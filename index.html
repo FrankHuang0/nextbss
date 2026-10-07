@@ -1,10 +1,11 @@
 ﻿<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI 業務助理｜課程入口</title><link rel="stylesheet" href="assets/style.css"></head><body>
-<header><h1>AI 業務助理 - 課程專區</h1><p>新竹營運處 AI 分享：用 NotebookLM 把會議紀錄、競品研究、產品知識庫、提案簡報與財報解讀變成日常工作流。</p>
+<header><h1>AI 業務助理 - 課程專區</h1><p>新竹／台北營運處 AI 分享：從 NotebookLM 業務應用到 AI 簡報工作流，把資料整理、提案與簡報變成可實踐的工作方法。</p>
 <div class="stats"><span>⏱ 2 小時</span><span>🎯 5 大情境</span><span>🛠 邊學邊練</span></div></header>
 <main>
 <div class="tabs"><button class="on" data-f="">全部</button><button data-f="簡報">簡報</button><button data-f="練習">練習</button><button data-f="工具">工具</button></div>
 <div class="grid">
+<a class="card" data-c="簡報" href="ai-presentation-workflow.html"><div class="th" style="background-image:url(assets/thumb-ai-workflow.svg)"></div><div class="bd"><h3>AI 簡報工作流 | 台北營運處分享</h3><p>安全來源、事實大綱、Gemini 敘事與本機公版。含新版功能、投影模式與實作提示詞。</p><small>台北營運處 · 依主 PPT 整理／新版補充</small></div></a>
 <a class="card" data-c="簡報" href="notebooklm-ai-training.html"><div class="th" style="background-image:url(assets/thumb-notebooklm-ai-training.png)"></div><div class="bd"><h3>課程簡報 | 用 NotebookLM 當你的 AI 業務助理</h3><p>5 大業務情境：會議紀錄、競品研究、產品知識庫、提案簡報、財報解讀。</p><small>新竹營運處 AI 分享</small></div></a>
 <a class="card" data-c="簡報" href="mobile-order-kb.html"><div class="th" style="background-image:url(assets/thumb-mobile-order-kb.png)"></div><div class="bd"><h3>知識庫分享 | 行動訂單業務知識庫</h3><p>11,000 行源碼到 30 秒找到答案：AI + MongoDB + MCP 實例。</p><small>新竹營運處 AI 分享</small></div></a>
 <a class="card" data-c="練習" href="practice.html"><div class="th" style="background-image:url(assets/thumb-practice.png)"></div><div class="bd"><h3>實作練習包 | 範例資料與提示詞</h3><p>5 情境虛構範例＋提示詞＋完成標準，一鍵複製直接練習。</p><small>新竹營運處 AI 分享</small></div></a>
@@ -35,7 +36,6 @@
 </main>
 <script>document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.grid .card').forEach(c=>c.style.display=!b.dataset.f||c.dataset.c===b.dataset.f?'':'none')})</script>
 <script src="assets/nav.js"></script></body></html>
-
 
 
 

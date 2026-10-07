@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="台北營運處 AI 簡報工作流：資料安全、NotebookLM 事實萃取、Gemini 敘事優化、簡報生成與本機公版整合。含新版功能、可複製提示詞及實作練習。">
+  <title>AI 簡報工作流｜台北營運處分享</title>
+  <link rel="stylesheet" href="assets/workflow.css">
+  <script src="assets/workflow.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#course">跳到教材內容</a>
+  <header class="masthead">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">AI</span> 業務學習專區</a>
+    <span class="mast-label">台北營運處分享 / PRESENTATION WORKFLOW</span>
+    <a class="home-link" href="index.html">回課程首頁 ↗</a>
+  </header>
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow">從資料到決策 · 台北營運處教材</p>
+        <h1>AI 簡報工作流<span>讓 AI 整理脈絡，<br>讓人掌握判斷。</span></h1>
+        <p class="hero-description">以《AI簡報工作流_v2.pptx》為主線，整合 NotebookLM × Gemini × PowerPoint。先把內容做對，再把簡報做好。</p>
+        <div class="hero-tags"><span>四階段 SOP</span><span>三組情境提示詞</span><span>新版功能補充</span></div>
+      </div>
+      <div class="hero-art" aria-label="公開來源經 AI 整理，機敏資料只在本機整合">
+        <span class="art-label">THE WORKFLOW</span>
+        <div class="art-row"><span class="art-num">01</span><div><b>先有依據</b><small>安全來源 / 事實與引用</small></div><span class="art-arrow">↘</span></div>
+        <div class="art-row"><span class="art-num">02</span><div><b>再有說服力</b><small>敘事 / 受眾 / 決策</small></div><span class="art-arrow">↘</span></div>
+        <div class="art-row last"><span class="art-num">03</span><div><b>最後由人交付</b><small>本機公版 / 真實數據 / 審閱</small></div><span class="art-arrow">✓</span></div>
+        <p class="art-foot">機敏資料不送進雲端生成流程</p>
+      </div>
+    </div>
+  </div>
+  <div class="controls" aria-label="教材操作">
+    <div class="mode-actions">
+      <button id="mode" type="button" aria-pressed="false" disabled>開始投影</button>
+      <button id="print" type="button" class="secondary" disabled>列印 / 存 PDF</button>
+      <span class="present-hint">← → 切頁 · 長頁可上下捲動</span>
+    </div>
+    <div class="paging">
+      <button id="prev" type="button" class="icon-button" aria-label="上一頁" disabled>←</button>
+      <label class="sr-only" for="jump">選擇教材頁面</label>
+      <select id="jump" disabled><option>載入教材導覽</option></select>
+      <span id="count" aria-live="polite">20 頁教材</span>
+      <button id="next" type="button" class="icon-button" aria-label="下一頁" disabled>→</button>
+    </div>
+  </div>
+  <noscript><p class="no-script">目前未啟用 JavaScript。仍可閱讀完整教材與提示詞；投影、切頁、複製功能需要啟用 JavaScript。</p></noscript>
+  <div class="course-layout">
+    <aside class="contents" aria-label="章節導覽">
+      <p class="eyebrow">COURSE INDEX</p>
+      <a href="#goals">01 課程目標</a>
+      <a href="#map">02 工作流總覽</a>
+      <a href="#traffic">03 資料紅綠燈</a>
+      <a href="#privacy">04 帳號與資料政策</a>
+      <a href="#roles">05 工具分工</a>
+      <a href="#sources">06 安全餵養</a>
+      <a href="#facts">07 事實大綱</a>
+      <a href="#story">08 敘事優化</a>
+      <a href="#studio">09 生成簡報</a>
+      <a href="#revise">10 修訂與匯出</a>
+      <a href="#local">11 本機重組</a>
+      <a href="#updates">12 新版差異</a>
+      <a href="#integration">13 Gemini 整合</a>
+      <a href="#upgrade">14 升級報告提示詞</a>
+      <a href="#performance">15 壓測報告提示詞</a>
+      <a href="#refactor">16 重構提案提示詞</a>
+      <a href="#pitfalls">17 視覺與避坑</a>
+      <a href="#lab">18 動手做</a>
+      <a href="#delivery">19 交付檢核</a>
+      <a href="#references">20 參考與版本</a>
+      <p class="index-note">閱讀模式可自由捲動。<br>投影模式用 ← → 切頁，Esc 返回閱讀。</p>
+    </aside>
+    <main id="course">
+      <section class="lesson" id="goals" data-title="課程目標">
+        <div class="lesson-meta"><span>01 / START HERE</span><span class="tag">主教材整理</span></div>
+        <h2>做一份「能交付」的簡報，<br>不只是生成一份簡報。</h2>
+        <p class="lead">原教材核心：AI 是梳理脈絡的大腦；內容、機敏資料與最終決策，由人負責。</p>
+        <div class="tiles three">
+          <article><span class="tile-num">01</span><h3>資料先分級</h3><p>辨識紅、黃、綠燈資料；上傳前先完成去識別化與權限確認。</p></article>
+          <article><span class="tile-num">02</span><h3>論點有依據</h3><p>把來源整理成「每頁一個主張」，區分事實、推論與待補資料。</p></article>
+          <article><span class="tile-num">03</span><h3>輸出可交付</h3><p>生成草稿、修訂、套公司公版，在本機填入真實數據並人工審閱。</p></article>
+        </div>
+        <div class="callout"><b>完成標準</b><p>用本課虛構案例產出 5 頁大綱；至少一個主張能回查來源；機敏欄位維持佔位符；說明何時走原生簡報、何時走本機公版。</p></div>
+        <p class="footnote">課前準備：可使用的 Google 帳號、NotebookLM / Gemini 權限、筆電、公司 PowerPoint 公版。若新功能尚未開放，使用純文字大綱路線。</p>
+      </section>
+      <section class="lesson" id="map" data-title="工作流總覽">
+        <div class="lesson-meta"><span>02 / THE PROCESS</span><span class="tag">主教材 SOP</span></div>
+        <h2>四階段，兩條界線。</h2>
+        <div class="workflow-grid">
+          <article><span>STEP 01</span><h3>安全餵養</h3><p>資料分級 → 整理來源 → 注入情境與限制</p><small>產物：可上傳的來源包</small></article>
+          <article><span>STEP 02</span><h3>大綱與敘事</h3><p>NotebookLM 萃取事實 → Gemini 優化匯報邏輯</p><small>產物：經查證的逐頁大綱</small></article>
+          <article><span>STEP 03</span><h3>生成與修訂</h3><p>設定受眾 / 風格 → 生成草稿 → 批次修訂</p><small>產物：可審閱的簡報草稿</small></article>
+          <article class="local-step"><span>STEP 04 · 本機</span><h3>公版與交付</h3><p>套公司版型 → 填真實數據 → 找佔位符 → 人工核准</p><small>產物：正式簡報</small></article>
+        </div>
+        <div class="tiles two">
+          <article><h3>第一條：資料界線</h3><p>雲端只接收核准的公開／安全資料。真實 IP、Log、未公開架構、營收與客戶資料留在核准環境。</p></article>
+          <article><h3>第二條：責任界線</h3><p>AI 幫你擬草稿與呈現建議，不替你承諾成效、保證事實或批准對外發布。</p></article>
+        </div>
+        <p class="footnote">依主 PPT 第 3–11 頁重整。此工作流降低風險，但不等同完整「零信任架構」或零資安風險保證。</p>
+      </section>
+      <section class="lesson" id="traffic" data-title="資料紅綠燈">
+        <div class="lesson-meta"><span>03 / SAFETY FIRST</span><span class="tag">主教材原則</span></div>
+        <h2>先問「能不能上傳」，<br>再問「怎麼生成」。</h2>
+        <div class="tiles three traffic">
+          <article class="green"><span class="light">綠燈 · 核准後可用</span><h3>公開資料</h3><ul><li>已公開的 TMF / API 規格</li><li>公開供應商手冊、新聞稿</li><li>確認可使用與分享的資料</li></ul><p>公開 ≠ 可任意重製；仍須確認授權。</p></article>
+          <article class="amber"><span class="light">黃燈 · 審查後使用</span><h3>去識別化資料</h3><ul><li>以通用代號呈現架構概念</li><li>合成測試數據、虛構案例</li><li>去特徵化的問題描述</li></ul><p>刪姓名不一定足夠；組合資訊也可能辨識系統或客戶。</p></article>
+          <article class="red"><span class="light">紅燈 · 不進此雲端流程</span><h3>真實機敏資料</h3><ul><li>CDR、真實 Log、帳密、IP</li><li>未公開 BSS / OSS 架構圖</li><li>真實營收、成本、客戶資料</li></ul><p>不得因關閉紀錄、付費或使用臨時對話就上傳。</p></article>
+        </div>
+        <div class="callout warning"><b>現場提問</b><p>「已刪掉客戶名稱，但仍有真實 IP 與營收的壓測報告」是什麼燈？<strong>仍是紅燈。</strong>資料分級以內容與公司規範為準，不以檔名或工具設定為準。</p></div>
+      </section>
+      <section class="lesson" id="privacy" data-title="帳號與資料政策">
+        <div class="lesson-meta"><span>04 / POLICY BEFORE PROMPT</span><span class="tag updated">官方補充 · 2026-10-07</span></div>
+        <h2>「關掉訓練」不是萬用保護罩。</h2>
+        <div class="tiles two">
+          <article><h3>NotebookLM / Gemini Notebook</h3><p>官方說明：一般使用資料不拿來訓練，除非提供回饋；提交回饋可能讓互動內容被檢視。符合資格的 Workspace / Education 帳號有不同的資料保護條款。</p><p><b>先確認帳號類型、組織核准與回饋政策，不要假設存在一個通用「關閉訓練」按鈕。</b></p></article>
+          <article><h3>Gemini Apps</h3><p>確認「Keep Activity／保留活動紀錄」、連結應用程式與組織政策。記憶、紀錄、資料保留與模型訓練不是同一件事。</p><p><b>設定不構成上傳授權；不因臨時對話或關閉記錄而放行紅燈資料。</b></p></article>
+        </div>
+        <div class="callout"><b>本機也要確認</b><p>填入機敏資料前，確認公版檔案不在 OneDrive / Google Drive 等自動同步位置，且不再使用會把文件傳回雲端的 AI 功能、外掛或轉檔服務。依公司核准的儲存、備份與交付方式操作。</p></div>
+        <p class="footnote">原 PPT「關閉雲端模型訓練選項」已改成帳號別檢查；不宣稱僅斷網就達成物理隔離。參考 <a href="https://support.google.com/notebooklm/answer/16164461" target="_blank" rel="noopener noreferrer">官方資料保護說明 [3]</a>。</p>
+      </section>
+      <section class="lesson" id="roles" data-title="工具分工與兩條路線">
+        <div class="lesson-meta"><span>05 / CHOOSE YOUR ROUTE</span><span class="tag updated">主教材 + 新版建議</span></div>
+        <h2>工具分工清楚，<br>就不用一直重做。</h2>
+        <div class="tiles three">
+          <article><h3>NotebookLM</h3><p>基於來源整理事實、產生帶引用的回答與內容草稿。<b>有引用不代表不會錯</b>，重要數字仍須逐一核對。</p></article>
+          <article><h3>Gemini</h3><p>調整受眾、敘事、主管決策觀點；不自行加數字或承諾。新增內容要回到來源驗證。</p></article>
+          <article><h3>PowerPoint</h3><p>在核准本機環境套公版、補精確圖表與真實數據，完成最終排版與審閱。</p></article>
+        </div>
+        <div class="route">
+          <div><span class="tag">路線 A · 正式／機敏報告</span><h3>純文字大綱 → 本機公版</h3><p>保留「文圖分離」。可控的文字、圖表與版型優先；紅燈數據只在本機補入。</p></div>
+          <div><span class="tag updated">路線 B · 公開／非機敏分享</span><h3>Studio 簡報 → 修訂 → PDF / PPTX</h3><p>可先試原生匯出，減少轉檔。PPTX 匯出不代表每張圖片或文字都可逐元素編輯，下載後實際檢查。</p></div>
+        </div>
+        <p class="footnote">原教材 DeckEdit 轉檔方案改為「有需要才使用」：先試官方匯出；第三方僅限已核准的非機敏資料，另查費用、授權與資料保留政策。</p>
+      </section>
+      <section class="lesson" id="sources" data-title="SOP 1：安全餵養">
+        <div class="lesson-meta"><span>06 / SOP 1</span><span class="tag">安全餵養與情境注入</span></div>
+        <h2>來源品質，決定簡報品質。</h2>
+        <ol class="steps">
+          <li><b>定義任務</b><span>這份簡報給誰？要做什麼決策？時間與頁數上限是多少？</span></li>
+          <li><b>先篩資料</b><span>確認權限、版本與日期；移除紅燈內容，保留核准的公開資料與合成案例。</span></li>
+          <li><b>建立筆記本</b><span>命名為「專案代號／目的／版本」，匯入需要的來源並確認處理完成。</span></li>
+          <li><b>圈選來源</b><span>只勾選本次相關來源；先問來源摘要、矛盾與缺漏，不急著生成投影片。</span></li>
+        </ol>
+        <div class="callout"><b>新版可減少前置轉檔</b><p>官方來源說明已列入 PPTX、DOCX、PDF、Markdown、CSV、圖片、Google Docs / Slides / Sheets 等。仍受大小、格式、方案限制；介面不支援時改用 PDF 或純文字。</p></div>
+        <details><summary>公開資料研究：Fast Research / Deep Research 怎麼用？</summary><p>在來源搜尋區選 Web，再依需要使用 Fast Research 或 Deep Research。研究報告與搜尋結果先看日期、發布者與內容，再選擇匯入；搜尋結果不是已查證的結論，不搜尋公司內部機敏資訊。</p></details>
+        <p class="footnote">功能位置因帳號與介面而異；以 <a href="https://support.google.com/notebooklm/answer/16215270" target="_blank" rel="noopener noreferrer">官方來源與研究說明 [2]</a> 為準。</p>
+      </section>
+      <section class="lesson" id="facts" data-title="SOP 2：事實大綱">
+        <div class="lesson-meta"><span>07 / SOP 2 · FACTS</span><span class="tag">先有事實</span></div>
+        <h2>每頁一個主張，<br>每個主張能追來源。</h2>
+        <p class="lead">先在 NotebookLM 對話中生成文字大綱，核對後再進入視覺生成。不要拿 AI 產出的假引用當證據。</p>
+        <div class="prompt"><div class="prompt-head"><b>事實萃取提示詞</b><button type="button" data-copy="prompt-facts">複製提示詞</button></div>
+<pre id="prompt-facts">你是電信專案簡報的事實整理助手。
+只根據目前勾選的來源，為非技術主管整理 5 頁純文字大綱。
+結構：問題 → 來源證據 → 可選方案 → 風險與備案 → 請求決策。
+每頁包含：一句主張標題、3 個重點、來源名稱與可核對的引用、建議圖表。
+區分「來源事實」「分析建議」「資料未提供」。
+不得自行編造數字、承諾、標準符合性或測試結果。
+真實 IP、TPS、工時、營收一律保留為 [待本機填入：欄位名稱]。
+需要真實 UI 截圖的位置標記 [待本機加入：截圖名稱]。
+若來源不足，列出缺什麼；不要猜答案或虛構引用。</pre></div>
+        <div class="callout"><b>停一下，查證</b><p>點開回答中的來源引用，對照原文。若引用不存在或不支持主張，刪掉／改寫該主張。文字大綱經查證後才是下一階段的基礎。</p></div>
+      </section>
+      <section class="lesson" id="story" data-title="SOP 2：敘事優化">
+        <div class="lesson-meta"><span>08 / SOP 2 · STORY</span><span class="tag">再有說服力</span></div>
+        <h2>從「我做了什麼」，<br>轉成「主管要決定什麼」。</h2>
+        <div class="tiles two"><article><h3>技術語言</h3><p>「API 版本更新、模組拆分、效能調校。」</p></article><article><h3>決策語言</h3><p>「要解決哪個業務風險？有哪些取捨？現在需要批准什麼？」</p></article></div>
+        <div class="prompt"><div class="prompt-head"><b>Gemini 敘事優化提示詞</b><button type="button" data-copy="prompt-story">複製提示詞</button></div>
+<pre id="prompt-story">以下是已核對來源、已去識別化的簡報大綱：
+[貼上安全的大綱]
+
+請改寫成向非技術高階主管匯報的版本。
+先說需要決定什麼，再說問題、證據、選項、建議與風險。
+每頁一個主張，最多 3 個重點；技術細節移到講者備註。
+保留所有引用、數字與 [待本機填入：...] 佔位符，不新增事實。
+工時、ROI 與停機時間未提供時，請標記待確認，不要估成事實。
+最後另列：敘事修改清單、需要回到來源確認的項目、邏輯斷層。</pre></div>
+        <p class="footnote">Gemini 能使用網頁搜尋與其他工具，並非天然只依上傳來源回答。改寫後仍需核對；整合筆記本也不省略這一步。</p>
+      </section>
+      <section class="lesson" id="studio" data-title="SOP 3：生成簡報">
+        <div class="lesson-meta"><span>09 / SOP 3 · GENERATE</span><span class="tag updated">新版操作</span></div>
+        <h2>先指定受眾與格式，<br>不要只按「生成」。</h2>
+        <ol class="steps">
+          <li><b>準備核對後的大綱</b><span>另存為一份安全文字來源，清楚標為「簡報大綱 v1」；生成時指定以它作為頁序依據。</span></li>
+          <li><b>Studio → Slide Deck</b><span>先用鉛筆／自訂設定；現場口頭授課選 Presenter Slides，寄送閱讀選 Detailed Deck。</span></li>
+          <li><b>設定語言、長度與提示</b><span>繁體中文、受眾、呈現風格與頁序；要求頁數屬提示，生成結果仍需檢查。</span></li>
+        </ol>
+        <div class="prompt"><div class="prompt-head"><b>簡報自訂提示詞</b><button type="button" data-copy="prompt-deck">複製提示詞</button></div>
+<pre id="prompt-deck">依「簡報大綱 v1」生成給非技術主管看的 5 頁簡報草稿。
+使用繁體中文。每頁一個結論、最多 3 個重點，字大、對比清楚。
+風格：白底、深灰文字、珊瑚紅重點色；以簡單流程圖與比較表為主。
+順序：問題、來源證據、可選方案、風險備案、請求決策。
+保留 [待本機填入：...]，不得補造數字、客戶名、IP、工時或 ROI。
+只用來源支持的內容；無來源者標為待確認。
+不要生成仿真的產品 UI；需要截圖時用文字佔位。</pre></div>
+        <p class="footnote">Slide Deck 目前有年齡與配額限制，手機功能可能不同；官方說明目前限 18 歲以上使用者。未開放時採純文字大綱 → 本機公版。</p>
+      </section>
+      <section class="lesson" id="revise" data-title="SOP 3：批次修訂與匯出">
+        <div class="lesson-meta"><span>10 / SOP 3 · REVISE</span><span class="tag updated">官方功能補充</span></div>
+        <h2>集中標記修改，<br>一次生成修訂版。</h2>
+        <div class="tiles two">
+          <article><h3>修訂操作</h3><ol><li>打開產出的簡報，選 Revise／修訂。</li><li>在各頁輸入文字、版型或視覺修改要求。</li><li>集中檢查 Pending Changes；需要時刪頁或調整順序。</li><li>再按 Generate revised deck，檢查新版本。</li></ol></article>
+          <article><h3>下載與交付</h3><ol><li>三點選單 → Download PDF 或 PowerPoint (.pptx)。</li><li>在本機打開，檢查文字是否可編輯、圖表是否只是圖片。</li><li>必須套公司公版或重新製圖時，回到文字大綱路線。</li><li>正式文件完成後再交付，不直接發草稿。</li></ol></article>
+        </div>
+        <div class="callout warning"><b>重要：修訂時不會參照來源</b><p>官方明確說明，Slide Deck 修訂目前不把來源納入考量。修訂只能改善呈現，不能當事實查證工具；修改數字、結論與圖表後，回原文重新核對。</p></div>
+        <div class="prompt"><div class="prompt-head"><b>單頁修訂示例</b><button type="button" data-copy="prompt-revise">複製提示詞</button></div>
+<pre id="prompt-revise">將此頁改成「風險／控制措施／待確認」三欄表。
+只重排現有內容，不增加事實或數值。
+所有 [待本機填入：...] 保持原文。
+把過長段落改成 3 個短句，保留必要限制條件。</pre></div>
+        <p class="footnote">每次修訂會產生新簡報並使用相應配額。參考 <a href="https://support.google.com/notebooklm/answer/16757456" target="_blank" rel="noopener noreferrer">官方 Slide Deck 說明 [1]</a>。</p>
+      </section>
+      <section class="lesson" id="local" data-title="SOP 4：本機重組">
+        <div class="lesson-meta"><span>11 / SOP 4 · LOCAL ONLY</span><span class="tag">主教材重點</span></div>
+        <h2>真實數據，<br>最後才在本機加入。</h2>
+        <ol class="steps">
+          <li><b>結束雲端處理</b><span>匯出核准內容；確認本機位置、同步、外掛與分享設定，避免新增的機敏內容又回流雲端。</span></li>
+          <li><b>套公司 PowerPoint 公版</b><span>把文字放入真正的文字框；數據圖用本機工具重建，不以圖片覆蓋錯字。</span></li>
+          <li><b>替換具名佔位符</b><span>例如 [待本機填入：TPS]、[待本機加入：架構圖]。由有權限的人補資料與版本。</span></li>
+          <li><b>全檔檢查</b><span>搜尋「待本機」「待確認」「[」；另檢查圖片、講者備註、隱藏頁、附件與文件中繼資料。</span></li>
+        </ol>
+        <div class="callout warning"><b>找不到「[」不代表檢查完了</b><p>PowerPoint 搜尋未必能找到圖片內的字。未替換欄位不能消失假裝已完成；無資料就保留清楚的待確認標示或刪除不成立的結論。</p></div>
+        <p class="footnote">實際真實數據不在這個公開教材中填寫。此頁僅教操作原則，不收集或上傳任何學員機敏資料。</p>
+      </section>
+      <section class="lesson" id="updates" data-title="NotebookLM 新版差異">
+        <div class="lesson-meta"><span>12 / WHAT CHANGED</span><span class="tag updated">查核日期 · 2026-10-07</span></div>
+        <h2>保留好原則，<br>拿掉已不必要的繞路。</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>原教材／容易誤解之處</th><th>現在建議</th><th>依據</th></tr></thead>
+          <tbody>
+            <tr><td>NotebookLM 是「防幻覺引擎」</td><td>來源與引用能協助查證，但不能保證正確；重要論點逐項查證。</td><td><a href="#references">[3]</a></td></tr>
+            <tr><td>簡報需要第三方轉成 PPT</td><td>先試原生 PDF / PPTX 匯出；元素可編輯程度仍需驗證。</td><td><a href="#references">[1]</a></td></tr>
+            <tr><td>微調後一頁一頁重新生成</td><td>批次加入修訂要求再生成；修訂不參照來源，要重新核對事實。</td><td><a href="#references">[1]</a></td></tr>
+            <tr><td>跨工具只能複製貼上</td><td>帳號有權限時可使用 Gemini 筆記本整合；沒有入口仍可貼安全大綱。</td><td><a href="#references">[4]</a></td></tr>
+            <tr><td>一定要先把 PPT 轉 PDF</td><td>官方列有 PPTX 等來源格式；先嘗試直接匯入，失敗再用 PDF / TXT。</td><td><a href="#references">[2]</a></td></tr>
+            <tr><td>關閉紀錄就可上傳內部資料</td><td>工具設定不取代公司授權；先分級，紅燈不進此流程。</td><td><a href="#references">[3][4]</a></td></tr>
+          </tbody>
+        </table></div>
+        <p class="footnote">官方說明目前使用「Gemini Notebook」名稱，原 NotebookLM 連結會導向新說明。為方便對照教材，本課仍稱 NotebookLM；不假設每個帳號已收到所有新版功能。</p>
+      </section>
+      <section class="lesson" id="integration" data-title="Gemini 筆記本整合">
+        <div class="lesson-meta"><span>13 / CONNECT, WITH CARE</span><span class="tag updated">選配進階路線</span></div>
+        <h2>能整合，就少搬一次資料。<br>但不要少一次查證。</h2>
+        <ol class="steps">
+          <li><b>確認入口與管理員授權</b><span>在 Gemini 的 Connected Apps／連結應用程式設定查看 Gemini Notebook。功能逐步開放，未看到不代表操作錯誤。</span></li>
+          <li><b>連接已核准筆記本</b><span>依畫面連接；官方說明可在提示中加 @Gemini Notebook，協助管理筆記本與來源、回答相關問題。</span></li>
+          <li><b>保留來源紀律</b><span>針對指定筆記本整理大綱；標記來源事實與分析建議，不讓網路搜尋混入未驗證的結論。</span></li>
+          <li><b>沒入口就退回基本流程</b><span>NotebookLM 抽取安全文字 → 複製到 Gemini 潤飾 → 人工比對 → 本機完成。</span></li>
+        </ol>
+        <div class="callout"><b>別為了方便而一律開記憶</b><p>部分整合功能需要 Keep Activity 開啟；關閉時，自動儲存、記憶、Drive 來源等功能會受限。依組織規範取捨，不以啟用紀錄作為上課必要條件。</p></div>
+        <p class="footnote">Gemini 的筆記本對話可能使用網頁搜尋及其他工具。參考 <a href="https://support.google.com/gemini/answer/16972047" target="_blank" rel="noopener noreferrer">官方整合說明 [4]</a>。不沿用輔助教材中的固定模型名稱、費率或保證效率。</p>
+      </section>
+      <section class="lesson" id="upgrade" data-title="情境一：系統升級">
+        <div class="lesson-meta"><span>14 / PROMPT KIT 01</span><span class="tag">改編自主 PPT 附錄</span></div>
+        <h2>系統升級與標準對接</h2>
+        <p class="lead">適用：BSS / OSS 更新、API 升級。重點不是列規格，而是說清楚標準、業務價值與停機風險。</p>
+        <div class="prompt"><div class="prompt-head"><b>01 · NotebookLM：先抽事實</b><button type="button" data-copy="prompt-upgrade-facts">複製</button></div>
+<pre id="prompt-upgrade-facts">你是電信系統架構師。請依勾選來源，替 [專案代號] 系統升級整理 5 頁大綱。
+每頁一個主張與 3 個重點，涵蓋：現況痛點、標準對接、預期業務效益、風險與回復備案、決策請求。
+列出來源支持的標準要求，不能把「規劃符合」寫成「已驗證符合」。
+IP、營收影響、停機時間使用 [待本機填入：欄位名稱]。
+未提供的效果與驗證結果標記「資料未提供」，每個事實附來源引用。
+另列待確認資料與建議搭配的圖表。</pre></div>
+        <div class="prompt"><div class="prompt-head"><b>02 · Gemini：轉成主管語言</b><button type="button" data-copy="prompt-upgrade-story">複製</button></div>
+<pre id="prompt-upgrade-story">請將下列安全大綱改寫為對非技術主管的系統升級報告：
+[貼上已查證、已去識別化大綱]
+強調標準對接與業務風險的關聯、停機控管及回復條件。
+保留來源事實、引用與全部佔位符。沒有依據的效益不得量化。
+最後一頁明確列出需要批准的選項及尚待確認的風險。</pre></div>
+        <p class="footnote">驗收：可區分「標準要求／已完成驗證／待驗證」，沒有自編停機時間與效益數字。</p>
+      </section>
+      <section class="lesson" id="performance" data-title="情境二：效能壓測">
+        <div class="lesson-meta"><span>15 / PROMPT KIT 02</span><span class="tag">改編自主 PPT 附錄</span></div>
+        <h2>效能壓測與瓶頸分析</h2>
+        <p class="lead">適用：結帳日高併發、回應延遲。數據與原因分開，別把觀察到的現象直接當成根因。</p>
+        <div class="prompt"><div class="prompt-head"><b>01 · NotebookLM：客觀整理</b><button type="button" data-copy="prompt-performance-facts">複製</button></div>
+<pre id="prompt-performance-facts">你是 QA 與效能分析助手。依勾選來源，為 [模組代號] 整理 4 頁壓測報告大綱：
+測試條件、觀察結果、待驗證的瓶頸假設、優化方案與下一輪驗證。
+TPS、Error Rate、Response Time 使用 [待本機填入：指標名稱]。
+區分「測試觀察」與「原因推論」；不得由單一 CPU 現象直接判定根因。
+每項事實附來源；無資訊時列待補，不編造測試結果。
+建議使用哪些本機圖表比較前後差異。</pre></div>
+        <div class="prompt"><div class="prompt-head"><b>02 · Gemini：轉成行動方案</b><button type="button" data-copy="prompt-performance-story">複製</button></div>
+<pre id="prompt-performance-story">請把這份安全壓測大綱改成行動方案：
+[貼上已查證、已去識別化大綱]
+依影響、風險及驗證依賴排序，列「措施／建議優先級／驗證方式／待確認工時」。
+優先級屬建議而非既定事實；工時未提供用 [待本機填入：工時]。
+保留引用與指標佔位符，不虛構修復時程或改善百分比。</pre></div>
+        <p class="footnote">驗收：每個瓶頸假設都有驗證方法；指標有單位與測試條件，未提供者維持佔位符。</p>
+      </section>
+      <section class="lesson" id="refactor" data-title="情境三：架構重構">
+        <div class="lesson-meta"><span>16 / PROMPT KIT 03</span><span class="tag">改編自主 PPT 附錄</span></div>
+        <h2>系統架構重構提案</h2>
+        <p class="lead">適用：微服務解耦、技術債清理。先講取捨與驗證，不把重構描寫成必然有高 ROI。</p>
+        <div class="prompt"><div class="prompt-head"><b>01 · NotebookLM：比較選項</b><button type="button" data-copy="prompt-refactor-facts">複製</button></div>
+<pre id="prompt-refactor-facts">你是架構評估助手。依勾選來源，為 [專案代號] 產出 6 頁重構提案：
+現況問題、不重構的風險、候選方案比較、邊界與依賴、分階段驗證、決策請求。
+比較保留現況、局部改善、逐步重構，不預設微服務一定最好。
+成本、節省工時、預算使用 [待本機填入：欄位名稱]。
+不公開真實架構圖；以通用元件與代號說明。
+事实附來源；假設與缺漏另列，不虛構 ROI。</pre></div>
+        <div class="prompt"><div class="prompt-head"><b>02 · Gemini：轉成投資決策</b><button type="button" data-copy="prompt-refactor-story">複製</button></div>
+<pre id="prompt-refactor-story">請將以下安全技術大綱改寫為投資決策簡報：
+[貼上已查證、已去識別化大綱]
+說明不改善的業務風險、各方案代價、階段成果與停止／回復條件。
+ROI 若缺成本或收益資料，明確標記「目前無法計算」，另列需補資料。
+保留所有來源與佔位符，不誇大急迫性，不新增財務承諾。</pre></div>
+        <p class="footnote">驗收：至少比較兩個選項，列出假設、成本缺口、階段驗收與回復條件。</p>
+      </section>
+      <section class="lesson" id="pitfalls" data-title="視覺設計與實戰避坑">
+        <div class="lesson-meta"><span>17 / DESIGN THAT SERVES THE MESSAGE</span><span class="tag">主教材延伸</span></div>
+        <h2>讓圖說明事情，<br>不是讓事情配合圖。</h2>
+        <div class="tiles two">
+          <article><h3>適合 AI 協助</h3><ul><li>大綱、主張與講者備註</li><li>概念流程、比較表的構圖建議</li><li>公開題材的視覺草稿</li><li>一頁一結論、刪除冗字</li></ul></article>
+          <article><h3>留給人工與本機工具</h3><ul><li>真實 UI 截圖與精確架構圖</li><li>帶單位、座標與刻度的數據圖</li><li>公司公版、授權標誌與法務聲明</li><li>機敏內容與最後審閱</li></ul></article>
+        </div>
+        <div class="callout warning"><b>不要花時間「補破圖」</b><p>圖片裡的繁體中文錯字不要用色塊蓋；需要可編輯就回文字框。不要把生成式 UI 當產品實際畫面，也不要把浮水印裁掉當授權處理方式。</p></div>
+        <div class="prompt"><div class="prompt-head"><b>視覺規格模板</b><button type="button" data-copy="prompt-style">複製</button></div>
+<pre id="prompt-style">現場投影，16:9；每頁一個主張與最多 3 個重點。
+白底、深灰文字、單一重點色；不以顏色作為唯一分類線索。
+流程用簡單方塊；比較用表格；真實數據圖表在本機製作。
+大段解釋放講者備註，不縮小字塞滿畫面。
+精確 UI 與架構圖保留 [待本機加入：圖名]。
+標題、中文、單位、日期與引用最後由人工檢查。</pre></div>
+      </section>
+      <section class="lesson" id="lab" data-title="20 分鐘實作">
+        <div class="lesson-meta"><span>18 / HANDS-ON LAB</span><span class="tag updated">新增教學練習 · 虛構案例</span></div>
+        <h2>20 分鐘，做出可核對的大綱。</h2>
+        <p class="lead">不使用真實內部資料。以下案例與數字皆為教學合成，不能當作產品能力、標準或正式成效引用。</p>
+        <div class="prompt"><div class="prompt-head"><b>範例來源 · 直接貼成文字來源</b><button type="button" data-copy="sample-source">複製範例來源</button></div>
+<pre id="sample-source">標題：教學合成案例 — 專案 A 技術趨勢分享
+日期：2026-10-07；用途：練習，非真實系統。
+事實 F1：虛構系統 A 有訂單、帳務與通知三個模組。
+事實 F2：在合成測試情境中，訂單尖峰時可觀察到通知延遲；根因尚未確認。
+事實 F3：團隊列出「調整排程」與「逐步拆分通知模組」兩個候選方向。
+事實 F4：候選方向均需在測試環境驗證，並保留回復程序。
+資料缺口：TPS、延遲、Error Rate、工時、預算、ROI、確切完成日期均未提供。
+決策目標：是否先核准非正式環境的小規模驗證，而非立即全面重構。
+限制：本案例不含真實 IP、客戶、架構或營收。
+數值欄位請用 [待本機填入：欄位名稱]，不得捏造。</pre></div>
+        <div class="tiles three">
+          <article><span class="tile-num">00–05</span><h3>建立來源</h3><p>新建筆記本，貼上範例。確認摘要沒有新增不存在的數值。</p></article>
+          <article><span class="tile-num">05–12</span><h3>產出並查證</h3><p>用第 7 頁提示生成 5 頁大綱；挑一個主張對照 F1–F4，檢查事實與假設。</p></article>
+          <article><span class="tile-num">12–20</span><h3>優化與驗收</h3><p>用第 8 頁提示調整敘事，或試原生簡報。與鄰座互查，不編造效益數字。</p></article>
+        </div>
+        <details><summary>如何判斷做完了？參考成果與追問題</summary><p>參考頁序：現況問題 → 觀察與未知 → 兩個候選方向 → 驗證與回復 → 請求核准小規模試驗。至少保留一個資料缺口，不能寫「已確定根因」或「ROI 提升」。</p><p>故意問：「專案 A 的 TPS 是多少？」合理回答應指出來源未提供，而不是生成數字。若來源過短不顯示逐段引用，手動核對 F1–F4；不能把模型編出的 [1] 當真實引用。</p></details>
+        <p class="footnote">新功能未開放、額度不足或生成太慢：只做文字大綱與查證即可完成核心學習目標，不在現場等待轉檔。</p>
+      </section>
+      <section class="lesson" id="delivery" data-title="交付檢核">
+        <div class="lesson-meta"><span>19 / READY TO DELIVER?</span><span class="tag">人工審核</span></div>
+        <h2>交付前，五個關卡都要過。</h2>
+        <p class="lead">此清單僅在頁面內勾選，不儲存、不送出。它是檢查提醒，不取代公司簽核流程。</p>
+        <fieldset class="checks"><legend>交付檢查清單</legend>
+          <label><input type="checkbox"> <span><b>資料授權</b>　來源可用、可分享，沒有公開機敏或受限第三方內容。</span></label>
+          <label><input type="checkbox"> <span><b>事實正確</b>　數字、單位、版本與結論均核對原文；推論有標記。</span></label>
+          <label><input type="checkbox"> <span><b>佔位符完成</b>　文字、圖片、備註與隱藏頁已檢查；待確認項目有清楚揭露。</span></label>
+          <label><input type="checkbox"> <span><b>視覺可讀</b>　繁體中文無錯字，投影清楚，圖表不是偽造的 UI 或數據。</span></label>
+          <label><input type="checkbox"> <span><b>交付核准</b>　公版、同步位置、外部連結、分享權限與人工簽核符合規範。</span></label>
+        </fieldset>
+        <div class="callout"><b>課後第一步</b><p>選一個沒有機敏疑慮的技術趨勢主題，先練「安全來源 → 5 頁大綱 → 人工查證 → 本機公版」，再逐步擴大應用。</p></div>
+      </section>
+      <section class="lesson" id="references" data-title="參考與版本說明">
+        <div class="lesson-meta"><span>20 / SOURCES &amp; VERSION</span><span class="tag updated">更新查核 · 2026-10-07</span></div>
+        <h2>哪些是原教材，<br>哪些是新版補充？</h2>
+        <p>主線依指定《AI簡報工作流_v2.pptx》（營發處 黃智賢）之 SOP、資料分級、文圖分離與附錄情境整理。HTML 以教學重新編排，不是逐頁原圖翻製；提示詞加入查證、佔位符及不編造數字的限制。</p>
+        <p>新版功能以 Google 官方文件查核；未經官方確認的固定價格、模型名稱、效率倍數、介面位置不當作現行事實。實作案例與視覺均為本課新增，未上傳原 PPT、輔助壓縮檔或標示禁止外傳的第三方付費教材。</p>
+        <ol class="references-list">
+          <li><a href="https://support.google.com/notebooklm/answer/16757456" target="_blank" rel="noopener noreferrer">Google：Generate / edit / export Slide Decks</a><span>格式、批次修訂、修訂不參照來源、PDF / PPTX 匯出與分享。</span></li>
+          <li><a href="https://support.google.com/notebooklm/answer/16215270" target="_blank" rel="noopener noreferrer">Google：Add sources &amp; research</a><span>來源格式、限制、Fast Research、Deep Research。</span></li>
+          <li><a href="https://support.google.com/notebooklm/answer/16164461" target="_blank" rel="noopener noreferrer">Google：Learn about NotebookLM / Gemini Notebook</a><span>資料保護、帳號條件、資料不取代人工判斷。</span></li>
+          <li><a href="https://support.google.com/gemini/answer/16972047" target="_blank" rel="noopener noreferrer">Google：Notebooks in Gemini Apps</a><span>Connected Apps、逐步開放、活動紀錄關閉時的限制。</span></li>
+        </ol>
+        <div class="callout"><b>版本與可用性</b><p>教學補充日期為 2026-10-07。功能會依年齡、帳號、管理員、地區、訂閱、配額與裝置不同；請以自己的介面與官方文件為準。沒有新版入口時，保留純文字大綱路線。</p></div>
+        <a class="back-link" href="index.html">返回課程首頁 ↗</a>
+      </section>
+    </main>
+  </div>
+  <div id="copy-status" role="status" aria-live="polite"></div>
+  <footer class="page-footer"><span>AI 簡報工作流 · 台北營運處分享</span><span>公開教材不包含真實內部數據</span><a href="index.html">課程首頁 ↗</a></footer>
+</body>
+</html>

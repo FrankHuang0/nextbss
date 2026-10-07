@@ -1,0 +1,183 @@
+:root{--coral:#fc6a65;--ink:#252c36;--muted:#59616e;--line:#e4e5e8;--paper:#f7f7f8;--navy:#204272}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:var(--paper);font:17px/1.8 "Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif}
+a{color:var(--navy);text-underline-offset:4px}
+button,select{font:inherit}
+button,a,select,input,summary{touch-action:manipulation}
+:focus-visible{outline:3px solid var(--navy);outline-offset:4px}
+button{cursor:pointer;border:1px solid transparent;background:var(--ink);color:white;border-radius:99px;padding:8px 20px;line-height:1.5;font-weight:700}
+button:hover:not(:disabled){background:var(--navy)}
+button:disabled{opacity:.45;cursor:default}
+.secondary{background:white;color:var(--ink);border-color:var(--line)}
+.secondary:hover:not(:disabled){color:white}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.skip{position:absolute;top:-100px;left:20px;z-index:99;background:white;padding:10px}
+.skip:focus{top:10px}
+.masthead{display:flex;align-items:center;gap:24px;max-width:1320px;margin:0 auto;padding:22px 32px;background:var(--paper)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:800;color:var(--ink);white-space:nowrap}
+.brand-mark{display:grid;place-items:center;width:36px;height:36px;background:var(--coral);color:#fff;border-radius:10px}
+.mast-label{margin-left:auto;color:var(--muted);font-size:12px;letter-spacing:.1em}
+.home-link{font-size:14px;text-decoration:none;border-bottom:1px solid var(--line);white-space:nowrap}
+.hero{background:var(--coral);color:white}
+.hero-inner{max-width:1320px;margin:auto;padding:65px 64px;display:grid;grid-template-columns:1.25fr 1fr;align-items:center;gap:70px}
+.hero-inner>*{min-width:0}
+.eyebrow{font:12px/1.5 Consolas,monospace;letter-spacing:.13em;margin:0 0 22px;font-weight:700}
+h1{font-size:clamp(32px,4vw,56px);line-height:1.2;font-weight:400;margin:0}
+h1 span{display:block;font-size:clamp(22px,2.5vw,32px);line-height:1.5;margin-top:18px}
+.hero-description{font-size:16px;max-width:530px;margin:22px 0}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap}
+.hero-tags span{font-size:12px;border:1px solid #fff9;border-radius:99px;padding:3px 12px}
+.hero-art{position:relative;background:#fff;color:var(--ink);border-radius:8px;box-shadow:12px 12px 0 #b94a473b;padding:28px 32px;transform:rotate(-2deg)}
+.art-label{font:11px Consolas,monospace;letter-spacing:.18em;color:var(--muted)}
+.art-row{display:flex;align-items:center;gap:18px;padding:22px 0;border-bottom:1px solid var(--line)}
+.art-num{font:36px/1 Consolas,monospace;color:var(--coral)}
+.art-row b{font-size:22px;font-weight:700}
+.art-row small{display:block;color:var(--muted);font-size:12px}
+.art-arrow{margin-left:auto;font-size:25px}
+.art-row.last{border:0}
+.art-foot{font-size:12px;border-top:2px solid var(--coral);padding-top:14px;margin:0;color:var(--muted)}
+.controls{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px max(24px,calc((100vw - 1200px)/2));border-bottom:1px solid var(--line);background:#fff;box-shadow:0 2px 8px #00000004;font-size:14px}
+.mode-actions,.paging{display:flex;align-items:center;gap:8px;min-width:0}
+.paging select{width:220px;max-width:30vw;min-width:0;font-size:14px;border:1px solid var(--line);padding:9px 10px;border-radius:6px;background:white;color:var(--ink)}
+.icon-button{border:1px solid var(--line);color:var(--ink);background:white;padding:8px 15px}
+#count{font:12px Consolas,monospace;min-width:52px;text-align:center}
+.course-layout{max-width:1260px;padding:36px 30px 80px;margin:auto;display:grid;grid-template-columns:210px minmax(0,1fr);gap:36px}
+.contents{position:sticky;top:100px;align-self:start;max-height:calc(100vh - 120px);overflow:auto}
+.contents .eyebrow{color:var(--muted);padding-left:12px;margin-bottom:15px}
+.contents>a{display:block;text-decoration:none;color:var(--muted);font-size:13px;padding:5px 10px;border-left:2px solid var(--line)}
+.contents>a:hover,.contents>a[aria-current="true"]{border-left-color:var(--coral);color:#af3530;background:#fff}
+.index-note{font-size:11px;color:var(--muted);padding:8px 10px}
+main{min-width:0}
+.lesson{background:white;padding:40px 42px;margin-bottom:24px;border:1px solid var(--line);border-radius:6px;scroll-margin-top:90px}
+.lesson:focus{outline:none}
+.lesson-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:26px;font:11px/1.5 Consolas,monospace;color:var(--muted);letter-spacing:.08em;flex-wrap:wrap}
+.tag{display:inline-block;background:#fff0ee;color:#973c38;font:11px/1.5 "Microsoft JhengHei",sans-serif;padding:4px 10px;border-radius:99px;letter-spacing:0}
+.tag.updated{background:#edf2f8;color:var(--navy)}
+h2{font-size:clamp(26px,2.4vw,34px);line-height:1.45;letter-spacing:-.02em;margin:0 0 22px}
+h3{font-size:19px;margin:0 0 9px;line-height:1.5}
+p{margin:12px 0}
+.lead{font-size:18px;color:var(--muted);margin-bottom:24px}
+.tiles{display:grid;gap:14px;margin:22px 0}
+.tiles.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tiles.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tiles article{padding:20px;background:var(--paper);border:1px solid var(--line);border-radius:5px}
+.tiles p,.tiles li{font-size:15px}
+.tile-num{display:block;font:26px/1.5 Consolas,monospace;color:#b74640;margin-bottom:14px}
+ul,ol{padding-left:22px}
+li{margin:5px 0}
+.callout{border-left:3px solid var(--coral);background:#fff5f3;padding:16px 20px;margin:22px 0;font-size:15px}
+.callout>b{color:#973c38}
+.callout p{margin:6px 0 0}
+.callout.warning{background:#fff8e9;border-color:#a56b00}
+.callout.warning>b{color:#795000}
+.footnote{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+.workflow-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:28px 0}
+.workflow-grid article{padding:18px 14px;background:var(--ink);color:#fff;position:relative;border-radius:5px}
+.workflow-grid article>span{font:11px Consolas,monospace;color:#ffaea9}
+.workflow-grid h3{margin-top:18px;font-size:19px}
+.workflow-grid p{font-size:14px}
+.workflow-grid small{font-size:11px;color:#d6d9df}
+.workflow-grid .local-step{background:var(--navy)}
+.traffic article{border-top-width:4px}
+.traffic article.green{border-top-color:#228057;background:#f3faf5}
+.traffic article.amber{border-top-color:#a56b00;background:#fff9ea}
+.traffic article.red{border-top-color:#b54540;background:#fff4f3}
+.light{font-size:12px;font-weight:700;display:block;margin-bottom:14px}
+.route{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.route>div{border-top:2px solid var(--ink);padding-top:16px}
+.route h3{margin-top:16px}
+.route p{font-size:15px}
+.steps{counter-reset:step;list-style:none;padding:0}
+.steps li{counter-increment:step;display:grid;grid-template-columns:32px 150px 1fr;gap:12px;margin:0;padding:16px 0;border-bottom:1px solid var(--line);font-size:15px}
+.steps li:before{content:counter(step,decimal-leading-zero);font:18px/1.8 Consolas,monospace;color:#b74640}
+.steps span{color:var(--muted)}
+.prompt{border:1px solid var(--line);margin:20px 0;border-radius:6px;overflow:hidden}
+.prompt-head{background:var(--paper);padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;font-size:14px}
+.prompt-head button{font-size:12px;white-space:nowrap;padding:6px 14px}
+pre{margin:0;padding:20px;white-space:pre-wrap;overflow-wrap:anywhere;background:#292f38;color:#f3f4f6;font:14px/1.9 Consolas,"Microsoft JhengHei",monospace}
+details{border:1px solid var(--line);padding:14px 18px;margin:20px 0;font-size:15px;border-radius:5px}
+summary{cursor:pointer;font-weight:700}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);text-align:left;padding:13px 15px;vertical-align:top}
+th{background:var(--paper)}
+td:last-child{white-space:nowrap}
+.checks{border:0;margin:24px 0;padding:0}
+.checks legend{font-size:14px;font-weight:700;margin-bottom:12px}
+.checks label{display:flex;align-items:baseline;gap:12px;padding:14px 18px;border:1px solid var(--line);margin-bottom:10px;border-radius:5px;font-size:15px;cursor:pointer}
+.checks label:has(input:checked){background:#f3faf5;border-color:#228057}
+.checks input{accent-color:#228057;width:17px;height:17px;flex:none}
+.references-list{font-size:15px}
+.references-list li{margin-bottom:16px}
+.references-list span{display:block;font-size:13px;color:var(--muted)}
+.back-link{font-weight:700}
+.page-footer{background:var(--ink);color:#d6d9df;display:flex;justify-content:space-between;gap:20px;padding:30px max(24px,calc((100vw - 1200px)/2));font-size:12px}
+.page-footer a{color:#fff}
+#copy-status{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;max-width:calc(100vw - 32px);border-radius:8px;padding:12px 20px;z-index:50;font-size:14px;box-shadow:0 4px 20px #0002}
+#copy-status:empty{display:none}
+.no-script{padding:20px;text-align:center}
+body.presenting .hero,body.presenting .contents,body.presenting .page-footer{display:none}
+body.presenting .masthead{padding-top:12px;padding-bottom:12px}
+body.presenting .course-layout{display:block;max-width:1220px;padding-top:24px;padding-bottom:24px}
+body.presenting .lesson{min-height:calc(100vh - 180px);padding:38px 54px;margin:0}
+body.presenting .lesson[hidden]{display:none}
+body.presenting h2{font-size:clamp(30px,3vw,44px)}
+body.presenting .tiles p,body.presenting .tiles li,body.presenting .steps li{font-size:17px}
+body.presenting .lesson-meta{margin-bottom:24px}
+.present-hint{display:none;font-size:12px;color:var(--muted)}
+body.presenting .present-hint{display:inline}
+body.presenting .lesson{padding-top:28px;padding-bottom:28px}
+body.presenting h2{font-size:clamp(30px,2.8vw,40px);margin-bottom:16px}
+body.presenting .lesson-meta{margin-bottom:18px}
+body.presenting .tiles{margin:16px 0}
+body.presenting .tiles article{padding:16px}
+body.presenting .prompt{margin:16px 0}
+body.presenting pre{line-height:1.7;padding:16px 20px}
+body.presenting .steps li{padding:12px 0}
+body.presenting .callout{margin:16px 0;padding:12px 16px}
+@media(max-width:1050px){
+  .hero-inner{gap:35px;padding:48px 36px}
+  .course-layout{grid-template-columns:160px minmax(0,1fr);gap:20px;padding:26px 20px 50px}
+  .lesson{padding:30px 26px}
+  .workflow-grid{grid-template-columns:1fr 1fr}
+  .steps li{grid-template-columns:28px 125px 1fr}
+}
+@media(max-width:760px){
+  .masthead{padding:16px 20px;gap:14px}.mast-label{display:none}.home-link{margin-left:auto;font-size:12px}
+  .brand{font-size:15px}.brand-mark{width:30px;height:30px}
+  .hero-inner{grid-template-columns:1fr;padding:36px 24px;gap:30px}
+  .hero-art{transform:none;padding:20px 24px}
+  .art-row{padding:15px 0}.art-row b{font-size:19px}
+  .controls{flex-wrap:wrap;gap:10px;padding:10px 16px}
+  .paging{width:100%}.paging select{flex:1;max-width:none;width:auto}
+  .mode-actions button{font-size:13px;padding:7px 16px}
+  body.presenting .present-hint{display:none}
+  .course-layout{display:block;padding:20px 14px 40px}.contents{display:none}
+  .lesson{padding:24px 20px;scroll-margin-top:140px}
+  .tiles.three,.tiles.two,.route{grid-template-columns:1fr}
+  .steps li{grid-template-columns:25px 1fr}.steps span{grid-column:2}
+  .tiles article{padding:18px}.lesson-meta{margin-bottom:20px}
+  .lead{font-size:16px}.prompt-head{padding:10px 12px}.prompt-head b{font-size:13px}
+  pre{font-size:13px;padding:16px}
+  .page-footer{flex-direction:column;gap:8px}
+  body.presenting .lesson{padding:24px 20px}
+  body.presenting .course-layout{padding:16px 14px}
+}
+@media(max-width:400px){.workflow-grid{grid-template-columns:1fr}.hero-tags span{font-size:11px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-art{transform:none}}
+@media print{
+  @page{size:A4;margin:15mm}
+  body{background:white;font-size:11pt}
+  .masthead,.hero,.controls,.contents,.page-footer,#copy-status,.skip,.prompt-head button{display:none!important}
+  .course-layout,body.presenting .course-layout{display:block;padding:0;max-width:none}
+  .lesson,body.presenting .lesson{display:block!important;min-height:0;padding:0;margin:0 0 20px;border:0;break-before:page}
+  .lesson:first-child{break-before:auto}
+  h2,body.presenting h2{font-size:22pt}
+  h3{font-size:13pt}.lesson-meta{font-size:8pt}
+  .tiles p,.tiles li,.steps li,.callout{font-size:10pt}
+  pre{background:white;color:black;border:1px solid #ccc;font-size:9pt;line-height:1.5}
+  .prompt,.tiles article,.callout,.checks label{break-inside:avoid}
+  .prompt-head{background:#f3f3f3}
+  details>p{display:block!important}
+}
