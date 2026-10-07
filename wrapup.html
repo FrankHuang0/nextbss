@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+﻿<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>課後總結</title><link rel="stylesheet" href="assets/style.css"></head><body>
 <header><h1>🎯 課後總結</h1><a href="index.html">← 入口</a></header>
 <main>
@@ -21,7 +21,7 @@
 <button onclick="send()">以 Email 送出</button></div>
 </main>
 <script>
-const FEEDBACK_EMAIL="";
+const FEEDBACK_EMAIL="frank210@cht.com.tw";
 const L=JSON.parse(localStorage.getItem('my')||'{}');
 if(L.s)document.querySelectorAll('[name=s]').forEach(e=>e.checked=e.value===L.s);if(L.w)when.value=L.w;
 function save(){const c=document.querySelector('[name=s]:checked');localStorage.setItem('my',JSON.stringify({s:c&&c.value,w:when.value}));msg.textContent='已儲存 ✓'}
