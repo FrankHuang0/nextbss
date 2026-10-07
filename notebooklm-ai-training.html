@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用 NotebookLM 當你的 AI 業務助理｜業務同仁教學簡報</title>
+<style>
+  :root{ /* 主題1 晨光藍（預設） */
+    --bg:#eef3fb; --g1:#dbe7ff; --g2:#e9e1ff;
+    --surface:#ffffff; --surface2:#f3f7fe; --hi:#e9f1ff;
+    --line:#d6dfef; --line2:#c1cde3;
+    --text:#243453; --muted:#5c6c8d; --heading:#0f1d3d;
+    --brand:#2f6bff; --brand-ink:#1c4ed0; --brand2:#7a5cff;
+    --accent:#12b5a5; --accent-ink:#0a7f73;
+    --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
+    --src-bg:#f5f8ff; --src-text:#2c3a58; --src-who:#b5560a;
+    --shadow:0 18px 46px rgba(30,60,130,.12);
+  }
+  html[data-theme="sun"]{ /* 主題2 暖陽橙 */
+    --bg:#fff7f0; --g1:#ffe4d2; --g2:#ffd9e6;
+    --surface:#fffdfb; --surface2:#fff3ea; --hi:#ffeede;
+    --line:#f2ddcc; --line2:#eccdb7;
+    --text:#3c2b20; --muted:#8a6b58; --heading:#2a1810;
+    --brand:#ff6a3d; --brand-ink:#d5471d; --brand2:#ff4d8d;
+    --accent:#f0971b; --accent-ink:#a86a08;
+    --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
+    --src-bg:#fff6ee; --src-text:#4a3527; --src-who:#c0491a;
+    --shadow:0 18px 46px rgba(200,90,40,.14);
+  }
+  html[data-theme="mint"]{ /* 主題3 薄荷綠 */
+    --bg:#eefbf7; --g1:#d1f3eb; --g2:#d7eeff;
+    --surface:#ffffff; --surface2:#eef9f5; --hi:#e2f6f0;
+    --line:#cbe7df; --line2:#b4dbd1;
+    --text:#1f3a34; --muted:#557a72; --heading:#0c2a24;
+    --brand:#12b5a5; --brand-ink:#0a8073; --brand2:#2f8bd6;
+    --accent:#2fb37a; --accent-ink:#1c7c54;
+    --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
+    --src-bg:#f1fbf8; --src-text:#274a42; --src-who:#bf7a12;
+    --shadow:0 18px 46px rgba(20,140,120,.14);
+  }
+  html[data-theme="berry"]{ /* 主題4 櫻粉莓 */
+    --bg:#fff4f9; --g1:#ffdcec; --g2:#efe0ff;
+    --surface:#fffdfe; --surface2:#fdf0f6; --hi:#ffe7f1;
+    --line:#f1d4e1; --line2:#eac1d5;
+    --text:#3a2231; --muted:#8a5f76; --heading:#2a1020;
+    --brand:#d6428a; --brand-ink:#ac2c6d; --brand2:#8b5cff;
+    --accent:#3aa887; --accent-ink:#237a5f;
+    --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
+    --src-bg:#fdf3f8; --src-text:#442332; --src-who:#c23a76;
+    --shadow:0 18px 46px rgba(190,60,120,.14);
+  }
+  html[data-theme="citrus"]{ /* 主題5 陽光黃 */
+    --bg:#fffdf0; --g1:#fff1c6; --g2:#e6f6cf;
+    --surface:#fffef8; --surface2:#fdf8e6; --hi:#fdf2cd;
+    --line:#eee3bf; --line2:#e5d8a6;
+    --text:#3a3218; --muted:#7d724a; --heading:#2a2408;
+    --brand:#e89b12; --brand-ink:#a56d08; --brand2:#7bbf3a;
+    --accent:#3fa84f; --accent-ink:#2b7d38;
+    --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
+    --src-bg:#fffcee; --src-text:#403715; --src-who:#b6780c;
+    --shadow:0 18px 46px rgba(190,150,20,.16);
+  }
+  html[data-theme="clay"]{ /* 主題6 黏土療癒（軟綿felt風） */
+    --bg:#eaf6fd; --g1:#d6eefb; --g2:#ffe7da;
+    --surface:#ffffff; --surface2:#f2faff; --hi:#e6f4ff;
+    --line:#d8e7ef; --line2:#c4dbe6;
+    --text:#3a4a52; --muted:#6f8592; --heading:#243b45;
+    --brand:#3ba7dd; --brand-ink:#1f7fb0; --brand2:#6fbf5a;
+    --accent:#eab72e; --accent-ink:#a87d0c;
+    --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5646a;
+    --src-bg:#f2faff; --src-text:#3a4a52; --src-who:#c9713f;
+    --shadow:0 20px 48px rgba(90,160,200,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+    background:radial-gradient(1200px 700px at 20% -10%,var(--g1) 0,transparent 60%),
+               radial-gradient(1000px 700px at 100% 0,var(--g2) 0,transparent 55%),
+               var(--bg);
+    color:var(--text);overflow:hidden;transition:background .4s ease,color .4s ease;
+  }
+  .deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{
+    position:absolute;inset:0;display:none;flex-direction:column;
+    padding:56px 72px 88px;opacity:0;transform:translateY(14px);
+    transition:opacity .45s ease,transform .45s ease;
+    animation:none;
+  }
+  .slide.active{display:flex;opacity:1;transform:none}
+  .kick{color:var(--brand);font-weight:700;letter-spacing:.14em;font-size:14px;text-transform:uppercase}
+  h1{font-size:52px;line-height:1.15;margin:14px 0 10px;font-weight:800}
+  h2{font-size:38px;line-height:1.2;font-weight:800;margin-bottom:6px}
+  h3{font-size:22px;font-weight:700;margin-bottom:8px}
+  p{color:var(--muted);font-size:19px;line-height:1.7}
+  .lead{font-size:22px;color:var(--text)}
+  .grid{display:grid;gap:20px;margin-top:24px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{
+    background:linear-gradient(180deg,var(--surface),var(--surface2));
+    border:1px solid var(--line);border-radius:18px;padding:22px 24px;
+    box-shadow:var(--shadow);
+  }
+  .card h3{color:var(--heading)}
+  .card p{font-size:16px}
+  .pill{display:inline-block;background:color-mix(in srgb,var(--brand) 12%,transparent);border:1px solid color-mix(in srgb,var(--brand) 42%,transparent);
+    color:var(--brand-ink);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600;margin:4px 6px 0 0}
+  .tagA{background:color-mix(in srgb,var(--accent) 13%,transparent);border-color:color-mix(in srgb,var(--accent) 45%,transparent);color:var(--accent-ink)}
+  .tagW{background:color-mix(in srgb,var(--warn) 14%,transparent);border-color:color-mix(in srgb,var(--warn) 45%,transparent);color:var(--warn-ink)}
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:10px}
+  ul.clean li{position:relative;padding-left:30px;font-size:18px;color:var(--text);line-height:1.55}
+  ul.clean li::before{content:"";position:absolute;left:0;top:9px;width:14px;height:14px;border-radius:4px;
+    background:linear-gradient(135deg,var(--brand),var(--brand2))}
+  .steps{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .step{display:flex;gap:16px;align-items:flex-start}
+  .num{flex:0 0 40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:18px;
+    background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 8px 20px rgba(91,140,255,.35)}
+  .step .body{flex:1}
+  .step .body b{color:var(--heading);font-size:18px}
+  .step .body span{display:block;color:var(--muted);font-size:15.5px;line-height:1.55;margin-top:3px}
+  .split{display:grid;grid-template-columns:0.92fr 1.35fr;gap:28px;flex:1;min-height:0;margin-top:18px}
+  .panel{background:linear-gradient(180deg,var(--surface),var(--surface2));border:1px solid var(--line);border-radius:20px;
+    padding:24px 26px;overflow:auto}
+  .panel.hi{background:var(--hi);border-color:color-mix(in srgb,var(--brand) 35%,transparent)}
+  .mini{color:var(--muted);font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+  .kv{margin-top:6px}
+  .kv b{color:var(--heading)}
+  table.tbl{width:100%;border-collapse:collapse;margin-top:18px;font-size:17px}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:12px 14px;text-align:left;vertical-align:top}
+  table.tbl th{background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--brand-ink);font-weight:700}
+  table.tbl td b{color:var(--heading)}
+  .num-badge{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;font-weight:800;
+    background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff}
+  .pagenum{position:absolute;right:72px;bottom:78px;z-index:6;font-size:13px;font-weight:800;color:var(--muted);
+    background:color-mix(in srgb,var(--surface) 85%,transparent);border:1px solid var(--line);border-radius:999px;padding:5px 13px;
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+  .pagenum b{color:var(--brand-ink)}
+  .progress{position:absolute;left:0;top:0;width:100%;height:4px;transform-origin:left center;transform:scaleX(0);background:linear-gradient(90deg,var(--brand),var(--brand2));transition:transform .4s ease;z-index:5}
+  .nav{position:absolute;bottom:22px;right:72px;display:flex;gap:10px;z-index:6}
+  .nav button{background:var(--surface);border:1px solid var(--line);color:var(--text);width:44px;height:44px;border-radius:12px;
+    font-size:18px;cursor:pointer;transition:.2s}
+  .nav button:hover{background:color-mix(in srgb,var(--brand) 14%,var(--surface));border-color:color-mix(in srgb,var(--brand) 45%,transparent)}
+  .dots{position:absolute;bottom:28px;left:72px;display:flex;gap:6px;z-index:6;flex-wrap:wrap;max-width:66%}
+  .dot{min-width:24px;height:24px;padding:0 6px;border-radius:8px;background:var(--surface);border:1px solid var(--line);
+    color:var(--muted);font-size:11.5px;font-weight:700;display:grid;place-items:center;cursor:pointer;transition:.15s}
+  .dot:hover{border-color:color-mix(in srgb,var(--brand) 50%,transparent);color:var(--brand-ink)}
+  .dot.active{background:var(--brand);border-color:var(--brand);color:#fff}
+  .hero-badge{display:inline-flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--brand2) 13%,transparent);border:1px solid color-mix(in srgb,var(--brand2) 40%,transparent);
+    padding:8px 16px;border-radius:999px;color:var(--brand-ink);font-weight:600;font-size:15px}
+  .big-emoji{font-size:30px}
+  .center{flex-direction:column;justify-content:center}
+  .muted-s{font-size:15px;color:var(--muted)}
+  .warnbox{background:color-mix(in srgb,var(--warn) 10%,transparent);border:1px solid color-mix(in srgb,var(--warn) 38%,transparent);border-radius:14px;padding:16px 20px;margin-top:14px}
+  .warnbox b{color:var(--warn-ink)}
+  .scene-tag{position:absolute;top:56px;right:72px;font-weight:800;font-size:15px;color:var(--brand);letter-spacing:.1em}
+  .io{display:grid;grid-template-columns:1fr 1fr;gap:22px;flex:1;min-height:0;margin-top:16px}
+  .io .col{border:1px solid var(--line);border-radius:18px;padding:18px 20px;overflow:auto}
+  .io .inp{background:linear-gradient(180deg,color-mix(in srgb,var(--brand) 8%,var(--surface)),var(--surface));border-color:color-mix(in srgb,var(--brand) 38%,transparent)}
+  .io .outp{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface));border-color:color-mix(in srgb,var(--accent) 42%,transparent)}
+  .iohd{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px;letter-spacing:.06em;padding:5px 12px;border-radius:999px;margin-bottom:12px}
+  .iohd.in{background:color-mix(in srgb,var(--brand) 16%,transparent);border:1px solid color-mix(in srgb,var(--brand) 40%,transparent);color:var(--brand-ink)}
+  .iohd.out{background:color-mix(in srgb,var(--accent) 16%,transparent);border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);color:var(--accent-ink)}
+  .src{background:var(--src-bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.65;color:var(--src-text);white-space:pre-wrap}
+  .src .who{color:var(--src-who);font-weight:700}
+  .srccap{font-size:12.5px;color:var(--muted);font-weight:700;margin:2px 0 6px}
+  .prompt{background:color-mix(in srgb,var(--brand) 10%,transparent);border:1px solid color-mix(in srgb,var(--brand) 38%,transparent);border-radius:12px;padding:10px 14px;font-size:14px;color:var(--text);margin-top:12px;line-height:1.55}
+  .prompt b{color:var(--brand-ink)}
+  .out-h{font-size:14.5px;font-weight:800;color:var(--heading);margin:14px 0 6px}
+  .out-h:first-child{margin-top:0}
+  .io ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .io ul li{position:relative;padding-left:18px;font-size:13.8px;line-height:1.55;color:var(--text)}
+  .io ul li::before{content:"";position:absolute;left:0;top:8px;width:8px;height:8px;border-radius:3px;background:var(--accent)}
+  table.tbl2{width:100%;border-collapse:collapse;margin-top:6px;font-size:12.8px}
+  table.tbl2 th,table.tbl2 td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  table.tbl2 th{background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--brand-ink)}
+  table.tbl2 td b{color:var(--heading)}
+  .best{background:color-mix(in srgb,var(--accent) 15%,transparent)}
+  .disc{font-size:12px;color:var(--muted);margin-top:10px;font-style:italic}
+  .flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .flow .node{border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-weight:700;font-size:15px;background:var(--surface)}
+  .flow .arr{color:var(--brand);font-size:20px;font-weight:800}
+  .themebar{position:fixed;top:12px;right:16px;z-index:20;display:flex;gap:7px;align-items:center;
+    background:color-mix(in srgb,var(--surface) 80%,transparent);border:1px solid var(--line);
+    border-radius:999px;padding:6px 10px;box-shadow:var(--shadow);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .themebar .tlab{font-size:12px;font-weight:800;color:var(--muted);margin:0 2px 0 3px;letter-spacing:.04em}
+  .swatch{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.2s;padding:0}
+  .swatch:hover{transform:scale(1.14)}
+  .swatch.active{border-color:var(--heading);box-shadow:0 0 0 2px var(--surface) inset}
+  @media (max-width:1100px){ .themebar .tlab{display:none} }
+  .mindwrap{flex:1;min-height:0;display:grid;place-items:center;margin-top:4px}
+  .mind{width:100%;height:100%;max-height:64vh}
+  #fdg{touch-action:none}
+  #fdg .fdg-node{cursor:grab}
+  #fdg .fdg-node text{pointer-events:none;user-select:none;-webkit-user-select:none}
+  #fdg .fdg-hit{fill:#000;fill-opacity:0;pointer-events:all}
+  .mm-edge{fill:none;stroke:var(--line2);stroke-width:1.6;stroke-linecap:round}
+  .mm-edge2{fill:none;stroke:var(--line);stroke-width:1.1;stroke-linecap:round}
+  .mm-hub{fill:var(--brand);stroke:none}
+  .mm-hubt{fill:#fff}
+  .mm-main{fill:var(--surface);stroke:var(--line);stroke-width:1.1}
+  .mm-mt{fill:var(--heading);font-weight:800}
+  .mm-sub{fill:var(--surface2);stroke:var(--line);stroke-width:1}
+  .mm-st{fill:var(--text)}
+  .mm-c1{fill:var(--brand)} .mm-c2{fill:var(--accent)} .mm-c3{fill:var(--danger)}
+  .mm-c4{fill:var(--brand2)} .mm-c5{fill:var(--warn)} .mm-c6{fill:var(--src-who)}
+  /* ===== D3 風圖表共用 ===== */
+  .chartwrap{flex:1;min-height:0;display:grid;place-items:center;margin-top:6px}
+  .chartwrap svg{width:100%;height:100%;max-height:62vh}
+  .cx-grid{stroke:var(--line);stroke-width:1;stroke-dasharray:3 4}
+  .cx-axis{stroke:var(--line2);stroke-width:1.2}
+  .cx-lab{fill:var(--muted);font-size:12px}
+  .cx-val{fill:var(--heading);font-size:12px;font-weight:800}
+  .bar-a{fill:var(--brand)} .bar-b{fill:var(--accent)}
+  .leg-t{fill:var(--text);font-size:12.5px}
+  /* radar */
+  .rd-ring{fill:none;stroke:var(--line);stroke-width:1}
+  .rd-axis{stroke:var(--line2);stroke-width:1}
+  .rd-lab{fill:var(--heading);font-size:12.5px;font-weight:700}
+  .rd-a{fill:color-mix(in srgb,var(--brand) 26%,transparent);stroke:var(--brand);stroke-width:2.4}
+  .rd-b{fill:color-mix(in srgb,var(--accent) 22%,transparent);stroke:var(--accent);stroke-width:2.4}
+  .rd-da{fill:var(--brand)} .rd-db{fill:var(--accent)}
+  /* heatmap */
+  .hm-row{fill:var(--heading);font-size:12.5px;font-weight:700}
+  .hm-col{fill:var(--muted);font-size:12px;font-weight:700}
+  .hm-cell{stroke:var(--bg);stroke-width:3}
+  .hm-t{font-size:12px;font-weight:800}
+  /* gantt */
+  .gt-track{fill:var(--surface2)}
+  .gt-lab{fill:var(--text);font-size:12.5px;font-weight:600}
+  .gt-tick{stroke:var(--line);stroke-width:1;stroke-dasharray:3 4}
+  .gt-tlab{fill:var(--muted);font-size:11px}
+  .gt-btxt{fill:#fff;font-size:11px;font-weight:700}
+  /* funnel */
+  .fn-t{fill:#fff;font-size:13.5px;font-weight:800}
+  .fn-side{fill:var(--muted);font-size:12px}
+  /* journey / flow */
+  .jn-line{fill:none;stroke:var(--line2);stroke-width:3}
+  .jn-hub{fill:var(--brand)}
+  .jn-num{fill:#fff;font-size:17px;font-weight:800}
+  .jn-t{fill:var(--heading);font-size:13px;font-weight:800}
+  .jn-s{fill:var(--muted);font-size:11.5px}
+  .fl-node{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+  .fl-t{fill:var(--heading);font-size:13px;font-weight:800}
+  .fl-s{fill:var(--muted);font-size:10.5px}
+  .fl-arrow{fill:var(--brand)}
+
+  /* === 圖表進場動畫（切換到該頁時自動重播） === */
+  @keyframes an-growY{from{transform:scaleY(.02);opacity:.5}to{transform:scaleY(1);opacity:1}}
+  @keyframes an-growX{from{transform:scaleX(.02)}to{transform:scaleX(1)}}
+  @keyframes an-pop{from{opacity:0;transform:scale(.25)}to{opacity:1;transform:scale(1)}}
+  @keyframes an-fade{from{opacity:0}to{opacity:1}}
+  @keyframes an-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes an-dash{from{stroke-dashoffset:820}to{stroke-dashoffset:0}}
+  /* 分組長條 */
+  .slide.active svg[data-chart=bars] .bar-a,
+  .slide.active svg[data-chart=bars] .bar-b{transform-box:fill-box;transform-origin:bottom;animation:an-growY .7s cubic-bezier(.2,.85,.25,1) both}
+  .slide.active svg[data-chart=bars] .cx-val{animation:an-fade .5s .55s both}
+  /* 甘特 */
+  .slide.active svg[data-chart=gantt] rect[class^=mm-c]{transform-box:fill-box;transform-origin:left center;animation:an-growX .8s cubic-bezier(.2,.85,.25,1) both}
+  .slide.active svg[data-chart=gantt] .gt-btxt{animation:an-fade .5s .55s both}
+  /* 雷達 */
+  .slide.active svg[data-chart=radar] .rd-a,
+  .slide.active svg[data-chart=radar] .rd-b,
+  .slide.active svg[data-chart=radar] .rd-da,
+  .slide.active svg[data-chart=radar] .rd-db{transform-box:view-box;transform-origin:320px 230px;animation:an-pop .7s cubic-bezier(.2,.9,.2,1) both}
+  .slide.active svg[data-chart=radar] .rd-b,
+  .slide.active svg[data-chart=radar] .rd-db{animation-delay:.2s}
+  .slide.active svg[data-chart=radar] .rd-lab{animation:an-fade .5s .5s both}
+  /* 熱區矩陣（逐列交錯） */
+  .slide.active svg[data-chart=heatmap] .hm-cell{transform-box:fill-box;transform-origin:center;animation:an-pop .5s both}
+  .slide.active svg[data-chart=heatmap] .hm-cell:nth-of-type(n+6){animation-delay:.09s}
+  .slide.active svg[data-chart=heatmap] .hm-cell:nth-of-type(n+11){animation-delay:.18s}
+  .slide.active svg[data-chart=heatmap] .hm-cell:nth-of-type(n+16){animation-delay:.27s}
+  .slide.active svg[data-chart=heatmap] .hm-cell:nth-of-type(n+21){animation-delay:.36s}
+  .slide.active svg[data-chart=heatmap] .hm-t{animation:an-fade .45s .45s both}
+  /* 漏斗（逐層交錯） */
+  .slide.active svg[data-chart=funnel] polygon{transform-box:fill-box;transform-origin:center;animation:an-rise .55s both}
+  .slide.active svg[data-chart=funnel] polygon:nth-of-type(2){animation-delay:.12s}
+  .slide.active svg[data-chart=funnel] polygon:nth-of-type(3){animation-delay:.24s}
+  .slide.active svg[data-chart=funnel] polygon:nth-of-type(4){animation-delay:.36s}
+  .slide.active svg[data-chart=funnel] polygon:nth-of-type(5){animation-delay:.48s}
+  .slide.active svg[data-chart=funnel] .fn-t{animation:an-fade .5s .3s both}
+  .slide.active svg[data-chart=funnel] .fn-side,
+  .slide.active svg[data-chart=funnel] circle{animation:an-fade .5s .55s both}
+  /* 旅程（描線＋站點彈入） */
+  .slide.active svg[data-chart=journey] .jn-line{stroke-dasharray:820;animation:an-dash .9s ease both}
+  .slide.active svg[data-chart=journey] g .jn-hub{transform-box:fill-box;transform-origin:center;animation:an-pop .5s both}
+  .slide.active svg[data-chart=journey] g:nth-of-type(1) .jn-hub{animation-delay:.15s}
+  .slide.active svg[data-chart=journey] g:nth-of-type(2) .jn-hub{animation-delay:.3s}
+  .slide.active svg[data-chart=journey] g:nth-of-type(3) .jn-hub{animation-delay:.45s}
+  .slide.active svg[data-chart=journey] g:nth-of-type(4) .jn-hub{animation-delay:.6s}
+  .slide.active svg[data-chart=journey] g:nth-of-type(5) .jn-hub{animation-delay:.75s}
+  .slide.active svg[data-chart=journey] .jn-t,
+  .slide.active svg[data-chart=journey] .jn-s,
+  .slide.active svg[data-chart=journey] .jn-num{animation:an-fade .6s .55s both}
+  /* 流程（節點彈入＋箭頭淡入） */
+  .slide.active svg[data-chart=flow] .fl-node,
+  .slide.active svg[data-chart=flow] .fl-t,
+  .slide.active svg[data-chart=flow] .fl-s{transform-box:fill-box;transform-origin:center;animation:an-pop .5s both}
+  .slide.active svg[data-chart=flow] .fl-arrow{animation:an-fade .5s .45s both}
+  /* 尊重減少動態偏好 */
+  @media (prefers-reduced-motion:reduce){
+    .slide.active svg [class]{animation:none!important}
+  }
+  @media (max-width:1100px){
+    .slide{padding:40px 44px 80px}
+    h1{font-size:40px} h2{font-size:30px}
+    .split{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="themebar" id="themebar">
+  <span class="tlab">🎨 主題</span>
+  <button class="swatch" data-set="blue"   title="晨光藍" aria-label="晨光藍" style="background:linear-gradient(135deg,#2f6bff,#7a5cff)"></button>
+  <button class="swatch" data-set="sun"    title="暖陽橙" aria-label="暖陽橙" style="background:linear-gradient(135deg,#ff6a3d,#ff4d8d)"></button>
+  <button class="swatch" data-set="mint"   title="薄荷綠" aria-label="薄荷綠" style="background:linear-gradient(135deg,#12b5a5,#2f8bd6)"></button>
+  <button class="swatch" data-set="berry"  title="櫻粉莓" aria-label="櫻粉莓" style="background:linear-gradient(135deg,#d6428a,#8b5cff)"></button>
+  <button class="swatch" data-set="citrus" title="陽光黃" aria-label="陽光黃" style="background:linear-gradient(135deg,#e89b12,#7bbf3a)"></button>
+  <button class="swatch" data-set="clay"   title="黏土療癒" aria-label="黏土療癒" style="background:linear-gradient(135deg,#6fc7ef,#8ecb6e,#f2c14e)"></button>
+</div>
+<div class="deck" id="deck">
+  <div class="progress" id="progress"></div>
+
+  <!-- 1 封面 -->
+  <section class="slide active center">
+    <span class="hero-badge">🤖 AI 推廣種子計畫</span>
+    <span class="kick" style="margin-top:26px">業務同仁 · AI 應用教學</span>
+    <h1>用 NotebookLM 當你的<br>AI 業務助理</h1>
+    <p class="lead" style="max-width:820px">從會議紀錄、競品分析到提案簡報，5 個立即上手的工作情境 ＋ Step by Step 操作手冊，讓 AI 幫你把「找資料、讀資料、整理資料」的時間省下來。</p>
+    <div style="margin-top:26px">
+      <span class="pill">📄 來源匯入</span>
+      <span class="pill">🔎 引用可回查</span>
+      <span class="pill">🎧 語音／影片摘要</span>
+      <span class="pill">🧠 心智圖・AI 出題</span>
+    </div>
+    <p class="muted-s" style="margin-top:30px">資料來源：《數位時代》NotebookLM（Gemini Notebook）完整教學。使用方向鍵 ← → 或右下按鈕翻頁。</p>
+  </section>
+
+  <!-- 2 痛點 -->
+  <section class="slide">
+    <span class="kick">Why AI</span>
+    <h2>業務每天在跟「資料」賽跑</h2>
+    <p>不是不努力，是要看的東西太多、整理太慢、經驗難傳承。</p>
+    <div class="grid g3">
+      <div class="card"><div class="big-emoji">🗂️</div><h3>資料太雜</h3><p>客戶會議、產品規格、報價、競品新聞散在各處，臨時要用找不到。</p></div>
+      <div class="card"><div class="big-emoji">⏱️</div><h3>整理太慢</h3><p>會議後手動打紀錄、看完 30 分鐘影片才抓到 3 個重點，時間都花在「讀」。</p></div>
+      <div class="card"><div class="big-emoji">🔁</div><h3>經驗難傳承</h3><p>資深業務的話術與知識在腦袋裡，新人只能慢慢摸索。</p></div>
+    </div>
+    <div class="warnbox"><b>NotebookLM 的定位：</b> 不是聊天機器人亂編答案，而是「只根據你上傳的資料」回答，還會標出引用來源，讓你回頭查證原文——正好解決業務最怕的「資訊不準」。</div>
+  </section>
+
+  <!-- 3 工具速覽 -->
+  <section class="slide">
+    <span class="kick">工具速覽</span>
+    <h2>NotebookLM 是什麼？能幫我做什麼？</h2>
+    <p>Google 推出、內建 Gemini 的 AI 研究筆記工具（2026 年更名為 Gemini Notebook）。把資料丟進去，它變成你的「專屬知識庫」。</p>
+    <div class="split">
+      <div class="panel hi">
+        <div class="mini">核心運作 3 步</div>
+        <svg viewBox="0 0 380 118" data-chart="flow" style="width:100%;height:auto;margin-top:12px" role="img" aria-label="核心運作三步流程">
+          <defs><marker id="flArr" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path class="fl-arrow" d="M0,0 L9,4.5 L0,9 Z"/></marker></defs>
+          <line x1="112" y1="52" x2="132" y2="52" stroke="var(--brand)" stroke-width="2.4" marker-end="url(#flArr)"/>
+          <line x1="246" y1="52" x2="266" y2="52" stroke="var(--brand)" stroke-width="2.4" marker-end="url(#flArr)"/>
+          <rect class="fl-node" x="6"   y="30" width="104" height="44" rx="12"/>
+          <rect class="fl-node" x="140" y="30" width="104" height="44" rx="12"/>
+          <rect class="fl-node" x="274" y="30" width="104" height="44" rx="12"/>
+          <text class="fl-t" x="58"  y="52" text-anchor="middle">① 匯入來源</text>
+          <text class="fl-s" x="58"  y="68" text-anchor="middle">PDF・網頁・YouTube</text>
+          <text class="fl-t" x="192" y="52" text-anchor="middle">② 向 AI 提問</text>
+          <text class="fl-s" x="192" y="68" text-anchor="middle">輸入提示詞</text>
+          <text class="fl-t" x="326" y="52" text-anchor="middle">③ 產出成果</text>
+          <text class="fl-s" x="326" y="68" text-anchor="middle">摘要・簡報・音訊</text>
+          <text class="fl-s" x="58"  y="22" text-anchor="middle">📥</text>
+          <text class="fl-s" x="192" y="22" text-anchor="middle">💬</text>
+          <text class="fl-s" x="326" y="22" text-anchor="middle">📤</text>
+        </svg>
+        <div class="kv" style="margin-top:20px">
+          <div class="mini">收費</div>
+          <p style="margin-top:6px"><b style="color:var(--heading)">免費版</b>即可使用大部分功能；Google AI Pro／Workspace 帳號有更高的來源與產出額度。<br><span class="tagW pill">建議：先用公司帳號的免費額度體驗</span></p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="mini">6 大常用能力</div>
+        <ul class="clean" style="margin-top:14px">
+          <li><b>來源匯入</b>：PDF、Word、Google Sheets、網頁、YouTube、電子書都能丟進去</li>
+          <li><b>引用可回查</b>：每個答案都標來源段落，避免 AI 亂編</li>
+          <li><b>Deep Research</b>：自動上網彙整，產出研究報告</li>
+          <li><b>語音摘要／Podcast</b>：一鍵把資料變中文對談音訊，通勤也能聽</li>
+          <li><b>影片摘要</b>：60 秒客製化教學短片，補足純文字講不清的語境</li>
+          <li><b>心智圖 & AI 出題</b>：整理架構、自我檢核記憶</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 五大情境總覽 -->
+  <section class="slide">
+    <span class="kick">Roadmap</span>
+    <h2>業務可立即應用的 5 大工作情境</h2>
+    <table class="tbl">
+      <tr><th style="width:52px">#</th><th>工作情境</th><th>解決痛點</th><th>用到的功能</th></tr>
+      <tr><td><span class="num-badge">1</span></td><td><b>客戶會議紀錄＋待辦追蹤</b></td><td>開完會忘重點、待辦漏追</td><td>錄音／逐字稿摘要、抓 Action Items</td></tr>
+      <tr><td><span class="num-badge">2</span></td><td><b>競品與市場研究懶人包</b></td><td>蒐集競品費時、看不完</td><td>官網／影片匯入、Deep Research、比較表</td></tr>
+      <tr><td><span class="num-badge">3</span></td><td><b>產品知識庫＋即問即答</b></td><td>產品／報價／FAQ 背不完</td><td>建知識庫、隨時提問、附引用</td></tr>
+      <tr><td><span class="num-badge">4</span></td><td><b>客戶提案簡報快速生成</b></td><td>提案簡報從零開始很慢</td><td>提示詞、簡報大綱與內容產出</td></tr>
+      <tr><td><span class="num-badge">5</span></td><td><b>財報／產業報告解讀</b></td><td>財報太專業、拜訪前準備吃力</td><td>PDF 摘要、心智圖、Podcast 音訊</td></tr>
+    </table>
+    <p class="muted-s" style="margin-top:18px">接下來每個情境都附「情境說明 ＋ Step by Step 操作步驟」。</p>
+  </section>
+
+  <!-- 4b 業務旅程圖 -->
+  <section class="slide">
+    <span class="kick">Workflow · Journey</span>
+    <h2>業務的一天：用 AI 串起 5 個情境</h2>
+    <p class="muted-s" style="margin-bottom:2px">從晨會到拜訪前，NotebookLM 貫穿一整天的關鍵節點，把零碎時間變成業績時間。</p>
+    <div class="chartwrap">
+      <svg viewBox="0 0 1000 300" data-chart="journey" role="img" aria-label="業務一天工作流旅程圖">
+        <line class="jn-line" x1="100" y1="150" x2="900" y2="150"/>
+        <!-- 站點 -->
+        <g><circle class="jn-hub" cx="100" cy="150" r="26"/><text class="jn-num" x="100" y="157" text-anchor="middle">1</text>
+          <text class="jn-t" x="100" y="88" text-anchor="middle">會議紀錄</text><text class="jn-s" x="100" y="106" text-anchor="middle">09:00 晨會摘要</text></g>
+        <g><circle class="jn-hub" cx="300" cy="150" r="26"/><text class="jn-num" x="300" y="157" text-anchor="middle">2</text>
+          <text class="jn-t" x="300" y="205" text-anchor="middle">競品研究</text><text class="jn-s" x="300" y="223" text-anchor="middle">11:00 提案前情蒐</text></g>
+        <g><circle class="jn-hub" cx="500" cy="150" r="26"/><text class="jn-num" x="500" y="157" text-anchor="middle">3</text>
+          <text class="jn-t" x="500" y="88" text-anchor="middle">產品知識庫</text><text class="jn-s" x="500" y="106" text-anchor="middle">14:00 即問即答</text></g>
+        <g><circle class="jn-hub" cx="700" cy="150" r="26"/><text class="jn-num" x="700" y="157" text-anchor="middle">4</text>
+          <text class="jn-t" x="700" y="205" text-anchor="middle">提案簡報</text><text class="jn-s" x="700" y="223" text-anchor="middle">16:00 快速生成</text></g>
+        <g><circle class="jn-hub" cx="900" cy="150" r="26"/><text class="jn-num" x="900" y="157" text-anchor="middle">5</text>
+          <text class="jn-t" x="900" y="88" text-anchor="middle">財報解讀</text><text class="jn-s" x="900" y="106" text-anchor="middle">18:00 拜訪前準備</text></g>
+      </svg>
+    </div>
+    <div class="disc">＊時間點為示意，實際依個人工作節奏調整。</div>
+  </section>
+
+  <!-- 5 情境1 -->
+  <section class="slide">
+    <span class="scene-tag">情境 1 / 5</span>
+    <span class="kick">Scene 01</span>
+    <h2>客戶會議紀錄 ＋ 待辦追蹤</h2>
+    <div class="split">
+      <div class="panel hi">
+        <div class="mini">情境</div>
+        <p class="kv">拜訪或線上會議後，把錄音或逐字稿交給 AI，10 分鐘內拿到重點摘要、客戶需求與待辦清單。</p>
+        <div class="mini" style="margin-top:18px">痛點</div>
+        <p class="kv">手打紀錄耗時、事後想不起客戶說了什麼、承諾的事項漏追。</p>
+        <div class="mini" style="margin-top:18px">成果</div>
+        <p class="kv"><b>摘要 + 待辦 + 客戶關注點</b>，可直接貼進 CRM 或回報主管。</p>
+        <span class="pill tagA">🎧 語音錄音</span><span class="pill">📝 摘要</span><span class="pill">✅ Action Items</span>
+      </div>
+      <div class="panel">
+        <div class="mini">Step by Step</div>
+        <div class="steps" style="margin-top:12px">
+          <div class="step"><div class="num">1</div><div class="body"><b>建立新筆記本</b><span>登入 notebooklm.google.com →「新建筆記本」，命名為「◯◯客戶 會議」。</span></div></div>
+          <div class="step"><div class="num">2</div><div class="body"><b>上傳會議來源</b><span>把會議錄音檔、逐字稿或手機錄音直接匯入為「來源」。</span></div></div>
+          <div class="step"><div class="num">3</div><div class="body"><b>請 AI 摘要</b><span>輸入：「請條列這次會議的 5 個重點、客戶提出的需求與疑慮。」</span></div></div>
+          <div class="step"><div class="num">4</div><div class="body"><b>抓出待辦</b><span>再輸入：「列出我方需跟進的待辦事項，含負責人與時間點。」</span></div></div>
+          <div class="step"><div class="num">5</div><div class="body"><b>查核＆存檔</b><span>點答案上的引用回聽原話確認，貼進 CRM／回報信。</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 案例1 -->
+  <section class="slide">
+    <span class="scene-tag">情境 1 · 實際案例</span>
+    <span class="kick">Case 01</span>
+    <h2>會議紀錄：真實輸入 → AI 輸出</h2>
+    <div class="io">
+      <div class="col inp">
+        <span class="iohd in">📥 輸入</span>
+                <div class="srccap">來源：宏達精密（工具機零件廠）續約會議錄音逐字稿｜與會：資訊處 李昆霖經理、採購 陳雅婷、我方 王小明（2026/2/18）</div>
+                <div class="src"><span class="who">李經理：</span>先講現況，我們總部一條中華電信 100M 數據專線，桃園、台中兩廠各 50M，最近跨廠 ERP 跟視訊會議常卡，內部客訴很多。
+        <span class="who">李經理：</span>上個月遠傳來提案，說他們 SD-WAN 能整合三個點還比較便宜，我需要你們給我一份比較。
+        <span class="who">陳雅婷：</span>另外企業行動門號目前 350 門、明年 3 月底到期，這次希望連同數據一起談整包。
+        <span class="who">李經理：</span>我最在意兩件事：一是備援，去年專線斷過一次、訂單系統停兩小時，老闆很不爽；二是資安，同業被勒索軟體打過。對了，下半年越南平陽新廠要投產，之後要連回台灣總部。
+        <span class="who">王小明：</span>了解，我出「頻寬升級 vs SD-WAN 服務」兩案比較，資安搭 HiNet 雲端防火牆＋DDoS，備援做雙線，越南廠我拉國際電路同事一起評估。</div>
+                <div class="prompt"><b>💬 提示詞：</b>你是資深客戶經理。請整理本次會議重點、決策者與在意點、競爭態勢，並用表格列出我方待辦（事項／負責人／期限／對應中華電信產品）。</div>
+              </div>
+              <div class="col outp">
+                <span class="iohd out">📤 AI 輸出</span>
+                <div class="out-h">會議重點</div>
+                <ul>
+                  <li>現況：總部 100M＋桃園/台中廠各 50M 數據專線，跨廠 ERP 與視訊卡頓、已生客訴</li>
+                  <li>競爭態勢：遠傳提出整合三據點 SD-WAN，主打較低價</li>
+                  <li>續約：350 門企業行動門號 2026/3 底到期，要求與數據網路整包談</li>
+                  <li>未來：越南平陽新廠下半年投產，需回連台灣總部</li>
+                </ul>
+                <div class="out-h">決策者與在意點</div>
+                <ul>
+                  <li>李昆霖經理（技術決策）＝備援、穩定；陳雅婷（採購）＝價格、合約</li>
+                  <li>兩大痛點：曾斷線 2 小時衝擊訂單系統、同業遭勒索軟體</li>
+        </ul>
+                <div class="out-h">我方待辦</div>
+                <table class="tbl2">
+                  <tr><th>事項</th><th>負責人</th><th>期限</th><th>對應產品</th></tr>
+                  <tr><td>頻寬升級 vs SD-WAN 兩案比較書</td><td>王小明</td><td>2/25</td><td>數據專線／SD-WAN 服務</td></tr>
+                  <tr><td>350 門門號續約＋整包試算</td><td>王小明</td><td>2/27</td><td>企業行動門號（專案報價）</td></tr>
+                  <tr><td>備援＋資安規劃</td><td>售前工程師</td><td>3/1</td><td>雙線備援／HiNet 雲端防火牆＋DDoS</td></tr>
+                  <tr><td>越南廠跨境連線評估</td><td>國際電路 PM</td><td>3/5</td><td>國際電路(IEPL)／SD-WAN</td></tr>
+                </table>
+                <div class="disc" style="margin-top:8px">下一步：3/6 回客戶做整合方案簡報。</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 進階1 -->
+          <section class="slide">
+            <span class="scene-tag">情境 1 · 進階技巧</span>
+            <span class="kick">Pro Tips 01</span>
+            <h2>會議紀錄：進階使用技巧</h2>
+            <div class="split">
+              <div class="panel hi">
+                <div class="mini">5 個進階技巧</div>
+                <ul class="clean" style="margin-top:14px">
+                  <li><b>指定角色＋輸出格式</b>：叫 AI 當「資深客戶經理」並輸出表格，內容更到位</li>
+                  <li><b>客戶歷程分析</b>：把歷次會議逐字稿一起匯入，追蹤客戶關注點的變化</li>
+                  <li><b>自動抓商機與流失風險</b>：讓 AI 點出潛在加購機會與轉單警訊</li>
+                  <li><b>生成反對意見回應</b>：預先準備客戶可能的殺價與拒絕話術</li>
+                  <li><b>去識別化</b>：上傳前遮蔽個資與報價等敏感欄位，符合資安政策</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <div class="mini">可直接複製的提示詞</div>
+                <div class="prompt" style="margin-top:14px">「以表格整理待辦，欄位：事項、負責人、期限、對應中華電信產品。」</div>
+                <div class="prompt">「根據會議內容，客戶最可能因什麼原因轉單給遠傳？我方要如何預防？」</div>
+                <div class="prompt">「合併這次與前兩次會議，列出客戶需求的演變與尚未回應的問題。」</div>
+                <div class="disc" style="margin-top:14px">💡 小提醒：AI 只根據你上傳的來源作答，錄音／逐字稿越完整，摘要越準確。</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 6 情境2 -->
+  <section class="slide">
+    <span class="scene-tag">情境 2 / 5</span>
+    <span class="kick">Scene 02</span>
+    <h2>競品與市場研究懶人包</h2>
+    <div class="split">
+      <div class="panel hi">
+        <div class="mini">情境</div>
+        <p class="kv">把競品官網、產品頁、新聞、YouTube 開箱一次匯入，讓 AI 整理成比較表與市場趨勢。</p>
+        <div class="mini" style="margin-top:18px">痛點</div>
+        <p class="kv">競品資料東看西看很花時間，抓不到差異化賣點。</p>
+        <div class="mini" style="margin-top:18px">成果</div>
+        <p class="kv"><b>競品比較表 + 我方優勢話術</b>，拜訪前 30 分鐘就備妥。</p>
+        <span class="pill">🌐 網頁</span><span class="pill">▶️ YouTube</span><span class="pill tagA">🔎 Deep Research</span>
+      </div>
+      <div class="panel">
+        <div class="mini">Step by Step</div>
+        <div class="steps" style="margin-top:12px">
+          <div class="step"><div class="num">1</div><div class="body"><b>收集網址</b><span>整理 3～5 個競品官網、產品頁與相關新聞連結。</span></div></div>
+          <div class="step"><div class="num">2</div><div class="body"><b>一鍵匯入來源</b><span>用「網站」來源貼上網址；YouTube 影片可用「YouTube」來源匯入。</span></div></div>
+          <div class="step"><div class="num">3</div><div class="body"><b>做比較表</b><span>輸入：「以表格比較這幾家的價格、功能、目標客群與優缺點。」</span></div></div>
+          <div class="step"><div class="num">4</div><div class="body"><b>Deep Research 補強</b><span>開啟 Deep Research，讓 AI 自動上網彙整最新市場趨勢報告。</span></div></div>
+          <div class="step"><div class="num">5</div><div class="body"><b>轉成話術</b><span>輸入：「根據以上，整理我方 3 個差異化賣點與應對競品的話術。」</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 案例2 -->
+  <section class="slide">
+    <span class="scene-tag">情境 2 · 實際案例</span>
+    <span class="kick">Case 02</span>
+    <h2>競品研究：真實輸入 → AI 輸出</h2>
+    <div class="io">
+      <div class="col inp">
+        <span class="iohd in">📥 輸入</span>
+        <div class="srccap">來源①中華電信官網企業數據網路方案　②客戶提供之遠傳 SD-WAN 提案摘要（客戶轉述）</div>
+        <div class="src"><span class="who">【中華電信】</span>數據專線：點對點固接、頻寬保證、SLA 服務保證；IP-VPN(MPLS)：多點對多點、QoS；SD-WAN 服務：整合多線路、集中管理、佈建快。以上費率均為專案報價。
+<span class="who">【遠傳提案（客戶轉述）】</span>主打三據點 SD-WAN 整合、標榜總費用較現況低約一成、綁約 3 年、含基本資安。
+<span class="who">【客戶在意】</span>跨廠 ERP／視訊穩定、線路備援、越南平陽新廠未來要納管。</div>
+        <div class="prompt"><b>💬 提示詞：</b>客戶收到遠傳提案要求我方回應。請比較我方三方案與遠傳提案的差異、我方優勢與遠傳隱憂，並給 3 句反制話術與 1 個報價策略建議。</div>
+      </div>
+      <div class="col outp">
+        <span class="iohd out">📤 AI 輸出</span>
+        <table class="tbl2">
+          <tr><th>比較項目</th><th class="best">中華電信</th><th>遠傳提案</th></tr>
+          <tr><td>網路涵蓋</td><td class="best">全國自有機房＋國際電路</td><td>依合作／租用</td></tr>
+          <tr><td>越南廠跨境</td><td class="best">IEPL＋SD-WAN 一站整合</td><td>需另尋當地夥伴</td></tr>
+          <tr><td>資安</td><td class="best">HiNet 資安 SOC／DDoS／防火牆</td><td>含基本資安</td></tr>
+          <tr><td>費率</td><td class="best">專案報價（可整包門號）</td><td>主打低價、綁約 3 年</td></tr>
+        </table>
+        <div class="out-h">3 句反制話術</div>
+        <ul>
+          <li>「低價要看綁約與 SLA──斷線一次的損失，遠比每月價差高。」</li>
+          <li>「越南新廠跨境＋資安，中華電信一站到位，不必再找當地夥伴。」</li>
+          <li>「數據＋350 門門號整包，我幫您算 TCO，不只是比月租。」</li>
+        </ul>
+        <div class="out-h">報價策略建議</div>
+        <ul><li>以「整包 TCO＋SLA＋越南延伸」訴求價值，門號續約當談判籌碼，不硬拚單價</li></ul>
+      </div>
+    </div>
+    <div class="disc">＊產品名稱依中華電信官網；競品為客戶轉述，費率均為專案報價、實際以官方報價為準。</div>
+  </section>
+
+  <!-- 案例2 圖解 分組長條 -->
+  <section class="slide">
+    <span class="scene-tag">情境 2 · 圖解</span>
+    <span class="kick">Grouped Bar</span>
+    <h2>競品研究效益：人工 vs NotebookLM（示意）</h2>
+    <p class="muted-s" style="margin-bottom:2px">同一份競品比較，NotebookLM 把耗時大幅壓縮，讓業務把時間留給客戶。</p>
+    <div class="chartwrap">
+      <svg viewBox="0 0 1000 380" data-chart="bars" role="img" aria-label="人工與 NotebookLM 工時分組長條圖">
+        <!-- 圖例 -->
+        <rect class="bar-a" x="640" y="18" width="16" height="16" rx="3"/><text class="leg-t" x="662" y="31">人工</text>
+        <rect class="bar-b" x="740" y="18" width="16" height="16" rx="3"/><text class="leg-t" x="762" y="31">NotebookLM</text>
+        <!-- 格線與Y軸刻度(小時) -->
+        <g>
+          <line class="cx-grid" x1="90" y1="320" x2="960" y2="320"/><text class="cx-lab" x="80" y="324" text-anchor="end">0</text>
+          <line class="cx-grid" x1="90" y1="250" x2="960" y2="250"/><text class="cx-lab" x="80" y="254" text-anchor="end">2</text>
+          <line class="cx-grid" x1="90" y1="180" x2="960" y2="180"/><text class="cx-lab" x="80" y="184" text-anchor="end">4</text>
+          <line class="cx-grid" x1="90" y1="110" x2="960" y2="110"/><text class="cx-lab" x="80" y="114" text-anchor="end">6</text>
+          <line class="cx-grid" x1="90" y1="40"  x2="960" y2="40"/><text class="cx-lab" x="80" y="44"  text-anchor="end">8（小時）</text>
+        </g>
+        <line class="cx-axis" x1="90" y1="40" x2="90" y2="320"/>
+        <!-- 群組1 蒐集資料 4.0 / 0.8 -->
+        <rect class="bar-a" x="154" y="180" width="40" height="140" rx="4"/><text class="cx-val" x="174" y="172" text-anchor="middle">4.0</text>
+        <rect class="bar-b" x="202" y="292" width="40" height="28"  rx="4"/><text class="cx-val" x="222" y="284" text-anchor="middle">0.8</text>
+        <text class="cx-lab" x="198" y="342" text-anchor="middle">蒐集競品資料</text>
+        <!-- 群組2 製作比較表 2.0 / 0.4 -->
+        <rect class="bar-a" x="371" y="250" width="40" height="70"  rx="4"/><text class="cx-val" x="391" y="242" text-anchor="middle">2.0</text>
+        <rect class="bar-b" x="419" y="306" width="40" height="14"  rx="4"/><text class="cx-val" x="439" y="298" text-anchor="middle">0.4</text>
+        <text class="cx-lab" x="415" y="342" text-anchor="middle">製作比較表</text>
+        <!-- 群組3 擬定話術 1.5 / 0.5 -->
+        <rect class="bar-a" x="588" y="267" width="40" height="53"  rx="4"/><text class="cx-val" x="608" y="259" text-anchor="middle">1.5</text>
+        <rect class="bar-b" x="636" y="302" width="40" height="18"  rx="4"/><text class="cx-val" x="656" y="294" text-anchor="middle">0.5</text>
+        <text class="cx-lab" x="632" y="342" text-anchor="middle">擬定反制話術</text>
+        <!-- 群組4 總計 7.5 / 1.7 -->
+        <rect class="bar-a" x="805" y="57"  width="40" height="263" rx="4"/><text class="cx-val" x="825" y="49"  text-anchor="middle">7.5</text>
+        <rect class="bar-b" x="853" y="260" width="40" height="60"  rx="4"/><text class="cx-val" x="873" y="252" text-anchor="middle">1.7</text>
+        <text class="cx-lab" x="849" y="342" text-anchor="middle">合計工時</text>
+      </svg>
+    </div>
+    <div class="disc">＊工時為示意，用以說明效率差異；實際依案件複雜度而定。</div>
+  </section>
+
+  <!-- 進階2 -->
+  <section class="slide">
+    <span class="scene-tag">情境 2 · 進階技巧</span>
+    <span class="kick">Pro Tips 02</span>
+    <h2>競品／市場研究：進階使用技巧</h2>
+    <div class="split">
+      <div class="panel hi">
+        <div class="mini">5 個進階技巧</div>
+        <ul class="clean" style="margin-top:14px">
+          <li><b>多來源交叉</b>：官網＋新聞＋客戶轉述一起匯入，資訊更完整</li>
+          <li><b>Deep Research</b>：讓 AI 自動上網彙整最新產業趨勢與競品動態</li>
+          <li><b>競品反制 FAQ</b>：一次生成異議處理與殺價回應話術</li>
+          <li><b>市場定位心智圖</b>：一頁看懂我方與對手的相對位置</li>
+          <li><b>來源定期更新</b>：競品方案會變，來源要標日期、定期汰換</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="mini">可直接複製的提示詞</div>
+        <div class="prompt" style="margin-top:14px">「用 Deep Research 彙整 2026 台灣企業 SD-WAN 市場趨勢與前三大業者動態，附來源。」</div>
+        <div class="prompt">「把競品提案做成『我方對應方案＋一句話反制』的對照表。」</div>
+        <div class="prompt">「找出遠傳提案中，客戶最可能忽略的 3 個風險。」</div>
+        <div class="disc" style="margin-top:14px">💡 小提醒：競品資料務必註明來源與時間，對外報價一律以官方公告為準。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 情境3 -->
+  <section class="slide">
+    <span class="scene-tag">情境 3 / 5</span>
+    <span class="kick">Scene 03</span>
+    <h2>產品知識庫 ＋ 即問即答</h2>
+    <div class="split">
+      <div class="panel hi">
+        <div class="mini">情境</div>
+        <p class="kv">把產品型錄、規格書、報價原則、FAQ 全部匯入，變成一個隨時能問的「產品專家」，新人也能秒上手。</p>
+        <div class="mini" style="margin-top:18px">痛點</div>
+        <p class="kv">產品線多、規格與報價背不完，客戶當場問答不出來。</p>
+        <div class="mini" style="margin-top:18px">成果</div>
+        <p class="kv"><b>即問即答 + 引用來源</b>，答案有憑有據，降低講錯風險。</p>
+        <span class="pill">📚 知識庫</span><span class="pill tagA">🔎 附引用</span><span class="pill">🧠 心智圖</span>
+      </div>
+      <div class="panel">
+        <div class="mini">Step by Step</div>
+        <div class="steps" style="margin-top:12px">
+          <div class="step"><div class="num">1</div><div class="body"><b>建「產品知識庫」筆記本</b><span>集中放同一產品線的所有官方文件。</span></div></div>
+          <div class="step"><div class="num">2</div><div class="body"><b>批次匯入文件</b><span>上傳型錄 PDF、規格書 Word、報價原則、常見問答。</span></div></div>
+          <div class="step"><div class="num">3</div><div class="body"><b>直接提問測試</b><span>問：「A 型號和 B 型號差在哪？哪種客戶適合？」看引用是否正確。</span></div></div>
+          <div class="step"><div class="num">4</div><div class="body"><b>生成 FAQ 與心智圖</b><span>輸入：「整理客戶最常問的 10 題與標準回答」；再產出心智圖看架構。</span></div></div>
+          <div class="step"><div class="num">5</div><div class="body"><b>共享給團隊</b><span>把筆記本分享給新人，搭配 AI 出題自我檢核，加速上手。</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 案例3 -->
+  <section class="slide">
+    <span class="scene-tag">情境 3 · 實際案例</span>
+    <span class="kick">Case 03</span>
+    <h2>產品知識庫：真實輸入 → AI 輸出</h2>
+    <div class="io">
+      <div class="col inp">
+        <span class="iohd in">📥 輸入</span>
+        <div class="srccap">來源：中華電信企業網路規格書、SD-WAN／IP-VPN FAQ、企業資安服務說明、個資法遵循指引（批次匯入 8 份）＋客戶來信</div>
+        <div class="src"><span class="who">【規格】</span>IP-VPN(MPLS)：多點固接、QoS 與頻寬保證、SLA 服務保證；SD-WAN 服務：整合多線路、集中管理、動態選路、佈建快。
+<span class="who">【FAQ】</span>3 據點以上、需集中管控與快速擴點→優先 SD-WAN；核心系統需頻寬保證→MPLS 或混合。
+<span class="who">【資安】</span>可加購 HiNet 資安：雲端防火牆、DDoS 防護、SOC 監控。
+<span class="who">【法遵】</span>傳輸個資建議專線加密並符合個資法安全維護規範。
+<span class="who">【客戶來信】</span>某區域醫院資訊室：我們總院＋4 個門診據點，要連 HIS、也有病歷資料，該用哪種網路？資安與個資怎麼顧？大概多少錢？</div>
+        <div class="prompt"><b>💬 提示詞：</b>請根據我上傳的產品知識庫回答這位醫院客戶，並附引用；來源沒有的（如報價）就說明需另行報價，不要自己編。</div>
+      </div>
+      <div class="col outp">
+        <span class="iohd out">📤 AI 輸出</span>
+        <div class="out-h">建議網路架構</div>
+        <ul>
+          <li>總院＋4 門診＝多據點，建議 SD-WAN 服務集中管理〔引用：FAQ〕</li>
+          <li>HIS 核心與病歷傳輸，以 IP-VPN(MPLS)／專線加密段補強頻寬與穩定〔引用：規格、法遵〕</li>
+        </ul>
+        <div class="out-h">資安與個資</div>
+        <ul>
+          <li>加購 HiNet 資安：雲端防火牆＋DDoS＋SOC 監控〔引用：資安〕</li>
+          <li>病歷屬個資，傳輸須加密並符合個資法安全維護〔引用：法遵〕</li>
+        </ul>
+        <div class="out-h">關於費用</div>
+        <ul><li>來源未提供費率，屬專案報價；將依據點數與頻寬另出報價，不臆測〔查無來源〕</li></ul>
+        <div class="disc" style="margin-top:8px">✅ AI 只依來源回答，找不到就說「需另行報價」，避免幻覺與講錯規格。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 案例3 圖解 適配矩陣 -->
+  <section class="slide">
+    <span class="scene-tag">情境 3 · 圖解</span>
+    <span class="kick">Heatmap Matrix</span>
+    <h2>方案適配矩陣：需求 × 產品（示意）</h2>
+    <p class="muted-s" style="margin-bottom:2px">把知識庫的判斷邏輯視覺化：顏色越深＝適配度越高，拜訪時一眼對到客戶需求。</p>
+    <div class="chartwrap">
+      <svg viewBox="0 0 1000 430" data-chart="heatmap" role="img" aria-label="需求與產品適配度熱區矩陣">
+        <!-- 欄標題 -->
+        <text class="hm-col" x="270" y="58" text-anchor="middle">SD-WAN</text>
+        <text class="hm-col" x="420" y="58" text-anchor="middle">IP-VPN</text>
+        <text class="hm-col" x="570" y="58" text-anchor="middle">數據專線</text>
+        <text class="hm-col" x="720" y="58" text-anchor="middle">HiNet資安</text>
+        <text class="hm-col" x="870" y="58" text-anchor="middle">IEPL</text>
+        <!-- 列標題 + 資料格 (高80% 中45% 低15%) -->
+        <!-- row1 多據點集中管理 -->
+        <text class="hm-row" x="185" y="98" text-anchor="end">多據點集中管理</text>
+        <rect class="hm-cell" x="200" y="72" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 80%,transparent)"/><text class="hm-t" x="270" y="103" text-anchor="middle" fill="#fff">高</text>
+        <rect class="hm-cell" x="350" y="72" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 45%,transparent)"/><text class="hm-t" x="420" y="103" text-anchor="middle" fill="var(--heading)">中</text>
+        <rect class="hm-cell" x="500" y="72" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="hm-t" x="570" y="103" text-anchor="middle" fill="var(--heading)">低</text>
+        <rect class="hm-cell" x="650" y="72" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="hm-t" x="720" y="103" text-anchor="middle" fill="var(--heading)">低</text>
+        <rect class="hm-cell" x="800" y="72" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="hm-t" x="870" y="103" text-anchor="middle" fill="var(--heading)">低</text>
+        <!-- row2 核心系統頻寬 -->
+        <text class="hm-row" x="185" y="160" text-anchor="end">核心系統頻寬保證</text>
+        <rect class="hm-cell" x="200" y="134" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 45%,transparent)"/><text class="hm-t" x="270" y="165" text-anchor="middle" fill="var(--heading)">中</text>
+        <rect class="hm-cell" x="350" y="134" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 80%,transparent)"/><text class="hm-t" x="420" y="165" text-anchor="middle" fill="#fff">高</text>
+        <rect class="hm-cell" x="500" y="134" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 80%,transparent)"/><text class="hm-t" x="570" y="165" text-anchor="middle" fill="#fff">高</text>
+        <rect class="hm-cell" x="650" y="134" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="hm-t" x="720" y="165" text-anchor="middle" fill="var(--heading)">低</text>
+        <rect class="hm-cell" x="800" y="134" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 45%,transparent)"/><text class="hm-t" x="870" y="165" text-anchor="middle" fill="var(--heading)">中</text>
+        <!-- row3 資安/個資 -->
+        <text class="hm-row" x="185" y="222" text-anchor="end">資安／個資合規</text>
+        <rect class="hm-cell" x="200" y="196" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 45%,transparent)"/><text class="hm-t" x="270" y="227" text-anchor="middle" fill="var(--heading)">中</text>
+        <rect class="hm-cell" x="350" y="196" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 45%,transparent)"/><text class="hm-t" x="420" y="227" text-anchor="middle" fill="var(--heading)">中</text>
+        <rect class="hm-cell" x="500" y="196" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 45%,transparent)"/><text class="hm-t" x="570" y="227" text-anchor="middle" fill="var(--heading)">中</text>
+        <rect class="hm-cell" x="650" y="196" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 80%,transparent)"/><text class="hm-t" x="720" y="227" text-anchor="middle" fill="#fff">高</text>
+        <rect class="hm-cell" x="800" y="196" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="hm-t" x="870" y="227" text-anchor="middle" fill="var(--heading)">低</text>
+        <!-- row4 快速擴點 -->
+        <text class="hm-row" x="185" y="284" text-anchor="end">快速擴點佈建</text>
+        <rect class="hm-cell" x="200" y="258" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 80%,transparent)"/><text class="hm-t" x="270" y="289" text-anchor="middle" fill="#fff">高</text>
+        <rect class="hm-cell" x="350" y="258" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="hm-t" x="420" y="289" text-anchor="middle" fill="var(--heading)">低</text>
+        <rect class="hm-cell" x="500" y="258" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="hm-t" x="570" y="289" text-anchor="middle" fill="var(--heading)">低</text>
+        <rect class="hm-cell" x="650" y="258" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="hm-t" x="720" y="289" text-anchor="middle" fill="var(--heading)">低</text>
+        <rect class="hm-cell" x="800" y="258" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="hm-t" x="870" y="289" text-anchor="middle" fill="var(--heading)">低</text>
+        <!-- row5 跨境/海外 -->
+        <text class="hm-row" x="185" y="346" text-anchor="end">跨境／海外連線</text>
+        <rect class="hm-cell" x="200" y="320" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 45%,transparent)"/><text class="hm-t" x="270" y="351" text-anchor="middle" fill="var(--heading)">中</text>
+        <rect class="hm-cell" x="350" y="320" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 45%,transparent)"/><text class="hm-t" x="420" y="351" text-anchor="middle" fill="var(--heading)">中</text>
+        <rect class="hm-cell" x="500" y="320" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="hm-t" x="570" y="351" text-anchor="middle" fill="var(--heading)">低</text>
+        <rect class="hm-cell" x="650" y="320" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 45%,transparent)"/><text class="hm-t" x="720" y="351" text-anchor="middle" fill="var(--heading)">中</text>
+        <rect class="hm-cell" x="800" y="320" width="140" height="52" rx="6" style="fill:color-mix(in srgb,var(--brand) 80%,transparent)"/><text class="hm-t" x="870" y="351" text-anchor="middle" fill="#fff">高</text>
+        <!-- 圖例 -->
+        <rect class="hm-cell" x="200" y="392" width="30" height="20" rx="4" style="fill:color-mix(in srgb,var(--brand) 80%,transparent)"/><text class="fn-side" x="238" y="407">高適配</text>
+        <rect class="hm-cell" x="320" y="392" width="30" height="20" rx="4" style="fill:color-mix(in srgb,var(--brand) 45%,transparent)"/><text class="fn-side" x="358" y="407">中適配</text>
+        <rect class="hm-cell" x="440" y="392" width="30" height="20" rx="4" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="fn-side" x="478" y="407">低適配</text>
+      </svg>
+    </div>
+    <div class="disc">＊適配度為業務判斷示意，實際方案與費率以中華電信正式評估報價為準。</div>
+  </section>
+
+  <!-- 進階3 -->
+  <section class="slide">
+    <span class="scene-tag">情境 3 · 進階技巧</span>
+    <span class="kick">Pro Tips 03</span>
+    <h2>產品知識庫：進階使用技巧</h2>
+    <div class="split">
+      <div class="panel hi">
+        <div class="mini">5 個進階技巧</div>
+        <ul class="clean" style="margin-top:14px">
+          <li><b>團隊共用 Notebook</b>：全處共用同一套最新官方文件，答案一致</li>
+          <li><b>來源命名規則</b>：用「產品_版本_日期」，方便追來源、防止用到舊版</li>
+          <li><b>防幻覺指令</b>：要求「只根據來源回答，找不到就說沒有」</li>
+          <li><b>AI 出題訓練新人</b>：自動生成測驗，驗收產品知識</li>
+          <li><b>定期汰換</b>：資費／規格更新後移除舊版本文件</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="mini">可直接複製的提示詞</div>
+        <div class="prompt" style="margin-top:14px">「只根據上傳來源回答；來源沒有的請回覆『需查證／另行報價』，不要臆測。」</div>
+        <div class="prompt">「根據規格書，幫我出 10 題新人測驗與解答。」</div>
+        <div class="prompt">「客戶問○○，請給附引用的標準話術，並標出對應文件段落。」</div>
+        <div class="disc" style="margin-top:14px">💡 小提醒：文件更新後務必移除舊版，避免 AI 引用過期資料。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 情境4 -->
+  <section class="slide">
+    <span class="scene-tag">情境 4 / 5</span>
+    <span class="kick">Scene 04</span>
+    <h2>客戶提案簡報快速生成</h2>
+    <div class="split">
+      <div class="panel hi">
+        <div class="mini">情境</div>
+        <p class="kv">以客戶需求、產品資料與案例為來源，用一組好的提示詞，讓 AI 產出提案簡報大綱與各頁重點。</p>
+        <div class="mini" style="margin-top:18px">痛點</div>
+        <p class="kv">提案簡報每次從零開始、架構想很久。</p>
+        <div class="mini" style="margin-top:18px">成果</div>
+        <p class="kv"><b>簡報大綱 + 每頁文案</b>，貼進 PPT／Google Slides 微調即可。</p>
+        <span class="pill">✍️ 提示詞</span><span class="pill tagA">📊 簡報產出</span>
+      </div>
+      <div class="panel">
+        <div class="mini">Step by Step</div>
+        <div class="steps" style="margin-top:12px">
+          <div class="step"><div class="num">1</div><div class="body"><b>備妥來源</b><span>匯入客戶需求紀錄、產品賣點、成功案例。</span></div></div>
+          <div class="step"><div class="num">2</div><div class="body"><b>下對提示詞</b><span>輸入：「以【客戶痛點→解決方案→效益→案例→報價→下一步】6 段，產出 8 頁提案簡報大綱。」</span></div></div>
+          <div class="step"><div class="num">3</div><div class="body"><b>逐頁展開</b><span>輸入：「每頁給標題、3 個條列重點與一句成交金句。」</span></div></div>
+          <div class="step"><div class="num">4</div><div class="body"><b>套用範本語氣</b><span>指定對象與語氣，如「對象是製造業採購主管，語氣專業精簡」。</span></div></div>
+          <div class="step"><div class="num">5</div><div class="body"><b>修改美化</b><span>把大綱貼進 PPT／Slides，補上圖表與品牌樣式即完稿。</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 案例4 -->
+  <section class="slide">
+    <span class="scene-tag">情境 4 · 實際案例</span>
+    <span class="kick">Case 04</span>
+    <h2>提案簡報：真實輸入 → AI 輸出</h2>
+    <div class="io">
+      <div class="col inp">
+        <span class="iohd in">📥 輸入</span>
+        <div class="srccap">來源：客戶需求訪談紀錄、現況架構圖、我方產品賣點與同業案例（匯入 4 份）</div>
+        <div class="src"><span class="who">【客戶背景】</span>宏達精密（工具機零件廠），總部＋台中／台南 2 廠＝3 據點，約 600 人；越南平陽新廠明年 Q2 投產。
+<span class="who">【現況痛點】</span>現用他牌數據專線，去年斷線 3 次影響 ERP 出貨；跨廠視訊延遲；資安僅單點防火牆。
+<span class="who">【明確需求】</span>①三廠＋越南跨境穩定串接 ②線路備援不能再斷 ③集中式資安 ④350 門企業行動門號今年到期一起談。
+<span class="who">【我方賣點】</span>SD-WAN 集中管理／動態選路、雙線備援、SLA 服務保證、國際電路(IEPL) 延伸越南、HiNet 資安(防火牆/DDoS/SOC)、企業行動門號整包。</div>
+        <div class="prompt"><b>💬 提示詞：</b>以「封面→痛點→方案→備援→資安→越南延伸→案例→效益→報價→時程」10 頁產出提案大綱，每頁 2 重點，並給 3 句成交金句與 30 秒電梯簡報。</div>
+      </div>
+      <div class="col outp">
+        <span class="iohd out">📤 AI 輸出（簡報大綱）</span>
+        <ul style="line-height:1.5">
+          <li><b>P1 封面</b>：宏達精密企業網路與資安整合提案</li>
+          <li><b>P2 現況痛點</b>：去年斷線 3 次影響 ERP、跨廠視訊延遲</li>
+          <li><b>P3 解決方案</b>：SD-WAN 服務三廠串接＋動態選路</li>
+          <li><b>P4 線路備援</b>：雙線備援、SLA 服務保證、斷線自動切換</li>
+          <li><b>P5 集中式資安</b>：HiNet 防火牆＋DDoS＋SOC 統一政策</li>
+          <li><b>P6 越南延伸</b>：國際電路(IEPL)＋SD-WAN 新廠一站納管</li>
+          <li><b>P7 同業案例</b>：同型金屬加工廠導入後斷線歸零、維運省時</li>
+          <li><b>P8 效益</b>：出貨不中斷、跨廠協作順、資安可視化</li>
+          <li><b>P9 報價</b>：數據專線＋SD-WAN＋IEPL＋350 門門號整包（專案報價）</li>
+          <li><b>P10 時程與下一步</b>：POC 兩週→分期上線→越南 Q2 同步</li>
+        </ul>
+        <div class="out-h">成交金句</div>
+        <ul>
+          <li>「一份合約，把三廠＋越南的連線、備援、資安、門號一次搞定。」</li>
+          <li>「越南新廠開機日，就是網路與資安到位日。」</li>
+        </ul>
+      </div>
+    </div>
+    <div class="disc">＊產品名稱依中華電信官網；報價一律為專案報價，實際以中華電信正式報價為準。</div>
+  </section>
+
+  <!-- 進階4 -->
+  <section class="slide">
+    <span class="scene-tag">情境 4 · 進階技巧</span>
+    <span class="kick">Pro Tips 04</span>
+    <h2>提案簡報：進階使用技巧</h2>
+    <div class="split">
+      <div class="panel hi">
+        <div class="mini">5 個進階技巧</div>
+        <ul class="clean" style="margin-top:14px">
+          <li><b>提案範本 Notebook</b>：放歷年得標提案，新案快速套版</li>
+          <li><b>指定受眾語氣</b>：如「對採購主管、專業精簡」，文案更到位</li>
+          <li><b>一鍵影片／Podcast</b>：生成 60 秒摘要給客戶預熱</li>
+          <li><b>A/B 兩版本</b>：技術版 vs 決策者版，擇優提報</li>
+          <li><b>會議紀錄當來源</b>：貼近客戶原話，提案更有共鳴</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="mini">可直接複製的提示詞</div>
+        <div class="prompt" style="margin-top:14px">「用這份提案生成 60 秒影片旁白，語氣專業有溫度。」</div>
+        <div class="prompt">「同一份需求，分別產出給『IT 主管』與『採購決策者』的兩版大綱。」</div>
+        <div class="prompt">「幫每頁補一句可以念出來的口語講稿。」</div>
+        <div class="disc" style="margin-top:14px">💡 小提醒：報價頁一律標「專案報價」，正式報價以公司系統為準。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 進階4 圖解 雷達圖 -->
+  <section class="slide">
+    <span class="scene-tag">情境 4 · 圖解</span>
+    <span class="kick">Radar Chart</span>
+    <h2>能力雷達：中華電信 vs 競品（示意）</h2>
+    <p class="muted-s" style="margin-bottom:2px">提案時用一張雷達圖說清楚「我方強在哪」，把價格劣勢轉成價值對話。</p>
+    <div class="chartwrap">
+      <svg viewBox="0 0 640 470" data-chart="radar" role="img" aria-label="中華電信與競品能力雷達圖">
+        <!-- 圖例 -->
+        <rect class="rd-da" x="176" y="14" width="16" height="16" rx="3"/><text class="leg-t" x="198" y="27">中華電信</text>
+        <rect class="rd-db" x="360" y="14" width="16" height="16" rx="3"/><text class="leg-t" x="382" y="27">競品（示意）</text>
+        <!-- 環 -->
+        <polygon class="rd-ring" points="320,70 472.2,180.6 414.0,359.4 226.0,359.4 167.8,180.6"/>
+        <polygon class="rd-ring" points="320,134 411.3,200.3 376.4,307.7 263.6,307.7 228.7,200.3"/>
+        <polygon class="rd-ring" points="320,198 350.4,220.1 338.8,255.9 301.2,255.9 289.6,220.1"/>
+        <!-- 軸 -->
+        <line class="rd-axis" x1="320" y1="230" x2="320" y2="70"/>
+        <line class="rd-axis" x1="320" y1="230" x2="472.2" y2="180.6"/>
+        <line class="rd-axis" x1="320" y1="230" x2="414.0" y2="359.4"/>
+        <line class="rd-axis" x1="320" y1="230" x2="226.0" y2="359.4"/>
+        <line class="rd-axis" x1="320" y1="230" x2="167.8" y2="180.6"/>
+        <!-- 競品多邊形 [3,3,3,2,4] -->
+        <polygon class="rd-b" points="320,134 411.3,200.3 376.4,307.7 282.4,281.8 198.3,190.4"/>
+        <circle class="rd-db" cx="320" cy="134" r="3.5"/><circle class="rd-db" cx="411.3" cy="200.3" r="3.5"/><circle class="rd-db" cx="376.4" cy="307.7" r="3.5"/><circle class="rd-db" cx="282.4" cy="281.8" r="3.5"/><circle class="rd-db" cx="198.3" cy="190.4" r="3.5"/>
+        <!-- 中華電信多邊形 [5,5,5,5,3] -->
+        <polygon class="rd-a" points="320,70 472.2,180.6 414.0,359.4 226.0,359.4 228.7,200.3"/>
+        <circle class="rd-da" cx="320" cy="70" r="3.5"/><circle class="rd-da" cx="472.2" cy="180.6" r="3.5"/><circle class="rd-da" cx="414.0" cy="359.4" r="3.5"/><circle class="rd-da" cx="226.0" cy="359.4" r="3.5"/><circle class="rd-da" cx="228.7" cy="200.3" r="3.5"/>
+        <!-- 軸標籤 -->
+        <text class="rd-lab" x="320" y="54"  text-anchor="middle">網路涵蓋</text>
+        <text class="rd-lab" x="486" y="176" text-anchor="start">資安整合</text>
+        <text class="rd-lab" x="424" y="384" text-anchor="start">SLA 保證</text>
+        <text class="rd-lab" x="216" y="384" text-anchor="end">跨境／海外</text>
+        <text class="rd-lab" x="154" y="176" text-anchor="end">價格彈性</text>
+      </svg>
+    </div>
+    <div class="disc">＊各面向為業務觀點示意評分（滿分 5），非官方數據；費率以專案報價為準。</div>
+  </section>
+
+  <!-- 9 情境5 -->
+  <section class="slide">
+    <span class="scene-tag">情境 5 / 5</span>
+    <span class="kick">Scene 05</span>
+    <h2>財報／產業報告解讀（大客戶準備）</h2>
+    <div class="split">
+      <div class="panel hi">
+        <div class="mini">情境</div>
+        <p class="kv">拜訪大客戶前，把對方財報或產業報告匯入，快速掌握營運重點與可切入的商機。</p>
+        <div class="mini" style="margin-top:18px">痛點</div>
+        <p class="kv">財報又長又專業，讀不懂也沒時間讀。</p>
+        <div class="mini" style="margin-top:18px">成果</div>
+        <p class="kv"><b>重點摘要 + 商機切入點 + 通勤可聽的音訊</b>。</p>
+        <span class="pill">📄 PDF 財報</span><span class="pill tagA">🎧 Podcast 音訊</span><span class="pill">🧠 心智圖</span>
+      </div>
+      <div class="panel">
+        <div class="mini">Step by Step</div>
+        <div class="steps" style="margin-top:12px">
+          <div class="step"><div class="num">1</div><div class="body"><b>匯入財報／報告</b><span>上傳客戶年報、法說會資料或產業研究 PDF。</span></div></div>
+          <div class="step"><div class="num">2</div><div class="body"><b>抓經營重點</b><span>輸入：「用白話摘要營收、獲利、成長動能與今年策略重點。」</span></div></div>
+          <div class="step"><div class="num">3</div><div class="body"><b>找商機</b><span>輸入：「依這些重點，我方產品有哪些切入機會與拜訪話題？」</span></div></div>
+          <div class="step"><div class="num">4</div><div class="body"><b>生成 Podcast 音訊</b><span>一鍵產生中文對談音訊，通勤或拜訪前的路上聽。</span></div></div>
+          <div class="step"><div class="num">5</div><div class="body"><b>心智圖收尾</b><span>產出心智圖，把客戶全貌一頁看懂，帶著上場。</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 案例5 -->
+  <section class="slide">
+    <span class="scene-tag">情境 5 · 實際案例</span>
+    <span class="kick">Case 05</span>
+    <h2>財報解讀：真實輸入 → AI 輸出</h2>
+    <div class="io">
+      <div class="col inp">
+        <span class="iohd in">📥 輸入</span>
+        <div class="srccap">來源：目標客戶「台鴻精工（上市）」年報、法說會簡報與 Q&amp;A 逐字稿（匯入 3 份；數字為示意）</div>
+        <div class="src"><span class="who">【年報】</span>全年合併營收 148 億、YoY +12%；毛利率 28.5%（+1.2pp）；資本支出 22 億，主投智慧工廠與海外擴點。海外據點 3→5（新增越南平陽、墨西哥）。
+<span class="who">【法說 Q&amp;A】</span>
+問（外資分析師）：明年 capex 方向？
+答（財務長）：續投智慧製造與資安，雲端與資料備援是重點。
+問：越南廠時程？
+答：Q3 試產，需與台灣總部即時連線、確保生產資料不中斷。</div>
+        <div class="prompt"><b>💬 提示詞：</b>白話摘要營運重點（營收/毛利/capex/海外），指出我方（專線／IEPL／SD-WAN／hicloud IDC／HiNet 資安）商機、3 個拜訪話題與 1 個風險，財務數字直接引用來源。</div>
+      </div>
+      <div class="col outp">
+        <span class="iohd out">📤 AI 輸出</span>
+        <div class="out-h">營運重點（白話）</div>
+        <ul>
+          <li>營收 148 億 YoY +12%、毛利率 28.5% 走升，體質佳〔引用：年報〕</li>
+          <li>capex 22 億續投智慧工廠與海外，雲端與備援是重點〔引用：法說〕</li>
+          <li>海外據點 3→5，新增越南、墨西哥〔引用：年報〕</li>
+        </ul>
+        <div class="out-h">我方商機切入點</div>
+        <ul>
+          <li>越南廠↔總部即時連線：國際電路(IEPL)＋SD-WAN 跨境</li>
+          <li>資料不中斷：hicloud IDC 異地備援＋雲端連線</li>
+          <li>資安強化：HiNet 資安 防火牆／DDoS／SOC</li>
+        </ul>
+        <div class="out-h">3 個拜訪話題</div>
+        <ul>
+          <li>「越南 Q3 試產，跨境連線與生產資料備援可一起規劃。」</li>
+          <li>「capex 提到雲端與備援，正好談 hicloud 異地備援。」</li>
+          <li>「墨西哥新據點的國際電路需求，也能一併評估。」</li>
+        </ul>
+        <div class="disc" style="margin-top:8px">⚠️ 風險：對手可能主打低價跨境，需以 SLA 與一站整合訴求價值。</div>
+      </div>
+    </div>
+    <div class="disc">＊財務數字為示意，實際以客戶公開資訊為準；我方費率為專案報價。可再一鍵生成 Podcast 音訊，拜訪路上聽。</div>
+  </section>
+
+  <!-- 進階5 -->
+  <section class="slide">
+    <span class="scene-tag">情境 5 · 進階技巧</span>
+    <span class="kick">Pro Tips 05</span>
+    <h2>財報／大客戶研究：進階使用技巧</h2>
+    <div class="split">
+      <div class="panel hi">
+        <div class="mini">5 個進階技巧</div>
+        <ul class="clean" style="margin-top:14px">
+          <li><b>多份財報比較</b>：近 3 年或對手同業一起看趨勢</li>
+          <li><b>產業報告交叉</b>：找總經與政策風向，商機更立體</li>
+          <li><b>Podcast 音訊</b>：生成對談摘要，通勤／拜訪路上聽</li>
+          <li><b>客戶全貌心智圖</b>：一頁看懂，帶著上場</li>
+          <li><b>關鍵字追蹤</b>：盯 capex／資安／海外，自動抓商機</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="mini">可直接複製的提示詞</div>
+        <div class="prompt" style="margin-top:14px">「比較這家公司近 3 年營收與毛利趨勢，並點出對我方的商機變化。」</div>
+        <div class="prompt">「把年報＋這篇產業報告交叉，列出 5 個可切入的 IT 需求。」</div>
+        <div class="prompt">「用對談風格生成 3 分鐘中文音訊摘要，適合開車聽。」</div>
+        <div class="disc" style="margin-top:14px">💡 小提醒：財報數字以客戶公開揭露為準，勿對外引用未經證實資訊。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 心智圖範例 -->
+  <section class="slide">
+    <span class="scene-tag">情境 5 · 心智圖</span>
+    <span class="kick">Mind Map</span>
+    <h2>客戶心智圖：台鴻精工 一頁看懂</h2>
+    <p class="muted-s" style="margin-bottom:2px">參照 D3 Force-Directed Graph：節點載入時自動收斂成形、可用滑鼠拖曳；以客戶為核心連結「6 大面向 · 12 個重點」。</p>
+    <div class="mindwrap">
+      <svg id="fdg" class="mind" viewBox="0 0 900 560" data-chart="fdg" role="img" aria-label="台鴻精工 客戶全貌力導向關係圖">
+        <g class="fdg-links"></g>
+        <g class="fdg-nodes"></g>
+      </svg>
+    </div>
+    <div class="disc">＊心智圖內容依 Case 05 整理；財務數字為示意，電信服務費率以專案報價為準。</div>
+  </section>
+
+  <!-- 10 導入建議 -->
+  <section class="slide">
+    <span class="kick">導入建議</span>
+    <h2>上手技巧 ＋ 注意事項</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>🚀 快速上手 3 招</h3>
+        <ul class="clean" style="margin-top:8px">
+          <li>先從「1 個真實案子」開始，別一次匯入全部</li>
+          <li>提示詞越具體越好：講清楚<b>對象、格式、數量、語氣</b></li>
+          <li>善用「引用」回查原文，答案再拿去用</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>⚠️ 使用注意</h3>
+        <ul class="clean" style="margin-top:8px">
+          <li>客戶敏感／機密資料，先確認公司資安政策再上傳</li>
+          <li>AI 僅依來源作答，來源不完整答案就不完整</li>
+          <li>重要數字（報價、財報）務必人工再核對一次</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warnbox"><b>推廣小提醒：</b> 讓同仁「一次體驗一個情境並拿到成果」，比講一堆功能更有感。建議每週選 1 個情境實作分享。</div>
+  </section>
+
+  <!-- 10b 導入時程 甘特 -->
+  <section class="slide">
+    <span class="kick">Timeline · Gantt</span>
+    <h2>8 週導入時程建議（示意）</h2>
+    <p class="muted-s" style="margin-bottom:2px">從資料整備到成效檢視，分階段推進；每階段都要有「可展示的成果」。</p>
+    <div class="chartwrap">
+      <svg viewBox="0 0 1000 380" data-chart="gantt" role="img" aria-label="8 週導入時程甘特圖">
+        <!-- 週格線 + 標題 -->
+        <g>
+          <text class="gt-tlab" x="285" y="44" text-anchor="middle">W1</text><text class="gt-tlab" x="375" y="44" text-anchor="middle">W2</text>
+          <text class="gt-tlab" x="465" y="44" text-anchor="middle">W3</text><text class="gt-tlab" x="555" y="44" text-anchor="middle">W4</text>
+          <text class="gt-tlab" x="645" y="44" text-anchor="middle">W5</text><text class="gt-tlab" x="735" y="44" text-anchor="middle">W6</text>
+          <text class="gt-tlab" x="825" y="44" text-anchor="middle">W7</text><text class="gt-tlab" x="915" y="44" text-anchor="middle">W8</text>
+          <line class="gt-tick" x1="240" y1="50" x2="240" y2="342"/><line class="gt-tick" x1="330" y1="50" x2="330" y2="342"/>
+          <line class="gt-tick" x1="420" y1="50" x2="420" y2="342"/><line class="gt-tick" x1="510" y1="50" x2="510" y2="342"/>
+          <line class="gt-tick" x1="600" y1="50" x2="600" y2="342"/><line class="gt-tick" x1="690" y1="50" x2="690" y2="342"/>
+          <line class="gt-tick" x1="780" y1="50" x2="780" y2="342"/><line class="gt-tick" x1="870" y1="50" x2="870" y2="342"/>
+          <line class="gt-tick" x1="960" y1="50" x2="960" y2="342"/>
+        </g>
+        <!-- 列 -->
+        <text class="gt-lab" x="225" y="82"  text-anchor="end">需求盤點・資料整備</text>
+        <rect class="gt-track" x="240" y="64" width="720" height="26" rx="6"/><rect class="mm-c1" x="240" y="64" width="180" height="26" rx="6"/><text class="gt-btxt" x="330" y="82" text-anchor="middle">W1–W2</text>
+        <text class="gt-lab" x="225" y="130" text-anchor="end">建置 Notebook 知識庫</text>
+        <rect class="gt-track" x="240" y="112" width="720" height="26" rx="6"/><rect class="mm-c4" x="330" y="112" width="180" height="26" rx="6"/><text class="gt-btxt" x="420" y="130" text-anchor="middle">W2–W3</text>
+        <text class="gt-lab" x="225" y="178" text-anchor="end">種子同仁培訓</text>
+        <rect class="gt-track" x="240" y="160" width="720" height="26" rx="6"/><rect class="mm-c2" x="420" y="160" width="180" height="26" rx="6"/><text class="gt-btxt" x="510" y="178" text-anchor="middle">W3–W4</text>
+        <text class="gt-lab" x="225" y="226" text-anchor="end">情境試作（會議／競品）</text>
+        <rect class="gt-track" x="240" y="208" width="720" height="26" rx="6"/><rect class="mm-c5" x="510" y="208" width="270" height="26" rx="6"/><text class="gt-btxt" x="645" y="226" text-anchor="middle">W4–W6</text>
+        <text class="gt-lab" x="225" y="274" text-anchor="end">提案／財報情境擴散</text>
+        <rect class="gt-track" x="240" y="256" width="720" height="26" rx="6"/><rect class="mm-c6" x="600" y="256" width="270" height="26" rx="6"/><text class="gt-btxt" x="735" y="274" text-anchor="middle">W5–W7</text>
+        <text class="gt-lab" x="225" y="322" text-anchor="end">成效檢視與優化</text>
+        <rect class="gt-track" x="240" y="304" width="720" height="26" rx="6"/><rect class="mm-c3" x="780" y="304" width="180" height="26" rx="6"/><text class="gt-btxt" x="870" y="322" text-anchor="middle">W7–W8</text>
+      </svg>
+    </div>
+    <div class="disc">＊時程為導入示意，實際依團隊人力與案量調整。</div>
+  </section>
+
+  <!-- 10c 業務漏斗 -->
+  <section class="slide">
+    <span class="kick">Funnel</span>
+    <h2>業務推進漏斗：AI 在每一關幫什麼（示意）</h2>
+    <p class="muted-s" style="margin-bottom:2px">從名單到成交，NotebookLM 在每個階段都能省時、補彈藥、提高轉換。</p>
+    <div class="chartwrap">
+      <svg viewBox="0 0 820 400" data-chart="funnel" role="img" aria-label="業務推進漏斗圖">
+        <polygon points="50,30 610,30 565,92 95,92"   style="fill:color-mix(in srgb,var(--brand) 85%,transparent)"/><text class="fn-t" x="330" y="66" text-anchor="middle">名單開發　100%</text>
+        <polygon points="95,100 565,100 520,162 140,162" style="fill:color-mix(in srgb,var(--brand) 72%,transparent)"/><text class="fn-t" x="330" y="136" text-anchor="middle">需求確認　65%</text>
+        <polygon points="140,170 520,170 475,232 185,232" style="fill:color-mix(in srgb,var(--brand) 59%,transparent)"/><text class="fn-t" x="330" y="206" text-anchor="middle">方案提案　42%</text>
+        <polygon points="185,240 475,240 430,302 230,302" style="fill:color-mix(in srgb,var(--brand) 46%,transparent)"/><text class="fn-t" x="330" y="276" text-anchor="middle">議價協商　26%</text>
+        <polygon points="230,310 430,310 385,372 275,372" style="fill:color-mix(in srgb,var(--brand) 33%,transparent)"/><text class="fn-t" x="330" y="346" text-anchor="middle">成交簽約　15%</text>
+        <!-- 右側對應動作 -->
+        <circle class="mm-c1" cx="630" cy="57"  r="5"/><text class="fn-side" x="646" y="61">既有客戶＋資料整備</text>
+        <circle class="mm-c4" cx="630" cy="127" r="5"/><text class="fn-side" x="646" y="131">拜訪紀錄摘要、痛點確認</text>
+        <circle class="mm-c5" cx="630" cy="197" r="5"/><text class="fn-side" x="646" y="201">NotebookLM 生成提案／簡報</text>
+        <circle class="mm-c2" cx="630" cy="267" r="5"/><text class="fn-side" x="646" y="271">TCO／SLA 反制話術</text>
+        <circle class="mm-c6" cx="630" cy="337" r="5"/><text class="fn-side" x="646" y="341">整包簽約／門號續約</text>
+      </svg>
+    </div>
+    <div class="disc">＊轉換率為示意，用以說明各階段 AI 應用；實際依產品與客戶而定。</div>
+  </section>
+
+  <!-- 11 結尾 -->
+  <section class="slide center">
+    <span class="hero-badge">🌱 現在就開始</span>
+    <h1 style="margin-top:24px">今天先挑 1 個情境試試</h1>
+    <p class="lead" style="max-width:760px">打開 notebooklm.google.com，把手邊一份會議紀錄或產品文件丟進去，問它第一個問題。省下的時間，就是你的業績時間。</p>
+    <div style="margin-top:26px">
+      <span class="pill">1️⃣ 會議紀錄</span><span class="pill">2️⃣ 競品研究</span><span class="pill">3️⃣ 產品知識庫</span>
+      <span class="pill">4️⃣ 提案簡報</span><span class="pill">5️⃣ 財報解讀</span>
+    </div>
+    <p class="muted-s" style="margin-top:34px">資料來源：《數位時代》NotebookLM（Gemini Notebook）完整教學　|　AI 推廣種子計畫</p>
+  </section>
+
+  <!-- 12 製作說明 Colophon -->
+  <section class="slide" style="overflow-y:auto">
+    <span class="kick">Colophon</span>
+    <h2>這份簡報怎麼做出來的？</h2>
+    <p class="muted-s" style="margin-bottom:2px">工具、技術、參考資料與製作流程一次交代，讓同仁也能自行複製、二次改作。</p>
+    <div class="grid g2" style="margin-top:8px">
+      <div class="card">
+        <h3>🛠 使用工具</h3>
+        <ul class="clean" style="margin-top:6px">
+          <li><b>GitHub Copilot（AI 協作）</b>：規劃架構、產生內容與程式碼、逐步修訂</li>
+          <li><b>NotebookLM</b>：本簡報介紹的主角，也用來消化參考文章、彙整重點</li>
+          <li><b>純文字編輯器 + 瀏覽器</b>：撰寫與即時預覽，無需安裝任何環境</li>
+        </ul>
+        <h3 style="margin-top:12px">💻 技術做法</h3>
+        <ul class="clean" style="margin-top:6px">
+          <li>單一 <b>HTML 檔</b>，內含 CSS／JavaScript，<b>離線可開、免上網</b></li>
+          <li>圖表全為<b>原生 SVG</b> 手繪；動畫用 <b>CSS Keyframes</b></li>
+          <li>P20 力導向圖為<b>自寫物理模擬</b>（斥力＋彈簧＋阻尼），未引入外部套件</li>
+          <li>6 種明亮主題以 <b>CSS 變數</b>切換，記憶於 localStorage</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>📚 參考資料</h3>
+        <ul class="clean" style="margin-top:6px">
+          <li>《數位時代》〈NotebookLM 完整教學與應用情境〉<br><a href="https://www.bnext.com.tw/article/91193/notebooklm-complete-guide-and-use-cases" target="_blank" rel="noopener" style="color:var(--brand);text-decoration:underline;word-break:break-all">bnext.com.tw/article/91193</a></li>
+          <li>Google NotebookLM 官方網站<br><a href="https://notebooklm.google.com" target="_blank" rel="noopener" style="color:var(--brand);text-decoration:underline;word-break:break-all">notebooklm.google.com</a></li>
+          <li>D3.js Gallery／Force-Directed Graph（僅參考視覺，未用其程式碼）<br><a href="https://observablehq.com/@d3/gallery" target="_blank" rel="noopener" style="color:var(--brand);text-decoration:underline;word-break:break-all">observablehq.com/@d3/gallery</a>、<a href="https://observablehq.com/@d3/force-directed-graph/2" target="_blank" rel="noopener" style="color:var(--brand);text-decoration:underline;word-break:break-all">@d3/force-directed-graph/2</a></li>
+          <li>中華電信企業服務（數據專線／IP-VPN／SD-WAN／HiNet 資安／hicloud／IEPL）<br><a href="https://www.cht.com.tw" target="_blank" rel="noopener" style="color:var(--brand);text-decoration:underline;word-break:break-all">cht.com.tw</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="disc" style="margin-top:8px">＊案例中的公司、財務數字與轉換率均為<b>示意</b>；電信費率一律以<b>專案報價</b>為準，非官方數據。</div>
+
+    <div class="mini" style="margin-top:12px">製作流程</div>
+    <div style="margin-top:6px;width:100%">
+      <svg viewBox="0 0 1000 96" data-chart="flow" role="img" aria-label="簡報製作五步流程" style="display:block;width:100%;height:auto">
+        <defs>
+          <marker id="cfArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="fl-arrow"/>
+          </marker>
+        </defs>
+        <line x1="176" y1="48" x2="204" y2="48" stroke="var(--brand)" stroke-width="2" marker-end="url(#cfArr)"/>
+        <line x1="376" y1="48" x2="404" y2="48" stroke="var(--brand)" stroke-width="2" marker-end="url(#cfArr)"/>
+        <line x1="576" y1="48" x2="604" y2="48" stroke="var(--brand)" stroke-width="2" marker-end="url(#cfArr)"/>
+        <line x1="776" y1="48" x2="804" y2="48" stroke="var(--brand)" stroke-width="2" marker-end="url(#cfArr)"/>
+        <g><rect class="fl-node" x="16"  y="20" width="160" height="56" rx="12"/><text class="fl-t" x="96"  y="46" text-anchor="middle">① 蒐集參考</text><text class="fl-s" x="96"  y="66" text-anchor="middle">文章／官網匯入</text></g>
+        <g><rect class="fl-node" x="216" y="20" width="160" height="56" rx="12"/><text class="fl-t" x="296" y="46" text-anchor="middle">② 彙整重點</text><text class="fl-s" x="296" y="66" text-anchor="middle">情境與案例規劃</text></g>
+        <g><rect class="fl-node" x="416" y="20" width="160" height="56" rx="12"/><text class="fl-t" x="496" y="46" text-anchor="middle">③ 撰寫內容</text><text class="fl-s" x="496" y="66" text-anchor="middle">Copilot 協作產出</text></g>
+        <g><rect class="fl-node" x="616" y="20" width="160" height="56" rx="12"/><text class="fl-t" x="696" y="46" text-anchor="middle">④ 圖表美化</text><text class="fl-s" x="696" y="66" text-anchor="middle">SVG／動畫／主題</text></g>
+        <g><rect class="fl-node" x="816" y="20" width="160" height="56" rx="12"/><text class="fl-t" x="896" y="46" text-anchor="middle">⑤ 檢視修訂</text><text class="fl-s" x="896" y="66" text-anchor="middle">預覽回饋再迭代</text></g>
+      </svg>
+    </div>
+    <div class="disc" style="margin-top:6px">＊本頁流程亦即「用 AI 做一份教學簡報」的縮影：先餵資料、再共創、後打磨，人審定稿。</div>
+  </section>
+
+  <div class="dots" id="dots"></div>
+  <div class="pagenum" id="pageno">1 / 29</div>
+  <div class="nav">
+    <button id="prev" aria-label="上一頁">‹</button>
+    <button id="next" aria-label="下一頁">›</button>
+  </div>
+</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dotsWrap=document.getElementById('dots');
+  const progress=document.getElementById('progress');
+  const pageno=document.getElementById('pageno');
+  let i=0;
+  slides.forEach((_,idx)=>{
+    const d=document.createElement('div');d.className='dot'+(idx===0?' active':'');
+    d.textContent=idx+1;d.title='第 '+(idx+1)+' 頁';
+    d.onclick=()=>go(idx);dotsWrap.appendChild(d);
+  });
+  const dots=[...document.querySelectorAll('.dot')];
+  function go(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,idx)=>s.classList.toggle('active',idx===i));
+    dots.forEach((d,idx)=>d.classList.toggle('active',idx===i));
+    progress.style.transform='scaleX('+((i+1)/slides.length)+')';
+    pageno.innerHTML='<b>'+(i+1)+'</b> / '+slides.length;
+    fdgHook(i);
+  }
+  document.getElementById('next').onclick=()=>go(i+1);
+  document.getElementById('prev').onclick=()=>go(i-1);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')go(i+1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp')go(i-1);
+    if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+  });
+  // 主題切換（記憶選擇）
+  (function(){
+    const KEY='deckTheme';
+    const sws=[...document.querySelectorAll('#themebar .swatch')];
+    function apply(set){
+      if(set==='blue') document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme',set);
+      sws.forEach(s=>s.classList.toggle('active',s.dataset.set===set));
+      try{localStorage.setItem(KEY,set);}catch(e){}
+    }
+    sws.forEach(s=>s.addEventListener('click',()=>apply(s.dataset.set)));
+    let saved='blue'; try{saved=localStorage.getItem(KEY)||'blue';}catch(e){}
+    apply(saved);
+  })();
+  // === 力導向關係圖（P20，自寫物理模擬，無外部套件） ===
+  function fdgHook(idx){
+    if(!window.__fdg) return;
+    var host=slides[idx] && slides[idx].querySelector('#fdg');
+    if(host) window.__fdg.start(); else window.__fdg.stop();
+  }
+  (function(){
+    var svg=document.getElementById('fdg');
+    if(!svg) return;
+    var W=900,H=560,CX=450,CY=280;
+    var gL=svg.querySelector('.fdg-links'), gN=svg.querySelector('.fdg-nodes');
+    var SVGNS='http://www.w3.org/2000/svg';
+    // 面向（6）與重點（各 2）
+    var mains=[
+      {label:'📈 財務體質',c:'mm-c1',leaves:['營收 +12%','毛利 28.5%']},
+      {label:'🏭 營運動態',c:'mm-c2',leaves:['越南 Q3 試產','capex 擴產']},
+      {label:'⚠ 競爭風險',c:'mm-c3',leaves:['低價跨境搶單','匯率／關稅']},
+      {label:'💡 我方商機',c:'mm-c4',leaves:['IEPL 跨境組網','hicloud 異地備援']},
+      {label:'🗣 拜訪話題',c:'mm-c5',leaves:['越南專線連線','資安 SOC／DDoS']},
+      {label:'🎯 決策鏈',c:'mm-c6',leaves:['CFO：TCO 攤提','IT：穩定／SLA']}
+    ];
+    var nodes=[], links=[];
+    var hub={id:'hub',type:'hub',label:'台鴻精工',c:'mm-hub',r:38,pin:true};
+    nodes.push(hub);
+    mains.forEach(function(m,mi){
+      var mn={id:'m'+mi,type:'main',label:m.label,c:m.c,r:11};
+      nodes.push(mn); links.push({s:hub,t:mn,len:132});
+      m.leaves.forEach(function(lf,li){
+        var ln={id:'l'+mi+'_'+li,type:'leaf',label:lf,c:m.c,r:6};
+        nodes.push(ln); links.push({s:mn,t:ln,len:74});
+      });
+    });
+    // 建立 DOM（一次）
+    var lineEls=links.map(function(lk){
+      var el=document.createElementNS(SVGNS,'line');
+      el.setAttribute('class', lk.t.type==='leaf'?'mm-edge2':'mm-edge');
+      gL.appendChild(el); return el;
+    });
+    nodes.forEach(function(nd){
+      var g=document.createElementNS(SVGNS,'g');
+      g.setAttribute('class','fdg-node'); g.style.cursor='grab'; g.style.touchAction='none';
+      var hit=document.createElementNS(SVGNS,'circle');
+      hit.setAttribute('class','fdg-hit'); hit.setAttribute('r', Math.max(nd.r+12, nd.type==='leaf'?18:nd.r+14));
+      g.appendChild(hit);
+      var c=document.createElementNS(SVGNS,'circle');
+      c.setAttribute('class',nd.c); c.setAttribute('r',nd.r);
+      g.appendChild(c);
+      var t=document.createElementNS(SVGNS,'text');
+      if(nd.type==='hub'){ t.setAttribute('class','mm-hubt'); t.setAttribute('text-anchor','middle'); t.setAttribute('font-size','15'); t.setAttribute('font-weight','800'); t.textContent=nd.label; }
+      else if(nd.type==='main'){ t.setAttribute('class','mm-mt'); t.setAttribute('text-anchor','middle'); t.setAttribute('font-size','12'); t.textContent=nd.label; }
+      else { t.setAttribute('class','mm-st'); t.setAttribute('text-anchor','start'); t.setAttribute('font-size','11'); t.textContent=nd.label; }
+      g.appendChild(t);
+      nd.el=g; nd.circle=c; nd.text=t; nd.hit=hit; gN.appendChild(g);
+      addDrag(nd,g);
+    });
+    function seed(){
+      nodes.forEach(function(nd){
+        if(nd.pin){ nd.x=CX; nd.y=CY; }
+        else { var a=Math.random()*Math.PI*2, rr=40+Math.random()*80; nd.x=CX+Math.cos(a)*rr; nd.y=CY+Math.sin(a)*rr; }
+        nd.vx=0; nd.vy=0;
+      });
+      alpha=1;
+    }
+    var alpha=1, raf=null, running=false, dragNode=null;
+    function fixed(nd){ return nd.pin || nd===dragNode || nd.returning; }
+    function tick(){
+      // 斥力
+      for(var a=0;a<nodes.length;a++){ for(var b=a+1;b<nodes.length;b++){
+        var na=nodes[a], nb=nodes[b];
+        var dx=na.x-nb.x, dy=na.y-nb.y, d2=dx*dx+dy*dy||0.01, d=Math.sqrt(d2);
+        if(d<1){ d=1; dx=Math.random()-0.5; dy=Math.random()-0.5; }
+        var f=2600/d2; var ux=dx/d, uy=dy/d;
+        if(!fixed(na)){ na.vx+=ux*f; na.vy+=uy*f; }
+        if(!fixed(nb)){ nb.vx-=ux*f; nb.vy-=uy*f; }
+      }}
+      // 彈簧
+      links.forEach(function(lk){
+        var dx=lk.t.x-lk.s.x, dy=lk.t.y-lk.s.y, d=Math.sqrt(dx*dx+dy*dy)||0.01;
+        var f=(d-lk.len)*0.035; var ux=dx/d, uy=dy/d;
+        if(!fixed(lk.s)){ lk.s.vx+=ux*f; lk.s.vy+=uy*f; }
+        if(!fixed(lk.t)){ lk.t.vx-=ux*f; lk.t.vy-=uy*f; }
+      });
+      // 向心 / 回彈 + 積分
+      nodes.forEach(function(nd){
+        if(nd.pin || nd===dragNode) return;
+        if(nd.returning){
+          // 放開後以彈簧力（帶輕微回彈）飛回原位
+          var rx=nd.homeX-nd.x, ry=nd.homeY-nd.y;
+          nd.vx+=rx*0.2; nd.vy+=ry*0.2;
+          nd.vx*=0.74; nd.vy*=0.74;
+          nd.x+=nd.vx; nd.y+=nd.vy;
+          if(Math.abs(rx)<1.2 && Math.abs(ry)<1.2 && Math.abs(nd.vx)<0.4 && Math.abs(nd.vy)<0.4){
+            nd.x=nd.homeX; nd.y=nd.homeY; nd.vx=0; nd.vy=0; nd.returning=false;
+          }
+          return;
+        }
+        nd.vx+=(CX-nd.x)*0.006; nd.vy+=(CY-nd.y)*0.006;
+        nd.vx*=0.86; nd.vy*=0.86;
+        nd.x+=nd.vx*alpha; nd.y+=nd.vy*alpha;
+        nd.x=Math.max(nd.r+30,Math.min(W-nd.r-30,nd.x));
+        nd.y=Math.max(nd.r+18,Math.min(H-nd.r-18,nd.y));
+      });
+      if(alpha>0.06) alpha*=0.992;
+      render();
+    }
+    function render(){
+      links.forEach(function(lk,k){
+        lineEls[k].setAttribute('x1',lk.s.x); lineEls[k].setAttribute('y1',lk.s.y);
+        lineEls[k].setAttribute('x2',lk.t.x); lineEls[k].setAttribute('y2',lk.t.y);
+      });
+      nodes.forEach(function(nd){
+        nd.circle.setAttribute('cx',nd.x); nd.circle.setAttribute('cy',nd.y);
+        nd.hit.setAttribute('cx',nd.x); nd.hit.setAttribute('cy',nd.y);
+        if(nd.type==='leaf'){ nd.text.setAttribute('x',nd.x+nd.r+5); nd.text.setAttribute('y',nd.y+4); }
+        else { nd.text.setAttribute('x',nd.x); nd.text.setAttribute('y',nd.type==='hub'?nd.y+5:nd.y+4); }
+      });
+    }
+    function loop(){ if(!running) return; tick(); raf=requestAnimationFrame(loop); }
+    function svgPt(evt){
+      var p=svg.createSVGPoint(); p.x=evt.clientX; p.y=evt.clientY;
+      var m=svg.getScreenCTM(); if(!m) return null;
+      var q=p.matrixTransform(m.inverse()); return q;
+    }
+    function addDrag(nd,g){
+      g.addEventListener('pointerdown',function(e){
+        dragNode=nd; nd.returning=false;
+        nd.homeX=nd.x; nd.homeY=nd.y;   // 記住原位，放開後彈回
+        g.style.cursor='grabbing'; alpha=Math.max(alpha,0.6);
+        g.setPointerCapture&&g.setPointerCapture(e.pointerId); e.preventDefault();
+      });
+      g.addEventListener('pointermove',function(e){
+        if(dragNode!==nd) return; var q=svgPt(e); if(!q) return;
+        nd.x=q.x; nd.y=q.y; nd.vx=0; nd.vy=0; render();
+      });
+      function up(e){
+        if(dragNode===nd){
+          dragNode=null; g.style.cursor='grab';
+          nd.returning=true; nd.vx=0; nd.vy=0;   // 觸發彈回原位
+          alpha=Math.max(alpha,0.3);
+        }
+      }
+      g.addEventListener('pointerup',up); g.addEventListener('pointercancel',up);
+    }
+    var api={
+      start:function(){ if(running) return; running=true; seed(); render(); loop(); },
+      stop:function(){ running=false; if(raf) cancelAnimationFrame(raf); raf=null; }
+    };
+    window.__fdg=api;
+  })();
+  go(0);
+</script>
+</body>
+</html>
