@@ -5,7 +5,8 @@
 <div class="card"><b>⚠ 資料安全：</b>只貼虛構或已去識別化的資料。<br><b>練習方式</b>：① 開 <a href="https://notebooklm.google.com" target="_blank">NotebookLM</a> 建立筆記本 → ② 把「範例資料」複製貼成來源（新增來源 → 複製的文字）→ ③ 複製「提示詞」貼到對話框 → ④ 檢查結果，再用「進階追問」深入。<br>範例資料皆為虛構，請勿貼入真實客戶機敏資料。</div>
 <div id="list"></div></main>
 <script>
-const T=["10 分鐘（必練）","10 分鐘","10 分鐘（必練）","10 分鐘","10 分鐘"];\nconst D=["待辦表至少 3 筆，每筆都有負責人與期限；感謝信提到客戶預算與下週五報價。","比較表涵蓋價格／SLA／客服／裝機 4 項；話術能回應「競品比較便宜」。","推薦方案附來源引用；故意問「方案 X 是否支援 20G」，AI 應回答資料未提供，並能點開引用核對。","大綱 8 頁，每頁有 3 個重點；第 3 頁口頭說明稿約 1 分鐘。","整理出 3 個需求與 5 個開場提問，且每項都能對應到來源。"];\nconst S=[
+const T=["10 分鐘（必練）","10 分鐘","10 分鐘（必練）","10 分鐘","10 分鐘"];\nconst D=["待辦表至少 3 筆，每筆都有負責人與期限；感謝信提到客戶預算與下週五報價。","比較表涵蓋價格／SLA／客服／裝機 4 項；話術能回應「競品比較便宜」。","推薦方案附來源引用；故意問「方案 X 是否支援 20G」，AI 應回答資料未提供，並能點開引用核對。","大綱 8 頁，每頁有 3 個重點；第 3 頁口頭說明稿約 1 分鐘。","整理出 3 個需求與 5 個開場提問，且每項都能對應到來源。"];
+const S=[
 {t:"1. 客戶會議紀錄＋待辦追蹤",d:`【會議紀錄】2026/09/18 台鴻精工 拜訪
 與會：王經理（資訊）、陳副總；我方：業務小林
 - 王經理表示廠區 3 條產線網路常斷線，希望評估專線備援，預算約每月 8 萬內。
@@ -31,4 +32,5 @@ document.getElementById('list').innerHTML=S.map((s,i)=>`<div class="card"><h2>${
 <b>進階追問</b> <button class="alt" onclick="cp(${i},'a',this)">複製</button><pre>${esc(s.a)}</pre></div>`).join('');
 function cp(i,k,b){navigator.clipboard.writeText(S[i][k]);const o=b.textContent;b.textContent='已複製 ✓';setTimeout(()=>b.textContent=o,1200)}
 </script><script src="assets/nav.js"></script></body></html>
+
 
