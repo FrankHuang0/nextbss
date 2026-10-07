@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+﻿<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>實作練習包</title><link rel="stylesheet" href="assets/style.css"></head><body>
 <header><h1>🛠 實作練習包</h1><a href="index.html">← 入口</a></header>
 <main>
@@ -30,4 +30,4 @@ document.getElementById('list').innerHTML=S.map((s,i)=>`<div class="card"><h2>${
 <b>提示詞</b> <button onclick="cp(${i},'p',this)">複製</button><pre>${esc(s.p)}</pre>
 <b>進階追問</b> <button class="alt" onclick="cp(${i},'a',this)">複製</button><pre>${esc(s.a)}</pre></div>`).join('');
 function cp(i,k,b){navigator.clipboard.writeText(S[i][k]);const o=b.textContent;b.textContent='已複製 ✓';setTimeout(()=>b.textContent=o,1200)}
-</script></body></html>
+</script><script src="assets/nav.js"></script></body></html>

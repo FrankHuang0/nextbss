@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+﻿<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>小測驗</title><link rel="stylesheet" href="assets/style.css"></head><body>
 <header><h1>✅ 小測驗</h1><a href="index.html">← 入口</a></header>
 <main><div id="qs"></div><div class="card"><button onclick="grade()">交卷</button> <b id="score"></b></div></main>
@@ -18,4 +18,4 @@ document.getElementById('qs').innerHTML=Q.map((q,i)=>`<div class="card"><b>${i+1
 function grade(){let n=0;Q.forEach((q,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`);const ok=c&&+c.value===q[2];if(ok)n++;
 document.getElementById('r'+i).innerHTML=ok?'<span class=ok>✔ 正確</span>':`<span class=bad>✘ 正解：${q[1][q[2]]}</span>`});
 document.getElementById('score').textContent=`得分 ${n} / ${Q.length}`}
-</script></body></html>
+</script><script src="assets/nav.js"></script></body></html>

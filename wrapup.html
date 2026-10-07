@@ -27,4 +27,4 @@ if(L.s)document.querySelectorAll('[name=s]').forEach(e=>e.checked=e.value===L.s)
 function save(){const c=document.querySelector('[name=s]:checked');localStorage.setItem('my',JSON.stringify({s:c&&c.value,w:when.value}));msg.textContent='已儲存 ✓'}
 function send(){if(!FEEDBACK_EMAIL){alert('尚未設定收件信箱');return}
 location.href=`mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('AI分享課後問卷')}&body=${encodeURIComponent('滿意度：'+r.value+'\n收穫：'+g.value+'\n建議：'+b.value)}`}
-</script></body></html>
+</script><script src="assets/nav.js"></script></body></html>
