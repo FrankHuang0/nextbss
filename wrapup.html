@@ -1,0 +1,30 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>課後總結</title><link rel="stylesheet" href="assets/style.css"></head><body>
+<header><h1>🎯 課後總結</h1><a href="index.html">← 入口</a></header>
+<main>
+<div class="card"><h2>我的第一個情境</h2>
+<label><input type="radio" name="s" value="會議紀錄＋待辦追蹤"> 會議紀錄＋待辦追蹤</label>
+<label><input type="radio" name="s" value="競品與市場研究"> 競品與市場研究</label>
+<label><input type="radio" name="s" value="產品知識庫＋即問即答"> 產品知識庫＋即問即答</label>
+<label><input type="radio" name="s" value="客戶提案簡報生成"> 客戶提案簡報生成</label>
+<label><input type="radio" name="s" value="財報／產業報告解讀"> 財報／產業報告解讀</label>
+<p>我預計用在：<input id="when" size="30" placeholder="例：下週二拜訪台鴻精工"></p>
+<button onclick="save()">儲存（僅存在你的手機/瀏覽器）</button> <span id="msg"></span></div>
+<div class="card"><h2>8 週導入建議</h2><ol>
+<li>第 1 週：選 1 個情境，用真實（去識別）資料試一次</li><li>第 2 週：建立個人提示詞庫</li><li>第 3 週：會議紀錄固定用 AI 整理</li><li>第 4 週：建立常用產品知識庫</li>
+<li>第 5 週：競品／客戶研究包</li><li>第 6 週：提案簡報大綱流程</li><li>第 7 週：與同事分享成果</li><li>第 8 週：檢討效益、決定持續使用</li></ol></div>
+<div class="card"><h2>課後資源</h2><ul><li><a href="practice.html">練習包</a></li><li><a href="card.html">步驟卡</a></li><li><a href="quiz.html">小測驗</a></li><li><a href="notebooklm-ai-training.html">課程簡報</a></li></ul></div>
+<div class="card"><h2>滿意度問卷</h2>
+<p>整體滿意度：<select id="r"><option>5 非常滿意</option><option>4</option><option>3</option><option>2</option><option>1</option></select></p>
+<p>最有收穫：<br><textarea id="g" rows="2" style="width:100%"></textarea></p>
+<p>建議／想學的主題：<br><textarea id="b" rows="2" style="width:100%"></textarea></p>
+<button onclick="send()">以 Email 送出</button></div>
+</main>
+<script>
+const FEEDBACK_EMAIL="";
+const L=JSON.parse(localStorage.getItem('my')||'{}');
+if(L.s)document.querySelectorAll('[name=s]').forEach(e=>e.checked=e.value===L.s);if(L.w)when.value=L.w;
+function save(){const c=document.querySelector('[name=s]:checked');localStorage.setItem('my',JSON.stringify({s:c&&c.value,w:when.value}));msg.textContent='已儲存 ✓'}
+function send(){if(!FEEDBACK_EMAIL){alert('尚未設定收件信箱');return}
+location.href=`mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('AI分享課後問卷')}&body=${encodeURIComponent('滿意度：'+r.value+'\n收穫：'+g.value+'\n建議：'+b.value)}`}
+</script></body></html>

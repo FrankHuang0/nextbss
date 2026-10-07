@@ -1,0 +1,21 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>小測驗</title><link rel="stylesheet" href="assets/style.css"></head><body>
+<header><h1>✅ 小測驗</h1><a href="index.html">← 入口</a></header>
+<main><div id="qs"></div><div class="card"><button onclick="grade()">交卷</button> <b id="score"></b></div></main>
+<script>
+const Q=[
+["客戶會議剛結束，要快速整理待辦與感謝信，最適合哪個情境？",["會議紀錄＋待辦追蹤","財報解讀","競品研究"],0],
+["會議紀錄貼入 NotebookLM 後，怎樣讓待辦更可用？",["只要求摘要","要求表格含負責人與期限","不給任何指示"],1],
+["想比較我方與競品差異並產出話術，應該？",["只問『誰比較好』","上傳競品資料並要求比較表＋話術","直接憑記憶回答"],1],
+["競品研究用 NotebookLM 的好處是？",["回答都有來源依據可回查","一定不會錯","不需要資料"],0],
+["要避免 AI 亂答產品規格，提示詞應加上？",["請發揮創意","只能依來源回答，查無請說資料未提供","越簡短越好"],1],
+["客戶問題 NotebookLM 回答後，業務應該？",["直接轉寄客戶","對照來源引用再確認","忽略"],1],
+["快速產出提案簡報，第一步最好是？",["直接要 50 頁","提供客戶痛點／預算／方案，先要大綱","只給客戶名稱"],1],
+["提案大綱出來後，下一步？",["逐頁追問改寫並加入客戶語氣","不修改直接用","重新開始"],0],
+["準備大客戶拜訪，財報要整理成？",["完整逐字稿","現況重點、可能需求、開場提問","公司歷史"],1],
+["使用 AI 時，哪種資料不應直接貼入？",["公開新聞","客戶機敏或個資","虛構練習資料"],1]];
+document.getElementById('qs').innerHTML=Q.map((q,i)=>`<div class="card"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}<div id="r${i}"></div></div>`).join('');
+function grade(){let n=0;Q.forEach((q,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`);const ok=c&&+c.value===q[2];if(ok)n++;
+document.getElementById('r'+i).innerHTML=ok?'<span class=ok>✔ 正確</span>':`<span class=bad>✘ 正解：${q[1][q[2]]}</span>`});
+document.getElementById('score').textContent=`得分 ${n} / ${Q.length}`}
+</script></body></html>

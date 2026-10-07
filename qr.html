@@ -1,0 +1,15 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QR Code</title><link rel="stylesheet" href="assets/style.css">
+<style>.qrs{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;text-align:center}.qrs h2{font-size:2rem}.qrs div div{display:inline-block;padding:14px;background:#fff}</style></head><body>
+<header><h1>請用手機掃描 QR Code</h1><a href="index.html">← 入口</a></header>
+<main><div class="qrs">
+<div><h2>課程入口</h2><div id="q1"></div><p id="u1"></p></div>
+<div><h2>練習包</h2><div id="q2"></div><p id="u2"></p></div>
+</div></main>
+<script src="assets/qrcode.min.js"></script>
+<script>
+const base=location.href.replace(/[^/]*$/,'');
+[['q1','u1',base],['q2','u2',base+'practice.html']].forEach(([q,u,url])=>{
+ new QRCode(document.getElementById(q),{text:url,width:320,height:320});
+ document.getElementById(u).textContent=url;});
+</script></body></html>
