@@ -13,8 +13,29 @@
     <div class="stats"><span>Google 帳號登入</span><span>3 個視窗</span><span>回答可回查來源</span></div>
   </header>
   <main>
+    <div class="case" data-step="1" data-note="本課最後的練習，就是幫小林整理台鴻精工的首次拜訪紀錄。學會基本操作後，到第 2 級把 5 個關卡做完。"></div>
     <section class="card">
       <h2>介面：3 個視窗</h2>
+      <figure class="mock" aria-label="NotebookLM 介面示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>台鴻精工 拜訪準備</b></div>
+        <div class="mock-body">
+          <div class="mp"><h4><em>1</em>來源</h4>
+            <div class="src on">☑ 首次拜訪紀錄.txt</div>
+            <div class="src on">☑ 方案 X／Y／Z 型錄.pdf</div>
+            <div class="src">☐ 年報摘要.pdf</div>
+            <div class="add">＋ 新增來源</div></div>
+          <div class="mp"><h4><em>2</em>對話</h4>
+            <div class="q">客戶最在意的兩件事是什麼？</div>
+            <div class="a">1. 產線網路常斷線，希望有備援 <sup class="hl">1</sup><br>2. 資安監控，下週五前要初步報價 <sup>1</sup><br>可搭配方案 Y 行動備援 <sup>2</sup></div>
+            <div class="in">開始輸入…</div></div>
+          <div class="mp"><h4><em>3</em>Studio</h4>
+            <div class="tile">🎧 語音摘要</div>
+            <div class="tile">📑 簡報文件</div>
+            <div class="tile">❓ 常見問題</div>
+            <div class="tile">🗓 時間軸</div></div>
+        </div>
+        <figcaption>示意圖（非實際畫面，版面會隨官方更新）：只有<b>勾選</b>的來源會被用來回答；回答中的數字是<b>引用</b>，點開會跳到原文段落。</figcaption>
+      </figure>
       <table class="tbl">
         <tr><th>視窗</th><th>用途</th></tr>
         <tr><td>來源</td><td>新增、勾選資料；點來源可看「來源導覽」：摘要與重要主題。</td></tr>
@@ -32,6 +53,15 @@
         <li>在對話提問，點引用核對原文。</li>
         <li>在 Studio 產生所需文件，人工審閱後再使用。<small>產出的記事可「轉換為來源」，再延伸分析。</small></li>
       </ol>
+    </section>
+
+    <section class="card">
+      <h2>提問：同一份資料，問法決定品質</h2>
+      <div class="vs">
+        <div class="bad"><b>✘ 模糊的問法</b>幫我整理一下這份會議紀錄。<br><small>AI 只能猜你要什麼：可能寫成長篇摘要、漏掉待辦，也不知道要給誰看。</small></div>
+        <div class="good"><b>✔ 具體的問法</b>你是業務助理。請依來源整理：① 三行摘要 ② 待辦表（項目／負責人／期限）。來源沒寫的期限標示「來源未提供」。<br><small>有角色、任務、格式與限制，結果可以直接拿去用，也容易檢查。</small></div>
+      </div>
+      <p>記住公式：<b>角色＋任務＋輸出格式＋限制</b>。第一次結果不滿意時，不要整段重問，而是補一個條件（例如「改成表格」、「只列 3 點」）。</p>
     </section>
 
     <section class="card">
@@ -64,16 +94,15 @@
     </section>
 
     <section class="card">
-      <h2>練習：整理客戶會議紀錄</h2>
-      <p>依「<a href="https://frankhuang0.github.io/nextbss/notebooklm-ai-training.html">NotebookLM 業務助理</a>」情境 1 去識別化改寫。以「貼上文字」新增為來源：</p>
-      <pre>
-【去識別化會議紀錄：製造業客戶】
-資訊主管：總部與多處廠區之間的網路不穩，跨廠系統與視訊會議常受影響，現場作業已收到反映。
+      <h2>練習：整理台鴻精工的首次拜訪紀錄</h2>
+      <p>案例主線第 1 關（客戶、人物與數字皆為虛構）。以「貼上文字」新增為來源：</p>
+      <div class="prompt"><div class="prompt-h"><b>📄 範例資料</b><small>貼成來源</small></div><pre>
+【台鴻精工（虛構）首次拜訪紀錄】
+資訊主管：總部與 3 個廠區之間的網路不穩，跨廠系統與視訊會議常受影響，現場作業已收到反映。
 資訊主管：近期有其他業者提出整合多個據點的網路方案，價格較有吸引力，希望比較不同做法。
-採購代表：現有企業門號合約即將到期，希望評估是否與網路服務一併討論。
-資訊主管：過去曾發生網路中斷並影響訂單處理；也關心服務備援與資安防護。另有海外新據點即將啟用，需要評估連回既有據點的方式。
-我方業務：會整理既有網路升級與整合式方案的比較，並請相關同仁評估備援、資安及海外連線需求。
-      </pre>
+採購代表：現有合約 12 月到期，希望評估是否與網路服務一併討論。
+資訊主管：過去曾發生網路中斷並影響訂單處理；也關心服務備援與資安防護。明年海外新廠啟用，需要評估連回既有據點的方式。
+我方業務：會整理既有網路升級與整合式方案的比較，並請相關同仁評估備援、資安及海外連線需求。</pre></div>
       <ol>
         <li>看來源導覽：摘要是否抓到跨廠網路、競業比較、備援與資安、海外據點？</li>
         <li>在 Studio 產生「簡報文件」，檢查每個重點是否附引用。</li>

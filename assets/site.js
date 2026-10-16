@@ -20,6 +20,13 @@ const LESSONS=[
 {f:'mobile-order-kb.html',t:'知識庫分享',s:4,who:'開發／系統分析人員',time:'約 20 分',pre:'能閱讀基本程式碼',out:'自己專案的知識庫建置藍圖'},
 {f:'page-spec-reengineering.html',t:'網頁功能 Reengineering',s:4,who:'開發／系統分析人員',time:'約 60 分',pre:'知識庫分享',out:'一份頁面規格書草稿'},
 {f:'wrapup.html',t:'課後總結',s:5,who:'全員',time:'約 10 分',pre:'完成任一級',out:'我的第一個情境與 8 週計畫'}];
+// 貫穿案例（虛構）：業務小林經營製造業客戶「台鴻精工」的 5 個關卡，對應練習包情境 1–5
+const STORY=[
+{n:'首次拜訪',d:'會議紀錄＋待辦',a:'practice.html#s1'},
+{n:'客戶提到競品',d:'競品比較＋話術',a:'practice.html#s2'},
+{n:'配出方案',d:'產品知識庫',a:'practice.html#s3'},
+{n:'寫提案',d:'提案簡報大綱',a:'practice.html#s4'},
+{n:'高層會談',d:'財報解讀',a:'practice.html#s5'}];
 
 const get=()=>{try{return localStorage.getItem(K)}catch(e){return null}};
 const valid=t=>THEMES.some(x=>x[0]===t);
@@ -49,7 +56,7 @@ const st=document.createElement('style');st.id='nb-css';st.textContent=css;
 
 let seq=0;
 const NB=window.NB={
-  key:K,themes:THEMES,lessons:LESSONS,
+  key:K,themes:THEMES,lessons:LESSONS,story:STORY,
   stages:{1:'入門',2:'應用',3:'進階',4:'專題',5:'結業'},
   extra:[{f:'teacher.html',t:'講師'}],
   cur:()=>location.pathname.split('/').pop()||'index.html',
@@ -84,6 +91,15 @@ const NB=window.NB={
 
 const enhance=()=>{
   document.querySelectorAll('.nb-slot').forEach(s=>{if(!s.querySelector('.nb-theme'))NB.mount(s,{compact:s.dataset.compact!=null})});
+  // <div class="case" data-step="0~5" data-note="…">：0＝全覽，1–5＝標示目前關卡
+  document.querySelectorAll('.case').forEach(c=>{
+    if(c.dataset.done)return;c.dataset.done=1;const k=+c.dataset.step||0,here=NB.cur();
+    c.setAttribute('role','note');
+    c.innerHTML=`<div class="case-h"><b>📍 案例主線</b><span>台鴻精工（虛構）：業務小林從首次拜訪到高層會談</span></div>`
+      +`<ol class="case-s">${STORY.map((s,i)=>{const n=i+1,href=s.a.startsWith(here+'#')?s.a.slice(here.length):s.a;
+        return `<li${n===k?' class="cur" aria-current="step"':n<k?' class="past"':''}><a href="${href}"><i>${n}</i><b>${s.n}</b><small>${s.d}</small></a></li>`}).join('')}</ol>`
+      +(c.dataset.note?`<p class="case-n">${NB.esc(c.dataset.note)}</p>`:'');
+  });
   document.querySelectorAll('.prompt').forEach(p=>{
     if(p.querySelector('button'))return;
     const body=p.querySelector('pre,.sample');if(!body)return;
