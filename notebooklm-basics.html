@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NotebookLM 基礎操作</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>NotebookLM 基礎操作</h1>
+    <p>從建立筆記本到查證 AI 回答，完成第一次操作。</p>
+  <p class="note">注意：NotebookLM 的介面標籤與按鈕文字可能會隨產品更新變動；示範中的標籤僅為示例，請依實際介面操作。</p>
+  </header>
+  <main>
+    <section class="card timeline">
+      <h2>快速入門步驟</h2>
+      <ol>
+        <li>確認公司允許使用的帳號與可放入的資料類型（不可放客戶資料、個資、密碼或未授權內部文件）。</li>
+        <li>開啟 NotebookLM：
+          <a href="https://notebooklm.google.com/" target="_blank" rel="noopener">開啟 NotebookLM</a>
+        </li>
+        <li>建立新筆記本（New notebook）。</li>
+        <li>將來源檔案貼上或上傳為新來源（可使用公開或本練習提供之虛構來源）。</li>
+        <li>等待 NotebookLM 處理來源並完成索引 / 解析。</li>
+        <li>選取已完成處理的來源，向 NotebookLM 提問以取得回覆與引用。</li>
+        <li>點開來源引用（引用片段）核對原始內容與出處，整理並人工審閱結果後採信或退回。</li>
+      </ol>
+    </section>
+
+    <section class="card sample">
+      <h2>練習：貼上虛構服務資料作為來源</h2>
+      <pre>
+【虛構服務資料：雲杉備份試行方案】
+提供 500 GB 儲存空間，每月最多備份 30 次，試用期為 14 天。
+這份資料沒有提到是否支援手機 App。
+      </pre>
+      <p>練習題：</p>
+      <ol>
+        <li>請問雲杉備份試行方案提供多少儲存空間、每月備份次數上限與試用期？請以引用支持的答案呈現。</li>
+        <li>該資料是否有提到支援手機 App？如果來源沒有提供，請明確回答「來源未提供」，不可自行推測。</li>
+      </ol>
+      <p class="done">完成標準：第一題的每項答案均可由引用支持；第二題明確回覆「來源未提供」。</p>
+    </section>
+
+    <section class="card">
+      <h2>資料安全與基本排除方式</h2>
+      <ul>
+        <li>切勿將客戶資料、個資、內部文件或帳密貼到未經核准的工具或來源。</li>
+        <li>若來源仍在處理中：確認處理狀態，等待索引完成再查詢。</li>
+        <li>若回覆沒有引用或引用無法支持回答：確認相關來源是否已被選取；如未選取請補選適當來源後重試；或重寫問題以聚焦可引用的事實。</li>
+        <li>未查證前不可採用答案為事實，所有重要判斷都應人工審閱並保存來源鏈接。</li>
+      </ul>
+    </section>
+
+  </main>
+  <script src="assets/nav.js"></script>
+</body>
+</html>
