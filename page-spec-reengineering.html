@@ -5,106 +5,542 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>網頁功能 Reengineering：用知識庫產出規格書</title>
   <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .card h3{margin:24px 0 8px}.card h2+h3,.card h2+p+h3{margin-top:8px}
+    .toc{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+    .toc a{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 14px;text-decoration:none;color:var(--ink);font-size:.92rem}
+    .toc a:hover{border-color:var(--p);color:var(--p)}
+    .x{overflow-x:auto;margin:8px 0 16px}.x .tbl{min-width:520px}
+    .vs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:12px;margin:8px 0 16px}
+    .vs>div{border-radius:6px;padding:12px 14px}.bad{background:#fff5f5;border:1px solid #fecaca}.good{background:#f0fdf4;border:1px solid #bbf7d0}
+    .vs b{display:block;margin-bottom:4px}.vs code{word-break:break-all}
+    .diagram{border:1px solid var(--line);border-radius:6px;padding:12px;margin:8px 0 16px;overflow-x:auto;background:#fcfcfc;text-align:center}
+    .note{background:#fff8f7;border:1px solid #ffd9d6;border-radius:6px;padding:10px 14px;margin:8px 0 16px}
+    .rule h4{margin:18px 0 6px;color:var(--dark)}.rule .x .tbl{min-width:0;table-layout:fixed;width:100%}.rule .x .tbl th:first-child{width:5.5em}.rule .x .tbl td{overflow-wrap:anywhere}
+    code{background:#f3f3f3;border-radius:4px;padding:0 4px;font-size:.9em;overflow-wrap:anywhere}
+  </style>
 </head>
 <body>
   <header>
     <h1>網頁功能 Reengineering</h1>
-    <p>用知識庫＋AI 逆向解讀既有網頁，產出業務看得懂、開發找得到程式的功能規格書（Page Spec）。</p>
-    <div class="stats"><span>源碼是唯一事實</span><span>規則可追溯</span><span>✅／⚠ 誠實標示</span></div>
+    <p>把既有系統的網頁「逆向」還原成功能規格書（Page Spec）：以源碼為唯一事實、用業務語言寫規則、每條規則都能回查程式。本頁以「信用查核」為完整範例，說明方法、流程、格式與提示詞。</p>
+    <div class="stats"><span>七大準則</span><span>6 步流程</span><span>範例 18 條規則</span><span>✅／⚠ 誠實標示</span></div>
   </header>
   <main>
     <section class="card">
-      <h2>為什麼要逆向</h2>
-      <table class="tbl">
-        <tr><th>比較</th><th>原有規格文件</th><th>Page Spec</th></tr>
-        <tr><td>描述</td><td>系統「應該」做什麼</td><td>系統「實際」做了什麼</td></tr>
-        <tr><td>方向</td><td>需求驅動，由上而下</td><td>源碼驅動，由下而上</td></tr>
-        <tr><td>痛點／解法</td><td>多次修改後與程式不一致</td><td>每條規則附源碼定位，可回查</td></tr>
-      </table>
-      <p>事實優先序：<b>源碼 ＞ 資料庫 ＞ 畫面 ＞ 規格文件 ＞ 推測</b>。規格文件只作輔助。</p>
-      <p><small>知識庫如何建立，請見 <a href="mobile-order-kb.html">知識庫分享</a>。</small></p>
+      <h2>本頁導覽</h2>
+      <ul class="toc">
+        <li><a href="#sec-why">1 為什麼逆向</a></li>
+        <li><a href="#sec-principles">2 七大準則</a></li>
+        <li><a href="#sec-kb">3 知識庫與工具</a></li>
+        <li><a href="#sec-flow">4 製作流程 6 步</a></li>
+        <li><a href="#sec-inventory">5 規則盤點方法</a></li>
+        <li><a href="#sec-structure">6 規格書結構</a></li>
+        <li><a href="#sec-rules">7 規則命名與欄位</a></li>
+        <li><a href="#sec-writing">8 寫作規範</a></li>
+        <li><a href="#sec-case">9 範例：信用查核</a></li>
+        <li><a href="#sec-journey">10 實戰歷程</a></li>
+        <li><a href="#sec-prompts">11 提示詞範本</a></li>
+        <li><a href="#sec-pitfalls">12 常見坑</a></li>
+        <li><a href="#sec-checklist">13 檢查清單</a></li>
+        <li><a href="#sec-practice">14 練習</a></li>
+      </ul>
+      <p class="note">建議閱讀路徑：<b>第一次接觸</b> 1 → 4 → 9；<b>要動手寫</b> 2 → 5 → 7 → 8 → 11；<b>要審稿</b> 8 → 13。知識庫如何建置，請見 <a href="mobile-order-kb.html">知識庫分享</a>。</p>
     </section>
 
-    <section class="card">
-      <h2>製作流程：6 步</h2>
+    <section class="card" id="sec-why">
+      <h2>1. 為什麼要做逆向工程</h2>
+      <p>系統上線多年、經過多次需求修改後，「文件寫的」與「程式做的」常常不一樣。要回答「這個頁面到底會擋什麼、為什麼擋」，最可靠的答案只在源碼裡。</p>
+      <h3>我們遇到的問題</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>痛點</th><th>實際情況</th><th>後果</th></tr>
+        <tr><td>規模龐大</td><td>規格文件 1,896 份、Java 5,076 支、JSP／XHTML 2,411 支、選單功能 1,331 個</td><td>沒有人能全部掌握，跨模組問題從零查起</td></tr>
+        <tr><td>名詞不對應</td><td>「限制異動需主管授權」在源碼中有 3 套不同機制</td><td>問人、追程式動輒 30 分鐘以上，還可能答錯</td></tr>
+        <tr><td>文件與程式落差</td><td>多次需求修改（MR）後，程式行為與原規格描述不一致</td><td>相信文件反而踩坑</td></tr>
+        <tr><td>文件只寫意圖</td><td>規格寫「需檢查信用」，但沒寫查哪些、哪裡會擋、擋了顯示什麼</td><td>知道 what，不知道 how</td></tr>
+        <tr><td>新人上手慢</td><td>到職 3～6 個月才能獨立處理</td><td>訓練成本高、資深同仁被反覆打斷</td></tr>
+      </table></div>
+      <h3>傳統規格文件 vs Page Spec</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>比較</th><th>傳統 SRS／SDS</th><th>Page Spec（逆向文件）</th></tr>
+        <tr><td>描述</td><td>系統「應該」做什麼</td><td>系統「實際」做了什麼</td></tr>
+        <tr><td>方向</td><td>需求驅動（Top-down）</td><td>源碼驅動（Bottom-up）</td></tr>
+        <tr><td>時效</td><td>可能過時或與實作不符</td><td>與當前源碼同步，可定位到行</td></tr>
+        <tr><td>重點</td><td>著重「為什麼」</td><td>著重「怎麼做」，再用 SRS 補充「為什麼」</td></tr>
+        <tr><td>撰寫者</td><td>SA／PM</td><td>AI ＋ 工程師從源碼逆向撰寫</td></tr>
+      </table></div>
+      <h3>誰會用、怎麼用</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>角色</th><th>以前</th><th>有 Page Spec 後</th></tr>
+        <tr><td>開發</td><td>開 IDE 搜關鍵字、追呼叫鏈、再問人確認</td><td>查規則 → 看源碼定位 → 直接改，約 5 分鐘掌握邏輯</td></tr>
+        <tr><td>業務／客服</td><td>「為什麼被擋？」要等開發回推判斷條件</td><td>查失敗訊息欄，直接找到規則與業務原因</td></tr>
+        <tr><td>QA</td><td>依規格寫測試案例，常漏掉程式裡的例外分支</td><td>依阻擋規則（R）逐條設計案例，含例外與複核</td></tr>
+        <tr><td>新人</td><td>口頭解釋 30 分鐘，下次還要再講</td><td>丟一份連結：導覽 → 術語 → 主頁面，自學</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="sec-principles">
+      <h2>2. 核心精神：七大準則</h2>
+      <p>Page Spec 的本質是逆向工程文件：從既有源碼<b>還原</b>系統的真實流程與邏輯，而不是從需求文件正向推導。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>準則</th><th>說明</th></tr>
+        <tr><td>1. 源碼為主要事實來源</td><td>規則、判斷邏輯、欄位、分支都以實際 Java／JSP 源碼為依據；SRS／SDS 只補充業務背景與命名由來。</td></tr>
+        <tr><td>2. 行為優先於意圖</td><td>記錄系統實際做了什麼，而不是規格希望它做什麼。源碼與文件不一致時以源碼為準，並標註差異。</td></tr>
+        <tr><td>3. 逐行可追溯</td><td>每條規則都標註程式與位置，讀者能直接在 IDE 驗證；不接受「依規格推導」的無定位描述。</td></tr>
+        <tr><td>4. 忠實還原，不美化</td><td>冗餘邏輯、歷史補丁、寫死的條件都照實記錄，不因「不優雅」而省略或重組。</td></tr>
+        <tr><td>5. 分層記錄</td><td>記錄完整呼叫鏈：畫面 → 頁面事件處理 → 業務委派 → 業務邏輯 → 資料存取，包含中間的判斷與分支。</td></tr>
+        <tr><td>6. 區分確定與推測</td><td>讀過源碼驗證的標 ✅；推測或由文件推導的標 ⚠ 待驗證，讓讀者判斷可信度。</td></tr>
+        <tr><td>7. 增量探索</td><td>不求一次完備：先建骨架（頁面結構＋呼叫鏈），再逐方法深入，每次深入就更新驗證狀態。</td></tr>
+      </table></div>
+      <h3>事實來源優先序</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>優先</th><th>來源</th><th>用途</th><th>信任度</th></tr>
+        <tr><td>1</td><td>源碼（Java／JSP／SQL）</td><td>規則邏輯、判斷條件、欄位綁定、呼叫鏈</td><td>🟢 最高（唯一事實）</td></tr>
+        <tr><td>2</td><td>DB Schema＋實際資料</td><td>表結構、欄位值域、代碼實際有哪些值</td><td>🟢 高（可直接查詢驗證）</td></tr>
+        <tr><td>3</td><td>UI 畫面（源碼 HTML）</td><td>欄位佈局、顯示條件、事件綁定</td><td>🟡 中（需對照後端屬性）</td></tr>
+        <tr><td>4</td><td>SRS／SDS／SWDS</td><td>業務背景、命名由來、修改歷史</td><td>🟡 輔助（可能與源碼不一致）</td></tr>
+        <tr><td>5</td><td>推測／命名推導</td><td>—</td><td>🔴 最低（必須標 ⚠）</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="sec-kb">
+      <h2>3. 前置準備：知識庫與工具</h2>
+      <p>逆向的前提是 AI「讀得到」全部事實。我們把規格文件、源碼、資料表與選單設定匯入 MongoDB 知識庫，再包成 MCP Server，讓 Copilot CLI 等 AI 工具直接查詢。</p>
+      <div class="diagram"><div class="mermaid">
+flowchart LR
+  A["SRS／SDS／SWDS"] --> KB[("MongoDB 知識庫")]
+  B["Java／JSP 源碼"] --> KB
+  C["DB Schema／選單設定"] --> KB
+  KB --> MCP{{"MCP Server／CLI"}}
+  MCP --> AI(["AI 助理＋格式範本"])
+  AI --> PS["Page Spec 草稿"]
+  PS --> R{"人工審核"}
+  R -- 退回 --> AI
+  R -- 通過 --> KB
+      </div></div>
+      <h3>常用查詢工具</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>工具</th><th>做什麼</th><th>逆向時何時用</th></tr>
+        <tr><td><code>kb_list_operations</code></td><td>列出作業與選單</td><td>確認作業名稱、選單代碼</td></tr>
+        <tr><td><code>kb_search</code></td><td>語意搜尋（文件＋源碼切片）</td><td>用業務關鍵字找頁面、找規則</td></tr>
+        <tr><td><code>kb_fulltext</code></td><td>全文精確搜尋</td><td>找錯誤訊息原文、方法名、代碼值</td></tr>
+        <tr><td><code>kb_source_chain</code></td><td>作業的程式呼叫鏈</td><td>由頁面往下追到 Bean、Helper、DAO</td></tr>
+        <tr><td><code>kb_table_chain</code></td><td>資料表影響鏈</td><td>評估改一張表會影響哪些程式</td></tr>
+        <tr><td><code>kb_page_spec</code></td><td>讀取已完成的 Page Spec</td><td>參考前例、避免重複產生</td></tr>
+      </table></div>
+      <p>沒有 MCP 時，也可以用命令列：<code>python -m knowledge_base.cli query "提前購機檢查規則" --scope all</code>；在 Copilot CLI 中輸入 <code>/kb</code> 可直接啟用知識庫查詢技能。</p>
+      <p class="note">先確認<b>前端頁與後端程式都已匯入</b>。信用查核 v0.1 有 5 個 ⚠，原因全是同一個：前端 JSP 不在已匯入的源碼目錄中，畫面只能依 SRS 推繪。補匯入後才全部轉成 ✅。</p>
+    </section>
+
+    <section class="card" id="sec-flow">
+      <h2>4. 製作流程：6 步</h2>
+      <p>原則是「AI 做苦工、人做決定」：每一步都有明確的人工把關點。</p>
       <ol class="timeline">
-        <li><b>定位頁面</b>：用業務關鍵字（如「風險」「欠費」）查知識庫，找出入口、子頁與呼叫鏈。<small>先確認前端與後端源碼都已匯入。</small></li>
-        <li><b>先規劃再撰寫</b>：請 AI 提出範圍、頁面清單與規則草估，審核通過才開寫。</li>
-        <li><b>由 UI 窮舉規則</b>：從每個按鈕、欄位往下追；每個阻擋點都要對應一條規則。</li>
-        <li><b>業務語言＋三重定位</b>：判斷條件寫業務意義，不貼程式；程式細節放「源碼來源」欄。<small>三重定位＝方法名＋搜尋關鍵字＋基線行號，程式改版仍找得到。</small></li>
-        <li><b>標示驗證狀態</b>：✅ 已對照源碼；⚠ 待驗證。不以推論冒充事實。</li>
-        <li><b>Review 迭代</b>：逐項消化 ⚠、依源碼 HTML 重繪畫面示意、補對外介面，記錄文件歷程。</li>
+        <li><b>定位頁面</b>：用業務關鍵字查知識庫，找出入口、子頁與呼叫鏈。<small>例：「信用查核會查客戶風險、欠費、戶役政，請用這些項目找到信用查核頁面」→ 找到 checkcredit 套件與 5 個 chkRisk 子頁。把關：前後端源碼都在庫嗎？</small></li>
+        <li><b>先規劃，審核後再撰寫</b>：請 AI 依格式範本提出範圍、頁面清單、規則草估與待確認問題。<small>例：「是否包含 NP 攜入新申裝？否」「規則數是否設上限？否，以完整、正確為優先」。把關：範圍與頁面清單正確嗎？</small></li>
+        <li><b>由 UI 觸發點窮舉規則</b>：讀每頁 JSP，列出所有按鈕、下拉、連結觸發的方法，逐方法讀判斷分支。<small>產出 UI 觸發點清單與規則清單。把關：每個阻擋點都有對應規則嗎？（詳見第 5 節）</small></li>
+        <li><b>依範本撰寫</b>：全局導覽、頁面說明、依源碼 HTML 繪製的 UI 模擬圖、欄位、規則卡（業務語言＋三重定位＋流程圖）。<small>把關：業務看得懂判斷邏輯嗎？開發找得到程式嗎？</small></li>
+        <li><b>標示驗證狀態</b>：逐項標 ✅ 已從源碼驗證／⚠ 待驗證，寫明誠實界線。<small>例：v0.1 盤點 18 條規則、6 項 ✅、5 項 ⚠。把關：有沒有拿推論冒充事實？</small></li>
+        <li><b>Review 迭代、通過才入庫</b>：逐項消化 ⚠、補對外介面章節、更新文件歷程；審核通過才匯入知識庫，避免草稿污染。<small>例：v0.2 補齊 4 項實證、1 項誠實澄清為「人工判斷、無 API」。</small></li>
       </ol>
     </section>
 
-    <section class="card">
-      <h2>規格書結構</h2>
-      <table class="tbl">
-        <tr><th>章節</th><th>內容</th></tr>
-        <tr><td>全局導覽</td><td>流程圖、頁面串接圖、範圍地圖、依角色閱讀指南</td></tr>
-        <tr><td>作業概觀</td><td>業務定位、術語、業務情境、頁面清單、規則分布</td></tr>
-        <tr><td>各頁規格</td><td>頁面說明、畫面示意、欄位、規則（依操作時序排列）</td></tr>
-        <tr><td>收尾</td><td>對外介面、驗證狀態、文件歷程</td></tr>
-      </table>
-      <h3>規則命名</h3>
-      <p><b>R</b> 阻擋　<b>F</b> 功能　<b>D</b> 動態顯示　<b>X</b> 跨系統。代號＝類型－作業－序號，例如 R-CK-101。</p>
-      <h3>規則欄位</h3>
-      <p>代號、業務背景、觸發時機、判斷邏輯、失敗訊息、源碼來源、源碼流程（≤ 8 節點）、資料來源、驗證狀態。</p>
-    </section>
-
-    <section class="card">
-      <h2>範例：信用查核（去識別化）</h2>
-      <p>信用查核是多個受理作業共用的<b>受理前預審閘門</b>：4 個區塊同時查核，全部通過才放行，部分情況須主管複核。</p>
-      <pre>受理作業（多個入口）
-   ↓
-信用查核框架頁
-   ├ 風險查核 ── 外部風險查詢
-   ├ 帳單彙寄 ── 帳務系統
-   ├ 欠費查核 ── 帳務系統
-   └ 企業實地訪查提示
-   ↓
-全部通過 → 繼續受理；須複核 → 主管確認後放行</pre>
-      <p>盤點結果：5 頁、18 條規則（R×3／F×10／D×4／X×1）。</p>
-      <h3>規則卡：R-CK-101 風險種類禁止受理</h3>
-      <table class="tbl">
-        <tr><th>欄位</th><th>內容</th></tr>
-        <tr><td>業務背景</td><td>特定高風險種類（如詐騙相關）一律不受理，不開放主管複核。</td></tr>
-        <tr><td>觸發時機</td><td>風險查詢完成、判定風險等級時。</td></tr>
-        <tr><td>判斷邏輯</td><td><ol style="margin:0;padding-left:1.2em"><li>客戶命中「禁止受理」類風險種類。</li><li>符合特定代辦例外者移除該風險，否則標記不可受理。</li></ol></td></tr>
-        <tr><td>失敗訊息</td><td>「此客戶的風險種類，系統不予受理！」</td></tr>
-        <tr><td>源碼來源</td><td>查核主控程式．風險等級判定方法｜關鍵字：禁止受理分支｜基線行號（內部版本保留，公開版省略）</td></tr>
-        <tr><td>資料來源</td><td>設計規格「禁止受理風險種類」章節</td></tr>
-        <tr><td>驗證狀態</td><td>✅ 已逐碼比對源碼</td></tr>
-      </table>
-      <p class="done">好規則的樣子：業務看得懂判斷邏輯，開發用源碼來源 1 分鐘內找到程式。</p>
-    </section>
-
-    <section class="card">
-      <h2>提示詞範本</h2>
-      <pre>① 定位與規劃
-請查知識庫，以「[業務關鍵字]」找出相關頁面與呼叫鏈，
-依 Page Spec 範本提出規劃：範圍、頁面清單、預估規則。先不要撰寫。
-
-② 撰寫規則
-規劃核准。請從每頁 UI 觸發點往下窮舉，每個阻擋點寫一條規則；
-判斷邏輯用業務語言，源碼來源用三重定位；未查證者標 ⚠。
-
-③ 驗證補強
-列出所有 ⚠ 項，逐項查源碼補證據；查不到的請誠實說明，不要推測。</pre>
-    </section>
-
-    <section class="card">
-      <h2>檢查清單</h2>
-      <ul class="check">
-        <li>☐ 每個 UI 阻擋點都有對應規則</li>
-        <li>☐ 判斷邏輯為業務語言，沒有貼程式碼</li>
-        <li>☐ 每條規則有三重定位與 ✅／⚠ 狀態</li>
-        <li>☐ 失敗訊息逐字取自源碼</li>
-        <li>☐ 文件歷程記錄每版修改</li>
+    <section class="card" id="sec-inventory">
+      <h2>5. 規則盤點方法：由 UI 觸發點往下窮舉</h2>
+      <p class="note">規則的正確性與完整性必須是 <b>100 分</b>。盤點不依賴 SRS／SDS 的規則清單，而是從畫面元件出發，窮舉所有可觸發的判斷邏輯。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>步驟</th><th>動作</th><th>產出</th></tr>
+        <tr><td>1. 讀 JSP 全文</td><td>列出每個 valueChangeListener、action、actionListener、window.open、onclick</td><td>UI 觸發點清單（含行號）</td></tr>
+        <tr><td>2. 分類觸發點</td><td>區分「含判斷邏輯」與「純查詢／純畫面導向」</td><td>需寫規則的方法清單</td></tr>
+        <tr><td>3. 逐方法讀源碼</td><td>讀每個 if／return／continue，找出所有判斷分支</td><td>每個方法的判斷步驟表</td></tr>
+        <tr><td>4. 寫規則</td><td>每個含阻擋／過濾／重算的方法＝一條規則；大方法用步驟表列出內部判斷</td><td>完整規則文件</td></tr>
+      </table></div>
+      <h3>分層追呼叫鏈</h3>
+      <div class="diagram"><div class="mermaid">
+flowchart LR
+  P["JSP 畫面觸發"] --> B(("BackingBean 事件處理"))
+  B --> H(["BD／Helper 委派"])
+  H --> E["EJB 業務邏輯"]
+  E --> D[("DAO／SQL 資料存取")]
+  H --> X{{"外部系統 API"}}
+      </div></div>
+      <h3>完整性標準</h3>
+      <ul>
+        <li><b>必須寫規則</b>：畫面上每個會觸發後端方法的元件，只要方法內有「顯示訊息後 return」等阻擋點，就要有對應規則。</li>
+        <li><b>不需寫規則</b>：純查詢顯示、純畫面導向（如返回）、純計算且無阻擋。</li>
       </ul>
-      <p><b>對外分享前先去識別化</b>：移除程式、類別與方法名稱、行號、系統代碼、文件編號、資料表欄位與人員資料，改用泛稱。</p>
+      <h3>規則粒度</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>方法規模</th><th>寫法</th><th>範例</th></tr>
+        <tr><td>小（&lt; 30 行，1～3 個判斷）</td><td>一條規則，判斷邏輯用編號清單</td><td>驗證主約編號（2 步）</td></tr>
+        <tr><td>中（30～100 行，3～9 個判斷）</td><td>一條規則，用步驟表（# / 檢查名稱 / 條件 / 源碼定位 / 失敗處理）</td><td>選擇產品（9 步）</td></tr>
+        <tr><td>大（100 行以上，10 個以上判斷）</td><td>仍寫成一條規則，步驟表＋分群；流程圖畫分群不畫逐步</td><td>新增優惠驗證（28 步）</td></tr>
+      </table></div>
+      <p>同一頁的規則<b>依使用者操作時序</b>由上而下排列，不按 R／F／D 分組。讀者想知道的是「操作到這一步時，系統會檢查什麼」。</p>
+    </section>
+
+    <section class="card" id="sec-structure">
+      <h2>6. 規格書結構</h2>
+      <h3>全局導覽（放在第一章之前，30 秒掌握全局）</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>區塊</th><th>內容</th><th>何時必填</th></tr>
+        <tr><td>A-0 作業流程全貌</td><td>跨作業的業務流程圖，深色粗框標出本文件範圍，附相關文件狀態表</td><td>本作業是流程中段或被多個母流程呼叫時</td></tr>
+        <tr><td>A 頁面串接關聯圖</td><td>入口 → 頁面 → Bean → Helper → 外部系統 → 出口，用形狀區分元件</td><td>必填</td></tr>
+        <tr><td>B 範圍地圖</td><td>子頁 × 查什麼／會擋嗎／對外系統／章節連結</td><td>必填</td></tr>
+        <tr><td>C 閱讀指南</td><td>依角色（業務／開發／QA／新人）推薦閱讀路徑</td><td>必填</td></tr>
+        <tr><td>D 快速跳轉</td><td>一列章節錨點連結</td><td>必填</td></tr>
+      </table></div>
+      <h3>本文章節</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>章節</th><th>內容</th></tr>
+        <tr><td>一、作業概觀</td><td>作業性質、主程式、前端頁、呼叫來源、查核時機、總體處置</td></tr>
+        <tr><td>二、業務術語</td><td>讀者看不懂的名詞先定義（如承租人／代辦人、虛擬證號）</td></tr>
+        <tr><td>三、業務情境</td><td>依業務面向分類，對應子頁與 SRS 需求</td></tr>
+        <tr><td>四、頁面清單</td><td>P1～Pn 編號、頁面、程式、說明</td></tr>
+        <tr><td>五、規則分布</td><td>頁面 × R／F／D／SWDS 矩陣與合計</td></tr>
+        <tr><td>六～十、各頁規格</td><td>頁面說明 → UI 模擬圖 → 欄位說明 → 規則卡（依操作時序）</td></tr>
+        <tr><td>十一、對外介面</td><td>後端 API 與畫面外部連結分列</td></tr>
+        <tr><td>十二、誠實驗證狀態</td><td>每個項目 ✅／⚠ 與依據，以及界線聲明</td></tr>
+        <tr><td>十三、文件歷程</td><td>版本、日期、修改內容、作者</td></tr>
+      </table></div>
+      <h3>流程圖形狀圖例</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>形狀</th><th>Mermaid 語法</th><th>代表</th></tr>
+        <tr><td>矩形</td><td><code>[頁面]</code></td><td>JSP／XHTML 網頁</td></tr>
+        <tr><td>圓角</td><td><code>([名稱])</code></td><td>BD／Helper 業務委派層</td></tr>
+        <tr><td>圓形</td><td><code>((名稱))</code></td><td>BackingBean</td></tr>
+        <tr><td>菱形</td><td><code>{判斷}</code></td><td>路由／判斷節點</td></tr>
+        <tr><td>六角形</td><td><code>{{系統}}</code></td><td>外部系統／API</td></tr>
+        <tr><td>雙框</td><td><code>[[結果頁]]</code></td><td>出口／結果頁面</td></tr>
+      </table></div>
+      <h3>UI 模擬圖原則</h3>
+      <ul>
+        <li><b>依源碼 HTML 重繪</b>，不是截圖、也不是依規格推繪；欄位與版面不簡化。</li>
+        <li>有顯示條件（rendered）的區塊要標出條件；按鈕要標出觸發的方法；會開新視窗的連結標出目標頁。</li>
+        <li>圖下方註明對應源碼行號，並加註「依源碼 HTML 結構繪製（非實際截圖）」。</li>
+      </ul>
+    </section>
+
+    <section class="card" id="sec-rules">
+      <h2>7. 規則命名與欄位</h2>
+      <h3>命名慣例：類型－作業－序號</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>前綴</th><th>用途</th><th>範例</th></tr>
+        <tr><td>R</td><td>阻擋規則：不通過就擋件或需主管放行</td><td>R-CK-101 風險種類禁止受理</td></tr>
+        <tr><td>F</td><td>功能規則：篩選、資格、查詢、次數</td><td>F-CK-001 豁免對象免查判斷</td></tr>
+        <tr><td>D</td><td>動態顯示：畫面條件顯示、提示、連動</td><td>D-CK-101 同證門號提示</td></tr>
+        <tr><td>SWDS</td><td>跨頁面／跨系統整合規則</td><td>SWDS-P2-01</td></tr>
+      </table></div>
+      <p>作業別縮寫範例：NA＝新申裝、XG＝XG 互轉、DS＝優惠受理、NP＝NP 移入、CK＝信用查核。序號百位數對應頁面（1xx＝P2、3xx＝P4）。</p>
+      <h3>規則卡欄位</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>欄位</th><th>必填</th><th>寫什麼</th></tr>
+        <tr><td>規則描述</td><td>✅</td><td>三層：①適用情境 ②業務目的 ③系統行為，用完整句子</td></tr>
+        <tr><td>觸發時機</td><td>✅</td><td>哪一頁、哪個操作，如「P2 按確認時」</td></tr>
+        <tr><td>判斷邏輯</td><td>✅</td><td>業務語言條件清單；中大型方法改用步驟表</td></tr>
+        <tr><td>失敗訊息</td><td>✅</td><td>使用者看到的逐字訊息；不確定時寫「依系統設定動態顯示」</td></tr>
+        <tr><td>源碼來源</td><td>✅</td><td>程式＋方法＋行號（三重定位）</td></tr>
+        <tr><td>源碼流程</td><td>✅</td><td>Mermaid 流程圖，最多 8 個節點</td></tr>
+        <tr><td>資料來源</td><td>✅</td><td>SRS／SDS／SWDS 文件與章節；沒有就寫「⚠ 僅有源碼實證」</td></tr>
+        <tr><td>業務背景、適用範圍、前置條件、業務衝擊、錯誤碼、SQL</td><td>選用</td><td>有助理解時補上</td></tr>
+      </table></div>
+      <h3>三重定位：程式改版也找得到</h3>
+      <p>格式：<code>方法名() 內搜尋 "關鍵字" (基線行號 :XXXX)</code>，例如 <code>verify_doAddDiscnt() 搜尋 "checkIMEI4Modelins" (:3920)</code>。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>定位層</th><th>用途</th><th>何時失效</th></tr>
+        <tr><td>方法名</td><td>IDE「跳到方法」</td><td>方法改名或刪除</td></tr>
+        <tr><td>搜尋關鍵字</td><td>在方法內定位到判斷點</td><td>關鍵字被重構</td></tr>
+        <tr><td>基線行號</td><td>當下版本最快定位</td><td>任何程式修改後</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="sec-writing">
+      <h2>8. 寫作規範：寫業務規則，不是翻譯程式</h2>
+      <p>最常見的失敗，是把程式碼換成中文就當成規則。判斷條件要讓業務、QA、開發都看得懂；程式細節移到「源碼來源」欄。</p>
+      <div class="vs">
+        <div class="bad"><b>❌ 翻譯程式</b>判斷條件：<code>ifShowIMEI==true &amp;&amp; (serial_no==null || serial_no.trim().length()==0)</code></div>
+        <div class="good"><b>✅ 業務語言</b>判斷條件：此優惠包含保險／電池服務，需輸入 IMEI，但使用者未輸入 IMEI／序號。</div>
+      </div>
+      <div class="vs">
+        <div class="bad"><b>❌ 只寫結果</b>風險等級不符時回傳錯誤。</div>
+        <div class="good"><b>✅ 三層描述</b>①客戶命中須複核的風險種類時 ②對中度風險客戶要求主管把關並留下軌跡 ③要求輸入具複核權限的主管，未複核不得受理。</div>
+      </div>
+      <div class="vs">
+        <div class="bad"><b>❌ 改寫訊息</b>失敗訊息：提示風險不可受理。</div>
+        <div class="good"><b>✅ 逐字引用</b>失敗訊息：「此客戶的風險種類，系統不予受理！」</div>
+      </div>
+      <div class="x"><table class="tbl">
+        <tr><th>欄位</th><th>放什麼</th><th>不放什麼</th></tr>
+        <tr><td>判斷條件</td><td>業務語言；代碼值可保留但附中文說明</td><td>程式語法、變數宣告、比較運算子</td></tr>
+        <tr><td>失敗訊息</td><td>使用者看到的逐字訊息</td><td>自行改寫或摘要</td></tr>
+        <tr><td>源碼來源</td><td>方法名＋搜尋關鍵字＋基線行號</td><td>—</td></tr>
+      </table></div>
+      <h3>流程圖規則</h3>
+      <ul>
+        <li>由上而下（flowchart TD），節點 ≤ 8 個、每個節點文字 ≤ 15 字。</li>
+        <li>判斷用菱形；成功出口標「通過」，失敗出口標「踢錯」或「過濾」。</li>
+        <li>多分支邏輯優先用流程圖，不寫長段文字；圖太大時提供縮放拉桿。</li>
+      </ul>
+    </section>
+
+    <section class="card" id="sec-case">
+      <h2>9. 完整範例：信用查核頁面規格</h2>
+      <p>信用查核是受理前的<b>共用預審閘門</b>：受理員輸入客戶證號後，系統同時查核風險、帳單彙寄、欠費、企業實地訪查 4 個面向，全部通過才放行；部分情況須具複核權限的主管確認。</p>
+      <h3>一、作業概觀（節錄）</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>項目</th><th>值</th></tr>
+        <tr><td>作業性質</td><td>受理前預審查核；非獨立選單，由各受理流程內嵌呼叫</td></tr>
+        <tr><td>後端主程式</td><td>CheckerRequestBacking（1,401 行）、CheckerHelper（1,130 行）、WSClient（外部 API 呼叫器）</td></tr>
+        <tr><td>前端頁</td><td>chkRisk_fast（框架）、chkRisk_risk（風險）、chkRisk_bill（帳單）、chkRisk_fee（欠費）、chkRisk_others（其他事項）</td></tr>
+        <tr><td>查核對象</td><td>承租人＋協辦人／代辦人皆查</td></tr>
+        <tr><td>查核時機</td><td>輸入證號後即時執行；4 區塊同時查核、區塊內依序查核</td></tr>
+        <tr><td>總體處置</td><td>任一查核失敗即不准受理；部分項目須主管確認後放行</td></tr>
+      </table></div>
+      <h3>A-0 作業流程全貌：誰會呼叫信用查核</h3>
+      <div class="diagram"><div class="mermaid">
+flowchart TB
+  F1["一般新申裝"] --> T["★ 信用查核 ★"]
+  F2["NP 攜入"] --> T
+  F3["優惠受理"] --> T
+  F4["服務型態異動"] --> T
+  F5["Apple 通路"] --> T
+  F6["續租／復租"] --> T
+  T -- 通過 --> N["繼續受理"]
+  T -- 不通過 --> B["擋件／主管複核"]
+  style T fill:#e65100,color:#fff,stroke:#bf360c,stroke-width:3px
+  style N fill:#27ae60,color:#fff
+  style B fill:#c0392b,color:#fff
+      </div></div>
+      <h3>A 頁面串接關聯圖</h3>
+      <div class="diagram"><div class="mermaid">
+flowchart LR
+  E(["6 個受理入口"]) --> FAST["P1 框架頁 chkRisk_fast"]
+  FAST --> PROC{"路由 chkRiskProc"}
+  PROC -- risk --> RISK["P2 風險頁"]
+  PROC -- bill --> BILL["P3 帳單頁"]
+  PROC -- fee --> FEE["P4 欠費頁"]
+  PROC -- others --> OTH["P5 其他頁"]
+  RISK --> BEAN(("CheckerRequestBacking"))
+  BILL --> BEAN
+  FEE --> BEAN
+  OTH --> BEAN
+  BEAN --> HELP(["CheckerHelper"])
+  HELP --> NPA{{"警政署 165 風險"}}
+  HELP --> CCBS{{"帳務欠費"}}
+  HELP --> SPIP{{"戶役政"}}
+  HELP --> CBM{{"彙寄合併帳單"}}
+  FAST -- 查核通過 --> EXIT[["繼續受理"]]
+      </div></div>
+      <h3>B 範圍地圖</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>子頁</th><th>查什麼</th><th>會擋嗎</th><th>對外系統</th></tr>
+        <tr><td>P1 框架頁</td><td>豁免判斷＋四區塊分派</td><td>—</td><td>—</td></tr>
+        <tr><td>P2 風險頁</td><td>風險名單、信用燈號、防詐、同證門號</td><td>硬擋＋主管複核</td><td>警政署 165、戶役政</td></tr>
+        <tr><td>P3 帳單頁</td><td>彙寄／合併帳單</td><td>—</td><td>帳單彙寄系統</td></tr>
+        <tr><td>P4 欠費頁</td><td>承租人／報稅統編／代辦人欠費</td><td>主管複核（逾期）</td><td>帳務系統</td></tr>
+        <tr><td>P5 其他頁</td><td>同證門號數、KYC 提示</td><td>—</td><td>帳單彙寄系統</td></tr>
+      </table></div>
+      <h3>五、規則分布總覽</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>頁面</th><th>阻擋 R</th><th>功能 F</th><th>顯示 D</th><th>跨系統</th></tr>
+        <tr><td>P1 框架頁</td><td>—</td><td>F-CK-001、F-CK-002</td><td>—</td><td>—</td></tr>
+        <tr><td>P2 風險頁</td><td>R-CK-101、R-CK-102</td><td>F-CK-101～104</td><td>D-CK-101、102</td><td>SWDS-P2-01</td></tr>
+        <tr><td>P3 帳單頁</td><td>—</td><td>F-CK-201</td><td>—</td><td>—</td></tr>
+        <tr><td>P4 欠費頁</td><td>R-CK-301</td><td>F-CK-301</td><td>D-CK-301、302</td><td>—</td></tr>
+        <tr><td>P5 其他頁</td><td>—</td><td>F-CK-401、402</td><td>—</td><td>—</td></tr>
+        <tr><td><b>合計 18</b></td><td>3</td><td>10</td><td>4</td><td>1</td></tr>
+      </table></div>
+
+      <div class="rule">
+        <h4>規則卡：R-CK-101 風險種類禁止受理</h4>
+        <div class="x"><table class="tbl">
+          <tr><th>欄位</th><th>內容</th></tr>
+          <tr><td>業務背景</td><td>特定高風險種類（如詐騙相關）依風險政策一律不得受理，屬硬性阻擋，不開放主管複核放行。</td></tr>
+          <tr><td>適用範圍</td><td>通路：全部；客戶類型：全部</td></tr>
+          <tr><td>規則描述</td><td>①客戶命中特定高風險種類時。②對明確高風險客戶硬性擋件，杜絕詐欺與呆帳。③偵測到禁止受理的風險種類即標記為不可受理，不提供複核放行。</td></tr>
+          <tr><td>前置條件</td><td>F-CK-101 風險查詢之後</td></tr>
+          <tr><td>觸發時機</td><td>判定風險等級時</td></tr>
+          <tr><td>判斷邏輯</td><td>1. 客戶命中風險種類 27、30 或 37（特殊高風險）。<br>2. 代辦人證號符合 5 碼例外者移除該風險放行；否則標記為不可受理。</td></tr>
+          <tr><td>失敗訊息</td><td>「此客戶的風險種類，系統不予受理！」</td></tr>
+          <tr><td>業務衝擊</td><td>受理員無法受理，應請客戶洽風險建檔單位處理後再辦。</td></tr>
+          <tr><td>源碼來源</td><td><code>CheckerRequestBacking.chkRiskLevel()</code> 搜尋 "isRiskAvoid"（:628-630）；代辦人 5 碼例外（:354-401）</td></tr>
+          <tr><td>資料來源</td><td>SDS-OR-0084 §3.4「禁止受理 風險種類 27、30、37」</td></tr>
+          <tr><td>驗證狀態</td><td>✅ 已逐碼比對源碼</td></tr>
+        </table></div>
+        <div class="diagram"><div class="mermaid">
+flowchart TD
+  A["取得風險種類"] --> B{"命中 27／30／37"}
+  B -- 否 --> C["續判其他規則"]
+  B -- 是 --> D{"代辦人 5 碼例外"}
+  D -- 是 --> E["移除該風險，通過"]
+  D -- 否 --> F["標記禁止受理，踢錯"]
+        </div></div>
+
+        <h4>規則卡：R-CK-102 風險種類需主管複核</h4>
+        <div class="x"><table class="tbl">
+          <tr><th>欄位</th><th>內容</th></tr>
+          <tr><td>業務背景</td><td>部分風險種類不必一律禁止，但須由具複核權限的主管確認後放行，兼顧風險控管與業務彈性。</td></tr>
+          <tr><td>適用範圍</td><td>通路：全部（含策盟）；客戶類型：承租人／代辦人</td></tr>
+          <tr><td>觸發時機</td><td>判定風險等級時（R-CK-101 以外的分支）</td></tr>
+          <tr><td>判斷邏輯</td><td>符合任一即需主管複核：<br>1. 風險種類 05 或 22，且風險起始日在 2007/01/01 之後。<br>2. 命中「可加大略過」類風險種類（02、04、06、08…等 16 類）。<br>3. 風險種類 39 且對象為代辦人。<br>4. 風險種類 07、14、16 且為策盟受理。</td></tr>
+          <tr><td>失敗訊息</td><td>「此客戶的風險種類，必須輸入主管（有風險複核權限）」</td></tr>
+          <tr><td>業務衝擊</td><td>須請主管以帳密確認（內部 LDAP 驗證，逾時 2 秒）；未複核無法送件。</td></tr>
+          <tr><td>源碼來源</td><td><code>CheckerRequestBacking.chkRiskLevel()</code>（:598-648，新式等級 :606-617／舊式代碼 :618-644）；前端 <code>chkRisk_fast.jsp</code> 搜尋 "riskConfirm"</td></tr>
+          <tr><td>資料來源</td><td>SDS-OR-0084 §3.4「風險處理（主管確認或例外案放行）」</td></tr>
+          <tr><td>驗證狀態</td><td>✅ 已逐碼比對源碼</td></tr>
+        </table></div>
+        <div class="diagram"><div class="mermaid">
+flowchart TD
+  A["取得風險種類"] --> B{"05 或 22"}
+  B -- 是且 2007 後 --> C["需主管複核"]
+  B -- 否 --> D{"可加大略過類"}
+  D -- 是 --> C
+  D -- 否 --> E{"39 代辦人或策盟"}
+  E -- 是 --> C
+  E -- 否 --> F["不需複核，通過"]
+        </div></div>
+      </div>
+
+      <h3>十二、誠實驗證狀態（節錄）</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>項目</th><th>狀態</th><th>依據</th></tr>
+        <tr><td>4 大查核區塊與子項</td><td>✅ 已驗證</td><td>SDS 完整列出，與 SRS 需求、源碼方法一一對應</td></tr>
+        <tr><td>風險等級判定</td><td>✅ 已驗證</td><td>源碼 <code>chkRiskLevel()</code> 598-648 逐碼比對</td></tr>
+        <tr><td>5 個前端頁 UI 欄位與版面</td><td>✅ 已驗證</td><td>v0.2 匯入前端頁後逐頁核對，UI 圖改依源碼 HTML 繪製</td></tr>
+        <tr><td>主管授權實作</td><td>✅ 已驗證</td><td>為內部 LDAP 驗證，不是 SDS 所寫的外部 API（誠實修正）</td></tr>
+        <tr><td>企業實地訪查（P5）</td><td>✅ 已澄清</td><td>UI 提示＋同證門號查詢＋KYC 人工判斷，無獨立程式化 API</td></tr>
+      </table></div>
+      <p class="note">界線聲明：UI 模擬圖為依源碼 HTML 重繪之示意（非螢幕截圖）；不以推論冒充已驗證事實。v0.2 也誠實修正了「移民署 API 不存在」「165 查詢存在」等原本的推測。</p>
+      <h3>十三、文件歷程</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>版本</th><th>修改內容</th></tr>
+        <tr><td>v0.1-draft</td><td>依 SRS／SDS＋後端源碼盤點 4 區塊 5 頁、18 條規則（R×3／F×10／D×4／SWDS×1），標示 5 項 ⚠ 與誠實界線。</td></tr>
+        <tr><td>v0.2-draft</td><td>匯入前端頁逐頁核對；UI 模擬圖改依源碼 HTML 重繪；補逐字失敗訊息與主管授權對話框；消化 5 個 ⚠（4 補實證、1 澄清）；新增 §十一 對外介面；新增全局導覽 A-0～D。</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="sec-journey">
+      <h2>10. 實戰歷程：方法是怎麼長出來的</h2>
+      <p>格式範本不是一開始就設計好的，而是在對話中邊做邊修、再把好的做法沉澱下來。</p>
+      <ol class="timeline">
+        <li><b>建知識庫</b>：匯入規格文件與約 1.5 GB 源碼到 MongoDB，可語意搜尋、全文搜尋、追程式鏈。</li>
+        <li><b>XG 互轉試寫</b>：「給定作業名稱，盤點頁面、欄位與檢查規則；規則從源碼回推為業務說明，再輔以 SRS／SDS」。<small>過程中追加：UI 示意參考源碼 HTML、補文件歷程章、P4 缺圖補上。</small></li>
+        <li><b>加入源碼欄位</b>：每條規則新增「源碼來源」（程式＋function）與「源碼流程」（Mermaid），22 條一次批次補完。</li>
+        <li><b>一般新申裝：抽出範本</b>：先提格式 md 與撰寫規劃，確認後才產文件；把成功案例抽成格式範本。<small>再 review 出 10 項優化，明確要求「說清楚業務規則，而非翻譯程式」；輸出 HTML，流程圖附縮放拉桿。</small></li>
+        <li><b>包成 MCP Server</b>：同仁在自己的 AI 工具中就能查知識庫，並規劃「有人要看才產生、產過且未變更就重用」。</li>
+        <li><b>信用查核 v0.1 → v0.2</b>：先規劃、審核後撰寫；v0.1 留 5 個 ⚠；補匯入前端 JSP 後升 v0.2，UI 改依源碼 HTML、新增對外介面章。</li>
+        <li><b>延伸應用</b>：針對單一規則追問（如實地訪查的源碼邏輯、購機免預繳信用燈號計算）、整理「哪些作業可併同受理」審核文件。</li>
+      </ol>
+      <h3>人負責什麼</h3>
+      <ul>
+        <li><b>定方向</b>：決定範圍、取捨（如「不含 NP 攜入」「規則數不設上限」）。</li>
+        <li><b>審規劃</b>：要求 AI「先提規劃，確認後再寫」，避免大量返工與浪費 token。</li>
+        <li><b>挑問題</b>：「產出很多待 BA 補充，是你不知道，還是特意留給 BA？」逼 AI 區分查不到與不該猜。</li>
+        <li><b>守品質</b>：審核通過才入庫；草稿不進知識庫。</li>
+      </ul>
+    </section>
+
+    <section class="card" id="sec-prompts">
+      <h2>11. 提示詞範本</h2>
+      <p>把 <code>[ ]</code> 換成你的作業。建議依序使用，每一步看完結果再進下一步。</p>
+      <h3>① 定位頁面</h3>
+      <pre>[作業名稱] 頁面會檢查 [業務關鍵字1]、[業務關鍵字2]、[業務關鍵字3]。
+請用這些項目查知識庫，找出對應的頁面程式、入口來源與呼叫鏈，
+並確認前端 JSP 與後端程式是否都已匯入知識庫。</pre>
+      <h3>② 規劃（先不要寫）</h3>
+      <pre>請依 page spec 格式範本，規劃 [作業名稱] 的頁面規格書：
+範圍、頁面清單、預估規則數、資料來源、需要我決定的問題。
+待我審核通過再撰寫。</pre>
+      <h3>③ 撰寫規則</h3>
+      <pre>規劃核准。請依範本撰寫：
+1. 從每頁 JSP 的 UI 觸發點往下窮舉，每個阻擋點都要有一條規則；
+2. 判斷邏輯用業務語言，程式細節放源碼來源欄（三重定位）；
+3. 規則依使用者操作時序排列，每條附 ≤ 8 節點的 Mermaid 流程圖；
+4. UI 模擬圖依源碼 HTML 繪製；
+5. 未從源碼驗證的項目標 ⚠，不要推測。
+規則數不設上限，以完整、正確為優先。</pre>
+      <h3>④ 驗證補強</h3>
+      <pre>列出文件中所有 ⚠ 項目與原因。
+逐項查知識庫源碼補上方法與行號、逐字失敗訊息；
+查不到的請誠實說明原因，更新誠實驗證狀態與文件歷程。</pre>
+      <h3>⑤ 業務語言 Review</h3>
+      <pre>請 review 這份 page spec，找出「只是翻譯程式」的規則描述，
+改寫成業務人員看得懂的三層描述（適用情境／業務目的／系統行為），
+並列出修改前後對照。</pre>
+      <h3>⑥ 完整性稽核</h3>
+      <pre>請重新讀 [頁面].jsp，列出所有 action、actionListener、valueChangeListener、onclick，
+與文件中的規則逐一對照，列出沒有對應規則的阻擋點。</pre>
+      <h3>⑦ 單一規則追問</h3>
+      <pre>[規則代號] 的判斷邏輯，請從源碼找到這一段，
+用開發同仁懂的話說明，並附方法名、行號與流程圖。</pre>
+    </section>
+
+    <section class="card" id="sec-pitfalls">
+      <h2>12. 常見坑與對策</h2>
+      <div class="x"><table class="tbl">
+        <tr><th>坑</th><th>現象</th><th>對策</th></tr>
+        <tr><td>前端沒匯入</td><td>UI 只能依規格推繪，欄位與訊息全是 ⚠</td><td>定位頁面時先確認 JSP 入庫</td></tr>
+        <tr><td>翻譯程式</td><td>規則充滿變數名與運算子，業務看不懂</td><td>範本明定業務語言規範，並做 ⑤ Review</td></tr>
+        <tr><td>依規格清單盤點</td><td>漏掉程式裡的例外分支與歷史補丁</td><td>由 UI 觸發點往下窮舉，做 ⑥ 稽核</td></tr>
+        <tr><td>推論冒充事實</td><td>寫出不存在的外部 API（如移民署）</td><td>✅／⚠ 標示＋誠實驗證章</td></tr>
+        <tr><td>名詞對錯機制</td><td>「主管授權」有多套實作，以為是外部 API，其實是內部 LDAP</td><td>以源碼為準，文件不一致處標註差異</td></tr>
+        <tr><td>行號失效</td><td>程式改版後找不到規則對應程式</td><td>三重定位：方法＋關鍵字＋行號</td></tr>
+        <tr><td>一次產全部</td><td>耗大量 token，產出的文件沒人看</td><td>有人要看才產生；產過且未變更就重用</td></tr>
+        <tr><td>草稿入庫</td><td>未審稿內容被其他人查到並引用</td><td>審核通過才匯入知識庫</td></tr>
+        <tr><td>流程圖太大</td><td>一張圖塞 20 個節點看不清</td><td>≤ 8 節點、大方法畫分群；提供縮放拉桿</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="sec-checklist">
+      <h2>13. 檢查清單</h2>
+      <div class="grid2" style="margin-top:0">
+        <div><h3>完整性</h3><ul class="check">
+          <li>☐ 每個 UI 阻擋點都有對應規則</li>
+          <li>☐ 規則分布表數字與各頁規則一致</li>
+          <li>☐ 每頁都有 UI 模擬圖與欄位說明</li>
+          <li>☐ 有全局導覽 A～D（必要時含 A-0）</li>
+        </ul></div>
+        <div><h3>正確性</h3><ul class="check">
+          <li>☐ 判斷邏輯與源碼逐項比對</li>
+          <li>☐ 失敗訊息逐字取自源碼</li>
+          <li>☐ 每條規則標 ✅ 或 ⚠</li>
+          <li>☐ 與 SRS／SDS 不一致處已標註</li>
+        </ul></div>
+        <div><h3>可讀性</h3><ul class="check">
+          <li>☐ 判斷邏輯為業務語言，沒有程式碼</li>
+          <li>☐ 規則描述有三層</li>
+          <li>☐ 流程圖 ≤ 8 節點</li>
+          <li>☐ 術語表涵蓋陌生名詞</li>
+        </ul></div>
+        <div><h3>可維護性</h3><ul class="check">
+          <li>☐ 源碼來源使用三重定位</li>
+          <li>☐ 文件歷程記錄每版修改</li>
+          <li>☐ 審核通過才匯入知識庫</li>
+          <li>☐ 對外分享前完成去識別化</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section class="card" id="sec-practice">
+      <h2>14. 練習：逆向一個你熟悉的頁面</h2>
+      <p>挑一個你常被問「為什麼被擋」的頁面，在已接上知識庫的 AI 工具中完成以下步驟（約 60 分鐘）：</p>
+      <ol>
+        <li>用提示詞 ① 定位頁面，記下頁面程式與入口來源。</li>
+        <li>用提示詞 ② 取得規劃，至少修正一個範圍或問題的決定後再核准。</li>
+        <li>只撰寫<b>一個子頁</b>的規則（提示詞 ③），挑一條 R 規則對照源碼確認判斷邏輯。</li>
+        <li>用提示詞 ⑥ 稽核完整性，補上遺漏的阻擋點。</li>
+        <li>用檢查清單自評，並寫一筆文件歷程。</li>
+      </ol>
+      <p class="done">完成標準：子頁的每個阻擋點都有規則；任選一條規則，業務能看懂判斷邏輯、開發能在 1 分鐘內用源碼來源找到程式。</p>
     </section>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({ startOnLoad: false, theme: 'default', fontFamily: 'Noto Sans TC, Microsoft JhengHei, sans-serif' });
+      window.addEventListener('load', function () { mermaid.run(); });
+    }
+  </script>
   <script src="assets/nav.js"></script>
 </body>
 </html>
