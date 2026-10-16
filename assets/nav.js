@@ -1,5 +1,5 @@
 ﻿(function(){
-const P=[["index.html","首頁"],["ai-presentation-workflow.html","簡報工作流"],["notebooklm-ai-training.html","課程簡報"],["mobile-order-kb.html","知識庫分享"],["practice.html","實作練習"],["quiz.html","小測驗"],["card.html","步驟卡"],["teacher.html","講師流程"],["wrapup.html","課後總結"]];
+const P=[["index.html","首頁"],["ai-presentation-workflow.html","簡報工作流"],["notebooklm-ai-training.html","課程簡報"],["notebooklm-basics.html","NotebookLM 入門"],["mobile-order-kb.html","知識庫分享"],["practice.html","實作練習"],["quiz.html","小測驗"],["card.html","步驟卡"],["teacher.html","講師流程"],["wrapup.html","課後總結"]];
 const cur=location.pathname.split('/').pop()||"index.html";
 const n=document.createElement('nav');n.className='top';
 n.innerHTML='<div class="pill"><b>AI 助理</b>'+P.map(([h,t])=>`<a href="${h}"${h===cur?' class="on"':''}>${t}</a>`).join('')+'</div><a class="cta" href="qr.html">📱 QR Code</a>';
