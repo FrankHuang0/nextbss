@@ -136,7 +136,7 @@ flowchart LR
       <h2>4. 製作流程：6 步</h2>
       <p>原則是「AI 做苦工、人做決定」：每一步都有明確的人工把關點。</p>
       <ol class="timeline">
-        <li><b>定位頁面</b>：用業務關鍵字查知識庫，找出入口、子頁與呼叫鏈。<small>例：「信用查核會查客戶風險、欠費、戶役政，請用這些項目找到信用查核頁面」→ 找到 checkcredit 套件與 5 個 chkRisk 子頁。把關：前後端源碼都在庫嗎？</small></li>
+        <li><b>定位頁面</b>：用業務關鍵字查知識庫，找出入口、子頁與呼叫鏈。<small>例：「信用查核會查客戶風險、欠費、戶役政，請用這些項目找到信用查核頁面」→ 找到 che******it 套件與 5 個 chk**sk 子頁。把關：前後端源碼都在庫嗎？</small></li>
         <li><b>先規劃，審核後再撰寫</b>：請 AI 依格式範本提出範圍、頁面清單、規則草估與待確認問題。<small>例：「是否包含 NP 攜入新申裝？否」「規則數是否設上限？否，以完整、正確為優先」。把關：範圍與頁面清單正確嗎？</small></li>
         <li><b>由 UI 觸發點窮舉規則</b>：讀每頁 JSP，列出所有按鈕、下拉、連結觸發的方法，逐方法讀判斷分支。<small>產出 UI 觸發點清單與規則清單。把關：每個阻擋點都有對應規則嗎？（詳見第 5 節）</small></li>
         <li><b>依範本撰寫</b>：全局導覽、頁面說明、依源碼 HTML 繪製的 UI 模擬圖、欄位、規則卡（業務語言＋三重定位＋流程圖）。<small>把關：業務看得懂判斷邏輯嗎？開發找得到程式嗎？</small></li>
@@ -245,7 +245,7 @@ flowchart LR
         <tr><td>業務背景、適用範圍、前置條件、業務衝擊、錯誤碼、SQL</td><td>選用</td><td>有助理解時補上</td></tr>
       </table></div>
       <h3>三重定位：程式改版也找得到</h3>
-      <p>格式：<code>方法名() 內搜尋 "關鍵字" (基線行號 :XXXX)</code>，例如 <code>verify_doAddDiscnt() 搜尋 "checkIMEI4Modelins" (:3920)</code>。</p>
+      <p>格式：<code>方法名() 內搜尋 "關鍵字" (基線行號 :XXXX)</code>，例如 <code>ver*************nt() 搜尋 "che*************ns" (:3920)</code>。</p>
       <div class="x"><table class="tbl">
         <tr><th>定位層</th><th>用途</th><th>何時失效</th></tr>
         <tr><td>方法名</td><td>IDE「跳到方法」</td><td>方法改名或刪除</td></tr>
@@ -290,8 +290,8 @@ flowchart LR
       <div class="x"><table class="tbl">
         <tr><th>項目</th><th>值</th></tr>
         <tr><td>作業性質</td><td>受理前預審查核；非獨立選單，由各受理流程內嵌呼叫</td></tr>
-        <tr><td>後端主程式</td><td>CheckerRequestBacking（1,401 行）、CheckerHelper（1,130 行）、WSClient（外部 API 呼叫器）</td></tr>
-        <tr><td>前端頁</td><td>chkRisk_fast（框架）、chkRisk_risk（風險）、chkRisk_bill（帳單）、chkRisk_fee（欠費）、chkRisk_others（其他事項）</td></tr>
+        <tr><td>後端主程式</td><td>Che****************ng（1,401 行）、Che********er（1,130 行）、WSC***nt（外部 API 呼叫器）</td></tr>
+        <tr><td>前端頁</td><td>chk*******st（框架）、chk*******sk（風險）、chk*******ll（帳單）、chk******ee（欠費）、chk*********rs（其他事項）</td></tr>
         <tr><td>查核對象</td><td>承租人＋協辦人／代辦人皆查</td></tr>
         <tr><td>查核時機</td><td>輸入證號後即時執行；4 區塊同時查核、區塊內依序查核</td></tr>
         <tr><td>總體處置</td><td>任一查核失敗即不准受理；部分項目須主管確認後放行</td></tr>
@@ -314,17 +314,17 @@ flowchart TB
       <h3>A 頁面串接關聯圖</h3>
       <div class="diagram"><div class="mermaid">
 flowchart LR
-  E(["6 個受理入口"]) --> FAST["P1 框架頁 chkRisk_fast"]
-  FAST --> PROC{"路由 chkRiskProc"}
+  E(["6 個受理入口"]) --> FAST["P1 框架頁 chk*******st"]
+  FAST --> PROC{"路由 chk******oc"}
   PROC -- risk --> RISK["P2 風險頁"]
   PROC -- bill --> BILL["P3 帳單頁"]
   PROC -- fee --> FEE["P4 欠費頁"]
   PROC -- others --> OTH["P5 其他頁"]
-  RISK --> BEAN(("CheckerRequestBacking"))
+  RISK --> BEAN(("Che****************ng"))
   BILL --> BEAN
   FEE --> BEAN
   OTH --> BEAN
-  BEAN --> HELP(["CheckerHelper"])
+  BEAN --> HELP(["Che********er"])
   HELP --> NPA{{"警政署 165 風險"}}
   HELP --> CCBS{{"帳務欠費"}}
   HELP --> SPIP{{"戶役政"}}
@@ -360,16 +360,16 @@ flowchart LR
           <tr><td>規則描述</td><td>①客戶命中特定高風險種類時。②對明確高風險客戶硬性擋件，杜絕詐欺與呆帳。③偵測到禁止受理的風險種類即標記為不可受理，不提供複核放行。</td></tr>
           <tr><td>前置條件</td><td>F-CK-101 風險查詢之後</td></tr>
           <tr><td>觸發時機</td><td>判定風險等級時</td></tr>
-          <tr><td>判斷邏輯</td><td>1. 客戶命中風險種類 27、30 或 37（特殊高風險）。<br>2. 代辦人證號符合 5 碼例外者移除該風險放行；否則標記為不可受理。</td></tr>
+          <tr><td>判斷邏輯</td><td>1. 客戶命中風險種類 2*、3* 或 3*（特殊高風險）。<br>2. 代辦人證號符合 5 碼例外者移除該風險放行；否則標記為不可受理。</td></tr>
           <tr><td>失敗訊息</td><td>「此客戶的風險種類，系統不予受理！」</td></tr>
           <tr><td>業務衝擊</td><td>受理員無法受理，應請客戶洽風險建檔單位處理後再辦。</td></tr>
-          <tr><td>源碼來源</td><td><code>CheckerRequestBacking.chkRiskLevel()</code> 搜尋 "isRiskAvoid"（:628-630）；代辦人 5 碼例外（:354-401）</td></tr>
-          <tr><td>資料來源</td><td>SDS-OR-0084 §3.4「禁止受理 風險種類 27、30、37」</td></tr>
+          <tr><td>源碼來源</td><td><code>Che****************ng.chk*******el()</code> 搜尋 "isR******id"（:628-630）；代辦人 5 碼例外（:354-401）</td></tr>
+          <tr><td>資料來源</td><td>SDS-OR-0084 §3.4「禁止受理 風險種類 2*、3*、3*」</td></tr>
           <tr><td>驗證狀態</td><td>✅ 已逐碼比對源碼</td></tr>
         </table></div>
         <div class="diagram"><div class="mermaid">
 flowchart TD
-  A["取得風險種類"] --> B{"命中 27／30／37"}
+  A["取得風險種類"] --> B{"命中 2*／3*／3*"}
   B -- 否 --> C["續判其他規則"]
   B -- 是 --> D{"代辦人 5 碼例外"}
   D -- 是 --> E["移除該風險，通過"]
@@ -382,20 +382,20 @@ flowchart TD
           <tr><td>業務背景</td><td>部分風險種類不必一律禁止，但須由具複核權限的主管確認後放行，兼顧風險控管與業務彈性。</td></tr>
           <tr><td>適用範圍</td><td>通路：全部（含策盟）；客戶類型：承租人／代辦人</td></tr>
           <tr><td>觸發時機</td><td>判定風險等級時（R-CK-101 以外的分支）</td></tr>
-          <tr><td>判斷邏輯</td><td>符合任一即需主管複核：<br>1. 風險種類 05 或 22，且風險起始日在 2007/01/01 之後。<br>2. 命中「可加大略過」類風險種類（02、04、06、08…等 16 類）。<br>3. 風險種類 39 且對象為代辦人。<br>4. 風險種類 07、14、16 且為策盟受理。</td></tr>
+          <tr><td>判斷邏輯</td><td>符合任一即需主管複核：<br>1. 風險種類 0* 或 2*，且風險起始日在 2007/01/01 之後。<br>2. 命中「可加大略過」類風險種類（0*、0*、0*、0*…等 16 類）。<br>3. 風險種類 3* 且對象為代辦人。<br>4. 風險種類 0*、1*、1* 且為策盟受理。</td></tr>
           <tr><td>失敗訊息</td><td>「此客戶的風險種類，必須輸入主管（有風險複核權限）」</td></tr>
           <tr><td>業務衝擊</td><td>須請主管以帳密確認（內部 LDAP 驗證，逾時 2 秒）；未複核無法送件。</td></tr>
-          <tr><td>源碼來源</td><td><code>CheckerRequestBacking.chkRiskLevel()</code>（:598-648，新式等級 :606-617／舊式代碼 :618-644）；前端 <code>chkRisk_fast.jsp</code> 搜尋 "riskConfirm"</td></tr>
+          <tr><td>源碼來源</td><td><code>Che****************ng.chk*******el()</code>（:598-648，新式等級 :606-617／舊式代碼 :618-644）；前端 <code>chk*******st.jsp</code> 搜尋 "ris******rm"</td></tr>
           <tr><td>資料來源</td><td>SDS-OR-0084 §3.4「風險處理（主管確認或例外案放行）」</td></tr>
           <tr><td>驗證狀態</td><td>✅ 已逐碼比對源碼</td></tr>
         </table></div>
         <div class="diagram"><div class="mermaid">
 flowchart TD
-  A["取得風險種類"] --> B{"05 或 22"}
+  A["取得風險種類"] --> B{"0* 或 2*"}
   B -- 是且 2007 後 --> C["需主管複核"]
   B -- 否 --> D{"可加大略過類"}
   D -- 是 --> C
-  D -- 否 --> E{"39 代辦人或策盟"}
+  D -- 否 --> E{"3* 代辦人或策盟"}
   E -- 是 --> C
   E -- 否 --> F["不需複核，通過"]
         </div></div>
@@ -405,7 +405,7 @@ flowchart TD
       <div class="x"><table class="tbl">
         <tr><th>項目</th><th>狀態</th><th>依據</th></tr>
         <tr><td>4 大查核區塊與子項</td><td>✅ 已驗證</td><td>SDS 完整列出，與 SRS 需求、源碼方法一一對應</td></tr>
-        <tr><td>風險等級判定</td><td>✅ 已驗證</td><td>源碼 <code>chkRiskLevel()</code> 598-648 逐碼比對</td></tr>
+        <tr><td>風險等級判定</td><td>✅ 已驗證</td><td>源碼 <code>chk*******el()</code> 598-648 逐碼比對</td></tr>
         <tr><td>5 個前端頁 UI 欄位與版面</td><td>✅ 已驗證</td><td>v0.2 匯入前端頁後逐頁核對，UI 圖改依源碼 HTML 繪製</td></tr>
         <tr><td>主管授權實作</td><td>✅ 已驗證</td><td>為內部 LDAP 驗證，不是 SDS 所寫的外部 API（誠實修正）</td></tr>
         <tr><td>企業實地訪查（P5）</td><td>✅ 已澄清</td><td>UI 提示＋同證門號查詢＋KYC 人工判斷，無獨立程式化 API</td></tr>
