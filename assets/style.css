@@ -1,4 +1,4 @@
-﻿:root{--p:#fc6a65;--p2:#e65c5c;--dark:#2b2f36;--ink:#4d4d4d;--mut:#6b6b6b;--line:#d8d8d8;--bg:#fff;--surface:#fff;--tint:#fff1f0;--tint2:#fff8f7;--tline:#ffd9d6;--hd:var(--p);--strong:#2b2f36;--on-p:#fff;color-scheme:light}
+:root{--p:#fc6a65;--p2:#e65c5c;--dark:#2b2f36;--ink:#4d4d4d;--mut:#6b6b6b;--line:#d8d8d8;--bg:#fff;--surface:#fff;--tint:#fff1f0;--tint2:#fff8f7;--tline:#ffd9d6;--hd:var(--p);--strong:#2b2f36;--on-p:#fff;color-scheme:light}
 [data-theme="ocean"]{--p:#2563eb;--p2:#1d4ed8;--dark:#1e293b;--tint:#eff6ff;--tint2:#f5f9ff;--tline:#bfdbfe}
 [data-theme="forest"]{--p:#15803d;--p2:#166534;--dark:#1c2a22;--tint:#ecfdf3;--tint2:#f4fdf7;--tline:#bbf7d0}
 [data-theme="grape"]{--p:#7c3aed;--p2:#6d28d9;--dark:#2e1f47;--tint:#f5f3ff;--tint2:#faf8ff;--tline:#ddd6fe}
@@ -137,3 +137,56 @@ nav.top .nb-tbtn{padding:12px 18px;border:0;box-shadow:0 6px 24px #0002;font-siz
 .grid .card .th.cv.lt{background:radial-gradient(circle at 86% 30%,#ffffff1f 0 17%,transparent 18%),linear-gradient(135deg,#5b6472,var(--dark))}
 .th.cv em{font-style:normal;font-size:.78rem;font-weight:700;letter-spacing:.1em;background:#00000038;border-radius:999px;padding:3px 12px}
 .th.cv i{align-self:flex-end;font-style:normal;font-size:2.8rem;line-height:1;filter:drop-shadow(0 4px 10px #0003)}
+
+/* P3：案例主線、介面示意、參考輸出、測驗解析 */
+.case{border:1px solid var(--tline);background:var(--tint2);border-radius:10px;padding:12px 14px;margin:0 0 18px}
+.case-h{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;margin-bottom:10px}
+.case-h b{color:var(--p)}.case-h span{color:var(--mut);font-size:.92rem}
+.case-s{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;counter-reset:none}
+.case-s a{display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center;height:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);text-decoration:none;color:var(--ink)}
+.case-s a:hover{border-color:var(--p)}
+.case-s i{grid-row:span 2;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--tint);color:var(--p);font-style:normal;font-weight:700;font-size:.85rem}
+.case-s b{font-size:.92rem;color:var(--strong)}.case-s small{color:var(--mut);font-size:.8rem}
+.case-s .past i{background:var(--p);color:var(--on-p);opacity:.55}
+.case-s .cur a{border:2px solid var(--p);box-shadow:0 2px 10px #0001}.case-s .cur i{background:var(--p);color:var(--on-p)}
+.case-n{margin:10px 0 0;font-size:.92rem;color:var(--ink)}
+.ctx{margin:-4px 0 14px;padding:8px 12px;border-radius:6px;background:var(--tint2);font-size:.94rem}
+.ctx b{color:var(--p)}
+@media(max-width:760px){.case-s{grid-template-columns:1fr}.case-s small{display:inline}}
+
+.mock{margin:8px 0 16px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#f6f7f9;box-shadow:0 4px 18px #0000000f}
+.mock-bar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:#e9ebef;font-size:.85rem;color:#444}
+.mock-bar span{width:10px;height:10px;border-radius:50%;background:#c8ccd2}.mock-bar b{margin-left:8px;font-weight:600}
+.mock-body{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:8px;padding:10px}
+.mp{background:#fff;border:1px solid #e3e5e9;border-radius:10px;padding:10px;font-size:.86rem;color:#333;min-width:0}
+.mp h4{margin:0 0 8px;font-size:.9rem;color:#222}.mp h4 em{font-style:normal;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--p);color:var(--on-p);font-size:.75rem;margin-right:6px}
+.mp .src{padding:5px 6px;border-radius:6px;margin-bottom:4px;color:#777}.mp .src.on{background:#eef3fd;color:#1f3b73}
+.mp .add{border:1px dashed #c4c8cf;border-radius:6px;padding:5px 6px;text-align:center;color:#777;margin-top:6px}
+.mp .q{margin-left:auto;width:fit-content;max-width:85%;background:#eef3fd;border-radius:10px 10px 2px 10px;padding:6px 10px;margin-bottom:8px}
+.mp .a{background:#f6f7f9;border-radius:10px 10px 10px 2px;padding:6px 10px;line-height:1.6}
+.mp sup{display:inline-grid;place-items:center;min-width:16px;height:16px;border-radius:50%;background:#dbe4f6;color:#1f3b73;font-size:.7rem;font-weight:700;vertical-align:.2em;outline:2px solid transparent}
+.mp sup.hl{background:var(--p);color:var(--on-p)}
+.mp .in{margin-top:10px;border:1px solid #d9dce1;border-radius:999px;padding:5px 12px;color:#999}
+.mp .tile{border:1px solid #e3e5e9;border-radius:8px;padding:6px 8px;margin-bottom:6px}
+.mock figcaption{padding:8px 14px 10px;font-size:.85rem;color:#555;border-top:1px solid #e3e5e9;background:#fff}
+@media(max-width:760px){.mock-body{grid-template-columns:1fr}}
+
+.ref{margin:4px 0 6px;border:1px dashed var(--tline);border-radius:8px;background:var(--surface)}
+.ref>summary{cursor:pointer;padding:9px 14px;font-weight:700;color:var(--p)}
+.ref>summary:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+.ref[open]>summary{border-bottom:1px dashed var(--tline)}
+.ref .ref-b{padding:10px 14px}.ref .ref-b pre{white-space:pre-wrap;margin:0 0 10px}
+.ref .chk{margin:0;font-size:.92rem;color:var(--ink)}.ref .chk b{color:var(--p)}
+
+.why{margin-top:8px;padding:8px 12px;border-radius:6px;background:var(--tint2);border-left:3px solid var(--tline);font-size:.94rem}
+.why b{color:var(--strong)}.why a{white-space:nowrap;color:var(--p);font-weight:700}
+.band{display:block;margin-top:6px;font-weight:400;color:var(--mut)}
+@media print{.case{break-inside:avoid}.ref{display:none}}
+
+[data-theme="dark"] .mock{background:#14171c;border-color:#3a414b}
+[data-theme="dark"] .mock-bar{background:#262b33;color:#c9ced6}[data-theme="dark"] .mock-bar span{background:#4a525e}
+[data-theme="dark"] .mp{background:#1f232a;border-color:#3a414b;color:#d6d9de}[data-theme="dark"] .mp h4{color:#f1f3f5}
+[data-theme="dark"] .mp .src{color:#a3abb5}[data-theme="dark"] .mp .src.on,[data-theme="dark"] .mp .q{background:#1d2a40;color:#c7d7f5}
+[data-theme="dark"] .mp .a{background:#262b33}[data-theme="dark"] .mp sup{background:#2f3d57;color:#c7d7f5}
+[data-theme="dark"] .mp .tile,[data-theme="dark"] .mp .in,[data-theme="dark"] .mp .add{border-color:#3a414b;color:#a3abb5}
+[data-theme="dark"] .mock figcaption{background:#1f232a;color:#a3abb5;border-color:#3a414b}

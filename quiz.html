@@ -1,24 +1,28 @@
 ﻿<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>小測驗</title><script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css"></head><body>
-<header><h1>情境題暖身測驗</h1><p>10 題情境、找錯與判斷題，交卷立即看解答，檢查提示詞、查證與資料安全觀念。</p></header>
-<main><div id="qs"></div><div class="card"><button onclick="grade()">交卷</button> <b id="score"></b></div>
+<header><h1>情境題暖身測驗</h1><p>10 題情境、找錯與判斷題，交卷後每題附解析與複習連結，檢查提示詞、查證與資料安全觀念。</p></header>
+<main><div id="qs"></div><div class="card"><button onclick="grade()">交卷</button> <button class="alt" id="retry" onclick="render();scrollTo(0,0)" hidden>重新作答</button> <b id="score"></b></div>
 <section class="card recap"><h2>重點回顧</h2><ul><li>好提示詞＝角色＋資料＋任務＋格式＋對象，缺一項就容易答非所問。</li><li>AI 回答要能點開引用回查；找不到來源，就視為不可靠。</li><li>機敏資料先代號化；報價金額、合約條款等對外內容由人定稿。</li><li>從 1 個情境開始，直接排進下週的行程。</li></ul><p class="next">下一步：到 <a href="wrapup.html">課後總結</a> 選定你的第一個情境。</p></section>
 </main>
 <script>
 const Q=[
-["【情境】客戶會議剛結束，你要在 10 分鐘內回傳待辦與感謝信。哪個做法最有效率？",["把整段逐字稿貼進去，只說「幫我整理」","貼入會議紀錄，指定輸出：三行摘要＋待辦表（負責人／期限）＋感謝信","先把紀錄手動整理成條列，再交給 AI 潤飾"],1],
-["【找錯】提示詞：「幫我寫比較好的提案」。主要問題是？",["太短而且沒有角色、資料、格式與對象","字太少所以 AI 不理你","應該用英文"],0],
-["【情境】AI 回答「方案 X 支援 20G 頻寬」，但來源資料沒寫這件事。你該怎麼辦？",["直接用，AI 通常是對的","點開引用核對，找不到來源就視為不可靠，並要求只依來源回答","重問一次直到答案滿意"],1],
-["【找錯】同事把客戶全名、聯絡人手機與合約金額整份貼入 AI。最合適的處理？",["沒問題，AI 不會外洩","改為代號／去識別化後再貼，必要時只貼摘要","刪除對話就好"],1],
-["【情境】客戶說「競品比較便宜 10%」。使用 NotebookLM 的最佳方式是？",["上傳競品與我方資料，要求比較表與 3 種回應話術，並檢查引用","請 AI 直接說我們比較好","不要準備，現場再說"],0],
-["【判斷】哪一個最適合交給 AI，但仍須人最後審閱？",["寄給客戶的報價金額","提案簡報大綱初稿","合約法律條款定稿"],1],
-["【情境】提案簡報要快速產出，下列順序何者較好？",["提供痛點／預算／方案 → 先要大綱 → 逐頁改寫","一次要 50 頁完整內容","只給客戶名稱"],0],
-["【找錯】AI 回答很長但有一半不切題。最有效的修正是？",["換一個 AI","加上限制：只回答 3 點、用表格、僅依來源","罵它"],1],
-["【情境】拜訪大客戶前只有 20 分鐘，財報很長。應該要求 AI 產出？",["整份財報翻譯","現況三重點、可能的 ICT 需求、5 個開場提問","公司歷史沿革"],1],
-["【反思】導入 AI 後，你下週的第一步最好是？",["等公司有更完整的規範再說","選 1 個情境，排定下一場會議實際使用","等同事用了再看"],1]];document.getElementById('qs').innerHTML=Q.map((q,i)=>`<div class="card"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>[o,j]).sort(()=>Math.random()-.5).map(([o,j])=>`<label><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}<div id="r${i}"></div></div>`).join('');
+["【情境】台鴻精工會議剛結束，你要在 10 分鐘內回傳待辦與感謝信。哪個做法最有效率？",["把整段逐字稿貼進去，只說「幫我整理」","貼入會議紀錄，指定輸出：三行摘要＋待辦表（負責人／期限）＋感謝信","先把紀錄手動整理成條列，再交給 AI 潤飾"],1,"只說「幫我整理」，AI 只能猜格式；先手動整理則浪費時間。一次指定要哪些產出，結果才能直接用、也容易檢查。","practice.html#s1"],
+["【找錯】提示詞：「幫我寫比較好的提案」。主要問題是？",["缺少角色、資料、格式與對象，「比較好」也無法判斷","沒有指定字數，AI 不知道要寫多長","應該改用英文提問，效果比較好"],0,"好提示詞＝角色＋資料＋任務＋格式＋對象。字數只是格式的一小部分；中文提問完全可行。","card.html"],
+["【情境】AI 回答「方案 X 支援 20G 頻寬」，但來源資料沒寫這件事。你該怎麼辦？",["直接用，AI 通常是對的","點開引用核對，找不到來源就視為不可靠，並要求只依來源回答","重問幾次，直到出現想要的答案"],1,"來源沒寫的內容就是幻覺風險。重問到滿意，只是挑到一個你喜歡的錯誤答案；型錄寫的是 100M～10G。","practice.html#s3"],
+["【找錯】同事把客戶全名、聯絡人手機與合約金額整份貼入 AI。最合適的處理？",["沒問題，AI 不會外洩","改為代號／去識別化後再貼，必要時只貼摘要","貼完後把對話刪除就好"],1,"刪除對話不等於撤回已送出的資料。正確做法是在貼上「之前」就去識別化，而且只放核准的資料。","notebooklm-basics.html"],
+["【情境】客戶說「競品比較便宜 10%」。使用 NotebookLM 的最佳方式是？",["上傳競品與我方資料，要求比較表與 3 種回應話術，並檢查引用","請 AI 寫一段「我們服務比較好」的說明","先降價 10% 再說，不必準備"],0,"有資料、有結構、有話術，而且能回查來源，才有說服力；空泛的自誇或直接降價都沒有回應客戶真正的顧慮。","practice.html#s2"],
+["【判斷】哪一個最適合交給 AI，但仍須人最後審閱？",["寄給客戶的報價金額","提案簡報大綱初稿","合約法律條款定稿"],1,"大綱初稿容錯高、改起來快；報價金額與合約條款錯一個字就有商業或法律責任，必須由人負責定稿。","ai-presentation-workflow.html"],
+["【情境】提案簡報要快速產出，下列順序何者較好？",["提供痛點／預算／方案 → 先要大綱 → 逐頁改寫","一次要求 50 頁完整內容","只給客戶名稱，讓 AI 自由發揮"],0,"先要大綱，方向錯可以早點修正；一次 50 頁難審也難改。資料給得越少，AI 越容易用通用內容補空白。","practice.html#s4"],
+["【找錯】AI 回答很長但有一半不切題。最有效的修正是？",["換一個 AI 工具重問同一句","加上限制：只回答 3 點、用表格、僅依來源","回覆「再精簡一點」"],1,"不切題通常是指令太寬。明確的數量、格式與範圍限制最有效；只說「精簡一點」仍沒告訴 AI 什麼才切題。","card.html"],
+["【情境】拜訪大客戶前只有 20 分鐘，財報很長。應該要求 AI 產出？",["整份財報的完整翻譯","現況三重點、可能的 ICT 需求、5 個開場提問","公司歷史沿革與組織圖"],1,"時間有限，要的是能拿來開場的資訊：現況、需求假設與驗證用的提問。完整翻譯和沿革對這次拜訪幫助不大。","practice.html#s5"],
+["【反思】導入 AI 後，你下週的第一步最好是？",["等公司有更完整的規範再說","選 1 個情境，排定下一場會議實際使用","先看同事用得如何再決定"],1,"習慣是用出來的：選一個情境、排進具體行程，才會真的發生。在核准範圍內，小步開始就好。","wrapup.html"]];
+const qs=document.getElementById('qs'),score=document.getElementById('score');
+function render(){qs.innerHTML=Q.map((q,i)=>`<div class="card"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>[o,j]).sort(()=>Math.random()-.5).map(([o,j])=>`<label><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}<div id="r${i}" aria-live="polite"></div></div>`).join('');score.textContent='';document.getElementById('retry').hidden=true}
 function grade(){let n=0;Q.forEach((q,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`);const ok=c&&+c.value===q[2];if(ok)n++;
-document.getElementById('r'+i).innerHTML=ok?'<span class=ok>✔ 正確</span>':`<span class=bad>✘ 正解：${q[1][q[2]]}</span>`});
-document.getElementById('score').textContent=`得分 ${n} / ${Q.length}`}
+document.getElementById('r'+i).innerHTML=(ok?'<span class=ok>✔ 正確</span>':`<span class=bad>✘ 正解：${q[1][q[2]]}</span>`)+`<div class="why"><b>解析：</b>${q[3]} <a href="${q[4]}">複習 →</a></div>`});
+const band=n>=9?'觀念很穩，可以直接把第一個情境排進下週行程。':n>=6?'大方向正確，把答錯題的「複習」連結看一遍再出發。':'建議回到實作練習包，至少完成情境 1 與情境 3 再重測。';
+score.innerHTML=`得分 ${n} / ${Q.length}<span class="band">${band}</span>`;const r=document.getElementById('retry');r.hidden=false;score.scrollIntoView({block:'nearest'})}
+render();
 </script><script src="assets/nav.js"></script><script src="assets/lesson.js"></script></body></html>
 
 
