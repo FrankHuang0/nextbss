@@ -4,13 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI 知識庫經驗分享</title>
+<script src="assets/site.js"></script>
 <style>
-:root{--blue:#81C7D4;--red:#E08B81;--green:#A3D6C1;--gray:#F0F0F0;--bg:#FDFDFD;--text:#333;--body:#555;--quote:#CC6666;--sidebar-w:220px}
+:root{--blue:#81C7D4;--red:#E08B81;--green:#A3D6C1;--gray:#F0F0F0;--bg:#FDFDFD;--text:#333;--body:#555;--quote:#CC6666;--sidebar-w:220px;--side:#1E3A5F;--tint:#FFF0EE}
+[data-theme="ocean"]{--red:#2563eb;--blue:#60a5fa;--quote:#1d4ed8;--side:#1e293b;--tint:#eff6ff}
+[data-theme="forest"]{--red:#15803d;--blue:#86d6a8;--quote:#166534;--side:#1c2a22;--tint:#ecfdf3}
+[data-theme="grape"]{--red:#7c3aed;--blue:#c4b5fd;--quote:#6d28d9;--side:#2e1f47;--tint:#f5f3ff}
+[data-theme="dark"]{--red:#e8615c;--side:#0d0f12;--tint:#fde8e7}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"Microsoft JhengHei","PingFang TC",sans-serif;background:var(--bg);color:var(--text);line-height:1.8}
 
 /* === SIDEBAR === */
-.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:#1E3A5F;overflow-y:auto;padding:16px 0;z-index:100}
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--side);overflow-y:auto;padding:16px 0;z-index:100}
 .sidebar h2{color:#fff;font-size:.85em;padding:8px 16px;margin:0;opacity:.6;text-transform:uppercase;letter-spacing:1px}
 .sidebar a{display:block;color:#BFD7ED;text-decoration:none;padding:8px 20px;font-size:.88em;border-left:3px solid transparent;transition:all .15s}
 .sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
@@ -25,7 +30,7 @@ body{font-family:"Microsoft JhengHei","PingFang TC",sans-serif;background:var(--
 /* === TYPOGRAPHY === */
 h1{font-size:2em;color:var(--text);border-bottom:4px solid var(--red);padding-bottom:10px;margin-bottom:8px}
 h1 small{font-size:.45em;color:var(--body);font-weight:normal;display:block;margin-top:4px}
-h2{font-size:1.5em;color:var(--red);margin:32px 0 16px;padding:8px 14px;background:linear-gradient(90deg,#FFF0EE,transparent);border-left:5px solid var(--red);border-radius:0 6px 6px 0}
+h2{font-size:1.5em;color:var(--red);margin:32px 0 16px;padding:8px 14px;background:linear-gradient(90deg,var(--tint),transparent);border-left:5px solid var(--red);border-radius:0 6px 6px 0}
 h3{font-size:1.15em;color:var(--text);margin:20px 0 8px}
 p{color:var(--body);margin:6px 0}
 </style>
@@ -35,7 +40,7 @@ p{color:var(--body);margin:6px 0}
 <!-- SIDEBAR NAVIGATION -->
 <nav class="sidebar">
   <div class="logo">📚 AI 知識庫分享</div>
-  <button onclick="openPresenterView()" style="display:block;width:calc(100% - 32px);margin:8px 16px;padding:8px;background:#E08B81;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:.85em">🎤 簡報者模式</button>
+  <button onclick="openPresenterView()" style="display:block;width:calc(100% - 32px);margin:8px 16px;padding:8px;background:var(--red);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:.85em">🎤 簡報者模式</button>
   <h2>簡報</h2>
   <a href="#" onclick="go('cover')" class="active">封面</a>
   <a href="#" onclick="go('concept')">🤖 設計理念</a>

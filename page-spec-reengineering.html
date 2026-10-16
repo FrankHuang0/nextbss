@@ -4,17 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>網頁功能 Reengineering：用知識庫產出規格書</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
   <style>
     .card h3{margin:24px 0 8px}.card h2+h3,.card h2+p+h3{margin-top:8px}
-    .toc{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
-    .toc a{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 14px;text-decoration:none;color:var(--ink);font-size:.92rem}
-    .toc a:hover{border-color:var(--p);color:var(--p)}
-    .x{overflow-x:auto;margin:8px 0 16px}.x .tbl{min-width:520px}
-    .vs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:12px;margin:8px 0 16px}
-    .vs>div{border-radius:6px;padding:12px 14px}.bad{background:#fff5f5;border:1px solid #fecaca}.good{background:#f0fdf4;border:1px solid #bbf7d0}
-    .vs b{display:block;margin-bottom:4px}.vs code{word-break:break-all}
-    .diagram{border:1px solid var(--line);border-radius:6px;padding:12px;margin:8px 0 16px;overflow-x:auto;background:#fcfcfc;text-align:center}
     .diagram.wide .mermaid svg{min-width:900px}
     .sw{white-space:nowrap}
     .shp{display:inline-block;width:40px;height:20px;margin-right:8px;vertical-align:middle;box-sizing:border-box}
@@ -24,11 +16,9 @@
     .shp.sub{box-shadow:inset 4px 0 0 #27ae60,inset 6px 0 0 #fff,inset -4px 0 0 #27ae60,inset -6px 0 0 #fff}
     .c-entry{background:#ececff;border:1px solid #9370db}.c-page{background:#1565c0}.c-route{background:#f39c12}
     .c-bean{background:#34495e}.c-helper{background:#1abc9c}.c-ext{background:#c0392b}.c-exit{background:#27ae60}
-    .note{background:var(--tint2);border:1px solid var(--tline);border-radius:6px;padding:10px 14px;margin:8px 0 16px}
     .rule h4{margin:18px 0 6px;color:var(--strong)}.rule .x .tbl{min-width:0;table-layout:fixed;width:100%}.rule .x .tbl th:first-child{width:5.5em}.rule .x .tbl td{overflow-wrap:anywhere}
     code{background:#f3f3f3;border-radius:4px;padding:0 4px;font-size:.9em;overflow-wrap:anywhere}
-    [data-theme="dark"] code{background:#2c323b}[data-theme="dark"] .vs .bad{background:#2d1d20;border-color:#7f1d1d}[data-theme="dark"] .vs .good{background:#16271d;border-color:#2f5a3d}
-    [data-theme="dark"] .diagram{border-color:#fcfcfc}
+    [data-theme="dark"] code{background:#2c323b}
   </style>
 </head>
 <body>
@@ -498,36 +488,29 @@ flowchart TD
     <section class="card" id="sec-prompts">
       <h2>11. 提示詞範本</h2>
       <p>把 <code>[ ]</code> 換成你的作業。建議依序使用，每一步看完結果再進下一步。</p>
-      <h3>① 定位頁面</h3>
-      <pre>[作業名稱] 頁面會檢查 [業務關鍵字1]、[業務關鍵字2]、[業務關鍵字3]。
+      <div class="prompt"><div class="prompt-h"><b>① 定位頁面</b></div><pre>[作業名稱] 頁面會檢查 [業務關鍵字1]、[業務關鍵字2]、[業務關鍵字3]。
 請用這些項目查知識庫，找出對應的頁面程式、入口來源與呼叫鏈，
-並確認前端 JSP 與後端程式是否都已匯入知識庫。</pre>
-      <h3>② 規劃（先不要寫）</h3>
-      <pre>請依 page spec 格式範本，規劃 [作業名稱] 的頁面規格書：
+並確認前端 JSP 與後端程式是否都已匯入知識庫。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>② 規劃（先不要寫）</b></div><pre>請依 page spec 格式範本，規劃 [作業名稱] 的頁面規格書：
 範圍、頁面清單、預估規則數、資料來源、需要我決定的問題。
-待我審核通過再撰寫。</pre>
-      <h3>③ 撰寫規則</h3>
-      <pre>規劃核准。請依範本撰寫：
+待我審核通過再撰寫。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>③ 撰寫規則</b></div><pre>規劃核准。請依範本撰寫：
 1. 從每頁 JSP 的 UI 觸發點往下窮舉，每個阻擋點都要有一條規則；
 2. 判斷邏輯用業務語言，程式細節放源碼來源欄（三重定位）；
 3. 規則依使用者操作時序排列，每條附 ≤ 8 節點的 Mermaid 流程圖；
 4. UI 模擬圖依源碼 HTML 繪製；
 5. 未從源碼驗證的項目標 ⚠，不要推測。
-規則數不設上限，以完整、正確為優先。</pre>
-      <h3>④ 驗證補強</h3>
-      <pre>列出文件中所有 ⚠ 項目與原因。
+規則數不設上限，以完整、正確為優先。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>④ 驗證補強</b></div><pre>列出文件中所有 ⚠ 項目與原因。
 逐項查知識庫源碼補上方法與行號、逐字失敗訊息；
-查不到的請誠實說明原因，更新誠實驗證狀態與文件歷程。</pre>
-      <h3>⑤ 業務語言 Review</h3>
-      <pre>請 review 這份 page spec，找出「只是翻譯程式」的規則描述，
+查不到的請誠實說明原因，更新誠實驗證狀態與文件歷程。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>⑤ 業務語言 Review</b></div><pre>請 review 這份 page spec，找出「只是翻譯程式」的規則描述，
 改寫成業務人員看得懂的三層描述（適用情境／業務目的／系統行為），
-並列出修改前後對照。</pre>
-      <h3>⑥ 完整性稽核</h3>
-      <pre>請重新讀 [頁面].jsp，列出所有 action、actionListener、valueChangeListener、onclick，
-與文件中的規則逐一對照，列出沒有對應規則的阻擋點。</pre>
-      <h3>⑦ 單一規則追問</h3>
-      <pre>[規則代號] 的判斷邏輯，請從源碼找到這一段，
-用開發同仁懂的話說明，並附方法名、行號與流程圖。</pre>
+並列出修改前後對照。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>⑥ 完整性稽核</b></div><pre>請重新讀 [頁面].jsp，列出所有 action、actionListener、valueChangeListener、onclick，
+與文件中的規則逐一對照，列出沒有對應規則的阻擋點。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>⑦ 單一規則追問</b></div><pre>[規則代號] 的判斷邏輯，請從源碼找到這一段，
+用開發同仁懂的話說明，並附方法名、行號與流程圖。</pre></div>
     </section>
 
     <section class="card" id="sec-pitfalls">
@@ -588,7 +571,8 @@ flowchart TD
       </ol>
       <p class="done">完成標準：子頁的每個阻擋點都有規則；任選一條規則，業務能看懂判斷邏輯、開發能在 1 分鐘內用源碼來源找到程式。</p>
     </section>
-  </main>
+  <section class="card recap"><h2>重點回顧</h2><ul><li>源碼是唯一事實：未從源碼驗證的項目標 ⚠，不推測、不補寫。</li><li>規則用業務語言寫（適用情境／業務目的／系統行為），程式細節放來源欄並三重定位。</li><li>從 UI 觸發點往下窮舉每個阻擋點，最後做完整性稽核。</li><li>先規劃、再撰寫、再驗證：每一步人工審核通過才進下一步。</li></ul><p class="next">下一步：挑一個你負責的頁面，從「① 定位頁面」提示詞開始試做。</p></section>
+</main>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
   <script>
     if (window.mermaid) {
