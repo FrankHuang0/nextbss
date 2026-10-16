@@ -1,7 +1,9 @@
 ﻿<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>小測驗</title><link rel="stylesheet" href="assets/style.css"></head><body>
-<header><h1>✅ 情境題暖身測驗</h1><a href="index.html">← 入口</a></header>
-<main><div id="qs"></div><div class="card"><button onclick="grade()">交卷</button> <b id="score"></b></div></main>
+<title>小測驗</title><script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css"></head><body>
+<header><h1>情境題暖身測驗</h1><p>10 題情境、找錯與判斷題，交卷立即看解答，檢查提示詞、查證與資料安全觀念。</p></header>
+<main><div id="qs"></div><div class="card"><button onclick="grade()">交卷</button> <b id="score"></b></div>
+<section class="card recap"><h2>重點回顧</h2><ul><li>好提示詞＝角色＋資料＋任務＋格式＋對象，缺一項就容易答非所問。</li><li>AI 回答要能點開引用回查；找不到來源，就視為不可靠。</li><li>機敏資料先代號化；報價金額、合約條款等對外內容由人定稿。</li><li>從 1 個情境開始，直接排進下週的行程。</li></ul><p class="next">下一步：到 <a href="wrapup.html">課後總結</a> 選定你的第一個情境。</p></section>
+</main>
 <script>
 const Q=[
 ["【情境】客戶會議剛結束，你要在 10 分鐘內回傳待辦與感謝信。哪個做法最有效率？",["把整段逐字稿貼進去，只說「幫我整理」","貼入會議紀錄，指定輸出：三行摘要＋待辦表（負責人／期限）＋感謝信","先把紀錄手動整理成條列，再交給 AI 潤飾"],1],

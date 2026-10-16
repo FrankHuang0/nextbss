@@ -1,24 +1,30 @@
 (function(){
-const P=[["index.html","首頁"],["notebooklm-basics.html","NotebookLM 入門"],["card.html","步驟卡"],["notebooklm-ai-training.html","NotebookLM 業務助理"],["practice.html","實作練習"],["quiz.html","小測驗"],["ai-presentation-workflow.html","簡報工作流"],["mobile-order-kb.html","知識庫分享"],["page-spec-reengineering.html","功能逆向"],["wrapup.html","課後總結"],["teacher.html","講師流程"]];
-const T=[["coral","珊瑚紅","#fc6a65"],["ocean","海洋藍","#2563eb"],["forest","森林綠","#15803d"],["grape","葡萄紫","#7c3aed"],["dark","夜間","#1f232a"]];
-const K='nextbss-theme',de=document.documentElement;
-const get=()=>{try{return localStorage.getItem(K)}catch(e){return null}};
-const set=t=>{de.dataset.theme=t;try{localStorage.setItem(K,t)}catch(e){}};
-const saved=get();if(T.some(x=>x[0]===saved))de.dataset.theme=saved;
-const cur=location.pathname.split('/').pop()||"index.html";
-const n=document.createElement('nav');n.className='top';
-n.innerHTML='<div class="pill"><b>AI 助理</b>'+P.map(([h,t])=>`<a href="${h}"${h===cur?' class="on"':''}>${t}</a>`).join('')+'</div>'
-+'<div class="theme"><button type="button" class="tbtn" aria-haspopup="true" aria-expanded="false" aria-controls="tmenu" title="切換主題配色">🎨<span> 主題</span></button>'
-+'<div class="tmenu" id="tmenu" hidden>'+T.map(([k,t,c])=>`<button type="button" data-t="${k}"><i style="background:${c}"></i>${t}</button>`).join('')+'</div></div>'
-+'<a class="cta" href="qr.html">📱 QR Code</a>';
+const NB=window.NB;if(!NB)return;
+const cur=NB.cur(),esc=NB.esc,HOME='index.html',QR='qr.html';
+const on=f=>f===cur?' class="on" aria-current="page"':'';
+const groups=[1,2,3,4].map(s=>({s,t:NB.stages[s],items:NB.lessons.filter(x=>x.s===s)}));
+const tail=NB.lessons.filter(x=>x.s===5).map(x=>({f:x.f,t:NB.stages[5]})).concat(NB.extra);
+const item=x=>`<a href="${x.f}"${on(x.f)}>${esc(x.t)}<em>${esc(x.time)}</em></a>`;
+const n=document.createElement('nav');n.className='top';n.setAttribute('aria-label','課程導覽');
+n.innerHTML='<div class="pill"><b>AI 助理</b>'
++`<a href="${HOME}"${on(HOME)}>首頁</a>`
++groups.map(g=>`<div class="dd"><button type="button" class="dd-b${g.items.some(x=>x.f===cur)?' on':''}" aria-expanded="false" aria-controls="dd-${g.s}">${g.t}</button>`
+  +`<div class="dd-m" id="dd-${g.s}" hidden><small>第 ${g.s} 級 · ${g.t}</small>${g.items.map(item).join('')}</div></div>`).join('')
++tail.map(x=>`<a href="${x.f}"${on(x.f)}>${esc(x.t)}</a>`).join('')
++'<button type="button" class="mb" aria-expanded="false" aria-controls="mpanel">☰ 課程</button></div>'
++`<a class="cta" href="${QR}">📱 QR Code</a>`
++'<div class="mpanel" id="mpanel" hidden>'
++`<div class="mg"><small>開始</small><a href="${HOME}"${on(HOME)}>首頁・學習地圖</a></div>`
++groups.map(g=>`<div class="mg"><small>第 ${g.s} 級 · ${g.t}</small>${g.items.map(item).join('')}</div>`).join('')
++`<div class="mg"><small>完成與資源</small>${tail.map(x=>`<a href="${x.f}"${on(x.f)}>${esc(x.t)}</a>`).join('')}<a href="${QR}"${on(QR)}>QR Code</a></div>`
++'</div>';
 document.body.prepend(n);
-const b=n.querySelector('.tbtn'),m=n.querySelector('.tmenu');
-const mark=()=>{const a=de.dataset.theme||'coral';m.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.t===a))};
-const open=v=>{m.hidden=!v;b.setAttribute('aria-expanded',v);if(v){mark();m.querySelector('[aria-pressed="true"]').focus()}};
-b.onclick=e=>{e.stopPropagation();open(m.hidden)};
-m.onclick=e=>{const x=e.target.closest('button');if(!x)return;set(x.dataset.t);mark();open(false);b.focus()};
-document.addEventListener('click',e=>{if(!m.hidden&&!n.querySelector('.theme').contains(e.target))open(false)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){open(false);b.focus()}});
-document.querySelectorAll('header a').forEach(a=>a.remove());
+NB.mount(n,{}).after(n.querySelector('.cta'));
+const pops=[...n.querySelectorAll('.dd-b,.mb')].map(b=>[b,n.querySelector('#'+b.getAttribute('aria-controls'))]);
+const close=(except)=>pops.forEach(([b,m])=>{if(b!==except){m.hidden=true;b.setAttribute('aria-expanded','false')}});
+pops.forEach(([b,m])=>b.addEventListener('click',e=>{const v=m.hidden;close(b);m.hidden=!v;b.setAttribute('aria-expanded',v);
+  if(v){const a=m.querySelector('a');if(a&&e.detail===0)a.focus()}}));
+document.addEventListener('click',e=>{if(!e.target.closest('.dd,.mpanel,.mb'))close()});
+n.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const o=pops.find(([b,m])=>!m.hidden);if(o){close();o[0].focus()}});
 document.body.insertAdjacentHTML('beforeend','<footer>AI 業務助理課程 · NotebookLM 業務應用</footer>');
 })();

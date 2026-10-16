@@ -4,77 +4,68 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>用 NotebookLM 當你的 AI 業務助理｜業務同仁教學簡報</title>
+<script src="assets/site.js"></script>
 <style>
-  :root{ /* 主題1 晨光藍（預設） */
-    --bg:#eef3fb; --g1:#dbe7ff; --g2:#e9e1ff;
+  :root{ /* 珊瑚紅（預設，與全站主題一致） */
+    --bg:#fff8f7; --g1:#ffe2df; --g2:#ffeedd;
+    --surface:#ffffff; --surface2:#fff4f2; --hi:#ffebe8;
+    --line:#f1dedb; --line2:#e8c9c5;
+    --text:#3a3f47; --muted:#6b6b6b; --heading:#2b2f36;
+    --brand:#fc6a65; --brand-ink:#c2413c; --brand2:#ff9a5c;
+    --accent:#12a594; --accent-ink:#0a7468;
+    --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
+    --src-bg:#fff7f5; --src-text:#3a3f47; --src-who:#c2413c;
+    --shadow:0 18px 46px rgba(200,80,70,.13);
+  }
+  html[data-theme="ocean"]{ /* 海洋藍 */
+    --bg:#eef3fb; --g1:#dbe7ff; --g2:#e3f0ff;
     --surface:#ffffff; --surface2:#f3f7fe; --hi:#e9f1ff;
     --line:#d6dfef; --line2:#c1cde3;
-    --text:#243453; --muted:#5c6c8d; --heading:#0f1d3d;
-    --brand:#2f6bff; --brand-ink:#1c4ed0; --brand2:#7a5cff;
+    --text:#243453; --muted:#5c6c8d; --heading:#1e293b;
+    --brand:#2563eb; --brand-ink:#1d4ed8; --brand2:#0ea5e9;
     --accent:#12b5a5; --accent-ink:#0a7f73;
     --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
-    --src-bg:#f5f8ff; --src-text:#2c3a58; --src-who:#b5560a;
+    --src-bg:#f5f8ff; --src-text:#2c3a58; --src-who:#1d4ed8;
     --shadow:0 18px 46px rgba(30,60,130,.12);
   }
-  html[data-theme="sun"]{ /* 主題2 暖陽橙 */
-    --bg:#fff7f0; --g1:#ffe4d2; --g2:#ffd9e6;
-    --surface:#fffdfb; --surface2:#fff3ea; --hi:#ffeede;
-    --line:#f2ddcc; --line2:#eccdb7;
-    --text:#3c2b20; --muted:#8a6b58; --heading:#2a1810;
-    --brand:#ff6a3d; --brand-ink:#d5471d; --brand2:#ff4d8d;
-    --accent:#f0971b; --accent-ink:#a86a08;
+  html[data-theme="forest"]{ /* 森林綠 */
+    --bg:#f0faf4; --g1:#d5f2e0; --g2:#e2f5ee;
+    --surface:#ffffff; --surface2:#eff9f3; --hi:#e1f5e8;
+    --line:#cfe6d8; --line2:#b6d9c4;
+    --text:#1f3a2c; --muted:#557a64; --heading:#1c2a22;
+    --brand:#15803d; --brand-ink:#166534; --brand2:#0d9488;
+    --accent:#2f8bd6; --accent-ink:#1f6aa8;
     --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
-    --src-bg:#fff6ee; --src-text:#4a3527; --src-who:#c0491a;
-    --shadow:0 18px 46px rgba(200,90,40,.14);
+    --src-bg:#f2fbf6; --src-text:#274a36; --src-who:#166534;
+    --shadow:0 18px 46px rgba(20,120,70,.13);
   }
-  html[data-theme="mint"]{ /* 主題3 薄荷綠 */
-    --bg:#eefbf7; --g1:#d1f3eb; --g2:#d7eeff;
-    --surface:#ffffff; --surface2:#eef9f5; --hi:#e2f6f0;
-    --line:#cbe7df; --line2:#b4dbd1;
-    --text:#1f3a34; --muted:#557a72; --heading:#0c2a24;
-    --brand:#12b5a5; --brand-ink:#0a8073; --brand2:#2f8bd6;
-    --accent:#2fb37a; --accent-ink:#1c7c54;
+  html[data-theme="grape"]{ /* 葡萄紫 */
+    --bg:#f8f5ff; --g1:#e9e0ff; --g2:#fbe4f1;
+    --surface:#ffffff; --surface2:#f6f2ff; --hi:#efe8ff;
+    --line:#e2d9f3; --line2:#cfc2ea;
+    --text:#2f2645; --muted:#6b6480; --heading:#2e1f47;
+    --brand:#7c3aed; --brand-ink:#6d28d9; --brand2:#d6428a;
+    --accent:#12a594; --accent-ink:#0a7468;
     --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
-    --src-bg:#f1fbf8; --src-text:#274a42; --src-who:#bf7a12;
-    --shadow:0 18px 46px rgba(20,140,120,.14);
+    --src-bg:#f9f6ff; --src-text:#2f2645; --src-who:#6d28d9;
+    --shadow:0 18px 46px rgba(110,60,200,.13);
   }
-  html[data-theme="berry"]{ /* 主題4 櫻粉莓 */
-    --bg:#fff4f9; --g1:#ffdcec; --g2:#efe0ff;
-    --surface:#fffdfe; --surface2:#fdf0f6; --hi:#ffe7f1;
-    --line:#f1d4e1; --line2:#eac1d5;
-    --text:#3a2231; --muted:#8a5f76; --heading:#2a1020;
-    --brand:#d6428a; --brand-ink:#ac2c6d; --brand2:#8b5cff;
-    --accent:#3aa887; --accent-ink:#237a5f;
-    --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
-    --src-bg:#fdf3f8; --src-text:#442332; --src-who:#c23a76;
-    --shadow:0 18px 46px rgba(190,60,120,.14);
-  }
-  html[data-theme="citrus"]{ /* 主題5 陽光黃 */
-    --bg:#fffdf0; --g1:#fff1c6; --g2:#e6f6cf;
-    --surface:#fffef8; --surface2:#fdf8e6; --hi:#fdf2cd;
-    --line:#eee3bf; --line2:#e5d8a6;
-    --text:#3a3218; --muted:#7d724a; --heading:#2a2408;
-    --brand:#e89b12; --brand-ink:#a56d08; --brand2:#7bbf3a;
-    --accent:#3fa84f; --accent-ink:#2b7d38;
-    --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5484d;
-    --src-bg:#fffcee; --src-text:#403715; --src-who:#b6780c;
-    --shadow:0 18px 46px rgba(190,150,20,.16);
-  }
-  html[data-theme="clay"]{ /* 主題6 黏土療癒（軟綿felt風） */
-    --bg:#eaf6fd; --g1:#d6eefb; --g2:#ffe7da;
-    --surface:#ffffff; --surface2:#f2faff; --hi:#e6f4ff;
-    --line:#d8e7ef; --line2:#c4dbe6;
-    --text:#3a4a52; --muted:#6f8592; --heading:#243b45;
-    --brand:#3ba7dd; --brand-ink:#1f7fb0; --brand2:#6fbf5a;
-    --accent:#eab72e; --accent-ink:#a87d0c;
-    --warn:#e0900c; --warn-ink:#9c630a; --danger:#e5646a;
-    --src-bg:#f2faff; --src-text:#3a4a52; --src-who:#c9713f;
-    --shadow:0 20px 48px rgba(90,160,200,.18);
+  html[data-theme="dark"]{ /* 夜間 */
+    --bg:#15181d; --g1:#252229; --g2:#1d2430;
+    --surface:#1f232a; --surface2:#262b33; --hi:#2c323b;
+    --line:#3a414b; --line2:#4a525e;
+    --text:#d6d9de; --muted:#a3abb5; --heading:#f1f3f5;
+    --brand:#ff8a85; --brand-ink:#ffb0ac; --brand2:#a78bfa;
+    --accent:#2dd4bf; --accent-ink:#5eead4;
+    --warn:#f5a524; --warn-ink:#fbbf24; --danger:#f87171;
+    --src-bg:#1b1f25; --src-text:#d6d9de; --src-who:#ffb0ac;
+    --shadow:0 18px 46px rgba(0,0,0,.45);
+    color-scheme:dark;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{
-    font-family:"Segoe UI","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+    font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
     background:radial-gradient(1200px 700px at 20% -10%,var(--g1) 0,transparent 60%),
                radial-gradient(1000px 700px at 100% 0,var(--g2) 0,transparent 55%),
                var(--bg);
@@ -181,14 +172,6 @@
   .flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}
   .flow .node{border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-weight:700;font-size:15px;background:var(--surface)}
   .flow .arr{color:var(--brand);font-size:20px;font-weight:800}
-  .themebar{position:fixed;top:12px;right:16px;z-index:20;display:flex;gap:7px;align-items:center;
-    background:color-mix(in srgb,var(--surface) 80%,transparent);border:1px solid var(--line);
-    border-radius:999px;padding:6px 10px;box-shadow:var(--shadow);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-  .themebar .tlab{font-size:12px;font-weight:800;color:var(--muted);margin:0 2px 0 3px;letter-spacing:.04em}
-  .swatch{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.2s;padding:0}
-  .swatch:hover{transform:scale(1.14)}
-  .swatch.active{border-color:var(--heading);box-shadow:0 0 0 2px var(--surface) inset}
-  @media (max-width:1100px){ .themebar .tlab{display:none} }
   .mindwrap{flex:1;min-height:0;display:grid;place-items:center;margin-top:4px}
   .mind{width:100%;height:100%;max-height:64vh}
   #fdg{touch-action:none}
@@ -312,15 +295,6 @@
 </style>
 </head>
 <body>
-<div class="themebar" id="themebar">
-  <span class="tlab">🎨 主題</span>
-  <button class="swatch" data-set="blue"   title="晨光藍" aria-label="晨光藍" style="background:linear-gradient(135deg,#2f6bff,#7a5cff)"></button>
-  <button class="swatch" data-set="sun"    title="暖陽橙" aria-label="暖陽橙" style="background:linear-gradient(135deg,#ff6a3d,#ff4d8d)"></button>
-  <button class="swatch" data-set="mint"   title="薄荷綠" aria-label="薄荷綠" style="background:linear-gradient(135deg,#12b5a5,#2f8bd6)"></button>
-  <button class="swatch" data-set="berry"  title="櫻粉莓" aria-label="櫻粉莓" style="background:linear-gradient(135deg,#d6428a,#8b5cff)"></button>
-  <button class="swatch" data-set="citrus" title="陽光黃" aria-label="陽光黃" style="background:linear-gradient(135deg,#e89b12,#7bbf3a)"></button>
-  <button class="swatch" data-set="clay"   title="黏土療癒" aria-label="黏土療癒" style="background:linear-gradient(135deg,#6fc7ef,#8ecb6e,#f2c14e)"></button>
-</div>
 <div class="deck" id="deck">
   <div class="progress" id="progress"></div>
 
@@ -1241,20 +1215,6 @@
     if(e.key==='ArrowLeft'||e.key==='PageUp')go(i-1);
     if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
   });
-  // 主題切換（記憶選擇）
-  (function(){
-    const KEY='deckTheme';
-    const sws=[...document.querySelectorAll('#themebar .swatch')];
-    function apply(set){
-      if(set==='blue') document.documentElement.removeAttribute('data-theme');
-      else document.documentElement.setAttribute('data-theme',set);
-      sws.forEach(s=>s.classList.toggle('active',s.dataset.set===set));
-      try{localStorage.setItem(KEY,set);}catch(e){}
-    }
-    sws.forEach(s=>s.addEventListener('click',()=>apply(s.dataset.set)));
-    let saved='blue'; try{saved=localStorage.getItem(KEY)||'blue';}catch(e){}
-    apply(saved);
-  })();
   // === 力導向關係圖（P20，自寫物理模擬，無外部套件） ===
   function fdgHook(idx){
     if(!window.__fdg) return;
