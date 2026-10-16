@@ -18,13 +18,14 @@
 <p>整體滿意度：<select id="r"><option>5 非常滿意</option><option>4</option><option>3</option><option>2</option><option>1</option></select></p>
 <p>最有收穫：<br><textarea id="g" rows="2" style="width:100%"></textarea></p>
 <p>建議／想學的主題：<br><textarea id="b" rows="2" style="width:100%"></textarea></p>
-<button onclick="send()">以 Email 送出</button></div>
+<button onclick="send()">複製回饋內容</button> <span id="fb"></span></div>
 </main>
 <script>
-const FEEDBACK_EMAIL="frank210@cht.com.tw";
+const FEEDBACK_EMAIL="";
 const L=JSON.parse(localStorage.getItem('my')||'{}');
 if(L.s)document.querySelectorAll('[name=s]').forEach(e=>e.checked=e.value===L.s);if(L.w)when.value=L.w;
 function save(){const c=document.querySelector('[name=s]:checked');localStorage.setItem('my',JSON.stringify({s:c&&c.value,w:when.value}));msg.textContent='已儲存 ✓'}
-function send(){if(!FEEDBACK_EMAIL){alert('尚未設定收件信箱');return}
-location.href=`mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('AI分享課後問卷')}&body=${encodeURIComponent('滿意度：'+r.value+'\n收穫：'+g.value+'\n建議：'+b.value)}`}
-</script><script src="assets/nav.js"></script></body></html>
+function send(){const t='滿意度：'+r.value+'\n收穫：'+g.value+'\n建議：'+b.value;
+if(FEEDBACK_EMAIL){location.href=`mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('AI分享課後問卷')}&body=${encodeURIComponent(t)}`;return}
+navigator.clipboard.writeText(t).then(()=>fb.textContent='已複製 ✓ 請貼到講師提供的回饋管道（課程群組或表單）',()=>fb.textContent='無法自動複製，請手動選取內容')}
+</script><script src="assets/nav.js"></script><script src="assets/lesson.js"></script></body></html>
