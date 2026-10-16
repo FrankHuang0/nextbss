@@ -20,5 +20,5 @@ m.onclick=e=>{const x=e.target.closest('button');if(!x)return;set(x.dataset.t);m
 document.addEventListener('click',e=>{if(!m.hidden&&!n.querySelector('.theme').contains(e.target))open(false)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){open(false);b.focus()}});
 document.querySelectorAll('header a').forEach(a=>a.remove());
-document.body.insertAdjacentHTML('beforeend','<footer>新竹／台北營運處 AI 分享 · NotebookLM 業務應用</footer>');
+document.body.insertAdjacentHTML('beforeend','<footer>AI 業務助理課程 · NotebookLM 業務應用</footer>');
 })();
