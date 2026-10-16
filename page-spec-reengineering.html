@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>網頁功能 Reengineering：用知識庫產出規格書</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>網頁功能 Reengineering</h1>
+    <p>用知識庫＋AI 逆向解讀既有網頁，產出業務看得懂、開發找得到程式的功能規格書（Page Spec）。</p>
+    <div class="stats"><span>源碼是唯一事實</span><span>規則可追溯</span><span>✅／⚠ 誠實標示</span></div>
+  </header>
+  <main>
+    <section class="card">
+      <h2>為什麼要逆向</h2>
+      <table class="tbl">
+        <tr><th>比較</th><th>原有規格文件</th><th>Page Spec</th></tr>
+        <tr><td>描述</td><td>系統「應該」做什麼</td><td>系統「實際」做了什麼</td></tr>
+        <tr><td>方向</td><td>需求驅動，由上而下</td><td>源碼驅動，由下而上</td></tr>
+        <tr><td>痛點／解法</td><td>多次修改後與程式不一致</td><td>每條規則附源碼定位，可回查</td></tr>
+      </table>
+      <p>事實優先序：<b>源碼 ＞ 資料庫 ＞ 畫面 ＞ 規格文件 ＞ 推測</b>。規格文件只作輔助。</p>
+      <p><small>知識庫如何建立，請見 <a href="mobile-order-kb.html">知識庫分享</a>。</small></p>
+    </section>
+
+    <section class="card">
+      <h2>製作流程：6 步</h2>
+      <ol class="timeline">
+        <li><b>定位頁面</b>：用業務關鍵字（如「風險」「欠費」）查知識庫，找出入口、子頁與呼叫鏈。<small>先確認前端與後端源碼都已匯入。</small></li>
+        <li><b>先規劃再撰寫</b>：請 AI 提出範圍、頁面清單與規則草估，審核通過才開寫。</li>
+        <li><b>由 UI 窮舉規則</b>：從每個按鈕、欄位往下追；每個阻擋點都要對應一條規則。</li>
+        <li><b>業務語言＋三重定位</b>：判斷條件寫業務意義，不貼程式；程式細節放「源碼來源」欄。<small>三重定位＝方法名＋搜尋關鍵字＋基線行號，程式改版仍找得到。</small></li>
+        <li><b>標示驗證狀態</b>：✅ 已對照源碼；⚠ 待驗證。不以推論冒充事實。</li>
+        <li><b>Review 迭代</b>：逐項消化 ⚠、依源碼 HTML 重繪畫面示意、補對外介面，記錄文件歷程。</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2>規格書結構</h2>
+      <table class="tbl">
+        <tr><th>章節</th><th>內容</th></tr>
+        <tr><td>全局導覽</td><td>流程圖、頁面串接圖、範圍地圖、依角色閱讀指南</td></tr>
+        <tr><td>作業概觀</td><td>業務定位、術語、業務情境、頁面清單、規則分布</td></tr>
+        <tr><td>各頁規格</td><td>頁面說明、畫面示意、欄位、規則（依操作時序排列）</td></tr>
+        <tr><td>收尾</td><td>對外介面、驗證狀態、文件歷程</td></tr>
+      </table>
+      <h3>規則命名</h3>
+      <p><b>R</b> 阻擋　<b>F</b> 功能　<b>D</b> 動態顯示　<b>X</b> 跨系統。代號＝類型－作業－序號，例如 R-CK-101。</p>
+      <h3>規則欄位</h3>
+      <p>代號、業務背景、觸發時機、判斷邏輯、失敗訊息、源碼來源、源碼流程（≤ 8 節點）、資料來源、驗證狀態。</p>
+    </section>
+
+    <section class="card">
+      <h2>範例：信用查核（去識別化）</h2>
+      <p>信用查核是多個受理作業共用的<b>受理前預審閘門</b>：4 個區塊同時查核，全部通過才放行，部分情況須主管複核。</p>
+      <pre>受理作業（多個入口）
+   ↓
+信用查核框架頁
+   ├ 風險查核 ── 外部風險查詢
+   ├ 帳單彙寄 ── 帳務系統
+   ├ 欠費查核 ── 帳務系統
+   └ 企業實地訪查提示
+   ↓
+全部通過 → 繼續受理；須複核 → 主管確認後放行</pre>
+      <p>盤點結果：5 頁、18 條規則（R×3／F×10／D×4／X×1）。</p>
+      <h3>規則卡：R-CK-101 風險種類禁止受理</h3>
+      <table class="tbl">
+        <tr><th>欄位</th><th>內容</th></tr>
+        <tr><td>業務背景</td><td>特定高風險種類（如詐騙相關）一律不受理，不開放主管複核。</td></tr>
+        <tr><td>觸發時機</td><td>風險查詢完成、判定風險等級時。</td></tr>
+        <tr><td>判斷邏輯</td><td><ol style="margin:0;padding-left:1.2em"><li>客戶命中「禁止受理」類風險種類。</li><li>符合特定代辦例外者移除該風險，否則標記不可受理。</li></ol></td></tr>
+        <tr><td>失敗訊息</td><td>「此客戶的風險種類，系統不予受理！」</td></tr>
+        <tr><td>源碼來源</td><td>查核主控程式．風險等級判定方法｜關鍵字：禁止受理分支｜基線行號（內部版本保留，公開版省略）</td></tr>
+        <tr><td>資料來源</td><td>設計規格「禁止受理風險種類」章節</td></tr>
+        <tr><td>驗證狀態</td><td>✅ 已逐碼比對源碼</td></tr>
+      </table>
+      <p class="done">好規則的樣子：業務看得懂判斷邏輯，開發用源碼來源 1 分鐘內找到程式。</p>
+    </section>
+
+    <section class="card">
+      <h2>提示詞範本</h2>
+      <pre>① 定位與規劃
+請查知識庫，以「[業務關鍵字]」找出相關頁面與呼叫鏈，
+依 Page Spec 範本提出規劃：範圍、頁面清單、預估規則。先不要撰寫。
+
+② 撰寫規則
+規劃核准。請從每頁 UI 觸發點往下窮舉，每個阻擋點寫一條規則；
+判斷邏輯用業務語言，源碼來源用三重定位；未查證者標 ⚠。
+
+③ 驗證補強
+列出所有 ⚠ 項，逐項查源碼補證據；查不到的請誠實說明，不要推測。</pre>
+    </section>
+
+    <section class="card">
+      <h2>檢查清單</h2>
+      <ul class="check">
+        <li>☐ 每個 UI 阻擋點都有對應規則</li>
+        <li>☐ 判斷邏輯為業務語言，沒有貼程式碼</li>
+        <li>☐ 每條規則有三重定位與 ✅／⚠ 狀態</li>
+        <li>☐ 失敗訊息逐字取自源碼</li>
+        <li>☐ 文件歷程記錄每版修改</li>
+      </ul>
+      <p><b>對外分享前先去識別化</b>：移除程式、類別與方法名稱、行號、系統代碼、文件編號、資料表欄位與人員資料，改用泛稱。</p>
+    </section>
+  </main>
+  <script src="assets/nav.js"></script>
+</body>
+</html>
