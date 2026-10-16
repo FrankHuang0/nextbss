@@ -17,6 +17,6 @@ const Q=[
 function grade(){let n=0;Q.forEach((q,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`);const ok=c&&+c.value===q[2];if(ok)n++;
 document.getElementById('r'+i).innerHTML=ok?'<span class=ok>✔ 正確</span>':`<span class=bad>✘ 正解：${q[1][q[2]]}</span>`});
 document.getElementById('score').textContent=`得分 ${n} / ${Q.length}`}
-</script><script src="assets/nav.js"></script></body></html>
+</script><script src="assets/nav.js"></script><script src="assets/lesson.js"></script></body></html>
 
 

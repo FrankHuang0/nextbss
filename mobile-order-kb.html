@@ -15,7 +15,7 @@ body{font-family:"Microsoft JhengHei","PingFang TC",sans-serif;background:var(--
 .sidebar a{display:block;color:#BFD7ED;text-decoration:none;padding:8px 20px;font-size:.88em;border-left:3px solid transparent;transition:all .15s}
 .sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
 .sidebar a.active{border-left-color:var(--blue);color:#fff;background:rgba(129,199,212,.15);font-weight:bold}
-.sidebar .logo{color:#fff;font-size:1em;font-weight:bold;padding:12px 20px 20px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:12px}
+.sidebar .logo{color:#fff;font-size:1em;font-weight:bold;padding:52px 20px 20px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:12px}
 
 /* === MAIN === */
 .main{margin-left:var(--sidebar-w);min-height:100vh}
@@ -52,7 +52,7 @@ p{color:var(--body);margin:6px 0}
   <a href="#" onclick="go('howto')">🚀 如何套用</a>
   <a href="#" onclick="go('limits')">⚠️ 限制</a>
   <a href="#" onclick="go('qa')">❓ 踩坑 & Q&A</a>
-  <a href="#" onclick="go('judgeqa')">🧑‍⚖️ 委員 Q&amp;A</a>
+  <a href="#" onclick="go('judgeqa')">💬 延伸 Q&amp;A</a>
 </nav>
 
 <!-- ===== INLINE STYLES (continued) ===== -->
@@ -169,7 +169,7 @@ window.addEventListener('load', function() {
 12. 🚀 如何套用到你的專案<br>
 13. ⚠️ 限制與已知問題<br>
 14. ❓ 踩坑 & Q&A<br>
-15. 🧑‍⚖️ 委員 Q&amp;A
+15. 💬 延伸 Q&amp;A：導入前常見提問
 </div>
 </div>
 </div>
@@ -1219,10 +1219,10 @@ python -m knowledge_base.mcp_server</code></pre>
 </div>
 </div>
 
-<!-- ===== PAGE: 委員 Q&A ===== -->
+<!-- ===== PAGE: 延伸 Q&A ===== -->
 <div class="page" id="page-judgeqa">
-<h2>🧑‍⚖️ 委員 Q&amp;A｜預想提問與回答</h2>
-<p style="font-size:1.02em;color:var(--body);margin-bottom:8px">對象：各處處長委員。以下為預想的 8 個提問與建議回答（前 3 題為核心必答，後 5 題為延伸補充）。</p>
+<h2>💬 延伸 Q&amp;A｜導入前常見提問</h2>
+<p style="font-size:1.02em;color:var(--body);margin-bottom:8px">想在自己的單位導入知識庫時，最常被問到的 8 個問題（前 3 題談方法與效益，後 5 題談導入與維運）。</p>
 
 <div class="card blue">
 <h3>Q1. 知識庫目前有哪些常見方法論？你們選用的解決方案為何？為什麼？</h3>
@@ -1262,7 +1262,7 @@ python -m knowledge_base.mcp_server</code></pre>
 
 <div class="card green">
 <h3>Q8. 導入後如何衡量成效？有沒有具體 KPI 或推廣計畫？</h3>
-<p><strong>KPI：</strong>① 涵蓋作業數 ② 查詢次數與命中率 ③ 新人獨立作業所需時間 ④ 重複問題被問次數下降。<br><strong>推廣計畫：</strong>營發處試點驗證 → 整理最佳實踐 → 提供 <code>kb-package</code> + 教育訓練 → 擴散到其他處室。</p>
+<p><strong>KPI：</strong>① 涵蓋作業數 ② 查詢次數與命中率 ③ 新人獨立作業所需時間 ④ 重複問題被問次數下降。<br><strong>推廣計畫：</strong>單一單位試點驗證 → 整理最佳實踐 → 提供 <code>kb-package</code> + 教育訓練 → 擴散到其他處室。</p>
 </div>
 
 </div>
@@ -1330,10 +1330,10 @@ function applyScale(val) {
 
 // ===== PRESENTER MODE =====
 const presenterNotes = {
-  cover: { time: "0:30", title: "封面", notes: "各位評審好，我是營發處黃智賢。\n今天分享「行動訂單業務知識庫」。\n\n重點：提 1,896 份文件 + 7,487 支程式的規模數字。\n一句話：從「只有特定人才懂」變成「任何人 30 秒能查到」。" },
+  cover: { time: "0:30", title: "封面", notes: "大家好，今天分享「行動訂單業務知識庫」。\n\n重點：提 1,896 份文件 + 7,487 支程式的規模數字。\n一句話：從「只有特定人才懂」變成「任何人 30 秒能查到」。" },
   concept: { time: "1:30", title: "設計理念", notes: "核心問題：如何讓 AI 代理人像公司員工一樣工作？\n\n用機器人比喻：\n• 大腦 = 知識庫（domain knowledge）+ AI Model（思考能力）\n• 左手 = MCP Server（查 DB、Azure Board 等能力）\n• 右手 = Skill（需求分析、程式開發等技能）\n• 左腳 = 產出格式（Word/PPT/MD/HTML/PDF）\n• 右腳 = 撰寫指引（文件範本、品質標準）\n\n這五個能力缺一不可，知識庫就是賦予 AI 大腦中 domain knowledge 的部分。" },
   pain: { time: "1:30", title: "痛點", notes: "核心論點：有文件不等於有知識。\n\n• 提 1,896 份 SRS/SDS 都齊全\n• 但業務邏輯太廣，每人只懂自己的\n• 跨領域 = 從零查起\n• 強調表格中的五個困境\n\n結語：這就是我們要解決的問題。" },
-  std: { time: "2:00", title: "產品標準化 × P&L", notes: "這頁是競賽破題（對象=各處處長，講 P&L 不講技術）。\n\n核心論點一句話：把知識庫從「專案」變成「產品」。\n\n關鍵：同一套技術，當專案做完就結束、無法複製；標準化為產品後，可一次開發、對多處室甚至外部客戶重複交付。\n\n因果鏈三段：\n① 產品標準化：與特定系統解耦，封裝成標準交付包 kb-package.zip（程式+文件+匯入工具+操作手冊），可安裝可複製\n② 提升 P&L：營收↑（交付多處收入放大）、邊際成本↓（開發一次投入、每多賣一份近乎零成本）、毛利↑（從賣人力工時升級為賣產品）\n③ 可規模化銷售：框架通用不綁行動訂單，可包裝成產品目錄（基礎版/進階版/客製導入）\n\n財務語言：邊際成本趨近於零、毛利隨規模放大，就是產品標準化對 P&L 的核心貢獻。\n\n公式：產品營收 = 單份售價 × 交付份數。" },
+  std: { time: "2:00", title: "產品標準化 × P&L", notes: "這頁講 P&L，不講技術。\n\n核心論點一句話：把知識庫從「專案」變成「產品」。\n\n關鍵：同一套技術，當專案做完就結束、無法複製；標準化為產品後，可一次開發、對多處室甚至外部客戶重複交付。\n\n因果鏈三段：\n① 產品標準化：與特定系統解耦，封裝成標準交付包 kb-package.zip（程式+文件+匯入工具+操作手冊），可安裝可複製\n② 提升 P&L：營收↑（交付多處收入放大）、邊際成本↓（開發一次投入、每多賣一份近乎零成本）、毛利↑（從賣人力工時升級為賣產品）\n③ 可規模化銷售：框架通用不綁行動訂單，可包裝成產品目錄（基礎版/進階版/客製導入）\n\n財務語言：邊際成本趨近於零、毛利隨規模放大，就是產品標準化對 P&L 的核心貢獻。\n\n公式：產品營收 = 單份售價 × 交付份數。" },
   demo: { time: "2:00", title: "效果 Demo", notes: "先看效果再講技術。\n\n場景一（IMEI）：\n• 左：11,000 行 → 半天沒開始改\n• 右：Page Spec → 5 分鐘搞懂\n\n場景二（風險代碼1***）：\n• 左：搜錯 → 答錯\n• 右：對照表 → 30 秒完整答案\n\n最後帶工作流程對照表。" },
   what: { time: "1:30", title: "知識庫是什麼", notes: "一句話定義：把源碼的真實邏輯，用業務語言寫下來。\n\n左右對比：SRS 說「應該做什麼」vs Page Spec 說「實際怎麼做」。\n\n五大原則快速帶過（不要逐條念）。" },
   arch: { time: "2:00", title: "技術架構", notes: "先講使用者視角 3 步：打字→AI呼叫→回答。強調「你不用改工作方式」。\n\n架構三層帶過，重點：\n• MCP 是什麼（一句話）\n• 為什麼選 MCP 不選 REST（5行 vs 30行）\n• 安全性：全本地，不外送\n\n語意搜尋準確率：提 4 個實測 case。" },
@@ -1345,7 +1345,7 @@ const presenterNotes = {
   howto: { time: "0:30", title: "如何套用", notes: "快速帶過：zip 解壓 → 5 步驟。\n不要念指令，讓他們自己看。\n強調：第一天就能跑起來。" },
   limits: { time: "0:30", title: "限制", notes: "誠實說：暴力遍歷有上限、需人工驗證、最適合大型遺留系統。\n\n小專案不需要（< 50支、< 3人）。" },
   qa: { time: "0:30", title: "Q&A + 結語", notes: "結語：知識庫是團隊的第二個大腦。每次 AI 答錯都是改善的機會。\n\n準備被問：\n• vs ChatGPT？→ ChatGPT 沒你的源碼\n• 準確率？→ Top-3 實測全命中\n• 安全性？→ 全本地不外送\n• 其他語言？→ 框架通用" },
-  judgeqa: { time: "0:00", title: "委員 Q&A（備用）", notes: "備用頁，不主動報告，被問到才翻。\n\n8 題預想問答：\nQ1 方法論選擇（源碼逆向+RAG+MCP，因為文件與源碼脫節）\nQ2 創新性（源碼驅動、三重定位、Steering 自修正、雙層語言）\nQ3 效益/公式/樣本（2-4hr→5min；年省人時公式；3 個高頻作業具代表性）\nQ4 可複製到其他處室（框架通用、kb-package）\nQ5 資安（全本地、不外送）\nQ6 正確性（三道防線：源碼事實+驗證標記+人工Review）\nQ7 可持續/維護成本（增量匯入近零成本，分工認領）\nQ8 KPI/推廣（涵蓋數/命中率/新人時間/重複問題↓；試點→擴散）\n\n處長最可能問 Q3、Q4、Q7——效益、可複製、可持續。" }
+  judgeqa: { time: "0:00", title: "延伸 Q&A（備用）", notes: "備用頁，不主動報告，被問到才翻。\n\n8 題預想問答：\nQ1 方法論選擇（源碼逆向+RAG+MCP，因為文件與源碼脫節）\nQ2 創新性（源碼驅動、三重定位、Steering 自修正、雙層語言）\nQ3 效益/公式/樣本（2-4hr→5min；年省人時公式；3 個高頻作業具代表性）\nQ4 可複製到其他處室（框架通用、kb-package）\nQ5 資安（全本地、不外送）\nQ6 正確性（三道防線：源碼事實+驗證標記+人工Review）\nQ7 可持續/維護成本（增量匯入近零成本，分工認領）\nQ8 KPI/推廣（涵蓋數/命中率/新人時間/重複問題↓；試點→擴散）\n\n最常被問 Q3、Q4、Q7——效益、可複製、可持續。" }
 };
 
 var presenterWin = null;
@@ -1432,8 +1432,6 @@ function navPresenter(dir) {
   }
 }
 
-// Override go() to also update presenter
-const originalGo = go;
 </script>
 <script>
 // Patch: update presenter on page change
@@ -1455,6 +1453,6 @@ window.go = function(key) {
   setTimeout(updatePresenterView, 50);
 };
 </script>
-<a href="index.html" id="homeLink" style="position:fixed;left:12px;top:14px;z-index:99999;background:#fc6a65;color:#fff;padding:6px 14px;border-radius:999px;font:14px sans-serif;text-decoration:none;opacity:.85;box-shadow:0 2px 8px #0004">← 課程首頁</a>
+<script src="assets/lesson.js" data-mode="float"></script>
 </body>
 </html>
