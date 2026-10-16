@@ -174,55 +174,7 @@ flowchart LR
   H --> X{{"外部系統 API"}}
       </div></div>
       <h3>實例：信用查核頁的呼叫鏈</h3>
-      <p>把上面的分層套到信用查核，從 6 個受理入口一路追到 4 個外部系統。程式名稱已部分隱碼（<code>***</code>），外部系統以業務名稱表示。</p>
-            <div class="diagram wide"><div class="mermaid">
-flowchart LR
-  subgraph IN["入口來源（BackingBean）"]
-    direction TB
-    I1(["app***an 受理"])
-    I2(["Or1***an 新申裝派工"])
-    I3(["NPT***an NP 移入"])
-    I4(["pas***pe 服務型態異動"])
-    I5(["App***st Apple 通路"])
-    I6(["upd***an 續租／復租"])
-  end
-  I1 --> FAST
-  I2 --> FAST
-  I3 --> FAST
-  I4 --> FAST
-  I5 --> FAST
-  I6 --> FAST
-  FAST["chk***st.jsp 主控框架頁"] --> PROC{"chk***oc.jsp 路由分派"}
-  FAST -->|"查核通過"| NEXT[["ORW***10.jsp 繼續受理"]]
-  FAST -->|"設備總覽"| HIS[["doR***ry.jsp 設備查歷"]]
-  PROC -->|"type=risk"| P2["chk***sk.jsp P2 風險查核頁"]
-  PROC -->|"type=bill"| P3["chk***ll.jsp P3 帳單查核頁"]
-  PROC -->|"type=fee"| P4["chk***ee.jsp P4 欠費查核頁"]
-  PROC -->|"type=others"| P5["chk***rs.xhtml P5 其他查核頁"]
-  P2 --> BEAN(("Che***ng"))
-  P3 --> BEAN
-  P4 --> BEAN
-  P5 --> BEAN
-  BEAN --> HELP(["Che***er 查核服務"])
-  HELP --> GW{{"WSC***nt／APIM 外部系統介接"}}
-  GW --> X1{{"警政署 165"}}
-  GW --> X2{{"帳務欠費"}}
-  GW --> X3{{"戶役政"}}
-  GW --> X4{{"彙寄合併帳單"}}
-  classDef page fill:#1565c0,color:#fff,stroke:#0d47a1
-  classDef route fill:#f39c12,color:#fff,stroke:#e67e22
-  classDef bean fill:#34495e,color:#fff
-  classDef helper fill:#1abc9c,color:#fff,stroke:#16a085
-  classDef ext fill:#c0392b,color:#fff
-  classDef exit fill:#27ae60,color:#fff
-  class FAST,P2,P3,P4,P5 page
-  class PROC route
-  class BEAN,GW bean
-  class HELP helper
-  class X1,X2,X3,X4 ext
-  class NEXT,HIS exit
-  style IN fill:#fffde7,stroke:#c9b800
-      </div></div>
+      <p>把上面的分層套到信用查核：從 6 個受理入口追到 4 個外部系統，每一層要看的重點如下。完整呼叫鏈圖見<a href="#case-a">第 9 章「A 頁面串接關聯圖」</a>。</p>
       <div class="x"><table class="tbl">
         <tr><th>層級</th><th>形狀</th><th>信用查核的元件</th><th>追查重點</th></tr>
         <tr><td>入口來源</td><td class="sw"><span class="shp round c-entry" aria-hidden="true"></span>圓角</td><td>app***an 等 6 個 BackingBean</td><td>哪些受理流程會內嵌呼叫查核</td></tr>
@@ -382,25 +334,55 @@ flowchart TB
   style N fill:#27ae60,color:#fff
   style B fill:#c0392b,color:#fff
       </div></div>
-      <h3>A 頁面串接關聯圖</h3>
-      <div class="diagram"><div class="mermaid">
+      <h3 id="case-a">A 頁面串接關聯圖</h3>
+      <p>程式名稱已部分隱碼（<code>***</code>），外部系統以業務名稱表示；各形狀與顏色的意義見第 5 章分層對照表。</p>
+      <div class="diagram wide"><div class="mermaid">
 flowchart LR
-  E(["6 個受理入口"]) --> FAST["P1 框架頁 chk***st"]
-  FAST --> PROC{"路由 chk***oc"}
-  PROC -- risk --> RISK["P2 風險頁"]
-  PROC -- bill --> BILL["P3 帳單頁"]
-  PROC -- fee --> FEE["P4 欠費頁"]
-  PROC -- others --> OTH["P5 其他頁"]
-  RISK --> BEAN(("Che***ng"))
-  BILL --> BEAN
-  FEE --> BEAN
-  OTH --> BEAN
-  BEAN --> HELP(["Che***er"])
-  HELP --> X1{{"警政署 165 風險"}}
-  HELP --> X2{{"帳務欠費"}}
-  HELP --> X3{{"戶役政"}}
-  HELP --> X4{{"彙寄合併帳單"}}
-  FAST -- 查核通過 --> EXIT[["繼續受理"]]
+  subgraph IN["入口來源（BackingBean）"]
+    direction TB
+    I1(["app***an 受理"])
+    I2(["Or1***an 新申裝派工"])
+    I3(["NPT***an NP 移入"])
+    I4(["pas***pe 服務型態異動"])
+    I5(["App***st Apple 通路"])
+    I6(["upd***an 續租／復租"])
+  end
+  I1 --> FAST
+  I2 --> FAST
+  I3 --> FAST
+  I4 --> FAST
+  I5 --> FAST
+  I6 --> FAST
+  FAST["chk***st.jsp 主控框架頁"] --> PROC{"chk***oc.jsp 路由分派"}
+  FAST -->|"查核通過"| NEXT[["ORW***10.jsp 繼續受理"]]
+  FAST -->|"設備總覽"| HIS[["doR***ry.jsp 設備查歷"]]
+  PROC -->|"type=risk"| P2["chk***sk.jsp P2 風險查核頁"]
+  PROC -->|"type=bill"| P3["chk***ll.jsp P3 帳單查核頁"]
+  PROC -->|"type=fee"| P4["chk***ee.jsp P4 欠費查核頁"]
+  PROC -->|"type=others"| P5["chk***rs.xhtml P5 其他查核頁"]
+  P2 --> BEAN(("Che***ng"))
+  P3 --> BEAN
+  P4 --> BEAN
+  P5 --> BEAN
+  BEAN --> HELP(["Che***er 查核服務"])
+  HELP --> GW{{"WSC***nt／APIM 外部系統介接"}}
+  GW --> X1{{"警政署 165"}}
+  GW --> X2{{"帳務欠費"}}
+  GW --> X3{{"戶役政"}}
+  GW --> X4{{"彙寄合併帳單"}}
+  classDef page fill:#1565c0,color:#fff,stroke:#0d47a1
+  classDef route fill:#f39c12,color:#fff,stroke:#e67e22
+  classDef bean fill:#34495e,color:#fff
+  classDef helper fill:#1abc9c,color:#fff,stroke:#16a085
+  classDef ext fill:#c0392b,color:#fff
+  classDef exit fill:#27ae60,color:#fff
+  class FAST,P2,P3,P4,P5 page
+  class PROC route
+  class BEAN,GW bean
+  class HELP helper
+  class X1,X2,X3,X4 ext
+  class NEXT,HIS exit
+  style IN fill:#fffde7,stroke:#c9b800
       </div></div>
       <h3>B 範圍地圖</h3>
       <div class="x"><table class="tbl">
