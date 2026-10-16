@@ -17,7 +17,7 @@
 - 修改 `assets/nav.js`：將新頁加入共用導覽。
 - 建立 `docs/superpowers/plans/2026-10-16-notebooklm-basics.md`：本實作計畫。
 
-## 任務 1：建立 NotebookLM 基礎操作頁
+## Task 1: 建立 NotebookLM 基礎操作頁
 
 **檔案：**
 - 建立：`notebooklm-basics.html`
@@ -86,7 +86,7 @@
 
 預期：主要文字、步驟卡與練習內容沒有水平溢出，入口連結可見且可操作。
 
-## 任務 2：整合首頁卡片與共用導覽
+## Task 2: 整合首頁卡片與共用導覽
 
 **檔案：**
 - 修改：`index.html`
