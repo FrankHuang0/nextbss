@@ -218,7 +218,7 @@ window.addEventListener('load', function() {
 <tr><td>每人只懂自己的模組</td><td>系統有 522 條程式鏈、1,331 個功能，沒人能全部掌握</td><td>換人接手 = 重新學習</td></tr>
 <tr><td>文件描述的是「意圖」</td><td>SRS 寫「需檢查信用」，但不知具體查哪些、哪裡會擋、擋了顯示什麼</td><td>知道 what，不知道 how</td></tr>
 <tr><td>源碼與文件有落差</td><td>多次 MR 修改後，源碼行為與 SRS 描述已不一致</td><td>信了文件反而踩坑</td></tr>
-<tr><td>文件缺乏「可搜尋性」</td><td>想找「風險代碼 14 的處理」→ 不知在 1,896 份中的哪份、哪一頁</td><td>搜尋成本太高</td></tr>
+<tr><td>文件缺乏「可搜尋性」</td><td>想找「風險代碼 1*** 的處理」→ 不知在 1,896 份中的哪份、哪一頁</td><td>搜尋成本太高</td></tr>
 </table>
 <p style="margin-top:10px"><span class="tag green">知識庫解法</span> 把 1,896 份文件 + 658 支程式的知識，轉化為「可搜尋 + 可定位 + 跨領域可查」的活知識 → 不用每人把全部都記在腦裡</p>
 </div>
@@ -293,10 +293,10 @@ window.addEventListener('load', function() {
 <div class="vs-left">
 <h4>❌ 傳統做法</h4>
 <ul>
-<li>打開 NonMobDiscntBean.java（11,000 行）</li>
+<li>打開 Non***an.java（11,000 行）</li>
 <li>搜 IMEI... 命中 15 處</li>
-<li>追 checkIMEI4Modelins()（第 10735 行）</li>
-<li>發現又呼叫 ApplyUtil / PromoHelper</li>
+<li>追 che***ns()（第 10735 行）</li>
+<li>發現又呼叫 App***il / Pro***er</li>
 <li>問資深「這邊改會影響到...？」</li>
 <li><strong>半天過去，還沒開始改</strong></li>
 </ul>
@@ -308,7 +308,7 @@ window.addEventListener('load', function() {
 <li>開 page-spec-discount.html</li>
 <li>找 R-DS-014 步驟 3「IMEI 檢查」</li>
 <li>7 個子條件全列出（業務語言）</li>
-<li>源碼定位：<code>checkIMEI4Modelins() :10735</code></li>
+<li>源碼定位：<code>che***ns() :10735</code></li>
 <li>Mermaid 流程圖看全貌</li>
 <li><strong>5 分鐘搞懂，直接開改</strong></li>
 </ul>
@@ -317,12 +317,12 @@ window.addEventListener('load', function() {
 </div>
 
 <div class="card gray">
-<h3>場景：業務問「風險代碼 14 的客戶為什麼被擋？」</h3>
+<h3>場景：業務問「風險代碼 1*** 的客戶為什麼被擋？」</h3>
 <div class="vs">
 <div class="vs-left">
 <h4>❌ 沒知識庫</h4>
 <ul>
-<li>搜 <code>SupervisorReview</code></li>
+<li>搜 <code>Sup***ew</code></li>
 <li>找到優惠方案覆核</li>
 <li>回答「需主管授權」</li>
 <li>→ <strong>答錯了！</strong></li>
@@ -350,7 +350,7 @@ window.addEventListener('load', function() {
 <table>
 <tr><th>場景</th><th>現在怎麼做</th><th>有知識庫後</th></tr>
 <tr><td>接到改碼需求</td><td>開 IDE → 搜關鍵字 → 追呼叫鏈 → 問人確認</td><td>查 Page Spec → 看規則+定位 → 直接改</td></tr>
-<tr><td>業務問「為什麼擋」</td><td>開 IDE → 找 showMsg → 回推判斷條件</td><td>查失敗訊息欄 → 直接回答</td></tr>
+<tr><td>業務問「為什麼擋」</td><td>開 IDE → 找 sho***sg → 回推判斷條件</td><td>查失敗訊息欄 → 直接回答</td></tr>
 <tr><td>評估改碼影響範圍</td><td>靠經驗 + 問資深同仁</td><td>AI 呼叫 kb_table_chain → 列出影響鏈</td></tr>
 <tr><td>新人問你問題</td><td>口頭解釋 30 min（下次還要再講）</td><td>丟 Page Spec 連結（一次投入，永久可用）</td></tr>
 <tr><td>跨模組 debug</td><td>不熟的模組從頭 trace</td><td>查該模組 Page Spec → 5 min 掌握邏輯</td></tr>
@@ -399,7 +399,7 @@ window.addEventListener('load', function() {
 <span style="font-size:2em">💬</span><br>
 <strong>Step 1</strong><br>
 在 Kiro/Copilot 打字<br>
-<small>「風險代碼14會擋嗎？」</small>
+<small>「風險代碼1***會擋嗎？」</small>
 </div>
 <div style="text-align:center;padding:12px;border-right:2px solid #e0e0e0">
 <span style="font-size:2em">⚙️</span><br>
@@ -513,11 +513,11 @@ def kb_search(query: str, top_k: int = 5) -> str:
 <table>
 <tr><th>查詢</th><th>期望命中</th><th>實際 Top-3 命中？</th></tr>
 <tr><td>「提前購機的規則」</td><td>SRS 提前購機章節</td><td>✅ Top-1 命中</td></tr>
-<tr><td>「限制異動」</td><td>風險代碼 + accumdebtamt</td><td>✅ Top-2 涵蓋兩套</td></tr>
-<tr><td>「配號用到哪些程式」</td><td>AssignNum 相關程式鏈</td><td>✅ Top-1 命中</td></tr>
-<tr><td>「保險投保年齡限制」</td><td>checkIMEI4Modelins 子條件 3.3</td><td>✅ Top-3 內命中</td></tr>
+<tr><td>「限制異動」</td><td>風險代碼 + acc***mt</td><td>✅ Top-2 涵蓋兩套</td></tr>
+<tr><td>「配號用到哪些程式」</td><td>Ass***um 相關程式鏈</td><td>✅ Top-1 命中</td></tr>
+<tr><td>「保險投保年齡限制」</td><td>che***ns 子條件 3.3</td><td>✅ Top-3 內命中</td></tr>
 </table>
-<p style="font-size:.88em;color:var(--body)">模型：paraphrase-multilingual-MiniLM-L12-v2（384 維）。以上為實際測試結果（非體感估計）。中文業務術語在 Top-3 內命中率高，加上 $text lexical 合併後涵蓋率更佳。少數失敗案例：極短查詢（如單一代碼「14」）需改用 kb_fulltext。</p>
+<p style="font-size:.88em;color:var(--body)">模型：paraphrase-multilingual-MiniLM-L12-v2（384 維）。以上為實際測試結果（非體感估計）。中文業務術語在 Top-3 內命中率高，加上 $text lexical 合併後涵蓋率更佳。少數失敗案例：極短查詢（如單一代碼「1***」）需改用 kb_fulltext。</p>
 </div>
 
 
@@ -588,7 +588,7 @@ flowchart LR
         <div style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:4px 6px">SRS/SDS .doc</div>
         <div style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:4px 6px">Java / JSP</div>
         <div style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:4px 6px">SWDS</div>
-        <div style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:4px 6px">codefunction.json</div>
+        <div style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:4px 6px">cod***on.json</div>
       </div>
     </div>
     <div style="display:flex;align-items:center;font-size:1.5em;color:var(--red);font-weight:bold">→</div>
@@ -658,7 +658,7 @@ flowchart LR
 
 <div class="card blue">
 <h3>三重定位格式</h3>
-<pre><code>verify_doAddDiscnt() 搜尋 "checkIMEI4Modelins" (:3920)
+<pre><code>ver***nt() 搜尋 "che***ns" (:3920)
  └── 方法名              └── 搜尋關鍵字           └── 基線行號</code></pre>
 <table>
 <tr><th>定位層</th><th>用途</th><th>失效時機</th></tr>
@@ -670,9 +670,9 @@ flowchart LR
 
 <div class="vs">
 <div class="vs-left"><h4>❌ 程式碼當描述</h4>
-<pre><code>ifShowIMEI==true &&
-(serial_no==null ||
- serial_no.trim().length()==0)</code></pre>
+<pre><code>ifS***EI==true &&
+(ser***no==null ||
+ ser***no.trim().length()==0)</code></pre>
 <p>→ 非工程師看不懂</p></div>
 <div class="vs-mid">VS</div>
 <div class="vs-right"><h4>✅ 業務語言</h4>
@@ -691,18 +691,18 @@ flowchart LR
     <div style="background:#F5F5F5;border:2px dashed #999;border-radius:10px;padding:8px">
       <div style="font-weight:bold;color:#555;text-align:center;margin-bottom:6px">6 個入口</div>
       <div style="display:flex;flex-direction:column;gap:4px">
-        <div style="background:#fff;border:1px solid #bbb;border-radius:14px;padding:3px 8px">applyBean</div>
-        <div style="background:#fff;border:1px solid #bbb;border-radius:14px;padding:3px 8px">Or1110Bean</div>
-        <div style="background:#fff;border:1px solid #bbb;border-radius:14px;padding:3px 8px">NPTicketBean</div>
-        <div style="background:#fff;border:1px solid #bbb;border-radius:14px;padding:3px 8px">pasServiceType…</div>
+        <div style="background:#fff;border:1px solid #bbb;border-radius:14px;padding:3px 8px">app***an</div>
+        <div style="background:#fff;border:1px solid #bbb;border-radius:14px;padding:3px 8px">Or1***an</div>
+        <div style="background:#fff;border:1px solid #bbb;border-radius:14px;padding:3px 8px">NPT***an</div>
+        <div style="background:#fff;border:1px solid #bbb;border-radius:14px;padding:3px 8px">pas***pe…</div>
       </div>
     </div>
     <div style="color:var(--red);font-size:1.4em;font-weight:bold">→</div>
     <!-- 主控 -->
     <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
-      <div style="background:#1565c0;color:#fff;border-radius:8px;padding:8px 12px;font-weight:bold;text-align:center">chkRisk_fast.jsp<br><span style="font-size:.85em;font-weight:normal">主控框架</span></div>
+      <div style="background:#1565c0;color:#fff;border-radius:8px;padding:8px 12px;font-weight:bold;text-align:center">chk***st.jsp<br><span style="font-size:.85em;font-weight:normal">主控框架</span></div>
       <div style="color:#999">▼</div>
-      <div style="background:#f39c12;color:#fff;border-radius:8px;padding:8px 12px;font-weight:bold;text-align:center">chkRiskProc<br><span style="font-size:.85em;font-weight:normal">路由</span></div>
+      <div style="background:#f39c12;color:#fff;border-radius:8px;padding:8px 12px;font-weight:bold;text-align:center">chk***oc<br><span style="font-size:.85em;font-weight:normal">路由</span></div>
     </div>
     <div style="color:var(--red);font-size:1.4em;font-weight:bold">→</div>
     <!-- 4 並行查核 -->
@@ -718,9 +718,9 @@ flowchart LR
     <div style="color:var(--red);font-size:1.4em;font-weight:bold">→</div>
     <!-- Bean + Helper + 放行 -->
     <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
-      <div style="background:#34495e;color:#fff;border-radius:14px;padding:6px 10px;text-align:center">CheckerRequestBacking</div>
+      <div style="background:#34495e;color:#fff;border-radius:14px;padding:6px 10px;text-align:center">Che***ng</div>
       <div style="color:#999">▼</div>
-      <div style="background:#fff;border:1px solid #34495e;border-radius:14px;padding:4px 10px">CheckerHelper → 外部系統</div>
+      <div style="background:#fff;border:1px solid #34495e;border-radius:14px;padding:4px 10px">Che***er → 外部系統</div>
       <div style="color:#999">▼</div>
       <div style="background:#27ae60;color:#fff;border-radius:6px;padding:6px 12px;font-weight:bold">全過 → 繼續受理</div>
     </div>
@@ -736,16 +736,16 @@ flowchart LR
 <tr><td style="width:100px"><strong>規則代號</strong></td><td><code>R-CK-101</code></td></tr>
 <tr><td><strong>業務背景</strong></td><td>特定高風險種類（如詐騙相關）依風險政策一律不得受理，硬性阻擋，不開放主管複核放行。</td></tr>
 <tr><td><strong>觸發時機</strong></td><td>信用查核 → 風險等級判定時</td></tr>
-<tr><td><strong>判斷邏輯</strong></td><td>1. 客戶命中風險種類 27、30 或 37（特殊高風險）<br>2. 標記為不可受理，不提供複核放行</td></tr>
+<tr><td><strong>判斷邏輯</strong></td><td>1. 客戶命中風險種類 2***、3*** 或 3***（特殊高風險）<br>2. 標記為不可受理，不提供複核放行</td></tr>
 <tr><td><strong>失敗訊息</strong></td><td><code>此客戶的風險種類，系統不予受理！</code></td></tr>
-<tr><td><strong>源碼定位</strong></td><td><code>CheckerRequestBacking.chkRiskLevel()</code> 搜尋 <code>"isRiskAvoid"</code> (:628-630)</td></tr>
+<tr><td><strong>源碼定位</strong></td><td><code>Che***ng.chk***el()</code> 搜尋 <code>"isR***id"</code> (:628-630)</td></tr>
 </table>
 <div class="diagram">
   <!-- HTML+CSS 流程（取代 Mermaid） -->
   <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.85em">
     <span style="background:#E3F2FD;border:1px solid #42A5F5;border-radius:6px;padding:5px 10px">取得風險種類</span>
     <span style="color:var(--red);font-weight:bold">→</span>
-    <span style="background:#FFF8E1;border:1px solid #FFB74D;border-radius:20px;padding:5px 12px">命中 27/30/37？</span>
+    <span style="background:#FFF8E1;border:1px solid #FFB74D;border-radius:20px;padding:5px 12px">命中 2***/3***/3***？</span>
     <span style="color:var(--red);font-weight:bold">→</span>
     <span style="background:#FFF8E1;border:1px solid #FFB74D;border-radius:20px;padding:5px 12px">是→代辦人5碼例外？</span>
     <span style="display:inline-flex;flex-direction:column;gap:4px">
@@ -753,7 +753,7 @@ flowchart LR
       <span style="background:#e74c3c;color:#fff;border-radius:6px;padding:4px 10px">否則→禁止受理</span>
     </span>
   </div>
-  <p style="font-size:.78em;color:#999;margin-top:6px">未命中 27/30/37 → 續判其他規則</p>
+  <p style="font-size:.78em;color:#999;margin-top:6px">未命中 2***/3***/3*** → 續判其他規則</p>
 </div>
 </div>
 
@@ -770,8 +770,8 @@ flowchart LR
 3. 或命中 39 且對象為代辦人<br>
 4. 或命中 07、14、16 且為經銷商通路<br>
 → 須輸入具風險複核權限之主管方可放行</td></tr>
-<tr><td><strong>失敗訊息</strong></td><td><code>此客戶的風險種類，必須輸入主管（有風險複核權限）</code><br>送 chkLdapPwd.jsp 做 LDAP 驗證 + PRG_risk 職級檢查</td></tr>
-<tr><td><strong>源碼定位</strong></td><td><code>CheckerRequestBacking.chkRiskLevel()</code> (:598-648)</td></tr>
+<tr><td><strong>失敗訊息</strong></td><td><code>此客戶的風險種類，必須輸入主管（有風險複核權限）</code><br>送 chk***wd.jsp 做 LDAP 驗證 + PRG***sk 職級檢查</td></tr>
+<tr><td><strong>源碼定位</strong></td><td><code>Che***ng.chk***el()</code> (:598-648)</td></tr>
 </table>
 <div class="diagram">
   <!-- HTML+CSS 流程（取代 Mermaid） -->
@@ -783,13 +783,13 @@ flowchart LR
       <div style="font-weight:bold;color:#E08B00;margin-bottom:6px">符合任一條件 → 需主管複核</div>
       <div style="display:flex;flex-direction:column;gap:4px">
         <span style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:3px 8px">① 05/22 且起始日 ≥ 2007</span>
-        <span style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:3px 8px">② 其他高風險代碼（02/04/06…36）</span>
+        <span style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:3px 8px">② 其他高風險代碼（0***/0***/0***…3***）</span>
         <span style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:3px 8px">③ 39 且為代辦人</span>
         <span style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:3px 8px">④ 07/14/16 且為經銷商通路</span>
       </div>
     </div>
     <div style="color:#999;margin:4px 0 4px 20px">▼ 需複核</div>
-    <div style="background:#f39c12;color:#fff;border-radius:6px;padding:5px 10px;display:inline-block">輸入主管 → LDAP 驗證 + PRG_risk 職級</div>
+    <div style="background:#f39c12;color:#fff;border-radius:6px;padding:5px 10px;display:inline-block">輸入主管 → LDAP 驗證 + PRG***sk 職級</div>
     <div style="color:#999;margin:4px 0 4px 20px">▼</div>
     <div style="display:flex;gap:10px">
       <span style="background:#27ae60;color:#fff;border-radius:6px;padding:5px 12px">驗證通過 → 放行</span>
@@ -817,8 +817,8 @@ flowchart LR
 <h3>案例 1：「限制異動」= 兩套不同機制</h3>
 <table>
 <tr><th>機制</th><th>觸發</th><th>效果</th><th>源碼</th></tr>
-<tr><td>accumdebtamt ≥ 10</td><td>合約標記</td><td>🔒 鎖定作業</td><td><code>CheckerControl.isOnlySelfOrder()</code></td></tr>
-<tr><td>風險代碼 14</td><td>風控系統</td><td>🔐 經銷商需主管</td><td><code>CheckerRequestBacking.chkRiskLevel()</code></td></tr>
+<tr><td>acc***mt ≥ 10</td><td>合約標記</td><td>🔒 鎖定作業</td><td><code>Che***ol.isO***er()</code></td></tr>
+<tr><td>風險代碼 1***</td><td>風控系統</td><td>🔐 經銷商需主管</td><td><code>Che***ng.chk***el()</code></td></tr>
 </table>
 <p><span class="tag red">教訓</span> 同一業務名詞多套實作，搜到一套就停 = 答錯</p>
 </div>
@@ -827,8 +827,8 @@ flowchart LR
 <h3>案例 2：「主管授權」= 三套獨立機制</h3>
 <table>
 <tr><th>機制</th><th>觸發</th><th>驗證</th></tr>
-<tr><td>風險代碼確認</td><td>isRiskConfirm</td><td>LDAP + PRG_risk 職級</td></tr>
-<tr><td>優惠方案覆核</td><td>SUPERVISORREVIEW=Y</td><td>LDAP + Audit.Duty</td></tr>
+<tr><td>風險代碼確認</td><td>isR***rm</td><td>LDAP + PRG***sk 職級</td></tr>
+<tr><td>優惠方案覆核</td><td>SUP***EW=Y</td><td>LDAP + Aud***ty</td></tr>
 <tr><td>作業授權</td><td>apoperation 表</td><td>密碼 / 存在性</td></tr>
 </table>
 <p><span class="tag red">教訓</span> 需 Steering 提醒「三個都查」</p>
@@ -837,9 +837,9 @@ flowchart LR
 <div class="card">
 <h3>案例 3：「支援他局」= 兩種意思</h3>
 <div class="vs">
-<div class="vs-left"><h4>👤 使用者的意思</h4><ul><li>人員調到 227 <strong>上班</strong></li><li><code>managevoffice</code> 表</li><li>Login 覆蓋 session → 權限變</li></ul></div>
+<div class="vs-left"><h4>👤 使用者的意思</h4><ul><li>人員調到 2*** <strong>上班</strong></li><li><code>man***ce</code> 表</li><li>Login 覆蓋 session → 權限變</li></ul></div>
 <div class="vs-mid">≠</div>
-<div class="vs-right"><h4>🤖 AI 理解的</h4><ul><li>門號<strong>歸屬</strong> 227</li><li>orderType = "Z"</li><li>訂單寫入對方 DB</li></ul></div>
+<div class="vs-right"><h4>🤖 AI 理解的</h4><ul><li>門號<strong>歸屬</strong> 2***</li><li>ord***pe = "Z"</li><li>訂單寫入對方 DB</li></ul></div>
 </div>
 <p><span class="tag blue">改善</span> 提問加「主體 + 情境 + 操作 + 行為」</p>
 </div>
@@ -903,26 +903,26 @@ flowchart LR
 <p><strong>範例 1：搜尋策略（避免漏查）</strong></p>
 <pre><code># search-strategy.md
 遇到「主管授權」相關問題時，三個機制都要查：
-1. CheckerRequestBacking.chkRiskLevel()
-2. PromoUtil.checkSupervisorReview()
-3. CheckerBD.checkApoperation()</code></pre>
+1. Che***ng.chk***el()
+2. Pro***il.che***ew()
+3. Che***BD.che***on()</code></pre>
 
 <p><strong>範例 2：業務名詞對照（避免搜錯）</strong></p>
 <pre><code># business-terms.md
 | 業務名詞 | 源碼中的名稱 |
-| 限制異動 | riskCode "14" / accumdebtamt >= 10 |
-| 主管授權 | isRiskConfirm / SupervisorReview / Apoperation |
-| 代辦人   | helper(信用查核) / reporder(訂單) |
-| 配號     | AssignNum / numHelper |
-| E化申裝  | menuOR1110 / newApply / chkRisk_fast |</code></pre>
+| 限制異動 | ris***de "1***" / acc***mt >= 10 |
+| 主管授權 | isR***rm / Sup***ew / Apo***on |
+| 代辦人   | hel***er(信用查核) / rep***er(訂單) |
+| 配號     | Ass***um / num***er |
+| E化申裝  | men***10 / new***ly / chk***st |</code></pre>
 
 <p><strong>範例 3：作業特殊規則（避免誤判）</strong></p>
 <pre><code># discount-rules.md
-優惠受理(nonMobDiscnt)的特殊注意事項：
-- verify_doAddDiscnt 有 28 步驟，是一個 pipeline，不要拆成 28 條規則
-- 風險代碼 14 在經銷商通路才觸發主管確認，直營不觸發
-- earlyFlag 的值域：-3/-2/-1/0/正數，各有不同意義
-- checkExDepartment 在新增和確認時都會呼叫（R-DS-014 步驟18 和 R-DS-015 步驟11）</code></pre>
+優惠受理(non***nt)的特殊注意事項：
+- ver***nt 有 28 步驟，是一個 pipeline，不要拆成 28 條規則
+- 風險代碼 1*** 在經銷商通路才觸發主管確認，直營不觸發
+- ear***ag 的值域：-3/-2/-1/0/正數，各有不同意義
+- che***nt 在新增和確認時都會呼叫（R-DS-014 步驟18 和 R-DS-015 步驟11）</code></pre>
 </div>
 </div>
 
@@ -941,7 +941,7 @@ flowchart LR
 <tr><td>建 1 張索引表<br><small>如風險代碼對照：<strong>1 hr</strong></small></td><td>每次回答省 30 min</td><td><strong>第 2 次被問即回本</strong></td></tr>
 <tr><td>寫 1 條 Steering<br><small><strong>5 min</strong></small></td><td>AI 永不再犯同錯誤</td><td><strong>立即回本</strong></td></tr>
 </table>
-<p style="font-size:.88em;color:var(--body)">實際經驗：過去兩週光是「風險代碼 14」就被問了 3 次、「主管授權條件」被問了 2 次 → 建一張索引表一次解決所有人的問題。</p>
+<p style="font-size:.88em;color:var(--body)">實際經驗：過去兩週光是「風險代碼 1***」就被問了 3 次、「主管授權條件」被問了 2 次 → 建一張索引表一次解決所有人的問題。</p>
 </div>
 
 <!-- Original efficiency table -->
@@ -1023,10 +1023,10 @@ python -m knowledge_base.cli init-schema</code></pre>
 python -m knowledge_base.cli ingest-specs ^
   --root "你的SRS/SDS目錄"
 
-# 匯入源碼（需 codefunction.json）
+# 匯入源碼（需 cod***on.json）
 python -m knowledge_base.cli source-ingest ^
   --source "你的源碼目錄" ^
-  --codefunction "選單功能.json"
+  --cod***on "選單功能.json"
 
 # 建立語意向量
 python -m knowledge_base.cli semantic-reindex</code></pre>
@@ -1075,7 +1075,7 @@ python -m knowledge_base.mcp_server</code></pre>
 <tr><td>Python 3.11+</td><td>python.org 下載安裝</td><td>必要</td></tr>
 <tr><td>MongoDB 7.x</td><td>mongodb.com 下載，安裝為 Service</td><td>必要</td></tr>
 <tr><td>Microsoft Word</td><td>已安裝即可（解析 .doc 用）</td><td>略過 .doc，只用 .docx/.md</td></tr>
-<tr><td><code>codefunction.json</code></td><td>從系統 DB 匯出<br><code>SELECT * FROM codefunction</code></td><td>跳過 source-ingest</td></tr>
+<tr><td><code>cod***on.json</code></td><td>從系統 DB 匯出<br><code>SELECT * FROM cod***on</code></td><td>跳過 source-ingest</td></tr>
 <tr><td>源碼存取權</td><td>能讀到 .java / .jsp</td><td>只做規格文件檢索</td></tr>
 <tr><td>SRS/SDS 文件</td><td>.doc / .docx / .md 都支援</td><td>直接從源碼寫 Page Spec</td></tr>
 </table>
@@ -1169,7 +1169,7 @@ python -m knowledge_base.mcp_server</code></pre>
 <!-- Point 19: More conversational Q&A -->
 <div class="card">
 <h3>🕳️ 坑 1：「搜到一個就以為找完了」</h3>
-<p><strong>情境</strong>：問「主管授權的條件」→ 搜到 SupervisorReview → 回答了 → 被打臉</p>
+<p><strong>情境</strong>：問「主管授權的條件」→ 搜到 Sup***ew → 回答了 → 被打臉</p>
 <p><strong>真相</strong>：系統有三套完全不同的主管授權機制，名字不同、路徑不同、觸發條件不同。</p>
 <p><strong>解法</strong>：建 Steering，遇到特定關鍵字時強制多路搜尋。<strong>一次踩坑 → 永久免疫。</strong></p>
 </div>
@@ -1177,7 +1177,7 @@ python -m knowledge_base.mcp_server</code></pre>
 <div class="card">
 <h3>🕳️ 坑 2：「業務名詞 ≠ 源碼名稱」</h3>
 <p><strong>情境</strong>：業務說「限制異動」→ 源碼裡沒有任何變數叫 limitChange 或 restrictUpdate</p>
-<p><strong>真相</strong>：是 <code>accumdebtamt >= 10</code>（合約欄位）和 <code>riskCode "14"</code>（風控系統）兩套。</p>
+<p><strong>真相</strong>：是 <code>acc***mt >= 10</code>（合約欄位）和 <code>ris***de "1***"</code>（風控系統）兩套。</p>
 <p><strong>解法</strong>：建「業務名詞→源碼」對照表，放進 Steering。AI 和人都能秒查。</p>
 </div>
 
@@ -1334,14 +1334,14 @@ const presenterNotes = {
   concept: { time: "1:30", title: "設計理念", notes: "核心問題：如何讓 AI 代理人像公司員工一樣工作？\n\n用機器人比喻：\n• 大腦 = 知識庫（domain knowledge）+ AI Model（思考能力）\n• 左手 = MCP Server（查 DB、Azure Board 等能力）\n• 右手 = Skill（需求分析、程式開發等技能）\n• 左腳 = 產出格式（Word/PPT/MD/HTML/PDF）\n• 右腳 = 撰寫指引（文件範本、品質標準）\n\n這五個能力缺一不可，知識庫就是賦予 AI 大腦中 domain knowledge 的部分。" },
   pain: { time: "1:30", title: "痛點", notes: "核心論點：有文件不等於有知識。\n\n• 提 1,896 份 SRS/SDS 都齊全\n• 但業務邏輯太廣，每人只懂自己的\n• 跨領域 = 從零查起\n• 強調表格中的五個困境\n\n結語：這就是我們要解決的問題。" },
   std: { time: "2:00", title: "產品標準化 × P&L", notes: "這頁是競賽破題（對象=各處處長，講 P&L 不講技術）。\n\n核心論點一句話：把知識庫從「專案」變成「產品」。\n\n關鍵：同一套技術，當專案做完就結束、無法複製；標準化為產品後，可一次開發、對多處室甚至外部客戶重複交付。\n\n因果鏈三段：\n① 產品標準化：與特定系統解耦，封裝成標準交付包 kb-package.zip（程式+文件+匯入工具+操作手冊），可安裝可複製\n② 提升 P&L：營收↑（交付多處收入放大）、邊際成本↓（開發一次投入、每多賣一份近乎零成本）、毛利↑（從賣人力工時升級為賣產品）\n③ 可規模化銷售：框架通用不綁行動訂單，可包裝成產品目錄（基礎版/進階版/客製導入）\n\n財務語言：邊際成本趨近於零、毛利隨規模放大，就是產品標準化對 P&L 的核心貢獻。\n\n公式：產品營收 = 單份售價 × 交付份數。" },
-  demo: { time: "2:00", title: "效果 Demo", notes: "先看效果再講技術。\n\n場景一（IMEI）：\n• 左：11,000 行 → 半天沒開始改\n• 右：Page Spec → 5 分鐘搞懂\n\n場景二（風險代碼14）：\n• 左：搜錯 → 答錯\n• 右：對照表 → 30 秒完整答案\n\n最後帶工作流程對照表。" },
+  demo: { time: "2:00", title: "效果 Demo", notes: "先看效果再講技術。\n\n場景一（IMEI）：\n• 左：11,000 行 → 半天沒開始改\n• 右：Page Spec → 5 分鐘搞懂\n\n場景二（風險代碼1***）：\n• 左：搜錯 → 答錯\n• 右：對照表 → 30 秒完整答案\n\n最後帶工作流程對照表。" },
   what: { time: "1:30", title: "知識庫是什麼", notes: "一句話定義：把源碼的真實邏輯，用業務語言寫下來。\n\n左右對比：SRS 說「應該做什麼」vs Page Spec 說「實際怎麼做」。\n\n五大原則快速帶過（不要逐條念）。" },
   arch: { time: "2:00", title: "技術架構", notes: "先講使用者視角 3 步：打字→AI呼叫→回答。強調「你不用改工作方式」。\n\n架構三層帶過，重點：\n• MCP 是什麼（一句話）\n• 為什麼選 MCP 不選 REST（5行 vs 30行）\n• 安全性：全本地，不外送\n\n語意搜尋準確率：提 4 個實測 case。" },
   pipeline: { time: "1:00", title: "資料流程", notes: "快速帶過：四階段（來源→CLI→MongoDB→MCP）。\n\n強調：初次全量，之後增量。semantic-reindex 2min/千筆。\n不要在這頁停太久。" },
   pagespec: { time: "2:00", title: "Page Spec", notes: "這是最重要的產出物。\n\n三重定位：方法名+關鍵字+行號（三層遞降）。\n\n業務語言 vs 程式碼對比（左右）。\n\n秀兩條實際規則：\n• R-CK-101：簡潔阻擋\n• R-CK-102：複雜多條件+LDAP\n\nAI 5 分鐘產出 + 人 Review 15-30 min。" },
   cases: { time: "1:30", title: "實戰案例", notes: "三個踩坑故事：\n\n1.「限制異動」= 兩套機制（搜到一套就停=答錯）\n2.「主管授權」= 三套機制（需 Steering 提醒三個都查）\n3.「支援他局」= 兩種意思（主體+情境+操作+行為）\n\n結語：同一業務名詞多套實作是常態。" },
   collab: { time: "1:00", title: "AI+人協作", notes: "AI 負責：讀碼、展開、撰寫、畫圖。\n人負責：驗證、補背景、回報問題。\n\nSteering 循環：答錯→補→不再犯。\n三個範例快速帶過。" },
-  roi: { time: "1:00", title: "效益", notes: "ROI 三行：\n• Page Spec 3hr → 第2次查閱回本\n• 索引表 1hr → 第2次被問回本\n• Steering 5min → 立即回本\n\n實際數據：風險代碼14 兩週被問3次。\n\nBefore/After 表快速帶過。" },
+  roi: { time: "1:00", title: "效益", notes: "ROI 三行：\n• Page Spec 3hr → 第2次查閱回本\n• 索引表 1hr → 第2次被問回本\n• Steering 5min → 立即回本\n\n實際數據：風險代碼1*** 兩週被問3次。\n\nBefore/After 表快速帶過。" },
   howto: { time: "0:30", title: "如何套用", notes: "快速帶過：zip 解壓 → 5 步驟。\n不要念指令，讓他們自己看。\n強調：第一天就能跑起來。" },
   limits: { time: "0:30", title: "限制", notes: "誠實說：暴力遍歷有上限、需人工驗證、最適合大型遺留系統。\n\n小專案不需要（< 50支、< 3人）。" },
   qa: { time: "0:30", title: "Q&A + 結語", notes: "結語：知識庫是團隊的第二個大腦。每次 AI 答錯都是改善的機會。\n\n準備被問：\n• vs ChatGPT？→ ChatGPT 沒你的源碼\n• 準確率？→ Top-3 實測全命中\n• 安全性？→ 全本地不外送\n• 其他語言？→ 框架通用" },
