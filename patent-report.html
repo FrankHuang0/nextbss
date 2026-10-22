@@ -3,53 +3,567 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>板式熱交換器與熱管理領域專利分析報告</title>
-  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/patent.css">
+  <title>板式熱交換器與熱管理領域專利分析報告（示範）</title>
+  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
+  <style>
+.kbv {
+  --bg: #0d0d12;
+  --surface: #17171f;
+  --surface-2: #1e1e29;
+  --border: #2a2a38;
+  --text: #f2f2f7;
+  --text-dim: #9797a8;
+  --text-faint: #6b6b7c;
+  --accent: #7c5cff;
+  --accent-hover: #8f72ff;
+  --accent-dim: rgba(124, 92, 255, 0.15);
+  --success: #22c55e;
+  --success-dim: rgba(34, 197, 94, 0.12);
+  --error: #f2555a;
+  --error-dim: rgba(242, 85, 90, 0.12);
+  --warn: #f5a623;
+  --warn-dim: rgba(245, 166, 35, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.kbv * {
+  box-sizing: border-box;
+}
+
+.kbv,
+.kbv {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.kbv {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.kbv h1,
+.kbv h2,
+.kbv h3 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
+}
+
+.kbv h1 {
+  font-size: 22px;
+}
+
+.kbv h2 {
+  font-size: 16px;
+}
+
+.kbv h3 {
+  font-size: 14px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.kbv p {
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.kbv a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.kbv input,
+.kbv textarea,
+.kbv select {
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.kbv input::placeholder,
+.kbv textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.kbv input:focus,
+.kbv textarea:focus,
+.kbv select:focus {
+  border-color: var(--accent);
+}
+
+.kbv input:disabled,
+.kbv button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.kbv button {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  background: var(--accent);
+  color: white;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.kbv button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.kbv button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.kbv button.secondary {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.kbv button.secondary:hover:not(:disabled) {
+  background: var(--border);
+}
+
+.kbv .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.kbv .label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.kbv .field {
+  margin-bottom: 16px;
+}
+
+.kbv .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.kbv .badge.success {
+  background: var(--success-dim);
+  color: var(--success);
+}
+
+.kbv .badge.error {
+  background: var(--error-dim);
+  color: var(--error);
+}
+
+.kbv .badge.warn {
+  background: var(--warn-dim);
+  color: var(--warn);
+}
+
+.kbv .badge.neutral {
+  background: var(--surface-2);
+  color: var(--text-dim);
+}
+
+.kbv .error-text {
+  color: var(--error);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.kbv .page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  width: 100%;
+}
+
+.kbv .page-header {
+  margin-bottom: 24px;
+}
+
+.kbv .page-header p {
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.kbv ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.kbv ::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.kbv ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.report-page[data-v-f55be9fe] { max-width: 900px; margin: 0 auto; padding: 0 24px 80px;
+}
+
+/* HEADER */
+.report-header[data-v-f55be9fe] { padding: 32px 0 24px; border-bottom: 1px solid var(--border); margin-bottom: 4px;
+}
+.header-badges[data-v-f55be9fe] { display: flex; gap: 8px; margin-bottom: 12px;
+}
+.rbadge[data-v-f55be9fe] {
+  display: inline-block;
+  padding: 2px 9px; border-radius: 4px;
+  font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+}
+.rbadge.draft[data-v-f55be9fe]  { background: rgba(245,166,35,.15);  color: var(--warn);  border: 1px solid rgba(245,166,35,.3);
+}
+.rbadge.review[data-v-f55be9fe] { background: rgba(124,92,255,.12);  color: var(--accent); border: 1px solid rgba(124,92,255,.3);
+}
+.report-title[data-v-f55be9fe] { font-size: 22px; font-weight: 700; line-height: 1.3; letter-spacing: -.02em; margin-bottom: 6px; color: var(--text);
+}
+.report-subtitle[data-v-f55be9fe] { font-size: 13px; color: var(--text-dim); margin-bottom: 12px;
+}
+.report-meta-row[data-v-f55be9fe] { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12.5px; color: var(--text-faint); margin-bottom: 12px;
+}
+.report-meta-row strong[data-v-f55be9fe] { color: var(--text-dim);
+}
+.report-notice[data-v-f55be9fe] {
+  background: rgba(245,166,35,.08); border: 1px solid rgba(245,166,35,.2);
+  border-radius: var(--radius-sm); padding: 10px 14px;
+  font-size: 12.5px; color: var(--text-dim); line-height: 1.6;
+}
+.report-notice strong[data-v-f55be9fe] { color: var(--warn);
+}
+
+/* SECTIONS */
+.report-section[data-v-f55be9fe] { padding: 36px 0 0;
+}
+.sec-label[data-v-f55be9fe] {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
+}
+.sec-title[data-v-f55be9fe] { font-size: 17px; font-weight: 700; margin-bottom: 6px; color: var(--text);
+}
+.sec-desc[data-v-f55be9fe] { font-size: 13.5px; color: var(--text-dim); margin-bottom: 16px; line-height: 1.7;
+}
+.chart-analysis[data-v-f55be9fe] { color: var(--text-dim);
+}
+.chart-analysis strong[data-v-f55be9fe] { color: var(--text);
+}
+
+/* SUMMARY */
+.summary-grid[data-v-f55be9fe] { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;
+}
+.summary-stat[data-v-f55be9fe] {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px 16px;
+}
+.summary-stat.highlight-stat[data-v-f55be9fe] { border-color: rgba(34,197,94,.3); background: rgba(34,197,94,.06);
+}
+.summary-stat.warn-stat[data-v-f55be9fe] { border-color: rgba(242,85,90,.3); background: rgba(242,85,90,.06);
+}
+.stat-num[data-v-f55be9fe] { font-size: 26px; font-weight: 700; letter-spacing: -.03em; color: var(--text); margin-bottom: 2px;
+}
+.highlight-stat .stat-num[data-v-f55be9fe] { color: var(--success);
+}
+.warn-stat .stat-num[data-v-f55be9fe] { color: var(--error);
+}
+.stat-label[data-v-f55be9fe] { font-size: 12px; font-weight: 600; color: var(--text-dim); margin-bottom: 2px;
+}
+.stat-sub[data-v-f55be9fe] { font-size: 11px; color: var(--text-faint);
+}
+.findings-list[data-v-f55be9fe] { display: flex; flex-direction: column; gap: 8px;
+}
+.finding-item[data-v-f55be9fe] {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  background: var(--surface); border: 1px solid var(--border);
+  font-size: 13.5px; color: var(--text-dim);
+}
+.finding-item.critical[data-v-f55be9fe] { border-color: rgba(242,85,90,.3); background: rgba(242,85,90,.05);
+}
+.finding-item.high[data-v-f55be9fe]     { border-color: rgba(245,166,35,.3); background: rgba(245,166,35,.05);
+}
+.finding-item.medium[data-v-f55be9fe]   { border-color: rgba(124,92,255,.3); background: rgba(124,92,255,.05);
+}
+.finding-item p[data-v-f55be9fe] { margin: 0; color: var(--text-dim); font-size: 13.5px; line-height: 1.6;
+}
+.finding-no[data-v-f55be9fe] {
+  font-size: 10px; font-weight: 700; letter-spacing: .06em;
+  background: var(--surface-2); border-radius: 3px; padding: 2px 6px;
+  color: var(--text-faint); flex-shrink: 0; margin-top: 2px;
+}
+.finding-item.critical .finding-no[data-v-f55be9fe] { background: rgba(242,85,90,.2); color: var(--error);
+}
+.finding-item.high     .finding-no[data-v-f55be9fe] { background: rgba(245,166,35,.2); color: var(--warn);
+}
+.finding-item.medium   .finding-no[data-v-f55be9fe] { background: rgba(124,92,255,.2); color: var(--accent);
+}
+
+/* TREND BAR CHART */
+.bar-chart[data-v-f55be9fe] {
+  display: flex; align-items: flex-end; gap: 6px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 20px 16px 0;
+  height: 220px; overflow: hidden; margin-bottom: 8px;
+}
+.bar-group[data-v-f55be9fe] { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0;
+}
+.bar-wrap[data-v-f55be9fe] { flex: 1; display: flex; align-items: flex-end; width: 100%;
+}
+.bar[data-v-f55be9fe] {
+  width: 100%; background: var(--accent); border-radius: 3px 3px 0 0;
+  transition: height 0.3s ease; position: relative; display: flex; align-items: flex-start; justify-content: center;
+}
+.bar.bar-partial[data-v-f55be9fe] { background: rgba(124,92,255,.45);
+}
+.bar.bar-highlight[data-v-f55be9fe] { background: var(--success);
+}
+.bar-val[data-v-f55be9fe] { font-size: 9px; color: rgba(255,255,255,.7); position: absolute; top: 3px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+}
+.bar-year[data-v-f55be9fe] { font-size: 10px; color: var(--text-faint); padding: 4px 0 6px; white-space: nowrap;
+}
+.chart-note[data-v-f55be9fe] { font-size: 11.5px; color: var(--text-faint);
+}
+
+/* COUNTRY */
+.country-bars[data-v-f55be9fe] { display: flex; flex-direction: column; gap: 8px;
+}
+.country-row[data-v-f55be9fe] { display: flex; align-items: center; gap: 10px;
+}
+.country-label[data-v-f55be9fe] { display: flex; align-items: center; gap: 6px; width: 68px; flex-shrink: 0;
+}
+.flag[data-v-f55be9fe] { font-size: 14px;
+}
+.cname[data-v-f55be9fe] { font-size: 13px; color: var(--text-dim);
+}
+.country-bar-wrap[data-v-f55be9fe] { flex: 1; background: var(--surface-2); border-radius: 2px; height: 8px;
+}
+.country-bar[data-v-f55be9fe] { height: 8px; background: var(--accent); border-radius: 2px;
+}
+.country-stats[data-v-f55be9fe] { display: flex; gap: 6px; width: 100px; flex-shrink: 0; font-size: 12px;
+}
+.cpct[data-v-f55be9fe] { font-weight: 700; color: var(--text); width: 30px;
+}
+.ccount[data-v-f55be9fe] { color: var(--text-faint);
+}
+.ctrend[data-v-f55be9fe] { font-size: 11px;
+}
+.ctrend.up[data-v-f55be9fe] { color: var(--error);
+}
+.ctrend.down[data-v-f55be9fe] { color: var(--success);
+}
+
+/* APPLICANTS */
+.applicant-list[data-v-f55be9fe] { display: flex; flex-direction: column; gap: 6px;
+}
+.applicant-row[data-v-f55be9fe] { display: flex; align-items: center; gap: 10px; font-size: 13px;
+}
+.app-rank[data-v-f55be9fe] { font-size: 11px; font-weight: 700; color: var(--text-faint); width: 20px; flex-shrink: 0; font-variant-numeric: tabular-nums;
+}
+.app-info[data-v-f55be9fe] { display: flex; align-items: center; gap: 6px; width: 260px; flex-shrink: 0; overflow: hidden;
+}
+.app-flag[data-v-f55be9fe] { font-size: 13px; flex-shrink: 0;
+}
+.app-name[data-v-f55be9fe] { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.app-focus[data-v-f55be9fe] { font-size: 11px; color: var(--text-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.app-bar-wrap[data-v-f55be9fe] { flex: 1; background: var(--surface-2); border-radius: 2px; height: 6px;
+}
+.app-bar[data-v-f55be9fe] { height: 6px; background: rgba(124,92,255,.6); border-radius: 2px;
+}
+.app-count[data-v-f55be9fe] { font-variant-numeric: tabular-nums; font-size: 13px; color: var(--text-dim); width: 32px; text-align: right; flex-shrink: 0;
+}
+
+/* IPC */
+.ipc-bars[data-v-f55be9fe] { display: flex; flex-direction: column; gap: 10px;
+}
+.ipc-row[data-v-f55be9fe] { display: flex; align-items: center; gap: 10px; font-size: 13px;
+}
+.ipc-code[data-v-f55be9fe] { font-weight: 700; color: var(--accent); width: 40px; flex-shrink: 0; font-family: var(--mono); font-size: 12px;
+}
+.ipc-desc[data-v-f55be9fe] { width: 240px; flex-shrink: 0; color: var(--text-dim); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ipc-bar-wrap[data-v-f55be9fe] { flex: 1; background: var(--surface-2); border-radius: 2px; height: 8px;
+}
+.ipc-bar[data-v-f55be9fe] { height: 8px; background: rgba(124,92,255,.55); border-radius: 2px;
+}
+.ipc-pct[data-v-f55be9fe] { font-weight: 700; color: var(--text); width: 32px; text-align: right; flex-shrink: 0; font-size: 13px;
+}
+
+/* MATRIX */
+.matrix-wrap[data-v-f55be9fe] { overflow-x: auto; margin-bottom: 12px;
+}
+.matrix-table[data-v-f55be9fe] { border-collapse: collapse; font-size: 12.5px; width: 100%;
+}
+.matrix-table th[data-v-f55be9fe], .matrix-table td[data-v-f55be9fe] { padding: 7px 10px; border: 1px solid var(--border); text-align: center;
+}
+.matrix-corner[data-v-f55be9fe] { text-align: left; font-size: 11px; color: var(--text-faint); background: var(--surface-2); min-width: 110px;
+}
+.matrix-table th[data-v-f55be9fe] { background: var(--surface-2); color: var(--text-dim); font-size: 11.5px; white-space: nowrap;
+}
+.matrix-tech[data-v-f55be9fe] { text-align: left; color: var(--text-dim); font-size: 12px; white-space: nowrap; background: var(--surface);
+}
+.matrix-cell[data-v-f55be9fe] { font-variant-numeric: tabular-nums; font-weight: 600;
+}
+.cell-hot[data-v-f55be9fe]   { background: rgba(242,85,90,.25);  color: var(--error);
+}
+.cell-high[data-v-f55be9fe]  { background: rgba(245,166,35,.18); color: var(--warn);
+}
+.cell-mid[data-v-f55be9fe]   { background: rgba(124,92,255,.15); color: var(--accent);
+}
+.cell-low[data-v-f55be9fe]   { background: rgba(124,92,255,.06); color: var(--text-dim);}
+.cell-blank[data-v-f55be9fe] { background: var(--surface-2); color: var(--text-faint); font-weight: 400;
+}
+.blank-mark[data-v-f55be9fe] { font-size: 16px;
+}
+.matrix-legend[data-v-f55be9fe] { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px;
+}
+.legend-item[data-v-f55be9fe] { padding: 3px 10px; border-radius: 3px; border: 1px solid var(--border);
+}
+
+/* CLAIMS */
+.claims-stats[data-v-f55be9fe] { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;
+}
+.claim-row[data-v-f55be9fe] { display: flex; align-items: center; gap: 12px; font-size: 13px;
+}
+.claim-label[data-v-f55be9fe] { color: var(--text-dim); width: 130px; flex-shrink: 0;
+}
+.claim-val.accent[data-v-f55be9fe] { color: var(--accent); font-weight: 700; font-size: 15px;
+}
+.claim-note[data-v-f55be9fe] { font-size: 12px; color: var(--text-faint);
+}
+.transition-chart[data-v-f55be9fe] { display: flex; flex-direction: column; gap: 8px;
+}
+.trans-row[data-v-f55be9fe] { display: flex; align-items: center; gap: 10px; font-size: 13px;
+}
+.trans-label[data-v-f55be9fe] { width: 200px; flex-shrink: 0; color: var(--text-dim); font-family: var(--mono); font-size: 12px;
+}
+.trans-bar-wrap[data-v-f55be9fe] { flex: 1; background: var(--surface-2); border-radius: 2px; height: 8px;
+}
+.trans-bar[data-v-f55be9fe] { height: 8px; background: rgba(124,92,255,.5); border-radius: 2px;
+}
+.trans-bar.trans-warn[data-v-f55be9fe] { background: rgba(242,85,90,.6);
+}
+.trans-pct[data-v-f55be9fe] { font-weight: 700; color: var(--text); width: 36px; text-align: right; flex-shrink: 0;
+}
+
+/* RISK TABLE */
+.risk-table-wrap[data-v-f55be9fe] { overflow-x: auto;
+}
+.risk-table[data-v-f55be9fe] { border-collapse: collapse; font-size: 12.5px; width: 100%;
+}
+.risk-table th[data-v-f55be9fe], .risk-table td[data-v-f55be9fe] { padding: 9px 12px; border: 1px solid var(--border); text-align: left; vertical-align: top;
+}
+.risk-table th[data-v-f55be9fe] { background: var(--surface-2); color: var(--text-dim); font-size: 11.5px; white-space: nowrap;
+}
+.risk-table tr:hover td[data-v-f55be9fe] { background: rgba(255,255,255,.02);
+}
+.mono[data-v-f55be9fe] { font-family: var(--mono); font-size: 11.5px; white-space: nowrap;
+}
+.small[data-v-f55be9fe] { font-size: 11.5px;
+}
+.dim[data-v-f55be9fe] { color: var(--text-faint);
+}
+.risk-badge[data-v-f55be9fe] { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700;
+}
+.risk-high[data-v-f55be9fe] { background: rgba(242,85,90,.2); color: var(--error); border: 1px solid rgba(242,85,90,.3);
+}
+.risk-mid[data-v-f55be9fe]  { background: rgba(245,166,35,.2); color: var(--warn);  border: 1px solid rgba(245,166,35,.3);
+}
+
+/* ACTIONS */
+.action-list[data-v-f55be9fe] { display: flex; flex-direction: column; gap: 16px;
+}
+.action-group[data-v-f55be9fe] { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;
+}
+.action-timing[data-v-f55be9fe] { padding: 9px 14px; background: var(--surface-2); font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--accent); border-bottom: 1px solid var(--border);
+}
+.action-items[data-v-f55be9fe] { list-style: none; padding: 12px 14px; margin: 0; display: flex; flex-direction: column; gap: 7px;
+}
+.action-items li[data-v-f55be9fe] { font-size: 13.5px; color: var(--text-dim); padding-left: 14px; position: relative; line-height: 1.6;
+}
+.action-items li[data-v-f55be9fe]::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700;
+}
+
+/* REVIEW */
+.review-section[data-v-f55be9fe] { border: 1px solid rgba(245,166,35,.3); border-radius: var(--radius-sm); padding: 24px; background: rgba(245,166,35,.04);
+}
+.review-section .sec-label[data-v-f55be9fe] { color: var(--warn);
+}
+.review-grid[data-v-f55be9fe] { display: flex; flex-direction: column; gap: 10px;
+}
+.review-item[data-v-f55be9fe] { display: flex; gap: 12px; align-items: flex-start; font-size: 13.5px; color: var(--text-dim);
+}
+.review-num[data-v-f55be9fe] {
+  flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(245,166,35,.2); color: var(--warn);
+  font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 680px) {
+.summary-grid[data-v-f55be9fe] { grid-template-columns: 1fr 1fr;
+}
+.app-focus[data-v-f55be9fe] { display: none;
+}
+.ipc-desc[data-v-f55be9fe] { width: 140px;
+}
+}
+@media (max-width: 440px) {
+.summary-grid[data-v-f55be9fe] { grid-template-columns: 1fr;
+}
+.country-row[data-v-f55be9fe] { flex-wrap: wrap;
+}
+}
+
+
+.kbv{min-height:70vh;padding:110px 0 24px}
+@media (max-width:700px){.kbv{padding-top:76px}}
+.kbv .kbv-bar{width:100%;max-width:880px;margin:0 auto;padding:16px 24px 0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:14px}
+.kbv .kbv-bar a{color:var(--accent);text-decoration:underline}
+.kbv .kbv-gen{width:100%;max-width:880px;margin:0 auto;padding:0 24px;font-size:12px;color:var(--text-faint)}
+
+  </style>
 </head>
 <body>
-  <header>
-    <h1>板式熱交換器與熱管理領域專利分析報告</h1>
-    <p>示範報告：依規劃書的 10 章範本，用示範數據完整跑一次，讓專利分析師審查報告架構、分析格式與品質標準。</p>
-    <div class="stats"><span>示範報告</span><span>待審查</span><span>2014–2024</span><span>數據非真實</span></div>
-  </header>
-  <main class="pt">
-    <p class="pback"><a href="kb-project-analysis.html">← 回到課程〈知識庫應用：專案分析〉</a><a href="patent-plan.html">← 看規劃書</a></p>
-    <nav class="card"><ul class="toc"><li><a href="#summary">執行摘要</a></li><li><a href="#trend">年度趨勢</a></li><li><a href="#country">國別</a></li><li><a href="#top10">Top 10 申請人</a></li><li><a href="#ipc">IPC 領域</a></li><li><a href="#matrix">功效矩陣</a></li><li><a href="#claims">Claims 結構</a></li><li><a href="#risk">高風險專利</a></li><li><a href="#action">行動建議</a></li><li><a href="#review">審查備注</a></li></ul></nav>
-    <dl class="pmeta card"><div><dt>IPC 檢索範圍</dt><dd>F28D · F28F · H01M · H05K · F25B</dd></div><div><dt>分析期間</dt><dd>2014–2024</dd></div><div><dt>總件數</dt><dd>3,247 件</dd></div><div><dt>資料庫</dt><dd>USPTO · EPO · WIPO · JPO · CNIPA · TIPO</dd></div><div><dt>截止日</dt><dd>2024-09-30</dd></div><div><dt>版本</dt><dd>v0.1 示範稿</dd></div></dl>
-    <p class="callout warn">本報告為依據業界公開資訊製作之<strong>示範版本</strong>，數據僅供說明分析架構之用，<strong>非真實</strong>專利資料庫爬取結果。請專利分析師審查報告架構、分析格式與品質標準是否符合實務需求。</p>
-    <section class="card" id="summary"><p class="eyebrow">執行摘要</p><h2>Executive Summary</h2><p>供決策者在不閱讀全文的情況下做出初步判斷。</p>
-<div class="kpis"><div class="kpi"><b>3,247</b><span>有效專利件數</span><small>11 年，6 國資料庫</small></div><div class="kpi"><b>+22%</b><span>年均成長率</span><small>2019–2023 CAGR</small></div><div class="kpi up"><b>+38%</b><span>EV 熱管理子領域 CAGR</span><small>H01M 10/613 — 最快成長</small></div><div class="kpi risk"><b>2</b><span>高風險專利需 FTO</span><small>Alfa Laval / Danfoss 核心布局</small></div></div><ol class="finds"><li class="find"><span>01</span>EV 電池熱管理（H01M）為最快成長子領域，2019–2023 年 CAGR 達 38%，已成為各大廠重點佈局戰場。</li><li class="find"><span>02</span>中國申請人自 2021 年起在年度申請量首次超越美國（各佔 29% vs 24%），顯示供應鏈本土化壓力加劇。</li><li class="find"><span>03</span>Alfa Laval 在釺焊板式熱交換器核心技術（F28F 21/08）的佔比達 31%，構成進入壁壘；建議優先進行 FTO 分析。</li><li class="find"><span>04</span>資料中心液冷（H05K 7/20）近兩年申請量成長 67%，技術佈局仍在快速形成期，存在先行佈局機會。</li><li class="find"><span>05</span>技術功效矩陣顯示「壓降降低 × 材料技術」、「重量輕量化 × 冷媒流路 / 材料 / 系統整合」為三個顯著空白區，可評估申請可行性。</li></ol>
-    </section>
-    <section class="card" id="trend"><p class="eyebrow">管理面分析 — CH.4</p><h2>專利申請年度趨勢</h2>
-<p class="judge"><b>成長期判斷：</b>2018 年前呈平穩成長（年增約 3%）；2019 年起受 EV 電動化趨勢與資料中心液冷市場帶動，申請量加速增長，2019–2023 年 CAGR 達 22%。技術生命週期判斷：快速成長期，尚未進入成熟期，仍具佈局機會窗口。</p><ol class="ychart"><li class="yb"><span class="yb-b" style="height:45%"><em>210</em></span><small>2014</small></li><li class="yb"><span class="yb-b" style="height:47%"><em>218</em></span><small>2015</small></li><li class="yb"><span class="yb-b" style="height:48%"><em>225</em></span><small>2016</small></li><li class="yb"><span class="yb-b" style="height:49%"><em>231</em></span><small>2017</small></li><li class="yb"><span class="yb-b" style="height:51%"><em>238</em></span><small>2018</small></li><li class="yb"><span class="yb-b" style="height:57%"><em>267</em></span><small>2019</small></li><li class="yb"><span class="yb-b" style="height:64%"><em>298</em></span><small>2020</small></li><li class="yb"><span class="yb-b" style="height:76%"><em>356</em></span><small>2021</small></li><li class="yb hl"><span class="yb-b" style="height:88%"><em>412</em></span><small>2022</small></li><li class="yb hl"><span class="yb-b" style="height:100%"><em>468</em></span><small>2023</small></li><li class="yb est"><span class="yb-b" style="height:69%"><em>324</em></span><small>2024*</small></li></ol><p class="fn">* 2024 年資料截至 2024 Q3（約估全年 432 件），因 18 個月公開延遲，實際申請量可能高於顯示值。</p>
-    </section>
-    <section class="card" id="country"><p class="eyebrow">管理面分析 — CH.5</p><h2>專利權人國別分析</h2>
-<p class="judge"><b>集中度判斷：高度集中。</b>中美日三國合計佔 68%，其中中國自 2021 年首次成為年度最大申請國（佔 29%），反映中國廠商在換熱技術的積極追趕，也顯示供應鏈本土化壓力持續加深。德國雖排名第四，但掌握 Alfa Laval（瑞典）、GEA、Kelvion 等核心技術廠商，技術實力與申請量不成比例，需特別關注其專利品質（大族群）。</p><div class="hbs"><div class="hb"><span class="hb-l"><code>CN</code> 中國</span><span class="hb-t"><i style="width:100%"></i></span><span class="hb-v">27% <small>(878)</small></span><span class="tr">↑</span></div><div class="hb"><span class="hb-l"><code>US</code> 美國</span><span class="hb-t"><i style="width:89%"></i></span><span class="hb-v">24% <small>(779)</small></span><span class="tr">→</span></div><div class="hb"><span class="hb-l"><code>JP</code> 日本</span><span class="hb-t"><i style="width:63%"></i></span><span class="hb-v">17% <small>(551)</small></span><span class="tr">→</span></div><div class="hb"><span class="hb-l"><code>DE</code> 德國</span><span class="hb-t"><i style="width:48%"></i></span><span class="hb-v">13% <small>(422)</small></span><span class="tr">↓</span></div><div class="hb"><span class="hb-l"><code>KR</code> 韓國</span><span class="hb-t"><i style="width:33%"></i></span><span class="hb-v">9% <small>(292)</small></span><span class="tr">↑</span></div><div class="hb"><span class="hb-l"><code>—</code> 其他</span><span class="hb-t"><i style="width:37%"></i></span><span class="hb-v">10% <small>(325)</small></span><span class="tr">→</span></div></div>
-    </section>
-    <section class="card" id="top10"><p class="eyebrow">管理面分析 — CH.5</p><h2>Top 10 主要專利申請人</h2>
-<p class="judge"><b>集中度判斷：中度集中。</b>前五大申請人合計佔 34%，市場並無絕對壟斷者，但 Alfa Laval 在釺焊板式熱交換器核心工藝的佔比（約 31%）遠超過整體市佔率，具顯著技術壁壘。近 3 年 Samsung SDI、BorgWarner、Hanon Systems 等 EV 供應鏈廠商快速崛起，代表熱管理技術競爭正從傳統工業廠商向汽車電子廠商轉移。</p><div class="hbs wide"><div class="hb"><span class="hb-l"><span class="rk">01</span><code>SE</code> <b>Alfa Laval</b> <small>釺焊板式 / 工業用</small></span><span class="hb-t"><i style="width:100%"></i></span><span class="hb-v">312</span></div><div class="hb"><span class="hb-l"><span class="rk">02</span><code>DK</code> <b>Danfoss</b> <small>冷媒系統 / HVAC</small></span><span class="hb-t"><i style="width:79%"></i></span><span class="hb-v">247</span></div><div class="hb"><span class="hb-l"><span class="rk">03</span><code>US</code> <b>Parker Hannifin</b> <small>航太 / 工業熱管理</small></span><span class="hb-t"><i style="width:63%"></i></span><span class="hb-v">198</span></div><div class="hb"><span class="hb-l"><span class="rk">04</span><code>DE</code> <b>GEA Group</b> <small>食品工業 / 大型換熱</small></span><span class="hb-t"><i style="width:56%"></i></span><span class="hb-v">176</span></div><div class="hb"><span class="hb-l"><span class="rk">05</span><code>KR</code> <b>Samsung SDI</b> <small>EV 電池熱管理</small></span><span class="hb-t"><i style="width:50%"></i></span><span class="hb-v">156</span></div><div class="hb"><span class="hb-l"><span class="rk">06</span><code>SE</code> <b>SWEP International</b> <small>釺焊板式（BPHE）</small></span><span class="hb-t"><i style="width:46%"></i></span><span class="hb-v">143</span></div><div class="hb"><span class="hb-l"><span class="rk">07</span><code>US</code> <b>Modine Mfg.</b> <small>汽車 / EV 冷卻</small></span><span class="hb-t"><i style="width:41%"></i></span><span class="hb-v">128</span></div><div class="hb"><span class="hb-l"><span class="rk">08</span><code>DE</code> <b>Kelvion Holdings</b> <small>工業 / 數據中心</small></span><span class="hb-t"><i style="width:38%"></i></span><span class="hb-v">119</span></div><div class="hb"><span class="hb-l"><span class="rk">09</span><code>US</code> <b>BorgWarner</b> <small>汽車動力熱管理</small></span><span class="hb-t"><i style="width:35%"></i></span><span class="hb-v">108</span></div><div class="hb"><span class="hb-l"><span class="rk">10</span><code>KR</code> <b>Hanon Systems</b> <small>EV 熱泵 / 空調</small></span><span class="hb-t"><i style="width:31%"></i></span><span class="hb-v">97</span></div></div>
-    </section>
-    <section class="card" id="ipc"><p class="eyebrow">技術面分析 — CH.6</p><h2>IPC 技術領域分析（三階）</h2>
-<p class="judge"><b>集中度判斷：高度集中。</b>F28D + F28F 合計佔 70%，顯示核心專利仍集中於換熱裝置本體設計。H01M（14%）代表 EV 電池熱管理的跨界佈局，近 3 年佔比從 8% 升至 14%，是最值得關注的成長向量。H05K（電子散熱）與 F25B（冷媒系統）相對分散，仍具佈局空間。</p><div class="hbs wide"><div class="hb"><span class="hb-l"><code>F28D</code> 熱交換裝置（板型/管型/整體構型）</span><span class="hb-t"><i style="width:100%"></i></span><span class="hb-v">42%</span></div><div class="hb"><span class="hb-l"><code>F28F</code> 熱交換裝置細部元件（板片/流道/材料）</span><span class="hb-t"><i style="width:67%"></i></span><span class="hb-v">28%</span></div><div class="hb"><span class="hb-l"><code>H01M</code> 電化學程序（電池熱管理）</span><span class="hb-t"><i style="width:33%"></i></span><span class="hb-v">14%</span></div><div class="hb"><span class="hb-l"><code>H05K</code> 印刷電路基板（電子設備散熱冷卻）</span><span class="hb-t"><i style="width:19%"></i></span><span class="hb-v">8%</span></div><div class="hb"><span class="hb-l"><code>F25B</code> 冷凍/製冷裝置（冷媒換熱迴路）</span><span class="hb-t"><i style="width:19%"></i></span><span class="hb-v">8%</span></div></div>
-    </section>
-    <section class="card" id="matrix"><p class="eyebrow">技術面分析 — CH.7</p><h2>技術功效矩陣</h2>
-<p class="judge"><b>熱點：</b>「板片幾何設計 × 傳熱效率」（210 件）、「冷媒流路 × 熱均勻性」（201 件）為最密集佈局區，侵權風險最高，進入需謹慎。<b>機會空白：</b>「冷媒流路 × 重量輕量化」、「材料技術 × 重量輕量化 / 壓降降低」及「系統整合 × 重量輕量化」顯示零件數空白，建議確認是否為技術盲點或技術上不可行的組合，若可行則具佈局機會。</p><div class="x"><table class="tbl mtx"><tr><th>技術手段 ╲ 功效</th><th>傳熱效率提升</th><th>壓降降低</th><th>重量輕量化</th><th>製造成本降低</th><th>耐久性提升</th><th>熱均勻性</th></tr><tr><th>板片幾何設計</th><td class="m4">210</td><td class="m3">138</td><td class="m2">45</td><td class="m2">67</td><td class="m3">88</td><td class="m3">124</td></tr><tr><th>釺焊工藝</th><td class="m3">156</td><td class="m2">42</td><td class="m1">18</td><td class="m3">98</td><td class="m3">112</td><td class="m2">36</td></tr><tr><th>冷媒流路設計</th><td class="m3">178</td><td class="m3">89</td><td class="m0">—</td><td class="m2">45</td><td class="m2">67</td><td class="m4">201</td></tr><tr><th>材料技術</th><td class="m2">67</td><td class="m1">23</td><td class="m0">—</td><td class="m1">12</td><td class="m3">88</td><td class="m2">34</td></tr><tr><th>系統整合控制</th><td class="m2">45</td><td class="m1">12</td><td class="m0">—</td><td class="m2">78</td><td class="m2">34</td><td class="m3">188</td></tr></table></div><p class="legend"><span class="m4">201+ 高度佈局</span><span class="m3">80–200 中高</span><span class="m2">30–79 中</span><span class="m1">&lt;30 低密度</span><span class="m0">— 空白（機會區）</span></p>
-    </section>
-    <section class="card" id="claims"><p class="eyebrow">技術面分析 — CH.8</p><h2>申請專利範圍（Claims）結構分析</h2>
-<p class="judge"><b>保護範圍廣度評估：</b>comprising（開放式）佔 71%，意味多數專利採開放式解釋範圍，即系爭產品只要涵蓋全部技術特徵即構成侵權，即使具有額外元件亦然，侵權判斷門檻相對偏低。平均 Claim 數 16.4 件且平均獨立項 2.8 件，均高於換熱設備業界均值（14.2 件 / 2.1 件），顯示主要申請人對保護範圍佈局相當積極。</p><div class="kpis two"><div class="kpi"><b>16.4 件</b><span>平均 Claims 數</span><small>業界均值 14.2 件（高出 15%）</small></div><div class="kpi"><b>2.8 件</b><span>平均獨立項數</span><small>業界均值 2.1 件（高出 33%）</small></div></div><div class="hbs wide"><div class="hb"><span class="hb-l"><code>comprising</code>（開放式）</span><span class="hb-t"><i style="width:71%"></i></span><span class="hb-v">71%</span></div><div class="hb"><span class="hb-l"><code>consisting essentially of</code></span><span class="hb-t"><i style="width:18%"></i></span><span class="hb-v">18%</span></div><div class="hb"><span class="hb-l"><code>consisting of</code>（封閉式）</span><span class="hb-t"><i style="width:11%"></i></span><span class="hb-v">11%</span></div></div>
-    </section>
-    <section class="card" id="risk"><p class="eyebrow">侵權風險評估</p><h2>高風險專利清單（FTO 優先評估）</h2><p>下列專利依「comprising 型態 + 大族群 + 技術特徵覆蓋核心產品」標準篩選，建議委託方先行進行完整 Claim Chart 比對。</p>
-<div class="x"><table class="tbl"><tr><th>專利號</th><th>申請人</th><th>技術摘要</th><th>IPC</th><th>風險</th><th>備注</th></tr><tr><td class="nw"><code>US 10,677,534 B2</code></td><td><b>Alfa Laval</b></td><td>Brazed plate heat exchanger with turbulence promoters</td><td class="nw"><code>F28D 9/00</code></td><td><span class="lvl hi">高</span></td><td>comprising，8 獨立項，族群 32 件，覆蓋主流板式設計</td></tr><tr><td class="nw"><code>EP 3,425,321 B1</code></td><td><b>Danfoss</b></td><td>Refrigerant distributor for plate heat exchangers</td><td class="nw"><code>F28F 9/02</code></td><td><span class="lvl hi">高</span></td><td>comprising，冷媒分配領域核心布局，含台灣同族</td></tr><tr><td class="nw"><code>US 11,268,773 B2</code></td><td><b>Samsung SDI</b></td><td>Battery pack with plate-type cooling system</td><td class="nw"><code>H01M 10/613</code></td><td><span class="lvl md">中</span></td><td>僅限 EV 電池應用，若非 EV 客戶則風險較低</td></tr></table></div>
-    </section>
-    <section class="card" id="action"><p class="eyebrow">結論與策略建議 — CH.10</p><h2>策略行動建議</h2><p>依時間緊迫性排序，每條建議具體指向行動對象與預期效果。</p>
-<div class="act"><b>立即（0–1 個月）</b><ul><li>對 US 10,677,534 B2 及 EP 3,425,321 B1 進行完整 FTO 分析（Claim Chart 比對）</li><li>確認委託方現有產品是否落入 Alfa Laval 釺焊工藝獨立項</li></ul></div><div class="act"><b>3 個月內</b><ul><li>在 F28D 9/00 次類針對壓降降低技術申請 2–3 件防禦性專利</li><li>建立 EV 熱管理（H01M 10/613）的持續監控機制，重點追蹤三星、BorgWarner、Hanon</li></ul></div><div class="act"><b>6 個月內</b><ul><li>評估資料中心液冷（H05K 7/20）的技術佈局可行性，委外評估報告</li><li>針對「材料技術 × 壓降降低」空白區進行先行技術調查，確認是否無先前技術阻礙</li></ul></div>
-    </section>
-    <section class="card" id="review"><p class="eyebrow">審查備注</p><h2>請專利分析師重點審查事項</h2>
-<ol class="rqs"><li class="rq">技術功效矩陣的維度設定（技術手段 × 解決功效）是否符合板式換熱器實務分類標準？</li><li class="rq">高風險專利清單的篩選標準（comprising + 大族群）是否完整？是否遺漏其他重要篩選維度？</li><li class="rq">EV 熱管理的 IPC 分類（H01M 10/613）是否正確涵蓋板式換熱器在電池系統中的應用？</li><li class="rq">Claims 結構分析中，「comprising 比例 71%」的解讀方式與法律意涵是否準確？</li><li class="rq">各章節的「解析段落」格式（圖表 → 集中度判斷 → 策略意涵）是否達到可實際使用的深度？</li><li class="rq">本示範報告欠缺真實專利資料，實際執行時應補充哪些資訊才能達到可提交客戶的品質？</li></ol>
-    </section>
-
-    <p class="pback"><a href="kb-project-analysis.html">← 回到課程〈知識庫應用：專案分析〉</a><a href="patent-plan.html">← 看規劃書</a></p>
-  </main>
+  <div class="kbv">
+    <p class="kbv-bar"><a href="kb-project-analysis.html">← 回到課程〈知識庫應用：專案分析〉</a><a href="patent-plan.html">← 看規劃書</a></p>
+    <div class="page report-page" data-v-f55be9fe><div class="report-header" data-v-f55be9fe><div class="header-badges" data-v-f55be9fe><span class="rbadge draft" data-v-f55be9fe>示範報告</span><span class="rbadge review" data-v-f55be9fe>待審查</span></div><h1 class="report-title" data-v-f55be9fe>板式熱交換器與熱管理領域專利分析報告</h1><p class="report-subtitle" data-v-f55be9fe>IPC 檢索範圍：F28D · F28F · H01M · H05K · F25B　｜　分析期間：2014–2024</p><div class="report-meta-row" data-v-f55be9fe><span data-v-f55be9fe>總件數：<strong data-v-f55be9fe>3,247 件</strong></span><span data-v-f55be9fe>資料庫：USPTO · EPO · WIPO · JPO · CNIPA · TIPO</span><span data-v-f55be9fe>截止日：2024-09-30</span><span data-v-f55be9fe>版本：v0.1 示範稿</span></div><div class="report-notice" data-v-f55be9fe> 本報告為依據業界公開資訊製作之<strong data-v-f55be9fe>示範版本</strong>，數據僅供說明分析架構之用，非真實專利資料庫爬取結果。請專利分析師審查報告架構、分析格式與品質標準是否符合實務需求。 </div></div><section class="report-section" data-v-f55be9fe><div class="sec-label" data-v-f55be9fe>執行摘要</div><h2 class="sec-title" data-v-f55be9fe>Executive Summary</h2><p class="sec-desc" data-v-f55be9fe>供決策者在不閱讀全文的情況下做出初步判斷。</p><div class="summary-grid" data-v-f55be9fe><div class="summary-stat" data-v-f55be9fe><div class="stat-num" data-v-f55be9fe>3,247</div><div class="stat-label" data-v-f55be9fe>有效專利件數</div><div class="stat-sub" data-v-f55be9fe>11年，6 國資料庫</div></div><div class="summary-stat" data-v-f55be9fe><div class="stat-num" data-v-f55be9fe>+22%</div><div class="stat-label" data-v-f55be9fe>年均成長率</div><div class="stat-sub" data-v-f55be9fe>2019–2023 CAGR</div></div><div class="summary-stat highlight-stat" data-v-f55be9fe><div class="stat-num" data-v-f55be9fe>+38%</div><div class="stat-label" data-v-f55be9fe>EV 熱管理子領域 CAGR</div><div class="stat-sub" data-v-f55be9fe>H01M 10/613 — 最快成長</div></div><div class="summary-stat warn-stat" data-v-f55be9fe><div class="stat-num" data-v-f55be9fe>2</div><div class="stat-label" data-v-f55be9fe>高風險專利需 FTO</div><div class="stat-sub" data-v-f55be9fe>Alfa Laval / Danfoss 核心布局</div></div></div><div class="findings-list" data-v-f55be9fe><div class="critical finding-item" data-v-f55be9fe><span class="finding-no" data-v-f55be9fe>01</span><p data-v-f55be9fe>EV 電池熱管理（H01M）為最快成長子領域，2019–2023 年 CAGR 達 38%，已成為各大廠重點佈局戰場。</p></div><div class="critical finding-item" data-v-f55be9fe><span class="finding-no" data-v-f55be9fe>02</span><p data-v-f55be9fe>中國申請人自 2021 年起在年度申請量首次超越美國（各佔 29% vs 24%），顯示供應鏈本土化壓力加劇。</p></div><div class="high finding-item" data-v-f55be9fe><span class="finding-no" data-v-f55be9fe>03</span><p data-v-f55be9fe>Alfa Laval 在釺焊板式熱交換器核心技術（F28F 21/08）的佔比達 31%，構成進入壁壘；建議優先進行 FTO 分析。</p></div><div class="high finding-item" data-v-f55be9fe><span class="finding-no" data-v-f55be9fe>04</span><p data-v-f55be9fe>資料中心液冷（H05K 7/20）近兩年申請量成長 67%，技術佈局仍在快速形成期，存在先行佈局機會。</p></div><div class="medium finding-item" data-v-f55be9fe><span class="finding-no" data-v-f55be9fe>05</span><p data-v-f55be9fe>技術功效矩陣顯示「壓降降低 × 材料技術」、「重量輕量化 × 冷媒流路 / 材料 / 系統整合」為三個顯著空白區，可評估申請可行性。</p></div></div></section><section class="report-section" data-v-f55be9fe><div class="sec-label" data-v-f55be9fe>管理面分析 — Ch.4</div><h2 class="sec-title" data-v-f55be9fe>專利申請年度趨勢</h2><p class="sec-desc chart-analysis" data-v-f55be9fe><strong data-v-f55be9fe>成長期判斷：</strong>2018 年前呈平穩成長（年增約 3%）；2019 年起受 EV 電動化趨勢與資料中心液冷市場帶動，申請量加速增長，2019–2023 年 CAGR 達 22%。技術生命週期判斷：<strong data-v-f55be9fe>快速成長期</strong>，尚未進入成熟期，仍具佈局機會窗口。 </p><div class="bar-chart" data-v-f55be9fe><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar" style="height:71.7948717948718px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>210</span></div></div><div class="bar-year" data-v-f55be9fe>2014</div></div><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar" style="height:74.52991452991454px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>218</span></div></div><div class="bar-year" data-v-f55be9fe>2015</div></div><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar" style="height:76.92307692307692px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>225</span></div></div><div class="bar-year" data-v-f55be9fe>2016</div></div><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar" style="height:78.97435897435898px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>231</span></div></div><div class="bar-year" data-v-f55be9fe>2017</div></div><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar" style="height:81.36752136752136px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>238</span></div></div><div class="bar-year" data-v-f55be9fe>2018</div></div><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar" style="height:91.28205128205127px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>267</span></div></div><div class="bar-year" data-v-f55be9fe>2019</div></div><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar" style="height:101.88034188034187px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>298</span></div></div><div class="bar-year" data-v-f55be9fe>2020</div></div><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar" style="height:121.7094017094017px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>356</span></div></div><div class="bar-year" data-v-f55be9fe>2021</div></div><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar-highlight bar" style="height:140.85470085470087px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>412</span></div></div><div class="bar-year" data-v-f55be9fe>2022</div></div><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar-highlight bar" style="height:160px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>468</span></div></div><div class="bar-year" data-v-f55be9fe>2023</div></div><div class="bar-group" data-v-f55be9fe><div class="bar-wrap" data-v-f55be9fe><div class="bar-partial bar" style="height:110.76923076923077px;" data-v-f55be9fe><span class="bar-val" data-v-f55be9fe>324</span></div></div><div class="bar-year" data-v-f55be9fe>2024*</div></div></div><p class="chart-note" data-v-f55be9fe>* 2024 年資料截至 2024 Q3（約估全年 432 件），因 18 個月公開延遲，實際申請量可能高於顯示值。</p></section><section class="report-section" data-v-f55be9fe><div class="sec-label" data-v-f55be9fe>管理面分析 — Ch.5</div><h2 class="sec-title" data-v-f55be9fe>專利權人國別分析</h2><p class="sec-desc chart-analysis" data-v-f55be9fe><strong data-v-f55be9fe>集中度判斷：高度集中。</strong>中美日三國合計佔 68%，其中中國自 2021 年首次成為年度最大申請國（佔 29%），反映中國廠商在換熱技術的積極追趕，也顯示供應鏈本土化壓力持續加深。德國雖排名第四，但掌握 Alfa Laval（瑞典）、GEA、Kelvion 等核心技術廠商，技術實力與申請量不成比例，需特別關注其專利品質（大族群）。 </p><div class="country-bars" data-v-f55be9fe><div class="country-row" data-v-f55be9fe><div class="country-label" data-v-f55be9fe><span class="flag" data-v-f55be9fe>🇨🇳</span><span class="cname" data-v-f55be9fe>中國</span></div><div class="country-bar-wrap" data-v-f55be9fe><div class="country-bar" style="width:27%;" data-v-f55be9fe></div></div><div class="country-stats" data-v-f55be9fe><span class="cpct" data-v-f55be9fe>27%</span><span class="ccount" data-v-f55be9fe>(878)</span><span class="up ctrend" data-v-f55be9fe>+↑</span></div></div><div class="country-row" data-v-f55be9fe><div class="country-label" data-v-f55be9fe><span class="flag" data-v-f55be9fe>🇺🇸</span><span class="cname" data-v-f55be9fe>美國</span></div><div class="country-bar-wrap" data-v-f55be9fe><div class="country-bar" style="width:24%;" data-v-f55be9fe></div></div><div class="country-stats" data-v-f55be9fe><span class="cpct" data-v-f55be9fe>24%</span><span class="ccount" data-v-f55be9fe>(779)</span><span class="ctrend" data-v-f55be9fe>→</span></div></div><div class="country-row" data-v-f55be9fe><div class="country-label" data-v-f55be9fe><span class="flag" data-v-f55be9fe>🇯🇵</span><span class="cname" data-v-f55be9fe>日本</span></div><div class="country-bar-wrap" data-v-f55be9fe><div class="country-bar" style="width:17%;" data-v-f55be9fe></div></div><div class="country-stats" data-v-f55be9fe><span class="cpct" data-v-f55be9fe>17%</span><span class="ccount" data-v-f55be9fe>(551)</span><span class="ctrend" data-v-f55be9fe>→</span></div></div><div class="country-row" data-v-f55be9fe><div class="country-label" data-v-f55be9fe><span class="flag" data-v-f55be9fe>🇩🇪</span><span class="cname" data-v-f55be9fe>德國</span></div><div class="country-bar-wrap" data-v-f55be9fe><div class="country-bar" style="width:13%;" data-v-f55be9fe></div></div><div class="country-stats" data-v-f55be9fe><span class="cpct" data-v-f55be9fe>13%</span><span class="ccount" data-v-f55be9fe>(422)</span><span class="down ctrend" data-v-f55be9fe>↓</span></div></div><div class="country-row" data-v-f55be9fe><div class="country-label" data-v-f55be9fe><span class="flag" data-v-f55be9fe>🇰🇷</span><span class="cname" data-v-f55be9fe>韓國</span></div><div class="country-bar-wrap" data-v-f55be9fe><div class="country-bar" style="width:9%;" data-v-f55be9fe></div></div><div class="country-stats" data-v-f55be9fe><span class="cpct" data-v-f55be9fe>9%</span><span class="ccount" data-v-f55be9fe>(292)</span><span class="up ctrend" data-v-f55be9fe>↑</span></div></div><div class="country-row" data-v-f55be9fe><div class="country-label" data-v-f55be9fe><span class="flag" data-v-f55be9fe>🌐</span><span class="cname" data-v-f55be9fe>其他</span></div><div class="country-bar-wrap" data-v-f55be9fe><div class="country-bar" style="width:10%;" data-v-f55be9fe></div></div><div class="country-stats" data-v-f55be9fe><span class="cpct" data-v-f55be9fe>10%</span><span class="ccount" data-v-f55be9fe>(325)</span><span class="ctrend" data-v-f55be9fe>→</span></div></div></div></section><section class="report-section" data-v-f55be9fe><div class="sec-label" data-v-f55be9fe>管理面分析 — Ch.5</div><h2 class="sec-title" data-v-f55be9fe>Top 10 主要專利申請人</h2><p class="sec-desc chart-analysis" data-v-f55be9fe><strong data-v-f55be9fe>集中度判斷：中度集中。</strong>前五大申請人合計佔 34%，市場並無絕對壟斷者，但 Alfa Laval 在釺焊板式熱交換器核心工藝的佔比（約 31%）遠超過整體市佔率，具顯著技術壁壘。近 3 年 Samsung SDI、BorgWarner、Hanon Systems 等 EV 供應鏈廠商快速崛起，代表熱管理技術競爭正從傳統工業廠商向汽車電子廠商轉移。 </p><div class="applicant-list" data-v-f55be9fe><div class="applicant-row" data-v-f55be9fe><div class="app-rank" data-v-f55be9fe>01</div><div class="app-info" data-v-f55be9fe><span class="app-flag" data-v-f55be9fe>🇸🇪</span><span class="app-name" data-v-f55be9fe>Alfa Laval</span><span class="app-focus" data-v-f55be9fe>釺焊板式 / 工業用</span></div><div class="app-bar-wrap" data-v-f55be9fe><div class="app-bar" style="width:100%;" data-v-f55be9fe></div></div><div class="app-count" data-v-f55be9fe>312</div></div><div class="applicant-row" data-v-f55be9fe><div class="app-rank" data-v-f55be9fe>02</div><div class="app-info" data-v-f55be9fe><span class="app-flag" data-v-f55be9fe>🇩🇰</span><span class="app-name" data-v-f55be9fe>Danfoss</span><span class="app-focus" data-v-f55be9fe>冷媒系統 / HVAC</span></div><div class="app-bar-wrap" data-v-f55be9fe><div class="app-bar" style="width:79.16666666666666%;" data-v-f55be9fe></div></div><div class="app-count" data-v-f55be9fe>247</div></div><div class="applicant-row" data-v-f55be9fe><div class="app-rank" data-v-f55be9fe>03</div><div class="app-info" data-v-f55be9fe><span class="app-flag" data-v-f55be9fe>🇺🇸</span><span class="app-name" data-v-f55be9fe>Parker Hannifin</span><span class="app-focus" data-v-f55be9fe>航太 / 工業熱管理</span></div><div class="app-bar-wrap" data-v-f55be9fe><div class="app-bar" style="width:63.46153846153846%;" data-v-f55be9fe></div></div><div class="app-count" data-v-f55be9fe>198</div></div><div class="applicant-row" data-v-f55be9fe><div class="app-rank" data-v-f55be9fe>04</div><div class="app-info" data-v-f55be9fe><span class="app-flag" data-v-f55be9fe>🇩🇪</span><span class="app-name" data-v-f55be9fe>GEA Group</span><span class="app-focus" data-v-f55be9fe>食品工業 / 大型換熱</span></div><div class="app-bar-wrap" data-v-f55be9fe><div class="app-bar" style="width:56.41025641025641%;" data-v-f55be9fe></div></div><div class="app-count" data-v-f55be9fe>176</div></div><div class="applicant-row" data-v-f55be9fe><div class="app-rank" data-v-f55be9fe>05</div><div class="app-info" data-v-f55be9fe><span class="app-flag" data-v-f55be9fe>🇰🇷</span><span class="app-name" data-v-f55be9fe>Samsung SDI</span><span class="app-focus" data-v-f55be9fe>EV 電池熱管理</span></div><div class="app-bar-wrap" data-v-f55be9fe><div class="app-bar" style="width:50%;" data-v-f55be9fe></div></div><div class="app-count" data-v-f55be9fe>156</div></div><div class="applicant-row" data-v-f55be9fe><div class="app-rank" data-v-f55be9fe>06</div><div class="app-info" data-v-f55be9fe><span class="app-flag" data-v-f55be9fe>🇸🇪</span><span class="app-name" data-v-f55be9fe>SWEP International</span><span class="app-focus" data-v-f55be9fe>釺焊板式 (BPHE)</span></div><div class="app-bar-wrap" data-v-f55be9fe><div class="app-bar" style="width:45.83333333333333%;" data-v-f55be9fe></div></div><div class="app-count" data-v-f55be9fe>143</div></div><div class="applicant-row" data-v-f55be9fe><div class="app-rank" data-v-f55be9fe>07</div><div class="app-info" data-v-f55be9fe><span class="app-flag" data-v-f55be9fe>🇺🇸</span><span class="app-name" data-v-f55be9fe>Modine Mfg.</span><span class="app-focus" data-v-f55be9fe>汽車 / EV 冷卻</span></div><div class="app-bar-wrap" data-v-f55be9fe><div class="app-bar" style="width:41.02564102564102%;" data-v-f55be9fe></div></div><div class="app-count" data-v-f55be9fe>128</div></div><div class="applicant-row" data-v-f55be9fe><div class="app-rank" data-v-f55be9fe>08</div><div class="app-info" data-v-f55be9fe><span class="app-flag" data-v-f55be9fe>🇩🇪</span><span class="app-name" data-v-f55be9fe>Kelvion Holdings</span><span class="app-focus" data-v-f55be9fe>工業 / 數據中心</span></div><div class="app-bar-wrap" data-v-f55be9fe><div class="app-bar" style="width:38.141025641025635%;" data-v-f55be9fe></div></div><div class="app-count" data-v-f55be9fe>119</div></div><div class="applicant-row" data-v-f55be9fe><div class="app-rank" data-v-f55be9fe>09</div><div class="app-info" data-v-f55be9fe><span class="app-flag" data-v-f55be9fe>🇺🇸</span><span class="app-name" data-v-f55be9fe>BorgWarner</span><span class="app-focus" data-v-f55be9fe>汽車動力熱管理</span></div><div class="app-bar-wrap" data-v-f55be9fe><div class="app-bar" style="width:34.61538461538461%;" data-v-f55be9fe></div></div><div class="app-count" data-v-f55be9fe>108</div></div><div class="applicant-row" data-v-f55be9fe><div class="app-rank" data-v-f55be9fe>10</div><div class="app-info" data-v-f55be9fe><span class="app-flag" data-v-f55be9fe>🇰🇷</span><span class="app-name" data-v-f55be9fe>Hanon Systems</span><span class="app-focus" data-v-f55be9fe>EV 熱泵 / 空調</span></div><div class="app-bar-wrap" data-v-f55be9fe><div class="app-bar" style="width:31.08974358974359%;" data-v-f55be9fe></div></div><div class="app-count" data-v-f55be9fe>97</div></div></div></section><section class="report-section" data-v-f55be9fe><div class="sec-label" data-v-f55be9fe>技術面分析 — Ch.6</div><h2 class="sec-title" data-v-f55be9fe>IPC 技術領域分析（三階）</h2><p class="sec-desc chart-analysis" data-v-f55be9fe><strong data-v-f55be9fe>集中度判斷：高度集中。</strong>F28D + F28F 合計佔 70%，顯示核心專利仍集中於換熱裝置本體設計。H01M（14%）代表 EV 電池熱管理的跨界佈局，近 3 年佔比從 8% 升至 14%，是最值得關注的成長向量。H05K（電子散熱）與 F25B（冷媒系統）相對分散，仍具佈局空間。 </p><div class="ipc-bars" data-v-f55be9fe><div class="ipc-row" data-v-f55be9fe><div class="ipc-code" data-v-f55be9fe>F28D</div><div class="ipc-desc" data-v-f55be9fe>熱交換裝置（板型/管型/整體構型）</div><div class="ipc-bar-wrap" data-v-f55be9fe><div class="ipc-bar" style="width:42%;" data-v-f55be9fe></div></div><div class="ipc-pct" data-v-f55be9fe>42%</div></div><div class="ipc-row" data-v-f55be9fe><div class="ipc-code" data-v-f55be9fe>F28F</div><div class="ipc-desc" data-v-f55be9fe>熱交換裝置細部元件（板片/流道/材料）</div><div class="ipc-bar-wrap" data-v-f55be9fe><div class="ipc-bar" style="width:28%;" data-v-f55be9fe></div></div><div class="ipc-pct" data-v-f55be9fe>28%</div></div><div class="ipc-row" data-v-f55be9fe><div class="ipc-code" data-v-f55be9fe>H01M</div><div class="ipc-desc" data-v-f55be9fe>電化學程序（電池熱管理）</div><div class="ipc-bar-wrap" data-v-f55be9fe><div class="ipc-bar" style="width:14%;" data-v-f55be9fe></div></div><div class="ipc-pct" data-v-f55be9fe>14%</div></div><div class="ipc-row" data-v-f55be9fe><div class="ipc-code" data-v-f55be9fe>H05K</div><div class="ipc-desc" data-v-f55be9fe>印刷電路基板（電子設備散熱冷卻）</div><div class="ipc-bar-wrap" data-v-f55be9fe><div class="ipc-bar" style="width:8%;" data-v-f55be9fe></div></div><div class="ipc-pct" data-v-f55be9fe>8%</div></div><div class="ipc-row" data-v-f55be9fe><div class="ipc-code" data-v-f55be9fe>F25B</div><div class="ipc-desc" data-v-f55be9fe>冷凍/製冷裝置（冷媒換熱迴路）</div><div class="ipc-bar-wrap" data-v-f55be9fe><div class="ipc-bar" style="width:8%;" data-v-f55be9fe></div></div><div class="ipc-pct" data-v-f55be9fe>8%</div></div></div></section><section class="report-section" data-v-f55be9fe><div class="sec-label" data-v-f55be9fe>技術面分析 — Ch.7</div><h2 class="sec-title" data-v-f55be9fe>技術功效矩陣</h2><p class="sec-desc chart-analysis" data-v-f55be9fe><strong data-v-f55be9fe>熱點：</strong>「板片幾何設計 × 傳熱效率」（210 件）、「冷媒流路 × 熱均勻性」（201 件）為最密集佈局區，侵權風險最高，進入需謹慎。 <strong data-v-f55be9fe>機會空白：</strong>「冷媒流路 × 重量輕量化」、「材料技術 × 重量輕量化 / 壓降降低」及「系統整合 × 重量輕量化」顯示零件數空白，建議確認是否為技術盲點或技術上不可行的組合，若可行則具佈局機會。 </p><div class="matrix-wrap" data-v-f55be9fe><table class="matrix-table" data-v-f55be9fe><thead data-v-f55be9fe><tr data-v-f55be9fe><th class="matrix-corner" data-v-f55be9fe>技術手段 ╲ 功效</th><th data-v-f55be9fe>傳熱效率提升</th><th data-v-f55be9fe>壓降降低</th><th data-v-f55be9fe>重量輕量化</th><th data-v-f55be9fe>製造成本降低</th><th data-v-f55be9fe>耐久性提升</th><th data-v-f55be9fe>熱均勻性</th></tr></thead><tbody data-v-f55be9fe><tr data-v-f55be9fe><td class="matrix-tech" data-v-f55be9fe>板片幾何設計</td><td class="matrix-cell cell-hot" data-v-f55be9fe><span data-v-f55be9fe>210</span></td><td class="matrix-cell cell-high" data-v-f55be9fe><span data-v-f55be9fe>138</span></td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>45</span></td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>67</span></td><td class="matrix-cell cell-high" data-v-f55be9fe><span data-v-f55be9fe>88</span></td><td class="matrix-cell cell-high" data-v-f55be9fe><span data-v-f55be9fe>124</span></td></tr><tr data-v-f55be9fe><td class="matrix-tech" data-v-f55be9fe>釺焊工藝</td><td class="matrix-cell cell-hot" data-v-f55be9fe><span data-v-f55be9fe>156</span></td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>42</span></td><td class="matrix-cell cell-low" data-v-f55be9fe><span data-v-f55be9fe>18</span></td><td class="matrix-cell cell-high" data-v-f55be9fe><span data-v-f55be9fe>98</span></td><td class="matrix-cell cell-high" data-v-f55be9fe><span data-v-f55be9fe>112</span></td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>36</span></td></tr><tr data-v-f55be9fe><td class="matrix-tech" data-v-f55be9fe>冷媒流路設計</td><td class="matrix-cell cell-hot" data-v-f55be9fe><span data-v-f55be9fe>178</span></td><td class="matrix-cell cell-high" data-v-f55be9fe><span data-v-f55be9fe>89</span></td><td class="matrix-cell cell-blank" data-v-f55be9fe><span class="blank-mark" data-v-f55be9fe>—</span></td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>45</span></td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>67</span></td><td class="matrix-cell cell-hot" data-v-f55be9fe><span data-v-f55be9fe>201</span></td></tr><tr data-v-f55be9fe><td class="matrix-tech" data-v-f55be9fe>材料技術</td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>67</span></td><td class="matrix-cell cell-low" data-v-f55be9fe><span data-v-f55be9fe>23</span></td><td class="matrix-cell cell-blank" data-v-f55be9fe><span class="blank-mark" data-v-f55be9fe>—</span></td><td class="matrix-cell cell-low" data-v-f55be9fe><span data-v-f55be9fe>12</span></td><td class="matrix-cell cell-high" data-v-f55be9fe><span data-v-f55be9fe>88</span></td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>34</span></td></tr><tr data-v-f55be9fe><td class="matrix-tech" data-v-f55be9fe>系統整合控制</td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>45</span></td><td class="matrix-cell cell-low" data-v-f55be9fe><span data-v-f55be9fe>12</span></td><td class="matrix-cell cell-blank" data-v-f55be9fe><span class="blank-mark" data-v-f55be9fe>—</span></td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>78</span></td><td class="matrix-cell cell-mid" data-v-f55be9fe><span data-v-f55be9fe>34</span></td><td class="matrix-cell cell-hot" data-v-f55be9fe><span data-v-f55be9fe>188</span></td></tr></tbody></table></div><div class="matrix-legend" data-v-f55be9fe><span class="legend-item cell-hot" data-v-f55be9fe>201+ 高度佈局</span><span class="legend-item cell-high" data-v-f55be9fe>80–200 中高</span><span class="legend-item cell-mid" data-v-f55be9fe>30–79 中</span><span class="legend-item cell-low" data-v-f55be9fe>&lt;30 低密度</span><span class="legend-item cell-blank" data-v-f55be9fe>— 空白（機會區）</span></div></section><section class="report-section" data-v-f55be9fe><div class="sec-label" data-v-f55be9fe>技術面分析 — Ch.8</div><h2 class="sec-title" data-v-f55be9fe>申請專利範圍（Claims）結構分析</h2><p class="sec-desc chart-analysis" data-v-f55be9fe><strong data-v-f55be9fe>保護範圍廣度評估：</strong>comprising（開放式）佔 71%，意味多數專利採開放式解釋範圍，即系爭產品只要涵蓋全部技術特徵即構成侵權，即使具有額外元件亦然，侵權判斷門檻相對偏低。平均 Claim 數 16.4 件且平均獨立項 2.8 件，均高於換熱設備業界均值（14.2 件 / 2.1 件），顯示主要申請人對保護範圍佈局相當積極。 </p><div class="claims-stats" data-v-f55be9fe><div class="claim-row" data-v-f55be9fe><span class="claim-label" data-v-f55be9fe>平均 Claims 數</span><span class="claim-val accent" data-v-f55be9fe>16.4 件</span><span class="claim-note" data-v-f55be9fe>業界均值 14.2 件（高出 15%）</span></div><div class="claim-row" data-v-f55be9fe><span class="claim-label" data-v-f55be9fe>平均獨立項數</span><span class="claim-val accent" data-v-f55be9fe>2.8 件</span><span class="claim-note" data-v-f55be9fe>業界均值 2.1 件（高出 33%）</span></div></div><div class="transition-chart" data-v-f55be9fe><div class="trans-row" data-v-f55be9fe><div class="trans-label" data-v-f55be9fe>comprising（開放式）</div><div class="trans-bar-wrap" data-v-f55be9fe><div class="trans-warn trans-bar" style="width:71%;" data-v-f55be9fe></div></div><div class="trans-pct" data-v-f55be9fe>71%</div></div><div class="trans-row" data-v-f55be9fe><div class="trans-label" data-v-f55be9fe>consisting essentially of</div><div class="trans-bar-wrap" data-v-f55be9fe><div class="trans-bar" style="width:18%;" data-v-f55be9fe></div></div><div class="trans-pct" data-v-f55be9fe>18%</div></div><div class="trans-row" data-v-f55be9fe><div class="trans-label" data-v-f55be9fe>consisting of（封閉式）</div><div class="trans-bar-wrap" data-v-f55be9fe><div class="trans-bar" style="width:11%;" data-v-f55be9fe></div></div><div class="trans-pct" data-v-f55be9fe>11%</div></div></div></section><section class="report-section" data-v-f55be9fe><div class="sec-label" data-v-f55be9fe>侵權風險評估</div><h2 class="sec-title" data-v-f55be9fe>高風險專利清單（FTO 優先評估）</h2><p class="sec-desc" data-v-f55be9fe>下列專利依「comprising 型態 + 大族群 + 技術特徵覆蓋核心產品」標準篩選，建議委託方先行進行完整 Claim Chart 比對。</p><div class="risk-table-wrap" data-v-f55be9fe><table class="risk-table" data-v-f55be9fe><thead data-v-f55be9fe><tr data-v-f55be9fe><th data-v-f55be9fe>專利號</th><th data-v-f55be9fe>申請人</th><th data-v-f55be9fe>技術摘要</th><th data-v-f55be9fe>IPC</th><th data-v-f55be9fe>風險</th><th data-v-f55be9fe>備注</th></tr></thead><tbody data-v-f55be9fe><tr data-v-f55be9fe><td class="mono" data-v-f55be9fe>US 10,677,534 B2</td><td data-v-f55be9fe><strong data-v-f55be9fe>Alfa Laval</strong></td><td data-v-f55be9fe>Brazed plate heat exchanger with turbulence promoters</td><td class="mono small" data-v-f55be9fe>F28D 9/00</td><td data-v-f55be9fe><span class="risk-high risk-badge" data-v-f55be9fe>高</span></td><td class="small dim" data-v-f55be9fe>comprising，8 獨立項，族群 32 件，覆蓋主流板式設計</td></tr><tr data-v-f55be9fe><td class="mono" data-v-f55be9fe>EP 3,425,321 B1</td><td data-v-f55be9fe><strong data-v-f55be9fe>Danfoss</strong></td><td data-v-f55be9fe>Refrigerant distributor for plate heat exchangers</td><td class="mono small" data-v-f55be9fe>F28F 9/02</td><td data-v-f55be9fe><span class="risk-high risk-badge" data-v-f55be9fe>高</span></td><td class="small dim" data-v-f55be9fe>comprising，冷媒分配領域核心布局，含台灣同族</td></tr><tr data-v-f55be9fe><td class="mono" data-v-f55be9fe>US 11,268,773 B2</td><td data-v-f55be9fe><strong data-v-f55be9fe>Samsung SDI</strong></td><td data-v-f55be9fe>Battery pack with plate-type cooling system</td><td class="mono small" data-v-f55be9fe>H01M 10/613</td><td data-v-f55be9fe><span class="risk-mid risk-badge" data-v-f55be9fe>中</span></td><td class="small dim" data-v-f55be9fe>僅限 EV 電池應用，若非 EV 客戶則風險較低</td></tr></tbody></table></div></section><section class="report-section" data-v-f55be9fe><div class="sec-label" data-v-f55be9fe>結論與策略建議 — Ch.10</div><h2 class="sec-title" data-v-f55be9fe>策略行動建議</h2><p class="sec-desc" data-v-f55be9fe>依時間緊迫性排序，每條建議具體指向行動對象與預期效果。</p><div class="action-list" data-v-f55be9fe><div class="action-group" data-v-f55be9fe><div class="action-timing" data-v-f55be9fe>立即（0–1 個月）</div><ul class="action-items" data-v-f55be9fe><li data-v-f55be9fe>對 US 10,677,534 B2 及 EP 3,425,321 B1 進行完整 FTO 分析（Claim Chart 比對）</li><li data-v-f55be9fe>確認委託方現有產品是否落入 Alfa Laval 釺焊工藝獨立項</li></ul></div><div class="action-group" data-v-f55be9fe><div class="action-timing" data-v-f55be9fe>3 個月內</div><ul class="action-items" data-v-f55be9fe><li data-v-f55be9fe>在 F28D 9/00 次類針對壓降降低技術申請 2–3 件防禦性專利</li><li data-v-f55be9fe>建立 EV 熱管理（H01M 10/613）的持續監控機制，重點追蹤三星、BorgWarner、Hanon</li></ul></div><div class="action-group" data-v-f55be9fe><div class="action-timing" data-v-f55be9fe>6 個月內</div><ul class="action-items" data-v-f55be9fe><li data-v-f55be9fe>評估資料中心液冷（H05K 7/20）的技術佈局可行性，委外評估報告</li><li data-v-f55be9fe>針對「材料技術 × 壓降降低」空白區進行先行技術調查，確認是否無先前技術阻礙</li></ul></div></div></section><section class="report-section review-section" data-v-f55be9fe><div class="sec-label" data-v-f55be9fe>審查備注</div><h2 class="sec-title" data-v-f55be9fe>請專利分析師重點審查事項</h2><div class="review-grid" data-v-f55be9fe><div class="review-item" data-v-f55be9fe><div class="review-num" data-v-f55be9fe>1</div><div data-v-f55be9fe>技術功效矩陣的維度設定（技術手段 × 解決功效）是否符合板式換熱器實務分類標準？</div></div><div class="review-item" data-v-f55be9fe><div class="review-num" data-v-f55be9fe>2</div><div data-v-f55be9fe>高風險專利清單的篩選標準（comprising + 大族群）是否完整？是否遺漏其他重要篩選維度？</div></div><div class="review-item" data-v-f55be9fe><div class="review-num" data-v-f55be9fe>3</div><div data-v-f55be9fe>EV 熱管理的 IPC 分類（H01M 10/613）是否正確涵蓋板式換熱器在電池系統中的應用？</div></div><div class="review-item" data-v-f55be9fe><div class="review-num" data-v-f55be9fe>4</div><div data-v-f55be9fe>Claims 結構分析中，「comprising 比例 71%」的解讀方式與法律意涵是否準確？</div></div><div class="review-item" data-v-f55be9fe><div class="review-num" data-v-f55be9fe>5</div><div data-v-f55be9fe>各章節的「解析段落」格式（圖表 → 集中度判斷 → 策略意涵）是否達到可實際使用的深度？</div></div><div class="review-item" data-v-f55be9fe><div class="review-num" data-v-f55be9fe>6</div><div data-v-f55be9fe>本示範報告欠缺真實專利資料，實際執行時應補充哪些資訊才能達到可提交客戶的品質？</div></div></div></section></div>
+    <p class="kbv-bar"><a href="kb-project-analysis.html">← 回到課程〈知識庫應用：專案分析〉</a><a href="patent-plan.html">← 看規劃書</a></p>
+    <p class="kbv-gen">本頁由 Vue 原始碼產生（src/patent/PatentReport.vue），請勿直接修改本檔；改原始碼後執行 npm run build。</p>
+  </div>
   <script src="assets/nav.js"></script>
 </body>
 </html>
