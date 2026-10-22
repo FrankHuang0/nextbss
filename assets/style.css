@@ -190,3 +190,17 @@ nav.top .nb-tbtn{padding:12px 18px;border:0;box-shadow:0 6px 24px #0002;font-siz
 [data-theme="dark"] .mp .a{background:#262b33}[data-theme="dark"] .mp sup{background:#2f3d57;color:#c7d7f5}
 [data-theme="dark"] .mp .tile,[data-theme="dark"] .mp .in,[data-theme="dark"] .mp .add{border-color:#3a414b;color:#a3abb5}
 [data-theme="dark"] .mock figcaption{background:#1f232a;color:#a3abb5;border-color:#3a414b}
+/* Copilot 桌面版：對話節錄、介面示意的模式選單 */
+.convo{list-style:none;margin:8px 0 18px;padding:0;display:grid;gap:8px}
+.convo li{display:grid;grid-template-columns:76px 1fr;gap:10px;align-items:start}
+.convo li>span{font-size:.78rem;font-weight:700;text-align:center;padding:5px 0;border-radius:999px;background:var(--tint);color:var(--p);margin-top:4px}
+.convo li>p{margin:0;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);line-height:1.7}
+.convo .u>p{background:var(--tint2);border-color:var(--tline)}
+.convo .ai>span{background:var(--ink);color:var(--surface)}
+.convo .tip>span{background:var(--p);color:var(--on-p)}
+.convo .tip>p{border-style:dashed;border-color:var(--tline);color:var(--mut);font-size:.94rem}
+@media(max-width:600px){.convo li{grid-template-columns:1fr;gap:4px}.convo li>span{justify-self:start;padding:3px 12px;margin:0}}
+.mp .opt{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.mp .opt span{border:1px solid #d9dce1;border-radius:6px;padding:2px 8px;font-size:.78rem;color:#555}
+[data-theme="dark"] .mp .opt span{border-color:#3a414b;color:#a3abb5}
+[data-theme="dark"] .convo .ai>span{background:#e8eaed;color:#1f232a}
+[data-theme="dark"] .convo .u>span{background:rgba(255,255,255,.14);color:#fff}
