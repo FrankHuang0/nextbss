@@ -4,33 +4,484 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>專利分析 AI 協作系統：規劃書</title>
-  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/patent.css">
+  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
+  <style>
+.kbv {
+  --bg: #0d0d12;
+  --surface: #17171f;
+  --surface-2: #1e1e29;
+  --border: #2a2a38;
+  --text: #f2f2f7;
+  --text-dim: #9797a8;
+  --text-faint: #6b6b7c;
+  --accent: #7c5cff;
+  --accent-hover: #8f72ff;
+  --accent-dim: rgba(124, 92, 255, 0.15);
+  --success: #22c55e;
+  --success-dim: rgba(34, 197, 94, 0.12);
+  --error: #f2555a;
+  --error-dim: rgba(242, 85, 90, 0.12);
+  --warn: #f5a623;
+  --warn-dim: rgba(245, 166, 35, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.kbv * {
+  box-sizing: border-box;
+}
+
+.kbv,
+.kbv {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.kbv {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.kbv h1,
+.kbv h2,
+.kbv h3 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
+}
+
+.kbv h1 {
+  font-size: 22px;
+}
+
+.kbv h2 {
+  font-size: 16px;
+}
+
+.kbv h3 {
+  font-size: 14px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.kbv p {
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.kbv a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.kbv input,
+.kbv textarea,
+.kbv select {
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.kbv input::placeholder,
+.kbv textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.kbv input:focus,
+.kbv textarea:focus,
+.kbv select:focus {
+  border-color: var(--accent);
+}
+
+.kbv input:disabled,
+.kbv button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.kbv button {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  background: var(--accent);
+  color: white;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.kbv button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.kbv button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.kbv button.secondary {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.kbv button.secondary:hover:not(:disabled) {
+  background: var(--border);
+}
+
+.kbv .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.kbv .label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.kbv .field {
+  margin-bottom: 16px;
+}
+
+.kbv .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.kbv .badge.success {
+  background: var(--success-dim);
+  color: var(--success);
+}
+
+.kbv .badge.error {
+  background: var(--error-dim);
+  color: var(--error);
+}
+
+.kbv .badge.kbv-warn {
+  background: var(--warn-dim);
+  color: var(--warn);
+}
+
+.kbv .badge.neutral {
+  background: var(--surface-2);
+  color: var(--text-dim);
+}
+
+.kbv .error-text {
+  color: var(--error);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.kbv .page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  width: 100%;
+}
+
+.kbv .page-header {
+  margin-bottom: 24px;
+}
+
+.kbv .page-header p {
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.kbv ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.kbv ::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.kbv ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.plan-page[data-v-b4aaabd6] { max-width: 900px; margin: 0 auto; padding: 0 24px 80px;
+}
+
+/* HEADER */
+.plan-header[data-v-b4aaabd6] {
+  padding: 48px 0 36px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+.header-badges[data-v-b4aaabd6] { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.pbadge[data-v-b4aaabd6] {
+  display: inline-block; padding: 2px 9px; border-radius: 3px;
+  font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  border: 1px solid;
+}
+.pbadge.draft[data-v-b4aaabd6] { background: color-mix(in srgb, var(--warn) 12%, transparent); color: var(--warn); border-color: var(--warn);
+}
+.pbadge.review[data-v-b4aaabd6] { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); border-color: var(--accent);
+}
+.plan-title[data-v-b4aaabd6] { font-size: 1.9rem; font-weight: 700; line-height: 1.2; margin-bottom: 6px;
+}
+.plan-subtitle[data-v-b4aaabd6] { color: var(--text-dim); font-size: 1rem; margin-bottom: 18px;
+}
+.plan-meta-row[data-v-b4aaabd6] { display: flex; gap: 20px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-faint);
+}
+.plan-meta-row strong[data-v-b4aaabd6] { color: var(--text-dim);
+}
+
+/* SECTIONS */
+.plan-section[data-v-b4aaabd6] { padding: 52px 0 0;
+}
+.sec-eyebrow[data-v-b4aaabd6] { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px;
+}
+.sec-title[data-v-b4aaabd6] { font-size: 1.35rem; font-weight: 700; margin-bottom: 8px;
+}
+.sec-desc[data-v-b4aaabd6] { color: var(--text-dim); font-size: 13.5px; margin-bottom: 28px; max-width: 680px; line-height: 1.6;
+}
+
+/* TYPE GRID */
+.type-grid[data-v-b4aaabd6] { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 0;
+}
+.type-card[data-v-b4aaabd6] { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px;
+}
+.type-name[data-v-b4aaabd6] { font-weight: 700; font-size: 13.5px; margin-bottom: 5px;
+}
+.type-desc[data-v-b4aaabd6] { font-size: 12.5px; color: var(--text-dim); line-height: 1.5;
+}
+.type-name.accent[data-v-b4aaabd6] { color: var(--accent);
+}
+.type-name.green[data-v-b4aaabd6] { color: var(--success);
+}
+.type-name.kbv-warn[data-v-b4aaabd6] { color: var(--warn);
+}
+.type-name.dim[data-v-b4aaabd6] { color: var(--text-faint);
+}
+
+/* TIMELINE */
+.kbv-timeline[data-v-b4aaabd6] { position: relative;
+}
+.kbv-timeline[data-v-b4aaabd6]::before {
+  content: ""; position: absolute;
+  left: 21px; top: 32px; bottom: 32px;
+  width: 2px; background: var(--border);
+}
+.phase[data-v-b4aaabd6] { display: flex; gap: 18px; margin-bottom: 20px; align-items: flex-start;
+}
+.phase-dot[data-v-b4aaabd6] {
+  flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; z-index: 1;
+  border: 2px solid var(--border); background: var(--surface); color: var(--text-dim);
+}
+.phase.lead-ai .phase-dot[data-v-b4aaabd6] { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+}
+.phase.lead-human .phase-dot[data-v-b4aaabd6] { border-color: var(--success); color: var(--success); background: color-mix(in srgb, var(--success) 10%, var(--surface));
+}
+.phase.lead-both .phase-dot[data-v-b4aaabd6] { border-color: #38bdf8; color: #38bdf8; background: color-mix(in srgb, #38bdf8 10%, var(--surface));
+}
+.phase-card[data-v-b4aaabd6] { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.phase-head[data-v-b4aaabd6] {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 15px; border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 60%, var(--bg));
+}
+.phase-num[data-v-b4aaabd6] { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-faint);
+}
+.phase-name[data-v-b4aaabd6] { font-weight: 700; font-size: 14px; flex: 1;
+}
+.phase-lead-badge[data-v-b4aaabd6] { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 3px;
+}
+.badge-ai[data-v-b4aaabd6] { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent);
+}
+.badge-human[data-v-b4aaabd6] { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success);
+}
+.badge-both[data-v-b4aaabd6] { background: color-mix(in srgb, #38bdf8 12%, transparent); color: #38bdf8;
+}
+.phase-body[data-v-b4aaabd6] { display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+.task-col[data-v-b4aaabd6] { padding: 13px 15px; font-size: 13px;
+}
+.task-col + .task-col[data-v-b4aaabd6] { border-left: 1px solid var(--border);
+}
+.task-col-title[data-v-b4aaabd6] { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px;
+}
+.ai-col .task-col-title[data-v-b4aaabd6] { color: var(--accent);
+}
+.human-col .task-col-title[data-v-b4aaabd6] { color: var(--success);
+}
+.task-col ul[data-v-b4aaabd6] { list-style: none; padding: 0;
+}
+.task-col ul li[data-v-b4aaabd6] { padding: 2px 0 2px 13px; position: relative; color: var(--text-dim); line-height: 1.5; font-size: 12.5px;
+}
+.ai-col ul li[data-v-b4aaabd6]::before { content: "▸"; position: absolute; left: 0; color: var(--accent); font-size: 10px; top: 5px;
+}
+.human-col ul li[data-v-b4aaabd6]::before { content: "▸"; position: absolute; left: 0; color: var(--success); font-size: 10px; top: 5px;
+}
+.phase-output[data-v-b4aaabd6] { padding: 9px 15px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--text-dim); background: color-mix(in srgb, var(--surface) 60%, var(--bg));
+}
+.phase-output strong[data-v-b4aaabd6] { color: var(--text);
+}
+.phase-gate[data-v-b4aaabd6] { padding: 7px 15px; border-top: 1px solid var(--border); font-size: 12px; color: var(--warn); background: color-mix(in srgb, var(--warn) 8%, transparent);
+}
+.phase-gate[data-v-b4aaabd6]::before { content: "🔒 通過條件："; font-weight: 700;
+}
+
+/* CHAPTERS */
+.chapter-group[data-v-b4aaabd6] { margin-bottom: 32px;
+}
+.chapter-group-label[data-v-b4aaabd6] { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-faint); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 12px;
+}
+.chapter-card[data-v-b4aaabd6] { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 10px;
+}
+.chapter-head[data-v-b4aaabd6] { display: flex; align-items: flex-start; gap: 12px; padding: 13px 17px; border-bottom: 1px solid var(--border);
+}
+.chapter-num[data-v-b4aaabd6] { font-size: 12px; font-weight: 700; color: var(--text-faint); flex-shrink: 0; min-width: 42px; padding-top: 2px;
+}
+.chapter-title[data-v-b4aaabd6] { font-weight: 700; font-size: 14.5px; margin-bottom: 2px;
+}
+.chapter-purpose[data-v-b4aaabd6] { font-size: 12.5px; color: var(--text-dim);
+}
+.chapter-body[data-v-b4aaabd6] { display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+.chapter-col[data-v-b4aaabd6] { padding: 13px 17px; font-size: 12.5px;
+}
+.chapter-col + .chapter-col[data-v-b4aaabd6] { border-left: 1px solid var(--border);
+}
+.chapter-col-title[data-v-b4aaabd6] { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px;
+}
+.chapter-col-title.accent[data-v-b4aaabd6] { color: var(--accent);
+}
+.chapter-col-title.green[data-v-b4aaabd6] { color: var(--success);
+}
+.chapter-col ul[data-v-b4aaabd6] { list-style: none; padding: 0;
+}
+.chapter-col ul li[data-v-b4aaabd6] { padding: 2px 0 2px 13px; position: relative; color: var(--text-dim); line-height: 1.5;
+}
+.chapter-col ul li[data-v-b4aaabd6]::before { content: "–"; position: absolute; left: 0; color: var(--text-faint);
+}
+.chapter-quality[data-v-b4aaabd6] { padding: 9px 17px; border-top: 1px solid var(--border); font-size: 12px; color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+.chapter-quality[data-v-b4aaabd6]::before { content: "◎ 品質要求："; font-weight: 700;
+}
+
+/* QUALITY / VALUE CHAIN */
+.value-chain[data-v-b4aaabd6] { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 28px;
+}
+.vc-step[data-v-b4aaabd6] { padding: 14px; border-right: 1px solid var(--border); font-size: 13px; background: var(--surface);
+}
+.vc-step[data-v-b4aaabd6]:last-child { border-right: none;
+}
+.vc-tier[data-v-b4aaabd6] { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 4px;
+}
+.vc-name[data-v-b4aaabd6] { font-weight: 700; margin-bottom: 3px;
+}
+.vc-who[data-v-b4aaabd6] { font-size: 12px; color: var(--text-dim);
+}
+.vc-stop[data-v-b4aaabd6] { font-size: 11px; color: var(--warn); margin-top: 6px; font-weight: 600;
+}
+.vc-step.kbv-bad[data-v-b4aaabd6] { background: color-mix(in srgb, var(--error) 8%, var(--surface)); border-top: 3px solid var(--error);
+}
+.vc-step.min[data-v-b4aaabd6] { background: color-mix(in srgb, var(--warn) 8%, var(--surface)); border-top: 3px solid var(--warn);
+}
+.vc-step.kbv-good[data-v-b4aaabd6] { background: color-mix(in srgb, var(--success) 8%, var(--surface)); border-top: 3px solid var(--success);
+}
+.vc-step.best[data-v-b4aaabd6] { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); border-top: 3px solid var(--accent);
+}
+
+/* COMPARISON TABLE */
+.compare-title[data-v-b4aaabd6] { font-size: 1rem; font-weight: 700; margin: 32px 0 14px;
+}
+.compare-table-wrap[data-v-b4aaabd6] { overflow-x: auto; margin-bottom: 20px;
+}
+.compare-table[data-v-b4aaabd6] { width: 100%; border-collapse: collapse; font-size: 13px;
+}
+.compare-table th[data-v-b4aaabd6] { text-align: left; padding: 9px 13px; background: color-mix(in srgb, var(--surface) 60%, var(--bg)); border: 1px solid var(--border); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--text-dim);
+}
+.compare-table td[data-v-b4aaabd6] { padding: 10px 13px; border: 1px solid var(--border); vertical-align: top; line-height: 1.55;
+}
+.compare-table tr:hover td[data-v-b4aaabd6] { background: color-mix(in srgb, var(--surface) 40%, var(--bg));
+}
+.dim-cell[data-v-b4aaabd6] { font-weight: 600; color: var(--text-dim); font-size: 12px; white-space: nowrap;
+}
+.bad-th[data-v-b4aaabd6] { color: var(--error);
+}
+.good-th[data-v-b4aaabd6] { color: var(--success);
+}
+.bad-cell[data-v-b4aaabd6] { color: color-mix(in srgb, var(--error) 80%, var(--text-dim));
+}
+.good-cell[data-v-b4aaabd6] { color: var(--text);
+}
+
+/* CALLOUT */
+.kbv-callout[data-v-b4aaabd6] { border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 8%, transparent); padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13.5px; margin: 20px 0; color: var(--text-dim); line-height: 1.6;
+}
+.kbv-callout strong[data-v-b4aaabd6] { color: var(--warn);
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+.phase-body[data-v-b4aaabd6] { grid-template-columns: 1fr;
+}
+.chapter-body[data-v-b4aaabd6] { grid-template-columns: 1fr;
+}
+.value-chain[data-v-b4aaabd6] { grid-template-columns: 1fr 1fr;
+}
+.plan-title[data-v-b4aaabd6] { font-size: 1.4rem;
+}
+}
+@media (max-width: 400px) {
+.value-chain[data-v-b4aaabd6] { grid-template-columns: 1fr;
+}
+}
+
+
+.kbv{min-height:70vh;padding:110px 0 24px}
+@media (max-width:700px){.kbv{padding-top:76px}}
+.kbv .kbv-bar{width:100%;max-width:880px;margin:0 auto;padding:16px 24px 0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:14px}
+.kbv .kbv-bar a{color:var(--accent);text-decoration:underline}
+.kbv .kbv-gen{width:100%;max-width:880px;margin:0 auto;padding:0 24px;font-size:12px;color:var(--text-faint)}
+
+  </style>
 </head>
 <body>
-  <header>
-    <h1>專利分析 AI 協作系統：規劃書</h1>
-    <p>人機協作流程設計 × 分析報告標準範本。這份規劃書由 AI 依知識庫的 49 篇專利分析文獻產出，交由專利分析師審查。</p>
-    <div class="stats"><span>草案 V0.1</span><span>待專利師審查</span><span>6 階段流程</span><span>10 章範本</span></div>
-  </header>
-  <main class="pt">
-    <p class="pback"><a href="kb-project-analysis.html">← 回到課程〈知識庫應用：專案分析〉</a><a href="patent-report.html">看示範報告 →</a></p>
-    <nav class="card"><ul class="toc"><li><a href="#types">服務類型</a></li><li><a href="#phases">六階段流程</a></li><li><a href="#template">10 章範本</a></li><li><a href="#quality">品質標準</a></li></ul></nav>
-    <dl class="pmeta card"><div><dt>日期</dt><dd>2026-08-06</dd></div><div><dt>版本</dt><dd>0.1 草案</dd></div><div><dt>審查對象</dt><dd>專利分析師 / IP 工程師</dd></div><div><dt>知識庫依據</dt><dd>49 篇專利分析文獻</dd></div></dl>
-    <section class="card" id="types"><p class="eyebrow">背景說明</p><h2>分析服務類型與設計原則</h2><p>本系統涵蓋四種主要專利分析服務類型。AI 負責結構化、重複性的工作；專業人員負責語義判斷、策略洞察與風險評估。</p>
-<div class="ptypes"><div class="ptype"><b>技術佈局分析</b><span>Technology Landscape — 掌握某技術領域的整體專利佈局態勢與競爭格局</span></div><div class="ptype"><b>FTO 自由實施評估</b><span>Freedom-to-Operate — 評估特定產品或方法是否可能侵犯他人現有有效專利</span></div><div class="ptype"><b>白地分析</b><span>White Space Analysis — 識別技術 × 功效矩陣中的未佈局空間，尋找申請機會</span></div><div class="ptype"><b>競爭對手監控</b><span>Competitor Watch — 持續追蹤競爭對手的專利申請動向，預判技術策略</span></div></div>
-    </section>
-    <section class="card" id="phases"><p class="eyebrow">協作流程</p><h2>六階段人機協作流程</h2><p>AI 負責結構化、重複性的工作；專利師負責語義判斷、策略洞察與風險評估。每個通過條件（🔒）均需人工書面確認。</p>
-<ol class="phs"><li class="ph"><div class="ph-h"><span class="ph-n">PH.1</span><b>需求釐清與範圍定義</b><span class="ph-who">AI + 人工</span></div><div class="cols"><div class="ai"><b>AI 執行</b><ul><li>解析委託方需求描述，初步建議 IPC 範圍</li><li>生成技術關鍵字清單草稿</li><li>提供競爭對手初步名單</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>確認分析目的（FTO / 佈局 / 白地 / 競爭）</li><li>核定 IPC 範圍與檢索策略</li><li>確定報告受眾與決策情境</li></ul></div></div><p class="ph-out">產出：<b>確認需求文件：分析目的、IPC 範圍、競爭標的、預算</b></p><p class="gate">🔒 通過條件：委託方書面確認範圍，避免後段重做</p></li><li class="ph"><div class="ph-h"><span class="ph-n">PH.2</span><b>資料蒐集與結構化</b><span class="ph-who">AI 主導</span></div><div class="cols"><div class="ai"><b>AI 執行</b><ul><li>跨 DB 批量檢索（USPTO/EPO/WIPO/JPO/CNIPA）</li><li>噪音過濾（非相關申請人 / 過期 / 廢止）</li><li>申請人標準化（集團合併、前後母子公司）</li><li>輸出結構化資料集（CSV / JSON）</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>抽樣驗證 AI 篩選結果（5–10%）</li><li>確認申請人分類正確</li><li>補充 DB 未涵蓋的技術標準專利</li></ul></div></div><p class="ph-out">產出：<b>乾淨資料集：有效專利件數、申請人、IPC、日期、族群</b></p><p class="gate">🔒 通過條件：人工驗錯率 &lt; 5% 方可進入下一階段</p></li><li class="ph"><div class="ph-h"><span class="ph-n">PH.3</span><b>初步分析與視覺化</b><span class="ph-who">AI 主導</span></div><div class="cols"><div class="ai"><b>AI 執行</b><ul><li>年度趨勢、國別、申請人排名</li><li>技術功效矩陣（IPC × 關鍵字）</li><li>初步 Claims 統計（comprising 比例、獨立項均數）</li><li>生成摘要段落草稿</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>驗證圖表數據與原始資料一致</li><li>標注異常值與解讀假說</li><li>決定哪些圖表進入正式報告</li></ul></div></div><p class="ph-out">產出：<b>分析草稿：12–15 張圖表 + AI 生成摘要段落</b></p></li><li class="ph"><div class="ph-h"><span class="ph-n">PH.4</span><b>專業解讀與語意判斷</b><span class="ph-who">人工主導</span></div><div class="cols"><div class="ai"><b>AI 執行</b><ul><li>提供相關先前技術文獻</li><li>協助解析 Claims 技術特徵</li><li>生成技術術語對照表</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>逐份解讀核心專利 Claims 結構</li><li>評估法律效力（有效性 / 可規避性）</li><li>判斷技術白地的商業可行性</li><li>評估 FTO 風險等級</li></ul></div></div><p class="ph-out">產出：<b>Claims 分析表：重點專利逐項拆解 + 侵權風險評級</b></p><p class="gate">🔒 通過條件：每份高風險專利須有專利師書面判斷意見</p></li><li class="ph"><div class="ph-h"><span class="ph-n">PH.5</span><b>策略轉化</b><span class="ph-who">AI + 人工</span></div><div class="cols"><div class="ai"><b>AI 執行</b><ul><li>依分析結果生成策略選項矩陣</li><li>提供同業策略行為的歷史案例</li><li>生成行動計畫初稿</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>評估策略可行性（研發能力 / 預算 / 時程）</li><li>確定優先行動項目</li><li>加入市場、法律、營運限制</li></ul></div></div><p class="ph-out">產出：<b>策略建議：3 個時間維度（即時 / 3M / 6M）× 具體行動</b></p></li><li class="ph"><div class="ph-h"><span class="ph-n">PH.6</span><b>報告產出與品管</b><span class="ph-who">AI + 人工</span></div><div class="cols"><div class="ai"><b>AI 執行</b><ul><li>依範本組裝各章節</li><li>生成執行摘要草稿</li><li>格式檢查（圖表標注、引用格式）</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>全文審閱與修訂</li><li>確認策略建議與委託方情境一致</li><li>簽署品質確認（QA Sign-off）</li></ul></div></div><p class="ph-out">產出：<b>交付報告（PDF）+ 原始資料包 + Claim Chart 附件</b></p><p class="gate">🔒 通過條件：專利師 QA Sign-off 後方可交付</p></li></ol>
-    </section>
-    <section class="card" id="template"><p class="eyebrow">報告範本</p><h2>標準專利分析報告章節架構</h2><p>每章均標注 AI 可執行事項與人工判斷範圍，以及最低品質要求（◎ 品質要求）。</p>
-<h3 class="grp">核心必備（每份報告均須包含）</h3><div class="chp"><div class="ph-h"><span class="ph-n">Ch.01</span><b>執行摘要</b><small>Executive Summary</small></div><div class="cols"><div class="ai"><b>AI 可執行</b><ul><li>生成關鍵數字統計（件數 / 成長率 / 集中度）</li><li>初步列點發現</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>撰寫策略意涵與決策建議</li><li>確認摘要與報告正文一致</li></ul></div></div><p class="qreq">◎ 品質要求：決策者在不閱讀全文的情況下，可知道：①最重要的競爭態勢、②主要風險、③立即應採取的行動。禁止僅列數字，必須提供判斷。</p></div><div class="chp"><div class="ph-h"><span class="ph-n">Ch.02</span><b>分析範圍與目的</b><small>分析邊界聲明</small></div><div class="cols"><div class="ai"><b>AI 可執行</b><ul><li>整理確認需求文件</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>聲明分析目的、委託方背景、IPC 範圍、時間區間、資料庫來源</li></ul></div></div><p class="qreq">◎ 品質要求：讀者可以清楚知道：此報告分析什麼、不分析什麼、資料庫覆蓋率。</p></div><div class="chp"><div class="ph-h"><span class="ph-n">Ch.03</span><b>分析方法</b><small>可重現的方法論</small></div><div class="cols"><div class="ai"><b>AI 可執行</b><ul><li>生成檢索式文件</li><li>IPC 代號對照表</li><li>申請人標準化說明</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>確認方法論合理性</li><li>標注任何已知資料限制</li></ul></div></div><p class="qreq">◎ 品質要求：另一位分析師可依此章節重現相同的分析結果。</p></div><h3 class="grp">管理面分析</h3><div class="chp"><div class="ph-h"><span class="ph-n">Ch.04</span><b>專利申請年度趨勢</b><small>技術生命週期判斷</small></div><div class="cols"><div class="ai"><b>AI 可執行</b><ul><li>生成年度折線圖 / 柱狀圖</li><li>計算 CAGR</li><li>生成段落草稿</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>判斷技術生命週期（萌芽 / 快速成長 / 成熟 / 衰退）</li><li>分析外部事件對趨勢的影響</li></ul></div></div><p class="qreq">◎ 品質要求：不只呈現「圖表」，必須包含：①趨勢轉折點說明（如 2019 EV 影響）、②生命週期判斷、③對委託方的策略意涵。</p></div><div class="chp"><div class="ph-h"><span class="ph-n">Ch.05</span><b>競爭佈局分析</b><small>地理 + 申請人競爭格局</small></div><div class="cols"><div class="ai"><b>AI 可執行</b><ul><li>生成國別分佈圖 + Top 10 申請人排名</li><li>標記近三年快速成長者</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>判斷集中度（HHI）</li><li>解讀申請人策略意圖</li><li>提供可規避建議</li></ul></div></div><p class="qreq">◎ 品質要求：必須包含：①各國集中度判斷、②重點申請人的技術焦點描述、③近三年趨勢變化、④策略意涵。</p></div><h3 class="grp">技術面分析</h3><div class="chp"><div class="ph-h"><span class="ph-n">Ch.06</span><b>IPC 技術分類分析</b><small>技術架構定位</small></div><div class="cols"><div class="ai"><b>AI 可執行</b><ul><li>IPC 三階統計</li><li>生成技術分類圖</li><li>識別快速成長子類</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>解讀技術趨勢轉移</li><li>識別跨領域佈局（如 F28D → H01M）</li><li>判斷各子類的防禦 vs 進攻性質</li></ul></div></div><p class="qreq">◎ 品質要求：必須解讀每個主要 IPC 的技術意涵與競爭態勢，不得只列數字。</p></div><div class="chp"><div class="ph-h"><span class="ph-n">Ch.07</span><b>技術功效矩陣</b><small>白地識別</small></div><div class="cols"><div class="ai"><b>AI 可執行</b><ul><li>生成技術手段 × 解決功效矩陣初稿</li><li>標記密集區與空白區</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>核定矩陣維度是否符合技術實務</li><li>判斷空白區是「技術機會」還是「不可行組合」</li><li>評估進入各熱點區的侵權風險</li></ul></div></div><p class="qreq">◎ 品質要求：矩陣維度須由專利師與技術工程師共同確認。每個顯著空白區必須說明空白原因與評估建議。</p></div><div class="chp"><div class="ph-h"><span class="ph-n">Ch.08</span><b>關鍵專利與 Claims 分析</b><small>技術核心識別</small></div><div class="cols"><div class="ai"><b>AI 可執行</b><ul><li>統計 comprising / consisting 比例</li><li>Claims 數量統計</li><li>初步識別高引用專利</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>逐份拆解高風險專利 Claims 結構（Preamble / Transition / Body）</li><li>判斷法律效力與可規避性</li><li>撰寫 Claim Chart</li></ul></div></div><p class="qreq">◎ 品質要求：每份列為「關鍵專利」的專利必須有完整的 Claims 拆解與侵權評估意見，不得僅列摘要。</p></div><h3 class="grp">策略面輸出</h3><div class="chp"><div class="ph-h"><span class="ph-n">Ch.09</span><b>研發空白與佈局建議</b><small>機會識別</small></div><div class="cols"><div class="ai"><b>AI 可執行</b><ul><li>彙整矩陣空白區清單</li><li>提供相關先前技術摘要</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>評估技術可行性</li><li>確認市場規模與商業吸引力</li><li>建議申請策略（原創 / 迴避設計 / 授權）</li></ul></div></div><p class="qreq">◎ 品質要求：每個建議佈局區域必須說明：①技術空白的技術依據、②商業機會評估、③具體建議行動。</p></div><div class="chp"><div class="ph-h"><span class="ph-n">Ch.10</span><b>行動計畫與結論</b><small>可執行決策建議</small></div><div class="cols"><div class="ai"><b>AI 可執行</b><ul><li>生成行動項目初稿</li></ul></div><div class="hu"><b>人工判斷</b><ul><li>確認行動項目與委託方資源 / 策略一致</li><li>排定優先順序與責任人</li><li>設定追蹤里程碑</li></ul></div></div><p class="qreq">◎ 品質要求：每條行動建議必須：①具體指名行動對象（哪份專利 / 哪個技術）、②說明預期效果、③指定時間點。</p></div>
-    </section>
-    <section class="card" id="quality"><p class="eyebrow">品質標準</p><h2>五層價值鏈與品質要求</h2><p>多數公司停在 T1–T2（有資料、有圖表），但無法提供真正的策略判斷。目標是達到 T4–T5 層次。</p>
-<ol class="tiers"><li class="tier t1"><small>T1</small><b>資料整理</b><span>大部分公司</span><em>← 多數公司到這裡</em></li><li class="tier t2"><small>T2</small><b>圖表呈現</b><span>大部分供應商</span></li><li class="tier t3"><small>T3</small><b>文字解析</b><span>少數分析師</span></li><li class="tier t4"><small>T4</small><b>策略判斷</b><span>資深 IP 顧問</span></li><li class="tier t5"><small>T5</small><b>行動建議</b><span>頂尖 IP × 商業</span></li></ol><h3>好報告 vs 差報告：具體對比</h3><div class="x"><table class="tbl"><tr><th>分析維度</th><th>差（僅數據）</th><th>好（含判斷與建議）</th></tr><tr><td class="nw">申請趨勢</td><td class="bad-c">2019 年申請量 267 件，比 2018 年增加 29 件。</td><td>2019 年受 EV 電動化觸媒影響，申請量加速至 267 件（年增 12%），為近 10 年首次突破 10% 年增，顯示技術進入快速成長期，佈局時機窗口正開放。</td></tr><tr><td class="nw">競爭格局</td><td class="bad-c">Alfa Laval 申請量最多（312 件），排名第一。</td><td>Alfa Laval 在釺焊板式熱交換器核心工藝（F28F 21/08）的佔比達 31%，遠超其整體市佔 10%，顯示其刻意在技術壁壘最高的子類集中佈局；若委託方計畫進入此子類，建議優先進行完整 FTO 分析。</td></tr><tr><td class="nw">技術空白</td><td class="bad-c">「冷媒流路 × 重量輕量化」矩陣格為空白。</td><td>「冷媒流路 × 重量輕量化」顯示零件數空白，可能原因有三：①材料限制導致技術上不可行；②市場需求不足；③為真正的先行佈局機會。建議先進行先前技術搜索確認原因後，再評估申請策略。</td></tr><tr><td class="nw">Claims 分析</td><td class="bad-c">comprising 比例 71%，獨立項均值 2.8 件。</td><td>comprising（開放式）佔 71%，意味侵權判斷門檻偏低，即使加入額外元件仍可能構成侵權；平均獨立項 2.8 件高於業界均值 2.1 件（高出 33%），顯示主要申請人積極多維度保護，委託方進入同一技術範圍須格外謹慎。</td></tr></table></div><p class="callout"><strong>核心原則：</strong>每張圖表下方必須包含三段解析——①集中度或趨勢的量化判斷、②與委託方情境的關聯、③具體的策略建議或警示。</p>
-    </section>
-
-    <p class="pback"><a href="kb-project-analysis.html">← 回到課程〈知識庫應用：專案分析〉</a><a href="patent-report.html">看示範報告 →</a></p>
-  </main>
+  <div class="kbv">
+    <p class="kbv-bar"><a href="kb-project-analysis.html">← 回到課程〈知識庫應用：專案分析〉</a><a href="patent-report.html">看示範報告 →</a></p>
+    <div class="plan-page" data-v-b4aaabd6><div class="plan-header" data-v-b4aaabd6><div class="header-badges" data-v-b4aaabd6><span class="pbadge draft" data-v-b4aaabd6>草案 v0.1</span><span class="pbadge review" data-v-b4aaabd6>待專利師審查</span></div><h1 class="plan-title" data-v-b4aaabd6>專利分析 AI 協作系統</h1><p class="plan-subtitle" data-v-b4aaabd6>人機協作流程設計 × 分析報告標準範本</p><div class="plan-meta-row" data-v-b4aaabd6><span data-v-b4aaabd6>日期：<strong data-v-b4aaabd6>2026-08-06</strong></span><span data-v-b4aaabd6>版本：<strong data-v-b4aaabd6>0.1 草案</strong></span><span data-v-b4aaabd6>審查對象：<strong data-v-b4aaabd6>專利分析師 / IP 工程師</strong></span><span data-v-b4aaabd6>知識庫依據：<strong data-v-b4aaabd6>49 篇專利分析文獻</strong></span></div></div><section class="plan-section" data-v-b4aaabd6><div class="sec-eyebrow" data-v-b4aaabd6>背景說明</div><h2 class="sec-title" data-v-b4aaabd6>分析服務類型與設計原則</h2><p class="sec-desc" data-v-b4aaabd6>本系統涵蓋四種主要專利分析服務類型。AI 負責結構化、重複性的工作；專業人員負責語義判斷、策略洞察與風險評估。</p><div class="type-grid" data-v-b4aaabd6><div class="type-card" data-v-b4aaabd6><div class="type-name accent" data-v-b4aaabd6>技術佈局分析</div><div class="type-desc" data-v-b4aaabd6>Technology Landscape — 掌握某技術領域的整體專利佈局態勢與競爭格局</div></div><div class="type-card" data-v-b4aaabd6><div class="type-name green" data-v-b4aaabd6>FTO 自由實施評估</div><div class="type-desc" data-v-b4aaabd6>Freedom-to-Operate — 評估特定產品或方法是否可能侵犯他人現有有效專利</div></div><div class="type-card" data-v-b4aaabd6><div class="type-name kbv-warn" data-v-b4aaabd6>白地分析</div><div class="type-desc" data-v-b4aaabd6>White Space Analysis — 識別技術 × 功效矩陣中的未佈局空間，尋找申請機會</div></div><div class="type-card" data-v-b4aaabd6><div class="type-name dim" data-v-b4aaabd6>競爭對手監控</div><div class="type-desc" data-v-b4aaabd6>Competitor Watch — 持續追蹤競爭對手的專利申請動向，預判技術策略</div></div></div></section><section class="plan-section" data-v-b4aaabd6><div class="sec-eyebrow" data-v-b4aaabd6>協作流程</div><h2 class="sec-title" data-v-b4aaabd6>六階段人機協作流程</h2><p class="sec-desc" data-v-b4aaabd6>AI 負責結構化、重複性的工作；專利師負責語義判斷、策略洞察與風險評估。每個通過條件（🔒）均需人工書面確認。</p><div class="kbv-timeline" data-v-b4aaabd6><div class="lead-both phase" data-v-b4aaabd6><div class="phase-dot" data-v-b4aaabd6>1</div><div class="phase-card" data-v-b4aaabd6><div class="phase-head" data-v-b4aaabd6><span class="phase-num" data-v-b4aaabd6>Ph.1</span><span class="phase-name" data-v-b4aaabd6>需求釐清與範圍定義</span><span class="badge-both phase-lead-badge" data-v-b4aaabd6>AI + 人工</span></div><div class="phase-body" data-v-b4aaabd6><div class="task-col ai-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>AI 執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>解析委託方需求描述，初步建議 IPC 範圍</li><li data-v-b4aaabd6>生成技術關鍵字清單草稿</li><li data-v-b4aaabd6>提供競爭對手初步名單</li></ul></div><div class="task-col human-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>確認分析目的（FTO / 佈局 / 白地 / 競爭）</li><li data-v-b4aaabd6>核定 IPC 範圍與檢索策略</li><li data-v-b4aaabd6>確定報告受眾與決策情境</li></ul></div></div><div class="phase-output" data-v-b4aaabd6>產出：<strong data-v-b4aaabd6>確認需求文件：分析目的、IPC 範圍、競爭標的、預算</strong></div><div class="phase-gate" data-v-b4aaabd6>委託方書面確認範圍，避免後段重做</div></div></div><div class="lead-ai phase" data-v-b4aaabd6><div class="phase-dot" data-v-b4aaabd6>2</div><div class="phase-card" data-v-b4aaabd6><div class="phase-head" data-v-b4aaabd6><span class="phase-num" data-v-b4aaabd6>Ph.2</span><span class="phase-name" data-v-b4aaabd6>資料蒐集與結構化</span><span class="badge-ai phase-lead-badge" data-v-b4aaabd6>AI 主導</span></div><div class="phase-body" data-v-b4aaabd6><div class="task-col ai-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>AI 執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>跨 DB 批量檢索（USPTO/EPO/WIPO/JPO/CNIPA）</li><li data-v-b4aaabd6>噪音過濾（非相關申請人 / 過期 / 廢止）</li><li data-v-b4aaabd6>申請人標準化（集團合併、前後母子公司）</li><li data-v-b4aaabd6>輸出結構化資料集（CSV / JSON）</li></ul></div><div class="task-col human-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>抽樣驗證 AI 篩選結果（5–10%）</li><li data-v-b4aaabd6>確認申請人分類正確</li><li data-v-b4aaabd6>補充 DB 未涵蓋的技術標準專利</li></ul></div></div><div class="phase-output" data-v-b4aaabd6>產出：<strong data-v-b4aaabd6>乾淨資料集：有效專利件數、申請人、IPC、日期、族群</strong></div><div class="phase-gate" data-v-b4aaabd6>人工驗錯率 &lt; 5% 方可進入下一階段</div></div></div><div class="lead-ai phase" data-v-b4aaabd6><div class="phase-dot" data-v-b4aaabd6>3</div><div class="phase-card" data-v-b4aaabd6><div class="phase-head" data-v-b4aaabd6><span class="phase-num" data-v-b4aaabd6>Ph.3</span><span class="phase-name" data-v-b4aaabd6>初步分析與視覺化</span><span class="badge-ai phase-lead-badge" data-v-b4aaabd6>AI 主導</span></div><div class="phase-body" data-v-b4aaabd6><div class="task-col ai-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>AI 執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>年度趨勢、國別、申請人排名</li><li data-v-b4aaabd6>技術功效矩陣（IPC × 關鍵字）</li><li data-v-b4aaabd6>初步 Claims 統計（comprising 比例、獨立項均數）</li><li data-v-b4aaabd6>生成摘要段落草稿</li></ul></div><div class="task-col human-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>驗證圖表數據與原始資料一致</li><li data-v-b4aaabd6>標注異常值與解讀假說</li><li data-v-b4aaabd6>決定哪些圖表進入正式報告</li></ul></div></div><div class="phase-output" data-v-b4aaabd6>產出：<strong data-v-b4aaabd6>分析草稿：12–15 張圖表 + AI 生成摘要段落</strong></div></div></div><div class="lead-human phase" data-v-b4aaabd6><div class="phase-dot" data-v-b4aaabd6>4</div><div class="phase-card" data-v-b4aaabd6><div class="phase-head" data-v-b4aaabd6><span class="phase-num" data-v-b4aaabd6>Ph.4</span><span class="phase-name" data-v-b4aaabd6>專業解讀與語意判斷</span><span class="badge-human phase-lead-badge" data-v-b4aaabd6>人工主導</span></div><div class="phase-body" data-v-b4aaabd6><div class="task-col ai-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>AI 執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>提供相關先前技術文獻</li><li data-v-b4aaabd6>協助解析 Claims 技術特徵</li><li data-v-b4aaabd6>生成技術術語對照表</li></ul></div><div class="task-col human-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>逐份解讀核心專利 Claims 結構</li><li data-v-b4aaabd6>評估法律效力（有效性 / 可規避性）</li><li data-v-b4aaabd6>判斷技術白地的商業可行性</li><li data-v-b4aaabd6>評估 FTO 風險等級</li></ul></div></div><div class="phase-output" data-v-b4aaabd6>產出：<strong data-v-b4aaabd6>Claims 分析表：重點專利逐項拆解 + 侵權風險評級</strong></div><div class="phase-gate" data-v-b4aaabd6>每份高風險專利須有專利師書面判斷意見</div></div></div><div class="lead-both phase" data-v-b4aaabd6><div class="phase-dot" data-v-b4aaabd6>5</div><div class="phase-card" data-v-b4aaabd6><div class="phase-head" data-v-b4aaabd6><span class="phase-num" data-v-b4aaabd6>Ph.5</span><span class="phase-name" data-v-b4aaabd6>策略轉化</span><span class="badge-both phase-lead-badge" data-v-b4aaabd6>AI + 人工</span></div><div class="phase-body" data-v-b4aaabd6><div class="task-col ai-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>AI 執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>依分析結果生成策略選項矩陣</li><li data-v-b4aaabd6>提供同業策略行為的歷史案例</li><li data-v-b4aaabd6>生成行動計畫初稿</li></ul></div><div class="task-col human-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>評估策略可行性（研發能力 / 預算 / 時程）</li><li data-v-b4aaabd6>確定優先行動項目</li><li data-v-b4aaabd6>加入市場、法律、營運限制</li></ul></div></div><div class="phase-output" data-v-b4aaabd6>產出：<strong data-v-b4aaabd6>策略建議：3 個時間維度（即時 / 3M / 6M）× 具體行動</strong></div></div></div><div class="lead-both phase" data-v-b4aaabd6><div class="phase-dot" data-v-b4aaabd6>6</div><div class="phase-card" data-v-b4aaabd6><div class="phase-head" data-v-b4aaabd6><span class="phase-num" data-v-b4aaabd6>Ph.6</span><span class="phase-name" data-v-b4aaabd6>報告產出與品管</span><span class="badge-both phase-lead-badge" data-v-b4aaabd6>AI + 人工</span></div><div class="phase-body" data-v-b4aaabd6><div class="task-col ai-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>AI 執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>依範本組裝各章節</li><li data-v-b4aaabd6>生成執行摘要草稿</li><li data-v-b4aaabd6>格式檢查（圖表標注、引用格式）</li></ul></div><div class="task-col human-col" data-v-b4aaabd6><div class="task-col-title" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>全文審閱與修訂</li><li data-v-b4aaabd6>確認策略建議與委託方情境一致</li><li data-v-b4aaabd6>簽署品質確認（QA Sign-off）</li></ul></div></div><div class="phase-output" data-v-b4aaabd6>產出：<strong data-v-b4aaabd6>交付報告（PDF） + 原始資料包 + Claim Chart 附件</strong></div><div class="phase-gate" data-v-b4aaabd6>專利師 QA Sign-off 後方可交付</div></div></div></div></section><section class="plan-section" data-v-b4aaabd6><div class="sec-eyebrow" data-v-b4aaabd6>報告範本</div><h2 class="sec-title" data-v-b4aaabd6>標準專利分析報告章節架構</h2><p class="sec-desc" data-v-b4aaabd6>每章均標注 AI 可執行事項與人工判斷範圍，以及最低品質要求（◎ 品質要求）。</p><div class="chapter-group" data-v-b4aaabd6><div class="chapter-group-label" data-v-b4aaabd6>核心必備（每份報告均須包含）</div><div class="chapter-card" data-v-b4aaabd6><div class="chapter-head" data-v-b4aaabd6><span class="chapter-num" data-v-b4aaabd6>Ch.01</span><div class="chapter-title-wrap" data-v-b4aaabd6><div class="chapter-title" data-v-b4aaabd6>執行摘要</div><div class="chapter-purpose" data-v-b4aaabd6>Executive Summary</div></div></div><div class="chapter-body" data-v-b4aaabd6><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title accent" data-v-b4aaabd6>AI 可執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>生成關鍵數字統計（件數 / 成長率 / 集中度）</li><li data-v-b4aaabd6>初步列點發現</li></ul></div><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title green" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>撰寫策略意涵與決策建議</li><li data-v-b4aaabd6>確認摘要與報告正文一致</li></ul></div></div><div class="chapter-quality" data-v-b4aaabd6>決策者在不閱讀全文的情況下，可知道：①最重要的競爭態勢、②主要風險、③立即應採取的行動。禁止僅列數字，必須提供判斷。</div></div><div class="chapter-card" data-v-b4aaabd6><div class="chapter-head" data-v-b4aaabd6><span class="chapter-num" data-v-b4aaabd6>Ch.02</span><div class="chapter-title-wrap" data-v-b4aaabd6><div class="chapter-title" data-v-b4aaabd6>分析範圍與目的</div><div class="chapter-purpose" data-v-b4aaabd6>分析邊界聲明</div></div></div><div class="chapter-body" data-v-b4aaabd6><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title accent" data-v-b4aaabd6>AI 可執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>整理確認需求文件</li></ul></div><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title green" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>聲明分析目的、委託方背景、IPC 範圍、時間區間、資料庫來源</li></ul></div></div><div class="chapter-quality" data-v-b4aaabd6>讀者可以清楚知道：此報告分析什麼、不分析什麼、資料庫覆蓋率。</div></div><div class="chapter-card" data-v-b4aaabd6><div class="chapter-head" data-v-b4aaabd6><span class="chapter-num" data-v-b4aaabd6>Ch.03</span><div class="chapter-title-wrap" data-v-b4aaabd6><div class="chapter-title" data-v-b4aaabd6>分析方法</div><div class="chapter-purpose" data-v-b4aaabd6>可重現的方法論</div></div></div><div class="chapter-body" data-v-b4aaabd6><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title accent" data-v-b4aaabd6>AI 可執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>生成檢索式文件</li><li data-v-b4aaabd6>IPC 代號對照表</li><li data-v-b4aaabd6>申請人標準化說明</li></ul></div><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title green" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>確認方法論合理性</li><li data-v-b4aaabd6>標注任何已知資料限制</li></ul></div></div><div class="chapter-quality" data-v-b4aaabd6>另一位分析師可依此章節重現相同的分析結果。</div></div></div><div class="chapter-group" data-v-b4aaabd6><div class="chapter-group-label" data-v-b4aaabd6>管理面分析</div><div class="chapter-card" data-v-b4aaabd6><div class="chapter-head" data-v-b4aaabd6><span class="chapter-num" data-v-b4aaabd6>Ch.04</span><div class="chapter-title-wrap" data-v-b4aaabd6><div class="chapter-title" data-v-b4aaabd6>專利申請年度趨勢</div><div class="chapter-purpose" data-v-b4aaabd6>技術生命週期判斷</div></div></div><div class="chapter-body" data-v-b4aaabd6><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title accent" data-v-b4aaabd6>AI 可執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>生成年度折線圖 / 柱狀圖</li><li data-v-b4aaabd6>計算 CAGR</li><li data-v-b4aaabd6>生成段落草稿</li></ul></div><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title green" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>判斷技術生命週期（萌芽 / 快速成長 / 成熟 / 衰退）</li><li data-v-b4aaabd6>分析外部事件對趨勢的影響</li></ul></div></div><div class="chapter-quality" data-v-b4aaabd6>不只呈現「圖表」，必須包含：①趨勢轉折點說明（如 2019 EV 影響）、②生命週期判斷、③對委託方的策略意涵。</div></div><div class="chapter-card" data-v-b4aaabd6><div class="chapter-head" data-v-b4aaabd6><span class="chapter-num" data-v-b4aaabd6>Ch.05</span><div class="chapter-title-wrap" data-v-b4aaabd6><div class="chapter-title" data-v-b4aaabd6>競爭佈局分析</div><div class="chapter-purpose" data-v-b4aaabd6>地理 + 申請人競爭格局</div></div></div><div class="chapter-body" data-v-b4aaabd6><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title accent" data-v-b4aaabd6>AI 可執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>生成國別分佈圖 + Top 10 申請人排名</li><li data-v-b4aaabd6>標記近三年快速成長者</li></ul></div><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title green" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>判斷集中度（HHI）</li><li data-v-b4aaabd6>解讀申請人策略意圖</li><li data-v-b4aaabd6>提供可規避建議</li></ul></div></div><div class="chapter-quality" data-v-b4aaabd6>必須包含：①各國集中度判斷、②重點申請人的技術焦點描述、③近三年趨勢變化、④策略意涵。</div></div></div><div class="chapter-group" data-v-b4aaabd6><div class="chapter-group-label" data-v-b4aaabd6>技術面分析</div><div class="chapter-card" data-v-b4aaabd6><div class="chapter-head" data-v-b4aaabd6><span class="chapter-num" data-v-b4aaabd6>Ch.06</span><div class="chapter-title-wrap" data-v-b4aaabd6><div class="chapter-title" data-v-b4aaabd6>IPC 技術分類分析</div><div class="chapter-purpose" data-v-b4aaabd6>技術架構定位</div></div></div><div class="chapter-body" data-v-b4aaabd6><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title accent" data-v-b4aaabd6>AI 可執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>IPC 三階統計</li><li data-v-b4aaabd6>生成技術分類圖</li><li data-v-b4aaabd6>識別快速成長子類</li></ul></div><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title green" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>解讀技術趨勢轉移</li><li data-v-b4aaabd6>識別跨領域佈局（如 F28D → H01M）</li><li data-v-b4aaabd6>判斷各子類的防禦 vs 進攻性質</li></ul></div></div><div class="chapter-quality" data-v-b4aaabd6>必須解讀每個主要 IPC 的技術意涵與競爭態勢，不得只列數字。</div></div><div class="chapter-card" data-v-b4aaabd6><div class="chapter-head" data-v-b4aaabd6><span class="chapter-num" data-v-b4aaabd6>Ch.07</span><div class="chapter-title-wrap" data-v-b4aaabd6><div class="chapter-title" data-v-b4aaabd6>技術功效矩陣</div><div class="chapter-purpose" data-v-b4aaabd6>白地識別</div></div></div><div class="chapter-body" data-v-b4aaabd6><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title accent" data-v-b4aaabd6>AI 可執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>生成技術手段 × 解決功效矩陣初稿</li><li data-v-b4aaabd6>標記密集區與空白區</li></ul></div><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title green" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>核定矩陣維度是否符合技術實務</li><li data-v-b4aaabd6>判斷空白區是「技術機會」還是「不可行組合」</li><li data-v-b4aaabd6>評估進入各熱點區的侵權風險</li></ul></div></div><div class="chapter-quality" data-v-b4aaabd6>矩陣維度須由專利師與技術工程師共同確認。每個顯著空白區必須說明空白原因與評估建議。</div></div><div class="chapter-card" data-v-b4aaabd6><div class="chapter-head" data-v-b4aaabd6><span class="chapter-num" data-v-b4aaabd6>Ch.08</span><div class="chapter-title-wrap" data-v-b4aaabd6><div class="chapter-title" data-v-b4aaabd6>關鍵專利與 Claims 分析</div><div class="chapter-purpose" data-v-b4aaabd6>技術核心識別</div></div></div><div class="chapter-body" data-v-b4aaabd6><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title accent" data-v-b4aaabd6>AI 可執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>統計 comprising / consisting 比例</li><li data-v-b4aaabd6>Claims 數量統計</li><li data-v-b4aaabd6>初步識別高引用專利</li></ul></div><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title green" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>逐份拆解高風險專利 Claims 結構（Preamble / Transition / Body）</li><li data-v-b4aaabd6>判斷法律效力與可規避性</li><li data-v-b4aaabd6>撰寫 Claim Chart</li></ul></div></div><div class="chapter-quality" data-v-b4aaabd6>每份列為「關鍵專利」的專利必須有完整的 Claims 拆解與侵權評估意見，不得僅列摘要。</div></div></div><div class="chapter-group" data-v-b4aaabd6><div class="chapter-group-label" data-v-b4aaabd6>策略面輸出</div><div class="chapter-card" data-v-b4aaabd6><div class="chapter-head" data-v-b4aaabd6><span class="chapter-num" data-v-b4aaabd6>Ch.09</span><div class="chapter-title-wrap" data-v-b4aaabd6><div class="chapter-title" data-v-b4aaabd6>研發空白與佈局建議</div><div class="chapter-purpose" data-v-b4aaabd6>機會識別</div></div></div><div class="chapter-body" data-v-b4aaabd6><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title accent" data-v-b4aaabd6>AI 可執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>彙整矩陣空白區清單</li><li data-v-b4aaabd6>提供相關先前技術摘要</li></ul></div><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title green" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>評估技術可行性</li><li data-v-b4aaabd6>確認市場規模與商業吸引力</li><li data-v-b4aaabd6>建議申請策略（原創 / 迴避設計 / 授權）</li></ul></div></div><div class="chapter-quality" data-v-b4aaabd6>每個建議佈局區域必須說明：①技術空白的技術依據、②商業機會評估、③具體建議行動。</div></div><div class="chapter-card" data-v-b4aaabd6><div class="chapter-head" data-v-b4aaabd6><span class="chapter-num" data-v-b4aaabd6>Ch.10</span><div class="chapter-title-wrap" data-v-b4aaabd6><div class="chapter-title" data-v-b4aaabd6>行動計畫與結論</div><div class="chapter-purpose" data-v-b4aaabd6>可執行決策建議</div></div></div><div class="chapter-body" data-v-b4aaabd6><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title accent" data-v-b4aaabd6>AI 可執行</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>生成行動項目初稿</li></ul></div><div class="chapter-col" data-v-b4aaabd6><div class="chapter-col-title green" data-v-b4aaabd6>人工判斷</div><ul data-v-b4aaabd6><li data-v-b4aaabd6>確認行動項目與委託方資源 / 策略一致</li><li data-v-b4aaabd6>排定優先順序與責任人</li><li data-v-b4aaabd6>設定追蹤里程碑</li></ul></div></div><div class="chapter-quality" data-v-b4aaabd6>每條行動建議必須：①具體指名行動對象（哪份專利 / 哪個技術）、②說明預期效果、③指定時間點。</div></div></div></section><section class="plan-section" data-v-b4aaabd6><div class="sec-eyebrow" data-v-b4aaabd6>品質標準</div><h2 class="sec-title" data-v-b4aaabd6>五層價值鏈與品質要求</h2><p class="sec-desc" data-v-b4aaabd6>多數公司停在 T1–T2（有資料、有圖表），但無法提供真正的策略判斷。目標是達到 T4–T5 層次。</p><div class="value-chain" data-v-b4aaabd6><div class="kbv-bad vc-step" data-v-b4aaabd6><div class="vc-tier" data-v-b4aaabd6>T1</div><div class="vc-name" data-v-b4aaabd6>資料整理</div><div class="vc-who" data-v-b4aaabd6>大部分公司</div><div class="vc-stop" data-v-b4aaabd6>← 多數公司到這裡</div></div><div class="kbv-bad vc-step" data-v-b4aaabd6><div class="vc-tier" data-v-b4aaabd6>T2</div><div class="vc-name" data-v-b4aaabd6>圖表呈現</div><div class="vc-who" data-v-b4aaabd6>大部分供應商</div></div><div class="min vc-step" data-v-b4aaabd6><div class="vc-tier" data-v-b4aaabd6>T3</div><div class="vc-name" data-v-b4aaabd6>文字解析</div><div class="vc-who" data-v-b4aaabd6>少數分析師</div></div><div class="kbv-good vc-step" data-v-b4aaabd6><div class="vc-tier" data-v-b4aaabd6>T4</div><div class="vc-name" data-v-b4aaabd6>策略判斷</div><div class="vc-who" data-v-b4aaabd6>資深 IP 顧問</div></div><div class="best vc-step" data-v-b4aaabd6><div class="vc-tier" data-v-b4aaabd6>T5</div><div class="vc-name" data-v-b4aaabd6>行動建議</div><div class="vc-who" data-v-b4aaabd6>頂尖 IP × 商業</div></div></div><h3 class="compare-title" data-v-b4aaabd6>好報告 vs 差報告：具體對比</h3><div class="compare-table-wrap" data-v-b4aaabd6><table class="compare-table" data-v-b4aaabd6><thead data-v-b4aaabd6><tr data-v-b4aaabd6><th data-v-b4aaabd6>分析維度</th><th class="bad-th" data-v-b4aaabd6>差（僅數據）</th><th class="good-th" data-v-b4aaabd6>好（含判斷與建議）</th></tr></thead><tbody data-v-b4aaabd6><tr data-v-b4aaabd6><td class="dim-cell" data-v-b4aaabd6>申請趨勢</td><td class="bad-cell" data-v-b4aaabd6>2019 年申請量 267 件，比 2018 年增加 29 件。</td><td class="good-cell" data-v-b4aaabd6>2019 年受 EV 電動化觸媒影響，申請量加速至 267 件（年增 12%），為近 10 年首次突破 10% 年增，顯示技術進入快速成長期，佈局時機窗口正開放。</td></tr><tr data-v-b4aaabd6><td class="dim-cell" data-v-b4aaabd6>競爭格局</td><td class="bad-cell" data-v-b4aaabd6>Alfa Laval 申請量最多（312 件），排名第一。</td><td class="good-cell" data-v-b4aaabd6>Alfa Laval 在釺焊板式熱交換器核心工藝（F28F 21/08）的佔比達 31%，遠超其整體市佔 10%，顯示其刻意在技術壁壘最高的子類集中佈局；若委託方計畫進入此子類，建議優先進行完整 FTO 分析。</td></tr><tr data-v-b4aaabd6><td class="dim-cell" data-v-b4aaabd6>技術空白</td><td class="bad-cell" data-v-b4aaabd6>「冷媒流路 × 重量輕量化」矩陣格為空白。</td><td class="good-cell" data-v-b4aaabd6>「冷媒流路 × 重量輕量化」顯示零件數空白，可能原因有三：①材料限制導致技術上不可行；②市場需求不足；③為真正的先行佈局機會。建議先進行先前技術搜索確認原因後，再評估申請策略。</td></tr><tr data-v-b4aaabd6><td class="dim-cell" data-v-b4aaabd6>Claims 分析</td><td class="bad-cell" data-v-b4aaabd6>comprising 比例 71%，獨立項均值 2.8 件。</td><td class="good-cell" data-v-b4aaabd6>comprising（開放式）佔 71%，意味侵權判斷門檻偏低，即使加入額外元件仍可能構成侵權；平均獨立項 2.8 件高於業界均值 2.1 件（高出 33%），顯示主要申請人積極多維度保護，委託方進入同一技術範圍須格外謹慎。</td></tr></tbody></table></div><div class="kbv-callout" data-v-b4aaabd6><strong data-v-b4aaabd6>核心原則：</strong>每張圖表下方必須包含三段解析——①集中度或趨勢的量化判斷、②與委託方情境的關聯、③具體的策略建議或警示。 </div></section></div>
+    <p class="kbv-bar"><a href="kb-project-analysis.html">← 回到課程〈知識庫應用：專案分析〉</a><a href="patent-report.html">看示範報告 →</a></p>
+    <p class="kbv-gen">本頁由 Vue 原始碼產生（src/patent/PatentPlan.vue），請勿直接修改本檔；改原始碼後執行 npm run build。</p>
+  </div>
   <script src="assets/nav.js"></script>
 </body>
 </html>
