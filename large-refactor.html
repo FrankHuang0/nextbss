@@ -1,0 +1,239 @@
+﻿<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>大型專案重構：AI 協作流程</title>
+  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>大型專案重構：AI 協作流程</h1>
+    <p>幾萬行的舊程式要換語言、換架構，最怕的不是寫不出來，而是「改完不知道有沒有改壞」。本課用一個真實案例（固網訂單系統的 C++ 模組改寫成 Java），教你讓 AI <b>分批、有證據</b>地完成大型重構。</p>
+    <div class="stats"><span>3 個核心觀念</span><span>6 步流程</span><span>5 道安全網</span><span>6 則提示詞</span></div>
+  </header>
+  <main>
+    <nav class="card"><ul class="toc">
+      <li><a href="#goal">學完你會</a></li><li><a href="#why">為什麼難</a></li><li><a href="#ideas">3 個核心觀念</a></li><li><a href="#flow">6 步流程</a></li><li><a href="#batch">切批與 Roadmap</a></li><li><a href="#safety">5 道安全網</a></li>
+      <li><a href="#case">實戰：第一批走一遍</a></li><li><a href="#kit">做成可重複的套件</a></li><li><a href="#prompts">提示詞</a></li><li><a href="#pitfalls">常見陷阱</a></li><li><a href="#check">自我檢核</a></li>
+    </ul></nav>
+
+    <p class="callout">本課案例取自內部實際的重構規劃（設計規格、Roadmap、第一批的規格與計畫），系統名稱與內部路徑已去識別化；行數、表格數等數字為規劃文件中的實際計數。</p>
+
+    <section class="card" id="goal">
+      <h2>學完你會</h2>
+      <ol>
+        <li>說出為什麼大型重構不能「一次全部重寫」，要用<b>漸進替換</b>。</li>
+        <li>照 6 步流程帶 AI 做重構：範圍分析 → 批次規格 → 人審 → 實作計畫 → 子代理執行 → 收尾。</li>
+        <li>替重構架好 5 道安全網，讓「有沒有改壞」可以用測試證明。</li>
+        <li>用本課 6 則提示詞，替自己的系統寫出 Roadmap 與第一批規格。</li>
+      </ol>
+      <p class="note">名詞小辭典：<b>重構</b> = 外部行為不變、只改內部寫法；本案是「換語言改寫」，原則一樣——<b>對外的輸入輸出必須和舊系統一模一樣</b>。<b>批次</b> = 一次只改一小塊、可以單獨驗收的範圍。</p>
+    </section>
+
+    <section class="card" id="why">
+      <h2>為什麼大型重構特別難？</h2>
+      <p>GitHub 官方部落格整理舊系統現代化的痛點：技術債、系統整合、資料遷移、成本，以及被稱為「最終魔王」的<b>測試</b>——每個小改動都可能弄壞別的地方，而且幾週後才發現。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>難處</th><th>在本案長什麼樣</th></tr>
+        <tr><td>量太大</td><td>主函式 2,167 行；往下追的呼叫鏈光前段就有 33 段、合計 12,855 行</td></tr>
+        <tr><td>影響面廣</td><td>一次受理會寫入 18 張資料表，每張表數十到上百個欄位</td></tr>
+        <tr><td>文件不可靠</td><td>舊文件寫主函式「約 4,190 行」，實際重新計數是 2,167 行</td></tr>
+        <tr><td>沒人記得細節</td><td>許多「怪怪的」寫法其實是業務規則，看不出哪些能改</td></tr>
+        <tr><td>AI 一次讀不完</td><td>整條鏈遠超過一次對話能處理的量，硬塞會漏、會亂猜</td></tr>
+      </table></div>
+      <p class="callout warn"><strong>最常見的失敗：</strong>「我們知道舊系統做什麼，照著重寫一套就好。」提出絞殺榕模式的 Martin Fowler 說，這種一次替換的計畫<b>多數以失敗收場</b>——舊系統的細節比想像中難摸清，使用者也等不了那麼久。</p>
+    </section>
+
+    <section class="card" id="ideas">
+      <h2>3 個核心觀念（網路上最常被引用的做法）</h2>
+      <div class="x"><table class="tbl">
+        <tr><th>觀念</th><th>一句話</th><th>本案怎麼用</th></tr>
+        <tr><td><b>絞殺榕</b><br>Strangler Fig</td><td>像榕樹沿著老樹慢慢長，新系統一塊一塊取代舊系統，最後舊的自然退場</td><td>新 Java 程式一批一批長出來；還沒做的分支先「明確失敗」，不假裝做完</td></tr>
+        <tr><td><b>特徵化測試</b><br>（黃金樣本測試）</td><td>先記下舊系統「實際」怎麼回應，新系統的結果必須一模一樣</td><td>用舊系統跑出的輸入／輸出與資料庫快照當標準答案，逐欄比對</td></tr>
+        <tr><td><b>舊系統就是規格</b></td><td>文件會過時，程式碼才是真相；怪異行為也要先照抄</td><td>改寫前一定讀舊碼；疑似缺陷記錄在規格，不順手修</td></tr>
+      </table></div>
+      <p class="note">延伸閱讀：<a href="https://martinfowler.com/bliki/StranglerFigApplication.html" target="_blank" rel="noopener">Martin Fowler：Strangler Fig Application</a>、<a href="https://en.wikipedia.org/wiki/Characterization_test" target="_blank" rel="noopener">維基百科：Characterization test</a>（由《Working Effectively with Legacy Code》作者 Michael Feathers 提出）、<a href="https://github.blog/ai-and-ml/github-copilot/modernizing-legacy-code-with-github-copilot-tips-and-examples/" target="_blank" rel="noopener">GitHub 部落格：用 Copilot 現代化舊程式</a>。</p>
+    </section>
+
+    <section class="card" id="flow">
+      <h2>6 步流程：人機分工，每一步都有人把關</h2>
+      <p>本案用 <b>superpowers</b> 這組 Skill（技能）。Skill 就是寫好的工作 SOP：你叫出它，AI 就照步驟做、該停的地方會停下來等你。一般新功能從 <code>brainstorming</code>（腦力激盪）開始；舊系統改寫因為「舊程式就是需求」，改用範圍分析和批次規格開頭。</p>
+      <ol class="flow">
+        <li><b>範圍分析</b> 產出 Roadmap</li>
+        <li><b>批次規格</b> 只寫不改</li>
+        <li><b>人審</b> 回答待確認問題</li>
+        <li><b>實作計畫</b> 拆成小任務</li>
+        <li><b>子代理執行</b> 一任務一 commit</li>
+        <li><b>收尾</b> 驗證＋更新文件</li>
+      </ol>
+      <div class="x"><table class="tbl">
+        <tr><th>步驟</th><th>使用的 Skill</th><th>AI 做</th><th>人做</th><th>過關條件</th></tr>
+        <tr><td>① 範圍分析</td><td class="nw">migration-scope</td><td>讀完呼叫鏈、程式化計數行數與分支、列出影響的表</td><td>決定怎麼切批、先做哪批</td><td>只分析、不寫程式</td></tr>
+        <tr><td>② 批次規格</td><td class="nw">migration-batch-spec</td><td>讀舊碼、重新計數、讀基準資料，寫 10 章規格</td><td>—</td><td>沒讀舊碼、沒重新計數不准寫規格</td></tr>
+        <tr><td>③ 人審</td><td>—</td><td>把你的答案寫進「決策紀錄」</td><td>逐題回答「待確認問題」</td><td>問題清空才往下</td></tr>
+        <tr><td>④ 實作計畫</td><td class="nw">writing-plans</td><td>拆成小任務，每個任務寫好測試與程式草稿</td><td>看過計畫才放行</td><td>必含「開工前核實」「特徵化測試」「文件更新」任務</td></tr>
+        <tr><td>⑤ 子代理執行</td><td class="nw">subagent-driven-development</td><td>每個任務派一個子代理：先寫測試再寫程式，另一個子代理審查</td><td>抽看 commit</td><td>每個任務一個 commit</td></tr>
+        <tr><td>⑥ 收尾</td><td class="nw">migration-batch-close<br>finishing-a-development-branch</td><td>跑全部測試並貼證據、寫函式文件、更新 Roadmap、寫好下一批的提示詞</td><td>決定合併或開 PR</td><td>測試全綠、Roadmap 已更新才算完成</td></tr>
+      </table></div>
+      <p class="callout ok">看出規律了嗎？<strong>AI 負責讀、算、寫；人負責決定。</strong>每一步的產出都是檔案（規格、計畫、文件），所以可以審、可以追、換人也接得下去。</p>
+      <p class="note">子代理（subagent）＝ AI 另外開一個「分身」專心做一個任務，做完回報。好處是每個分身只看自己那一小塊，不會因為資料太多而混亂。</p>
+    </section>
+
+    <section class="card" id="batch">
+      <h2>切批與 Roadmap：把大象切成小塊</h2>
+      <p>第 ① 步的產出叫 <b>Roadmap（路線圖）</b>，它是整個重構的地圖，每做完一批就更新一次。本案的 Roadmap 有 6 節：</p>
+      <ul class="check">
+        <li><b>目標與驗收</b>：做到什麼程度算完成（例如：輸出欄位與 18 張表逐欄比對全數一致）</li>
+        <li><b>表格差距矩陣</b>：每張表舊系統怎麼用、新系統做到哪、哪一批負責</li>
+        <li><b>呼叫鏈逐段狀態</b>：每段函式的行數、分支數、狀態</li>
+        <li><b>口徑差異</b>：文件寫的和實際計數不一樣的地方</li>
+        <li><b>批次順序與狀態</b>：每批範圍、依賴關係</li>
+        <li><b>進度紀錄</b>：每批完成日期、commit、新增測試數</li>
+      </ul>
+      <p>切批的規則很簡單：<b>每批 1–4 個子函式，或約 500 行</b>。看不清楚的大塊，先開一個「分析批」只寫文件、不寫程式，分析完再決定怎麼切。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>批次</th><th>範圍（節錄）</th><th>依賴</th></tr>
+        <tr><td class="nw">B01</td><td>專案骨架＋測試基礎設施（比對工具、測試資料載入、外部系統的佔位）</td><td>無</td></tr>
+        <tr><td class="nw">B02</td><td>入口與前段檢核（約 515 行）</td><td>B01</td></tr>
+        <tr><td class="nw">A01 分析</td><td>27 支前置檢核共 8,244 行，逐支判斷本情境會不會走到，決定後面怎麼切</td><td>B01</td></tr>
+        <tr><td class="nw">B03、B04x…</td><td>依 A01 結果拆成數個子批（x 表示之後再細分）</td><td>A01</td></tr>
+        <tr><td class="nw">…</td><td>客戶、帳戶、服務、門號、費用……共 5 個分析批、十多個實作批</td><td>依序</td></tr>
+        <tr><td class="nw">B15</td><td>整合驗收：整條鏈跑一次，殘留佔位清零</td><td>B14</td></tr>
+      </table></div>
+      <p class="callout ok">分析批只依賴 B01，可以提前做。這就是絞殺榕：先把「地基＋驗收工具」蓋好，再一段一段把舊功能搬過來。</p>
+      <p class="note">每一批都<b>新開一個對話</b>，貼上上一批收尾時寫好的「下一批提示詞」。這樣 AI 每次都從乾淨的狀態開始，不會被前面的對話干擾。</p>
+    </section>
+
+    <section class="card" id="safety">
+      <h2>5 道安全網：用證據證明沒改壞</h2>
+      <div class="x"><table class="tbl">
+        <tr><th>安全網</th><th>做法</th><th>防止什麼</th></tr>
+        <tr><td><b>① 基準資料</b></td><td>保存舊系統實際跑出來的輸入、輸出和資料庫快照（本案 22 張表）當標準答案</td><td>沒有標準答案，就不知道新系統對不對</td></tr>
+        <tr><td><b>② 逐欄比對</b></td><td>新系統跑同一筆資料，輸出欄位和每張表逐欄比；流水號、時間戳記先正規化再比</td><td>「看起來差不多」其實差一個欄位</td></tr>
+        <tr><td><b>③ 明確失敗</b></td><td>還沒做的分支直接丟出有說明的錯誤，位置和舊碼一致</td><td>沒做的功能默默跑錯，上線才爆</td></tr>
+        <tr><td><b>④ 重新計數</b></td><td>行數、分支、欄位數用程式重新數；和文件不同就記成「口徑差異」，不默默修正</td><td>相信過時文件，漏掉一半範圍</td></tr>
+        <tr><td><b>⑤ 對照答案隔離</b></td><td>同仁先前用別的流程做過一版，放在專案資料夾<b>外面</b>；測試全綠之前不准看，收尾時才比對</td><td>AI 直接抄答案，看不出新流程好不好</td></tr>
+      </table></div>
+      <p>口徑差異的真實例子：</p>
+      <div class="x"><table class="tbl">
+        <tr><th>項目</th><th>舊文件寫</th><th>重新計數</th><th>原因</th></tr>
+        <tr><td>主函式行數</td><td>約 4,190 行</td><td class="hot">2,167 行</td><td>文件依較舊版本，或把附屬函式算進去</td></tr>
+        <tr><td>訂單主表欄位數</td><td>105</td><td class="hot">133</td><td>文件只列對映欄位，不含系統欄位</td></tr>
+        <tr><td>某段函式起始行</td><td>5970</td><td class="hot">9383</td><td>原始碼版本不同，函式位置移動</td></tr>
+      </table></div>
+      <p class="callout">收尾比對對照答案時，差異分 3 類：<strong>新流程遺漏</strong>、<strong>新流程多出或不同</strong>、<strong>答案疑誤</strong>（新流程依舊碼證據認為答案錯）。補修一律回頭看舊碼，<strong>不得直接複製答案程式碼</strong>。</p>
+    </section>
+
+    <section class="card" id="case">
+      <h2>實戰：第一批（B01 專案骨架）走一遍</h2>
+      <p class="ctx"><b>背景</b>　固網訂單系統的「聯單產製」模組，原本是 C++ 寫的，要改寫成 Java 21。同仁已經用另一套流程（OpenSpec）做過一版；這次改用 superpowers 技能，<b>從空白專案重做</b>，並把整套流程做成別的模組也能用的套件。</p>
+      <ol class="timeline">
+        <li><b>貼上提示詞：</b>AI 讀 Roadmap、讀 C++ 舊碼（先把 Big5 編碼轉成 UTF-8）、重新計數、讀基準資料，寫出 10 章規格（13 條需求），然後<b>停下來</b>。</li>
+        <li><b>人審：</b>規格第 8 章列了 4 題待確認問題，你逐題回答，AI 寫進第 9 章「決策紀錄」。</li>
+        <li><b>寫計畫：</b>writing-plans 把規格拆成 15 個任務。AI 先在暫存專案把程式草稿實際編譯、跑過，才放進計畫。</li>
+        <li><b>子代理執行：</b>每個任務派一個子代理，先寫測試再寫程式，再由審查子代理檢查；每個任務一個 commit，例如「功能：b01 交易包裝」「測試：b01 DB 快照比對 harness」。</li>
+        <li><b>收尾：</b>貼出測試全綠的證據、寫好 5 份函式文件、更新 Roadmap 與下一批提示詞，最後才打開對照答案比對差異。</li>
+      </ol>
+      <h3>人審那一步，對話怎麼走</h3>
+      <ol class="convo">
+        <li class="ai"><span>Copilot</span><p>規格已完成並 commit。第 8 章有 4 題需要你決定，第 1 題：資料庫比對時，流水號（客戶編號、帳戶編號……）每次都不同，要怎麼比？</p></li>
+        <li class="u"><span>你</span><p>「先用設定檔列出要正規化的欄位；日期只比是不是空值。等資料庫開通查完再補。」</p></li>
+        <li class="ai"><span>Copilot</span><p>已寫入決策紀錄。第 3 題：有 4 張表不是這條程式鏈寫入的，要不要比？</p></li>
+        <li class="u"><span>你</span><p>「先排除比對，列入待查，查證後再決定。」</p></li>
+        <li class="tip"><span>技巧</span><p>不確定的事不必當場決定，可以先「排除＋列待查」，但一定要寫下來，不能讓 AI 自己猜。</p></li>
+        <li class="ai"><span>Copilot</span><p>第 4 題：Maven 下載套件需要經過公司 proxy，設定要放哪裡？</p></li>
+        <li class="u"><span>你</span><p>「放在使用者層級的設定檔，不要進 repo。」</p></li>
+        <li class="tip"><span>技巧</span><p>帳號密碼、proxy、本機路徑一律放個人設定，不進版本控制。</p></li>
+        <li class="ai"><span>Copilot</span><p>4 題都已清空，開始用 writing-plans 產出實作計畫。</p></li>
+      </ol>
+      <p class="callout warn"><strong>卡關怎麼辦？</strong>本案做範圍分析時資料庫的防火牆還沒開。AI 沒有停工，而是把所有「需要查資料庫才能確認」的項目集中到 Roadmap 附錄「待 DB 開通後查證」，先做不需要資料庫的部分。<b>遇到阻礙就記下來、繞過去，不要讓 AI 亂猜。</b></p>
+    </section>
+
+    <section class="card" id="kit">
+      <h2>做成可重複的套件：下一個模組直接套</h2>
+      <p>同樣的流程要用在很多模組，所以把它包成「遷移套件」，一行指令就能裝進新專案：</p>
+      <div class="x"><table class="tbl">
+        <tr><th>零件</th><th>內容</th><th>作用</th></tr>
+        <tr><td>3 個遷移 Skill</td><td>範圍分析、批次規格、批次收尾</td><td>把 6 步流程裡的關卡寫死，AI 不能跳步</td></tr>
+        <tr><td>文件範本</td><td>Roadmap、下一批提示詞、批次規格、函式文件、主規格</td><td>每批產出長得一樣，好審、好比較</td></tr>
+        <tr><td>規則檔</td><td>給 AI 的共同規則：DB 只能查不能改、怪異行為照抄、不支援就明確失敗……</td><td>每次對話自動遵守，不必每次重講</td></tr>
+        <tr><td>設定檔</td><td>模組名稱、舊碼位置、編碼、測試指令</td><td>換模組只改設定，不改 Skill</td></tr>
+        <tr><td>安裝腳本＋測試</td><td>可重複執行、可預覽（不寫入），並有自動化測試</td><td>裝錯不會弄壞目標專案</td></tr>
+      </table></div>
+      <p class="note">每批收尾時，把「這批新踩到的坑」補進規則檔。跨模組都適用的，再回饋到套件本身——流程會越用越聰明。</p>
+    </section>
+
+    <section class="card" id="prompts">
+      <h2>換成你的系統：6 則提示詞</h2>
+      <ol class="timeline">
+        <li>在 Copilot 桌面版建立專案，放入舊程式碼、舊文件和舊系統的基準資料（實際的輸入、輸出）。模式選 <b>Plan</b>。</li>
+        <li>依序貼上下面的提示詞，把【】換成你的內容。<b>每一步看過、回答完問題，再進下一步。</b></li>
+        <li>每一批都新開對話，貼上上一批收尾產出的「下一批提示詞」。</li>
+      </ol>
+      <div class="prompt"><div class="prompt-h"><b>💬 ① 範圍分析</b><small>產出 Roadmap，不寫程式</small></div><pre>請分析【舊函式名稱】在【情境】下實際會走到的呼叫鏈，只分析、不寫程式。
+1. 用程式（正規表達式）實際計算每段的行數、分支數、讀寫的資料表，不要沿用舊文件的數字。
+2. 和舊文件不同的地方，列成「口徑差異」表。
+3. 產出 Roadmap：目標與驗收、表格差距矩陣、呼叫鏈逐段狀態、口徑差異、批次順序（每批 1–4 個子函式或約 500 行）、進度紀錄。
+4. 看不清楚的大段，先列成「分析批」。需要但查不到的資料，集中列在附錄「待查證」。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ② 批次規格</b><small>只寫規格、列問題</small></div><pre>請為批次【批次名稱】產出規格。
+本批範圍：【列出函式或行號】
+不在本批：【列出】
+先讀舊碼與基準資料、重新計數，再寫規格，章節包含：目標、範圍、舊系統依據（檔案:行號）、行為需求與情境、設計決策、口徑差異、風險與佔位、待確認問題、決策紀錄。
+舊系統的怪異行為要忠實保留；不支援的分支要明確失敗。只產出規格，不要實作。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ③ 逐題確認</b><small>人審關卡</small></div><pre>請把規格中的「待確認問題」一次問我一題，附上你的建議選項與理由。
+我回答後寫進「決策紀錄」，全部清空後再告訴我可以進入實作計畫。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ④ 實作計畫</b><small>拆成小任務</small></div><pre>請用 writing-plans 依這份規格寫實作計畫。
+每個任務都要：先寫會失敗的測試、再寫程式、列出驗證指令與預期結果。
+計畫必須包含「開工前核實」「以基準資料做特徵化測試」「文件更新」三類任務。
+程式草稿請先在暫存專案實際編譯、跑過再放進計畫。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ⑤ 子代理執行</b><small>一任務一 commit</small></div><pre>請用 subagent-driven-development 執行這份計畫：
+每個任務派一個子代理實作，完成後由另一個子代理對照規格審查；通過才 commit，每個任務一個 commit。
+不要修改資料庫、不要推送到遠端；遇到計畫沒寫到的狀況，停下來問我。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ⑥ 收尾</b><small>拿證據說話</small></div><pre>請收尾這一批：
+1. 執行全部測試，貼出實際輸出當證據；沒有全綠就不要宣告完成。
+2. 更新函式文件、Roadmap（批次狀態、進度紀錄），並寫好下一批的提示詞。
+3. 測試全綠後才比對對照答案，差異分成「遺漏／多出或不同／答案疑誤」記錄在規格最後一章，不得複製答案程式碼。
+4. 把這批新踩到的坑補進規則檔。</pre></div>
+      <p class="done">完成標準：你手上有一份 Roadmap（含口徑差異與批次表），和第一批的規格——待確認問題已全部回答、寫進決策紀錄。</p>
+    </section>
+
+    <section class="card" id="pitfalls">
+      <h2>常見陷阱：差做法 vs 好做法</h2>
+      <div class="vs">
+        <div class="bad"><b>❌ 一口氣丟給 AI</b>「把這個 2 萬行的 C++ 檔改成 Java。」</div>
+        <div class="good"><b>✅ 先切批</b>先做範圍分析產出 Roadmap，每批不超過約 500 行，而且有驗收資料。</div>
+      </div>
+      <div class="vs">
+        <div class="bad"><b>❌ 相信口頭保證</b>AI 說「已完成，測試應該會過」，你就合併了。</div>
+        <div class="good"><b>✅ 要看證據</b>要求貼出實際執行測試的輸出；沒有全綠，不算完成。</div>
+      </div>
+      <div class="vs">
+        <div class="bad"><b>❌ 順手修 bug</b>看到舊碼寫法怪怪的，就請 AI 改成「正確」的。</div>
+        <div class="good"><b>✅ 先照抄、再記錄</b>忠實保留並用測試固定；疑似缺陷寫進規格，由人決定要不要另外修。</div>
+      </div>
+      <div class="vs">
+        <div class="bad"><b>❌ 沒做的先跳過</b>不支援的分支直接 return，假裝成功。</div>
+        <div class="good"><b>✅ 明確失敗</b>丟出寫明原因的錯誤，位置和舊碼一致，之後補做時一搜就找到。</div>
+      </div>
+      <p class="callout warn"><strong>安全提醒：</strong>資料庫只給 AI 唯讀權限；帳號密碼、proxy、本機路徑放個人設定檔，不進 repo；端到端整合測試與資料重置由人執行，不交給 AI。</p>
+    </section>
+
+    <section class="card" id="check">
+      <h2>自我檢核：3 題</h2>
+      <details class="ref"><summary>1. 為什麼不直接「照舊系統重寫一套新的」？</summary><div class="ref-b"><p><b>一次替換多數會失敗。</b>舊系統細節比想像中多，文件又常過時。用絞殺榕的方式一批一批取代，每批都能驗收，出錯也只影響一小塊。</p></div></details>
+      <details class="ref"><summary>2. 舊文件寫主函式 4,190 行，AI 重新計數只有 2,167 行，該怎麼處理？</summary><div class="ref-b"><p><b>記成「口徑差異」，不默默修正。</b>寫下兩邊的數字、來源和可能原因，以重新計數的結果規劃批次；文件以後再更正。</p></div></details>
+      <details class="ref"><summary>3. 既然有一版「對照答案」，為什麼實作時不准看？</summary><div class="ref-b"><p><b>為了驗證新流程本身。</b>先看答案，AI 會直接抄，就分不出是流程好還是抄得好。測試全綠後再比對，才能找出新流程遺漏的地方，甚至發現答案本身的錯。</p></div></details>
+    </section>
+
+    <section class="card recap"><h2>重點回顧</h2><ul>
+      <li>大型重構不要一次重寫：用絞殺榕方式，先蓋地基與驗收工具，再一批一批取代。</li>
+      <li>6 步流程：範圍分析 → 批次規格 → 人審 → 實作計畫 → 子代理執行 → 收尾；AI 讀算寫、人做決定。</li>
+      <li>5 道安全網：基準資料、逐欄比對、明確失敗、重新計數、對照答案隔離。</li>
+      <li>不確定就寫下來（待確認問題、待查證），不讓 AI 猜；完成要看測試證據。</li>
+      <li>把流程做成套件，換模組只改設定，每批的坑回饋到規則檔。</li>
+    </ul><p class="next">下一步：〈<a href="wrapup.html">課後總結</a>〉，選定你的第一個情境，挑一個小函式從「① 範圍分析」試做。</p></section>
+  </main>
+  <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>
+</body>
+</html>
