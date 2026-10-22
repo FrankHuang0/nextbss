@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>知識庫應用：專案分析</title>
+  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>知識庫應用：專案分析</h1>
+    <p>知識庫不只拿來查資料，也能幫你規劃一個沒做過的專案。本課以「專利分析」為例：先把 49 篇專業文獻放進知識庫，請 AI 依文獻寫出規劃書和示範報告，再交給專家審查。</p>
+    <div class="stats"><span>6 階段人機分工</span><span>10 章報告範本</span><span>5 層品質標準</span><span>4 則提示詞</span></div>
+  </header>
+  <main>
+    <nav class="card"><ul class="toc">
+      <li><a href="#goal">學完你會</a></li><li><a href="#why">為什麼先建知識庫</a></li><li><a href="#types">4 種分析</a></li><li><a href="#phases">6 階段分工</a></li><li><a href="#template">報告範本</a></li>
+      <li><a href="#quality">好報告標準</a></li><li><a href="#report">示範報告導讀</a></li><li><a href="#review">專家審查</a></li><li><a href="#apply">換成你的專案</a></li><li><a href="#check">自我檢核</a></li>
+    </ul></nav>
+
+    <p class="callout">本課案例取自內部知識庫的實作成果（規劃書、示範報告、審查備注 3 頁）。示範報告的數字是依公開資訊編的<strong>示範數據，非真實</strong>專利資料庫結果，只用來說明分析架構。</p>
+
+    <section class="card" id="goal">
+      <h2>學完你會</h2>
+      <ol>
+        <li>說出「知識庫 → 規劃書 → 示範報告 → 專家審查」4 個步驟各在做什麼。</li>
+        <li>分清楚哪些工作交給 AI、哪些一定要由人判斷。</li>
+        <li>用「好報告 vs 差報告」的標準，檢查 AI 寫出來的分析。</li>
+        <li>套用本課 4 則提示詞，把同一套做法用在自己的專案。</li>
+      </ol>
+      <p class="note">不懂專利沒關係。本課要學的是<b>做法</b>；專利只是例子，換成市場調查、系統評估、競品分析都適用。</p>
+    </section>
+
+    <section class="card" id="why">
+      <h2>為什麼要先建知識庫？</h2>
+      <p>想像新人第一次做專利分析：他會先讀前輩的報告和教科書，學會「專家怎麼做」再動手。AI 也一樣——<b>先把專業文獻放進知識庫，AI 才有可依循的經驗</b>，而不是憑空亂寫。</p>
+      <ol class="flow">
+        <li><b>收集</b> 49 篇專利分析文獻</li>
+        <li>放進<b>知識庫</b></li>
+        <li>AI 寫<b>規劃書</b></li>
+        <li>AI 做<b>示範報告</b></li>
+        <li><b>專家</b>審查</li>
+        <li>修正後<b>正式執行</b></li>
+      </ol>
+      <div class="x"><table class="tbl">
+        <tr><th>產出</th><th>裡面有什麼</th><th>給誰看、做什麼</th></tr>
+        <tr><td>規劃書</td><td>4 種分析類型、6 階段人機分工、10 章報告範本、品質標準</td><td>專家確認「做法」對不對</td></tr>
+        <tr><td>示範報告</td><td>用示範數據把範本完整跑一次</td><td>讓專家看到「成品長什麼樣」</td></tr>
+        <tr><td>審查備注</td><td>6 個需要專家確認的問題</td><td>告訴專家「重點看哪裡」</td></tr>
+      </table></div>
+      <p class="callout ok">先給示範報告是關鍵：專家看成品，比看計畫書容易指出問題；也能在花錢蒐集真實資料之前，先把範本調好。</p>
+    </section>
+
+    <section class="card" id="types">
+      <h2>先認識：4 種專利分析</h2>
+      <div class="x"><table class="tbl">
+        <tr><th>類型</th><th>一句話說明</th><th>回答的問題</th></tr>
+        <tr><td>技術佈局分析</td><td>看整個技術領域誰在申請、申請什麼</td><td>這個領域競爭有多激烈？</td></tr>
+        <tr><td>FTO 自由實施評估</td><td>檢查產品會不會侵犯別人還有效的專利</td><td>我的產品可以安心賣嗎？</td></tr>
+        <tr><td>白地分析</td><td>找出還沒有人申請的技術組合</td><td>哪裡還有申請機會？</td></tr>
+        <tr><td>競爭對手監控</td><td>持續追蹤對手的申請動向</td><td>對手下一步想做什麼？</td></tr>
+      </table></div>
+      <p class="note">名詞小辭典：<b>IPC</b> = 國際專利分類號（像圖書分類號）；<b>Claims</b> = 申請專利範圍，專利真正保護的內容；<b>FTO</b> = Freedom to Operate，可以自由實施。</p>
+    </section>
+
+    <section class="card" id="phases">
+      <h2>6 階段人機分工：誰做什麼</h2>
+      <p>分工原則只有一句：<b>重複、量大的交給 AI；需要判斷、要負責的交給人。</b>標 🔒 的是過關條件，一定要人工書面確認才能進下一階段。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>階段</th><th>主導</th><th>AI 做</th><th>人判斷</th><th>產出／過關條件</th></tr>
+        <tr><td><b>PH.1</b> 需求與範圍</td><td class="nw">AI＋人</td><td>解析需求、建議 IPC 範圍、列關鍵字與對手名單</td><td>確認分析目的、核定檢索範圍、確定報告讀者</td><td>🔒 委託方書面確認範圍，避免後面重做</td></tr>
+        <tr><td><b>PH.2</b> 資料蒐集</td><td class="nw">AI 主導</td><td>跨 5 國資料庫批次檢索、過濾雜訊、合併同集團申請人</td><td>抽樣 5–10% 驗證、補上資料庫沒收的專利</td><td>🔒 人工驗錯率 &lt; 5%</td></tr>
+        <tr><td><b>PH.3</b> 初步分析</td><td class="nw">AI 主導</td><td>趨勢、國別、申請人排名、技術功效矩陣、摘要草稿</td><td>核對圖表數字、標註異常值、挑選要用的圖</td><td>12–15 張圖表＋摘要草稿</td></tr>
+        <tr><td><b>PH.4</b> 專業解讀</td><td class="nw">人主導</td><td>找先前技術、協助拆解 Claims、整理術語對照</td><td>逐份解讀核心專利、評估法律效力與侵權風險</td><td>🔒 每件高風險專利都要有專利師書面意見</td></tr>
+        <tr><td><b>PH.5</b> 策略轉化</td><td class="nw">AI＋人</td><td>列策略選項、找同業案例、寫行動計畫初稿</td><td>評估可行性、排優先順序、加入市場與法律限制</td><td>即時／3 個月／6 個月行動建議</td></tr>
+        <tr><td><b>PH.6</b> 報告與品管</td><td class="nw">AI＋人</td><td>依範本組裝章節、寫執行摘要、檢查格式</td><td>全文審閱、確認建議符合委託方情境</td><td>🔒 專利師品質簽核後才交付</td></tr>
+      </table></div>
+      <p class="callout ok">看出規律了嗎？資料量大的階段（PH.2、PH.3）由 AI 主導；要下結論、要負責的地方（PH.4、每個 🔒）一定由人把關。</p>
+    </section>
+
+    <section class="card" id="template">
+      <h2>報告範本：10 章各要寫到什麼程度</h2>
+      <p>每一章都分成「AI 可執行」和「人工判斷」兩欄（跟 6 階段同一個原則），並訂出<b>最低品質要求</b>——讀者看完這章，至少要知道什麼。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>分類</th><th>章節</th><th>最低品質要求</th></tr>
+        <tr><td rowspan="3">核心必備</td><td>Ch.01 執行摘要</td><td>不看全文也知道：競爭態勢、主要風險、馬上該做的事。不能只列數字。</td></tr>
+        <tr><td>Ch.02 分析範圍與目的</td><td>說清楚分析什麼、<b>不</b>分析什麼、資料涵蓋多少。</td></tr>
+        <tr><td>Ch.03 分析方法</td><td>另一位分析師照著做，能得到一樣的結果。</td></tr>
+        <tr><td rowspan="2">管理面</td><td>Ch.04 年度申請趨勢</td><td>說明轉折點、判斷技術生命週期、對委託方的意涵。</td></tr>
+        <tr><td>Ch.05 競爭佈局</td><td>各國集中度、重點申請人的技術焦點、近 3 年變化。</td></tr>
+        <tr><td rowspan="3">技術面</td><td>Ch.06 IPC 技術分類</td><td>解讀每個主要分類的意涵，不能只列數字。</td></tr>
+        <tr><td>Ch.07 技術功效矩陣</td><td>每個空白區都要說明「為什麼空白」和建議。</td></tr>
+        <tr><td>Ch.08 關鍵專利與 Claims</td><td>每件關鍵專利都要完整拆解並評估侵權風險。</td></tr>
+        <tr><td rowspan="2">策略面</td><td>Ch.09 研發空白與佈局建議</td><td>技術依據、商業機會、具體行動，三個都要有。</td></tr>
+        <tr><td>Ch.10 行動計畫與結論</td><td>每條建議都指名對象、預期效果、時間點。</td></tr>
+      </table></div>
+      <p class="note">寫範本的技巧：不要只列章名，要寫「這章合格的標準」。AI 照標準寫，專家照標準審，雙方才有共同語言。</p>
+    </section>
+
+    <section class="card" id="quality">
+      <h2>好報告的標準：5 層價值</h2>
+      <p>多數報告停在 T1–T2（有資料、有圖表），但決策者真正需要的是 T4–T5：<b>判斷</b>和<b>行動</b>。</p>
+      <ol class="flow nonum">
+        <li><b>T1</b> 資料整理</li>
+        <li><b>T2</b> 圖表呈現</li>
+        <li><b>T3</b> 文字解析</li>
+        <li><b>T4</b> 策略判斷</li>
+        <li><b>T5</b> 行動建議</li>
+      </ol>
+      <p>同一個發現，差報告和好報告寫起來差很多：</p>
+      <div class="vs">
+        <div class="bad"><b>❌ 只有數字（T1–T2）</b>2019 年申請量 267 件，比 2018 年增加 29 件。</div>
+        <div class="good"><b>✅ 有判斷（T3–T4）</b>2019 年受電動車帶動，申請量加速到 267 件（年增 12%），是近 10 年首次超過 10%，代表技術進入快速成長期，佈局的時機窗口正在打開。</div>
+      </div>
+      <div class="vs">
+        <div class="bad"><b>❌ 只有排名</b>A 公司申請量最多（312 件），排名第一。</div>
+        <div class="good"><b>✅ 有意涵＋建議（T4–T5）</b>A 公司在技術門檻最高的子類佔 31%，遠高於它的整體市佔 10%，顯示刻意集中佈局；若要進入這個子類，建議先做完整的 FTO 分析。</div>
+      </div>
+      <div class="vs">
+        <div class="bad"><b>❌ 只說空白</b>「冷媒流路 × 輕量化」這一格是空白。</div>
+        <div class="good"><b>✅ 說明原因＋下一步</b>這一格空白可能有 3 個原因：①技術上做不到；②市場不需要；③真的是先行機會。建議先查先前技術，確認原因後再決定要不要申請。</div>
+      </div>
+      <p class="callout">核心原則：每張圖表下面都要寫 3 段——① 量化判斷（集中度、趨勢）② 跟委託方有什麼關係 ③ 具體建議或警示。</p>
+    </section>
+
+    <section class="card" id="report">
+      <h2>示範報告導讀：成品長什麼樣</h2>
+      <p class="callout warn">以下數字為<strong>示範數據，非真實</strong>專利資料，只用來說明報告格式。</p>
+      <p>主題：<b>板式熱交換器與熱管理領域</b>，分析期間 2014–2024，6 國資料庫，示範總件數 3,247 件。導讀時注意 4 個看點：</p>
+      <h3>看點 1：執行摘要先給結論</h3>
+      <p>開頭就列 4 個關鍵數字（總件數、年均成長 22%、電動車熱管理子領域成長 38%、2 件需 FTO 的高風險專利）和 5 點發現。每點都是「判斷」，不是單純數字。</p>
+      <h3>看點 2：每張圖都有判斷</h3>
+      <p>年度趨勢圖下面直接寫結論：「2019 年起加速成長，屬<b>快速成長期</b>，尚未成熟，仍有佈局機會」。國別、申請人、IPC 分類圖也都附上「集中度判斷」。</p>
+      <h3>看點 3：技術功效矩陣找熱點和空白</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>技術手段 ╲ 功效</th><th>傳熱效率</th><th>壓降降低</th><th>輕量化</th><th>降成本</th><th>耐久性</th><th>熱均勻</th></tr>
+        <tr><td>板片幾何設計</td><td class="hot">210</td><td>138</td><td>45</td><td>67</td><td>88</td><td>124</td></tr>
+        <tr><td>釺焊工藝</td><td>156</td><td>42</td><td>18</td><td>98</td><td>112</td><td>36</td></tr>
+        <tr><td>冷媒流路設計</td><td>178</td><td>89</td><td class="gap">—</td><td>45</td><td>67</td><td class="hot">201</td></tr>
+        <tr><td>材料技術</td><td>67</td><td>23</td><td class="gap">—</td><td>12</td><td>88</td><td>34</td></tr>
+        <tr><td>系統整合控制</td><td>45</td><td>12</td><td class="gap">—</td><td>78</td><td>34</td><td>188</td></tr>
+      </table></div>
+      <p><span class="hot-k">深色格</span> = 熱點，大家都在搶，<b>侵權風險高</b>；<span class="gap-k">—</span> = 空白，<b>可能是機會</b>，但要先確認是不是「技術上做不到」。</p>
+      <h3>看點 4：行動建議依時間排</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>時間</th><th>行動</th></tr>
+        <tr><td>立即（0–1 個月）</td><td>對 2 件高風險專利做完整 FTO 比對，確認現有產品有沒有落入範圍</td></tr>
+        <tr><td>3 個月內</td><td>在壓降降低技術申請 2–3 件防禦性專利；建立電動車熱管理的對手監控</td></tr>
+        <tr><td>6 個月內</td><td>評估資料中心液冷的佈局可行性；調查「材料技術 × 壓降降低」空白區</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="review">
+      <h2>交給專家審查：審查備注怎麼寫</h2>
+      <p>AI 寫得再像，也要專家確認。示範報告最後附了一份「審查備注」，把<b>需要專業判斷的地方直接列成問題</b>，專家就知道要看哪裡：</p>
+      <ol>
+        <li>技術功效矩陣的維度（技術手段 × 功效）符合實務分類嗎？</li>
+        <li>高風險專利的篩選標準完整嗎？有沒有漏掉重要條件？</li>
+        <li>電動車熱管理的分類號，有正確涵蓋電池系統的應用嗎？</li>
+        <li>Claims 結構分析的解讀方式和法律意涵準確嗎？</li>
+        <li>每章「圖表 → 判斷 → 策略意涵」的寫法，深度夠實際使用嗎？</li>
+        <li>換成真實資料執行時，還要補哪些資訊，才能交給客戶？</li>
+      </ol>
+      <p class="callout ok">你的專案也這樣做：把「AI 沒把握、需要專業判斷」的地方列成 5–6 個問題，附在產出最後面。審查會更快、更有重點。</p>
+    </section>
+
+    <section class="card" id="apply">
+      <h2>換成你的專案：4 則提示詞</h2>
+      <ol class="timeline">
+        <li>收集 20–50 篇和主題相關的專業文獻（公開報告、教科書章節、方法論文章），放進知識庫。用 NotebookLM 就建一本筆記本；用 Copilot 桌面版就放進專案資料夾，模式選 Plan。</li>
+        <li>依序貼上下面 4 則提示詞，把【】換成你的內容。每一步看過、修改過，再進下一步。</li>
+        <li>把規劃書、示範報告、審查問題一起交給專家，收集意見後修正範本。</li>
+      </ol>
+      <div class="prompt"><div class="prompt-h"><b>💬 ① 規劃人機分工流程</b><small>產出規劃書</small></div><pre>你是資深【領域】顧問。請依知識庫裡的文獻，設計「【專案名稱】」的人機協作流程：
+分成數個階段，每個階段列出：AI 執行事項、人工判斷事項、產出、過關條件。
+重複、量大的工作給 AI；需要判斷、要負責的工作給人。不確定的地方請標註並先問我。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ② 設計報告範本</b><small>每章都有品質標準</small></div><pre>請依知識庫文獻，提出「【專案名稱】報告」的標準章節架構。
+每章列出：AI 可執行事項、人工判斷事項、最低品質要求（讀者看完這章至少要知道什麼）。
+請註明每一章參考了哪些文獻。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ③ 產出示範報告</b><small>先看成品長相</small></div><pre>請依上面的範本，用公開資訊做一份示範報告。數據可以用示範值，但每頁都要標示「示範數據，非真實」。
+每張圖表下面寫 3 段：① 量化判斷 ② 和委託方的關係 ③ 具體建議或警示。不要只列數字。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ④ 列出專家審查問題</b><small>告訴專家看哪裡</small></div><pre>請列出這份規劃書和示範報告中，最需要【專家角色】確認的 6 個問題，依重要性排序。
+每題說明：為什麼需要人工判斷、如果判斷錯了會有什麼影響。</pre></div>
+      <p class="done">完成標準：你手上有 3 份東西——規劃書（含分工與過關條件）、示範報告（標明示範數據）、6 題審查問題，而且每份都親自看過、改過至少 1 處。</p>
+    </section>
+
+    <section class="card" id="check">
+      <h2>自我檢核：3 題</h2>
+      <details class="ref"><summary>1. 6 個階段中，哪一個一定要由人主導？為什麼？</summary><div class="ref-b"><p><b>PH.4 專業解讀。</b>判斷專利的法律效力、侵權風險要負責任，AI 只能協助找資料、拆解內容，結論必須由專利師書面確認。</p></div></details>
+      <details class="ref"><summary>2. 「2019 年申請量 267 件，比 2018 年多 29 件」屬於第幾層？怎麼改得更好？</summary><div class="ref-b"><p><b>T1–T2，只有數字。</b>要補上原因（電動車帶動）、判斷（進入快速成長期）、意涵（佈局窗口正在打開），才到 T3–T4。</p></div></details>
+      <details class="ref"><summary>3. 為什麼先做「示範報告」，而不是直接用真實資料做正式報告？</summary><div class="ref-b"><p><b>先讓專家看成品、調好範本。</b>專家看成品比看計畫容易給意見；範本確認後再花時間蒐集真實資料，不容易整份重做。</p></div></details>
+    </section>
+
+    <section class="card recap"><h2>重點回顧</h2><ul>
+      <li>先把專業文獻放進知識庫，AI 才有「前輩經驗」可以依循。</li>
+      <li>4 個步驟：知識庫 → 規劃書 → 示範報告 → 專家審查。</li>
+      <li>重複、量大的交給 AI；判斷、要負責的交給人，每個 🔒 都要人工確認。</li>
+      <li>好報告不只列數字：每張圖都要有判斷、關聯、建議（做到 T4–T5）。</li>
+      <li>AI 的產出要標明「示範／待審」，附上審查問題，交給專家確認後才正式使用。</li>
+    </ul><p class="next">下一步：〈<a href="page-spec-reengineering.html">網頁功能 Reengineering</a>〉，看知識庫怎麼從既有程式產出規格書。</p></section>
+  </main>
+  <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>
+</body>
+</html>
