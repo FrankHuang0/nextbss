@@ -72,6 +72,21 @@
 
     <section class="card" id="start">
       <h2>第一次使用：5 步驟</h2>
+      <div class="callout warn"><b>⚠️ 在公司網路裡用？先設定 proxy（Windows 11）</b>
+        沒設定的話，可能無法登入，或 AI 一直沒有回應。請在<b>安裝前</b>先設好：
+        <ol>
+          <li>按「開始」，搜尋「<b>編輯系統環境變數</b>」，再按「環境變數」。</li>
+          <li>在「系統變數」按「新增」，加入下面兩筆：
+            <table class="tbl">
+              <tr><th>變數名稱</th><th>變數值</th></tr>
+              <tr><td><code>HTTP_PROXY</code></td><td><code>***:8080</code></td></tr>
+              <tr><td><code>HTTPS_PROXY</code></td><td><code>***:8080</code></td></tr>
+            </table>
+          </li>
+          <li>按「確定」關閉視窗，<b>重新開啟</b> Copilot app 才會生效。</li>
+        </ol>
+        <small>*** 是公司的 proxy 位址，請問資訊單位。沒有系統管理員權限的話，加在上方的「使用者變數」也可以。</small>
+      </div>
       <ol class="timeline">
         <li>下載安裝 <a href="https://github.com/features/ai/github-app" target="_blank" rel="noopener">GitHub Copilot app</a>，用 GitHub 帳號登入。<small>需要 Copilot 授權，依公司規定申請。</small></li>
         <li>新增專案：側欄「專案」旁按「＋」，選「本機資料夾」。<small>只放可以給 AI 讀的資料。</small></li>
