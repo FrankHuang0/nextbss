@@ -17,6 +17,7 @@ const LESSONS=[
 {f:'practice.html',t:'實作練習包',s:2,who:'業務同仁',time:'每題 10 分',pre:'NotebookLM 業務助理',out:'待辦表、比較表等練習成果'},
 {f:'quiz.html',t:'情境題暖身測驗',s:2,who:'全員',time:'約 10 分',pre:'實作練習包',out:'10 題得分與易錯觀念'},
 {f:'ai-presentation-workflow.html',t:'AI 簡報工作流',s:3,who:'需要製作簡報者',time:'約 60 分',pre:'第 2 級：應用',out:'一份可核對來源的簡報大綱'},
+{f:'copilot-desktop-basics.html',t:'Copilot 桌面版入門',s:3,who:'需要做規劃與文件者',time:'約 45 分',pre:'NotebookLM 入門（提示詞公式）',out:'一份經角色審查的規劃 HTML'},
 {f:'mobile-order-kb.html',t:'知識庫分享',s:4,who:'開發／系統分析人員',time:'約 20 分',pre:'能閱讀基本程式碼',out:'自己專案的知識庫建置藍圖'},
 {f:'page-spec-reengineering.html',t:'網頁功能 Reengineering',s:4,who:'開發／系統分析人員',time:'約 60 分',pre:'知識庫分享',out:'一份頁面規格書草稿'},
 {f:'wrapup.html',t:'課後總結',s:5,who:'全員',time:'約 10 分',pre:'完成任一級',out:'我的第一個情境與 8 週計畫'}];

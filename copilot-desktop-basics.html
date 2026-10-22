@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Copilot 桌面版入門</title>
+  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Copilot 桌面版入門</h1>
+    <p>GitHub Copilot app（桌面版）：AI 不只回答問題，還會讀你的檔案、執行工具、產出文件。本課用兩個真實工作案例，學會「先規劃、再動工、邊做邊審」。</p>
+    <div class="stats"><span>專案＋工作階段</span><span>3 種模式</span><span>2 個真實案例</span></div>
+  </header>
+  <main>
+    <nav class="card"><ul class="toc">
+      <li><a href="#diff">和 NotebookLM 的差別</a></li><li><a href="#ui">介面</a></li><li><a href="#start">5 步驟上手</a></li>
+      <li><a href="#mode">3 種模式</a></li><li><a href="#case1">案例一：五年規劃</a></li><li><a href="#case2">案例二：知識庫</a></li>
+      <li><a href="#prompts">常用句型</a></li><li><a href="#more">進階設定</a></li><li><a href="#help">卡住怎麼辦</a></li><li><a href="#practice">練習</a></li>
+    </ul></nav>
+
+    <p class="callout">本課的兩個案例取自實際工作對話，已去識別化：人名、單位改用通稱，系統與程式名稱以 *** 代替。對話內容為節錄，保留原本的問法。</p>
+
+    <section class="card" id="diff">
+      <h2>它和 NotebookLM 有什麼不同？</h2>
+      <p>一句話：<b>NotebookLM 是「讀資料的助理」，Copilot 桌面版是「會動手的助理」。</b></p>
+      <div class="x"><table class="tbl">
+        <tr><th>項目</th><th>NotebookLM</th><th>Copilot 桌面版</th></tr>
+        <tr><td>資料從哪來</td><td>你上傳的來源</td><td>電腦上的資料夾、網頁、外接工具（MCP）</td></tr>
+        <tr><td>能做什麼</td><td>回答、摘要、Studio 產出</td><td>讀寫檔案、執行指令、安裝軟體，產出 HTML／PPTX／Word</td></tr>
+        <tr><td>適合的工作</td><td>讀懂資料、問答查證</td><td>多步驟工作：規劃、整理文件、建工具</td></tr>
+        <tr><td>你的角色</td><td>提問＋核對引用</td><td>下任務＋核准計畫＋審查成果</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="ui">
+      <h2>介面：側欄、對話、畫布</h2>
+      <figure class="mock" aria-label="Copilot 桌面版介面示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>GitHub Copilot app</b></div>
+        <div class="mock-body">
+          <div class="mp"><h4><em>1</em>側欄</h4>
+            <div class="tile">📁 專案：五年規劃文件</div>
+            <div class="src on">● BSS 五年演進規劃</div>
+            <div class="src">○ 規劃對話知識庫</div>
+            <div class="src">💬 對話（Chats）</div>
+            <div class="add">＋ 新工作階段</div></div>
+          <div class="mp"><h4><em>2</em>對話</h4>
+            <div class="q">你是資深企業架構師……請先提供規劃大綱和我確認。</div>
+            <div class="a">收到。開始前想先確認 3 件事：<br>① 規劃從哪一年起算？<br>② 目前有幾套訂單系統？<br>③ 報告對象是誰？</div>
+            <div class="in">輸入任務… @ 加檔案、/ 叫指令</div>
+            <div class="opt"><span>模式：Plan ▾</span><span>模型：Auto ▾</span></div></div>
+          <div class="mp"><h4><em>3</em>畫布</h4>
+            <div class="tile">🌐 瀏覽器：預覽 HTML</div>
+            <div class="tile">📝 編輯器：看 Markdown</div>
+            <div class="tile">⌨️ 終端機：看指令執行</div></div>
+        </div>
+        <figcaption>示意圖（非實際畫面，版面會隨官方更新）：左邊選<b>工作階段</b>，中間和 AI 對話，右邊用<b>畫布</b>直接看產出。</figcaption>
+      </figure>
+      <div class="x"><table class="tbl">
+        <tr><th>名詞</th><th>意思</th><th>小提醒</th></tr>
+        <tr><td>專案</td><td>一個資料夾或 GitHub repo</td><td>同一主題的檔案放同一個資料夾</td></tr>
+        <tr><td>工作階段（session）</td><td>一次任務的完整對話，AI 記得前文</td><td>一個主題一個工作階段，名稱取清楚</td></tr>
+        <tr><td>對話（Chats）</td><td>不綁資料夾的純聊天</td><td>適合先發想、問問題</td></tr>
+        <tr><td>模式</td><td>Interactive／Plan／Autopilot</td><td>見下面「3 種模式」</td></tr>
+        <tr><td>模型</td><td>選用哪個 AI 模型</td><td>不確定就選 Auto，自動挑</td></tr>
+        <tr><td>@</td><td>把檔案加進對話</td><td>例：@規劃報告.html</td></tr>
+        <tr><td>/</td><td>叫出指令或技能</td><td>例：/brainstorming</td></tr>
+        <tr><td>附件</td><td>貼上或拖曳截圖、檔案</td><td>錯誤畫面直接截圖貼上</td></tr>
+        <tr><td>畫布</td><td>右側面板：瀏覽器、編輯器、終端機</td><td>說「開啟 HTML 供我審閱」</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="start">
+      <h2>第一次使用：5 步驟</h2>
+      <ol class="timeline">
+        <li>下載安裝 <a href="https://github.com/features/ai/github-app" target="_blank" rel="noopener">GitHub Copilot app</a>，用 GitHub 帳號登入。<small>需要 Copilot 授權，依公司規定申請。</small></li>
+        <li>新增專案：側欄「專案」旁按「＋」，選「本機資料夾」。<small>只放可以給 AI 讀的資料。</small></li>
+        <li>在專案旁按「＋」開新工作階段；輸入框下方選模式（第一次建議 Plan）和模型（Auto）。</li>
+        <li>輸入任務：角色＋任務＋輸出格式＋限制；用 @ 加檔案，截圖可直接貼上。</li>
+        <li>回答 AI 的提問、核准計畫；產出用畫布打開看，不滿意就直接說哪裡要改。</li>
+      </ol>
+    </section>
+
+    <section class="card" id="mode">
+      <h2>3 種模式：給 AI 多少自主權</h2>
+      <div class="x"><table class="tbl">
+        <tr><th>模式</th><th>AI 怎麼做</th><th>什麼時候用</th><th>案例中的例子</th></tr>
+        <tr><td><b>Interactive</b> 互動</td><td>每一步跟你討論，等你回應</td><td>想法還不清楚，要邊談邊修</td><td>五年規劃逐頁討論簡報</td></tr>
+        <tr><td><b>Plan</b> 計畫</td><td>先提計畫，你核准後才執行</td><td>任務大、會改很多檔案或裝軟體</td><td>知識庫：「先提出規劃，待核准才可動工」</td></tr>
+        <tr><td><b>Autopilot</b> 自動</td><td>自己做到完成，不等你</td><td>規則已經講清楚的重複工作</td><td>「依此原則處理其他失敗的檔案」</td></tr>
+      </table></div>
+      <p class="callout ok">不確定就選 <b>Plan</b>：AI 不會直接改檔案，你看過計畫才放行。用其他模式時，在提示詞寫「先提出規劃，待核准才可動工」，效果也一樣。</p>
+    </section>
+
+    <section class="card" id="case1">
+      <h2>案例一：電信 BSS 五年演進規劃（規劃型）</h2>
+      <p class="ctx"><b>背景</b>　要向高階主管提出系統五年演進計畫。手上只有主管提供的研討會簡報，和部門的中長期工作主軸。</p>
+      <div class="prompt"><div class="prompt-h"><b>💬 開場提示詞</b><small>節錄，已去識別化</small></div><pre>「研討會資料」資料夾中是主管在研討會取得的簡報，方向很像我們要做的。
+你是資深企業架構師，請依據這些資料，上網查找相關報告，規劃電信 BSS 系統五年演進計畫。撰寫指引：
+1. 用 inside-out（從內部現況出發）與 outside-in（從市場與客戶出發）兩個角度，說明規劃的理由
+2. 每個階段要有投入、成果、效益指標與計算公式，並參考實際成功案例估算可能的值
+3. 用 CEO、CTO 等高階主管的角色審查並優化，直到各角色都滿意為止
+4. 先提供規劃大綱和我確認，通過後再做細部規劃
+5. 有不清楚的地方請向我提問，直到你有信心進行規劃為止</pre></div>
+      <h3>對話怎麼走</h3>
+      <ol class="convo">
+        <li class="ai"><span>Copilot</span><p>先讀完研討會資料，再提出幾個問題：規劃從哪年起算、現有系統的分工、報告對象……</p></li>
+        <li class="u"><span>你</span><p>「5 套訂單系統分別負責不同產品線，周邊系統部分相同，彼此原則上沒有互動。」</p></li>
+        <li class="ai"><span>Copilot</span><p>提出規劃大綱 → 你核准 → 才開始寫細部規劃。</p></li>
+        <li class="u"><span>你</span><p>「系統介接主要透過 API 和介面檔交換，*** 是流程控管元件，請更正你的認知。」</p></li>
+        <li class="tip"><span>技巧</span><p>AI 會誤解你的環境。發現錯就直接更正，它會帶著新的認知繼續做。</p></li>
+        <li class="u"><span>你</span><p>「我還是弄不清楚 TMF、本體論和 AWS AgentCore，是否可用一個簡單的比喻來說明？」</p></li>
+        <li class="tip"><span>技巧</span><p>看不懂就要求比喻，AI 很擅長把抽象概念講白。</p></li>
+        <li class="u"><span>你</span><p>「把這份技術選型比較整理成一頁 ADR（架構決策紀錄），方便向上報告時引用。」→「轉成簡報版 PPTX」→「合併成一份完整大簡報」→「開啟簡報供我 review」</p></li>
+        <li class="tip"><span>技巧</span><p>同一份內容，HTML、PPTX、一頁摘要都能請它轉。用畫布打開，邊看邊改。</p></li>
+        <li class="u"><span>你</span><p>「請以高階主管的角度提出優化建議，再依建議優化內容。」</p></li>
+        <li class="u"><span>你</span><p>「就訂單系統的角度來回覆，100 字內！」</p></li>
+        <li class="tip"><span>技巧</span><p>要短就給字數上限，要表格就說「用表格」。</p></li>
+      </ol>
+      <h3>這個案例學到的 5 個技巧</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>技巧</th><th>原句</th><th>為什麼有效</th></tr>
+        <tr><td>指定角色</td><td>你是資深企業架構師</td><td>回答的深度和用詞會跟著角色走</td></tr>
+        <tr><td>先大綱後細節</td><td>先提供規劃大綱和我確認</td><td>方向錯了只浪費一頁，不是一整份</td></tr>
+        <tr><td>請 AI 反問</td><td>有不清楚的地方請向我提問</td><td>補齊 AI 不知道的背景</td></tr>
+        <tr><td>多角色審查</td><td>用 CEO、CTO 的角色審查並優化</td><td>先自己抓到主管會問的問題</td></tr>
+        <tr><td>即時更正</td><td>請更正你的認知</td><td>避免錯誤一路帶到最後</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="case2">
+      <h2>案例二：規劃對話知識庫（動手型）</h2>
+      <p class="ctx"><b>背景</b>　想讓 AI 記住過去每次對話的工作流程、決策和領域知識，越用越懂你。這次 AI 不只寫文件，還要裝軟體、寫程式、匯入上千份規格文件。</p>
+      <h3>對話怎麼走</h3>
+      <ol class="convo">
+        <li class="u"><span>你</span><p>「參考以下網頁（LLM Wiki 文章），規劃如何把我和你每個 session 的對話和工作內容建成知識庫，讓知識逐步累積。看完請先提出你的理解和規劃，待核准才可動工。」</p></li>
+        <li class="ai"><span>Copilot</span><p>先說明自己的理解，提出三層架構（原始紀錄／整理後的知識頁／規則）的規劃，等你核准。</p></li>
+        <li class="u"><span>你</span><p>「想累積的知識：1. 工作流程 2. 領域知識 3. 我的思考與決策方式 4. 創新提議和盲點提醒。還有不足，自行提出 3 點補充供我參考。」</p></li>
+        <li class="tip"><span>技巧</span><p>請 AI 自己補 3 點，常會補到你沒想到的地方。</p></li>
+        <li class="u"><span>你</span><p>「資料儲存可以用 MongoDB 嗎？」……「從你的規劃來看，MongoDB 是不是可有可無？」</p></li>
+        <li class="tip"><span>技巧</span><p>挑戰 AI 的建議，逼它講清楚取捨，不要照單全收。</p></li>
+        <li class="u"><span>你</span><p>「依上述談話，重新提出完整規劃供我確認。」→「了解，先做單機版。」→「go on」</p></li>
+        <li class="u"><span>你</span><p>「安裝 MongoDB」→「將啟動的 command 包成一支 bat」→「由你啟動」</p></li>
+        <li class="ai"><span>Copilot</span><p>執行前先列出要跑的指令，等你允許才執行。</p></li>
+        <li class="tip"><span>技巧</span><p>AI 要執行指令或安裝軟體時會先問你，看懂再按允許。</p></li>
+        <li class="u"><span>你</span><p>（貼上錯誤畫面截圖）「出現這個畫面，要怎麼處理？」</p></li>
+        <li class="u"><span>你</span><p>「請匯入〈規格文件〉資料夾（包含子目錄）的文件。分批匯入，每次以 10 筆為限，直到完全匯入所有文件。」</p></li>
+        <li class="tip"><span>技巧</span><p>量大就分批：每批都能檢查，出錯也容易找到是哪一批。</p></li>
+        <li class="u"><span>你</span><p>「這份規格文件中有專案客戶的內容，為何回答時沒被參照？」</p></li>
+        <li class="ai"><span>Copilot</span><p>查出原因：這份是舊版 Word 格式，轉檔沒有成功。</p></li>
+        <li class="u"><span>你</span><p>「先重轉這 5 個檔案，並顯示轉檔後的局部資料供我確認。」→「內容正確，請依此原則處理其他失敗的檔案。」</p></li>
+        <li class="u"><span>你</span><p>「請依這次匯入的成功和失敗經驗，重新優化文件匯入處理流程。」</p></li>
+        <li class="tip"><span>技巧</span><p>小量試做 → 你確認 → 再全量；最後把經驗寫回流程，下次不再犯同樣的錯。</p></li>
+      </ol>
+      <h3>這個案例學到的 5 個技巧</h3>
+      <div class="x"><table class="tbl">
+        <tr><th>技巧</th><th>原句</th><th>為什麼有效</th></tr>
+        <tr><td>規劃待核准</td><td>先提出你的理解和規劃，待核准才可動工</td><td>會裝軟體、改檔案的工作，先看再放行</td></tr>
+        <tr><td>請 AI 補充</td><td>自行提出 3 點補充供我參考</td><td>找出自己的盲點</td></tr>
+        <tr><td>挑戰建議</td><td>MongoDB 是不是可有可無？</td><td>逼出取捨理由，避免過度設計</td></tr>
+        <tr><td>分批＋驗證</td><td>分批匯入，每次以 10 筆為限</td><td>錯誤早發現、好定位</td></tr>
+        <tr><td>經驗回寫流程</td><td>依成功和失敗經驗，重新優化流程</td><td>同樣的錯不會再犯</td></tr>
+      </table></div>
+      <p class="note">這個知識庫後來透過 MCP 接回 Copilot，其他工作階段也能直接查詢。做法見第 4 級〈<a href="mobile-order-kb.html">知識庫分享</a>〉。</p>
+    </section>
+
+    <section class="card" id="prompts">
+      <h2>常用句型（可直接複製）</h2>
+      <p>把底線 ___ 換成你的內容。可以組合使用，例如①＋②一起放在開場。</p>
+      <div class="prompt"><div class="prompt-h"><b>① 先規劃再動工</b><small>大任務的開場</small></div><pre>請先提出你的理解和規劃，待我核准後才動工。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>② 請 AI 反問</b><small>補齊背景</small></div><pre>有不清楚的地方請先向我提問，一次最多 5 題，直到你有信心再開始。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>③ 角色審查迴圈</b><small>交出去之前</small></div><pre>請分別以 CEO、CTO、第一線主管的角色審查這份內容，提出優化建議並修改；如此反覆 3 次後，再通知我審查。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>④ 小量試做</b><small>大量資料處理</small></div><pre>先處理前 5 筆，並顯示結果的局部內容供我確認；確認後再依同樣原則處理其餘的部分。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>⑤ 用比喻解釋</b><small>看不懂時</small></div><pre>我還是不懂 ___，請用一個生活中的比喻說明，再對應回原本的概念。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>⑥ 指定產出</b><small>格式＋位置</small></div><pre>請把上述內容整理成 HTML（右側加章節選單），存到「___」資料夾，完成後開啟供我審閱。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>⑦ 經驗回寫</b><small>做完之後</small></div><pre>請依這次的成功和失敗經驗，更新處理流程，並列出你改了哪些步驟。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>⑧ 精簡回覆</b><small>要重點時</small></div><pre>就 ___ 的角度回覆，100 字內。</pre></div>
+    </section>
+
+    <section class="card" id="more">
+      <h2>進階：讓 Copilot 更懂你</h2>
+      <p>大部分設定在側欄的「Customize」分頁或 App 設定裡。熟悉基本操作後再來試。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>功能</th><th>做什麼</th><th>例子</th></tr>
+        <tr><td>自訂指示</td><td>每次對話都自動套用的說明（設定 → Sessions → App instructions）</td><td>「我是新手，說明儘量簡單清楚」</td></tr>
+        <tr><td>Skills 技能</td><td>一包可重用的做法，用 / 叫出</td><td>/brainstorming：先釐清需求再動手</td></tr>
+        <tr><td>MCP</td><td>把外部工具、資料庫接給 AI 用</td><td>查知識庫、查資料表</td></tr>
+        <tr><td>/chronicle</td><td>查詢過去的工作紀錄</td><td>/chronicle standup：摘要近期做了什麼</td></tr>
+        <tr><td>/rubber-duck</td><td>請另一個模型挑毛病</td><td>重要規劃交出前先審一次</td></tr>
+        <tr><td>自動化</td><td>排程定期執行任務</td><td>每週一整理上週工作</td></tr>
+      </table></div>
+      <p><small>功能名稱與位置以<a href="https://docs.github.com/en/copilot/how-tos/github-copilot-app" target="_blank" rel="noopener">官方文件</a>為準，版本更新後可能不同。</small></p>
+    </section>
+
+    <section class="card" id="help">
+      <h2>使用提醒與卡住怎麼辦</h2>
+      <div class="callout warn"><b>資料安全三件事</b><ul>
+        <li>只把公司允許的資料放進專案資料夾；個資、客戶資料、密碼不要放。對外分享前先去識別化。</li>
+        <li>AI 要執行指令、安裝軟體、刪除檔案時，看懂再按允許。</li>
+        <li>產出一定要人工審查，數字和事實要核對來源。</li>
+      </ul></div>
+      <div class="x"><table class="tbl">
+        <tr><th>狀況</th><th>這樣說</th></tr>
+        <tr><td>AI 一直誤解背景</td><td>「請更正你的認知：___。請先複述你的理解。」</td></tr>
+        <tr><td>回答太長看不完</td><td>「100 字內」、「用表格整理」</td></tr>
+        <tr><td>做到一半中斷</td><td>「繼續」或「Continue from where you left off」</td></tr>
+        <tr><td>改壞了原本的內容</td><td>指出位置：「右邊選單被改壞了，請修正」。重要檔案先備份。</td></tr>
+        <tr><td>英文縮寫看不懂</td><td>「英文縮寫第一次出現時要補上全文」</td></tr>
+        <tr><td>對話太長、前後混亂</td><td>開新的工作階段，貼上前一階段的結論再繼續。</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="practice">
+      <h2>練習：用 Copilot 規劃一份小計畫</h2>
+      <p>主題：〈部門 AI 工具導入 3 個月計畫〉，也可以換成你手上的真實工作。</p>
+      <ol>
+        <li>建一個資料夾，放 1–2 份可公開的參考資料；加為專案，開新工作階段，模式選 Plan。</li>
+        <li>貼上下面的提示詞（或用句型①②自己組）。</li>
+        <li>回答 AI 的提問，核准大綱。</li>
+        <li>用句型③，請它用主管的角色審查一輪。</li>
+        <li>請它開啟 HTML 供你審閱，至少親自要求修改 1 個地方。</li>
+      </ol>
+      <div class="prompt"><div class="prompt-h"><b>💬 練習提示詞</b><small>把 @ 換成你的檔案</small></div><pre>你是資深專案經理。請依 @參考資料，規劃「部門 AI 工具導入 3 個月計畫」，內容包含目標、每月工作、負責角色、效益指標，輸出成 HTML。
+請先提出大綱待我核准；有不清楚的地方請先向我提問。</pre></div>
+      <p class="done">完成標準：AI 有先反問、先給大綱；最後的 HTML 經過一輪角色審查，而且你親自要求修改過至少 1 處。</p>
+    </section>
+
+    <section class="card recap"><h2>重點回顧</h2><ul>
+      <li>Copilot 桌面版會讀檔、執行、產出文件；你負責下任務、核准、審查。</li>
+      <li>一個主題一個工作階段；@ 加檔案、/ 叫指令、畫布看成果。</li>
+      <li>不確定就用 Plan：先規劃、待核准、再動工。</li>
+      <li>好用技巧：指定角色、請 AI 反問、多角色審查、小量試做再全量、經驗回寫流程。</li>
+      <li>執行指令前看懂再允許；產出一定要人工審查。</li>
+    </ul><p class="next">下一步：到第 4 級〈<a href="mobile-order-kb.html">知識庫分享</a>〉，看 AI＋MCP 怎麼把規格文件變成可查詢的知識庫。</p></section>
+  </main>
+  <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>
+</body>
+</html>
