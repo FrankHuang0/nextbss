@@ -10,16 +10,36 @@
   <header>
     <h1>Copilot 桌面版入門</h1>
     <p>GitHub Copilot app（桌面版）：AI 不只回答問題，還會讀你的檔案、執行工具、產出文件。本課用兩個真實工作案例，學會「先規劃、再動工、邊做邊審」。</p>
-    <div class="stats"><span>專案＋工作階段</span><span>3 種模式</span><span>2 個真實案例</span></div>
+    <div class="stats"><span>10 分鐘跟著做</span><span>3 種模式</span><span>2 個真實案例</span><span>7 個常見問題</span></div>
   </header>
   <main>
     <nav class="card"><ul class="toc">
-      <li><a href="#diff">和 NotebookLM 的差別</a></li><li><a href="#ui">介面</a></li><li><a href="#start">5 步驟上手</a></li>
-      <li><a href="#mode">3 種模式</a></li><li><a href="#case1">案例一：五年規劃</a></li><li><a href="#case2">案例二：知識庫</a></li>
-      <li><a href="#prompts">常用句型</a></li><li><a href="#more">進階設定</a></li><li><a href="#help">卡住怎麼辦</a></li><li><a href="#practice">練習</a></li>
+      <li><a href="#goal">學完你會</a></li><li><a href="#diff">和 NotebookLM 的差別</a></li><li><a href="#concept">它怎麼做事</a></li><li><a href="#ui">介面</a></li>
+      <li><a href="#start">5 步驟上手</a></li><li><a href="#mode">3 種模式</a></li><li><a href="#first">跟著做</a></li><li><a href="#permit">權限詢問</a></li>
+      <li><a href="#case1">案例一：五年規劃</a></li><li><a href="#case2">案例二：知識庫</a></li><li><a href="#better">提示詞 6 原則</a></li><li><a href="#prompts">常用句型</a></li>
+      <li><a href="#more">進階設定</a></li><li><a href="#help">卡住怎麼辦</a></li><li><a href="#faq">常見問題</a></li><li><a href="#check">自我檢核</a></li><li><a href="#practice">練習</a></li>
     </ul></nav>
 
     <p class="callout">本課的兩個案例取自實際工作對話，已去識別化：人名、單位改用通稱，系統與程式名稱以 *** 代替。對話內容為節錄，保留原本的問法。</p>
+
+    <section class="card" id="goal">
+      <h2>學完你會、開始前準備</h2>
+      <h3>學完這一課，你可以</h3>
+      <ol>
+        <li>說出 Copilot 桌面版和 NotebookLM 的差別，知道什麼工作適合交給它。</li>
+        <li>自己建立專案、開工作階段，完成第一個「讀檔 → 整理 → 存檔」任務。</li>
+        <li>看懂權限詢問，知道什麼時候該按允許、什麼時候該拒絕。</li>
+        <li>用「先規劃、待核准、再動工」的方式，帶 AI 完成一份規劃文件。</li>
+      </ol>
+      <h3>開始前，確認這 5 件事</h3>
+      <ul class="check">
+        <li>☐ 有 GitHub 帳號，並已依公司規定申請 Copilot 授權。</li>
+        <li>☐ 電腦已安裝 <b>Git</b>（官方列為必要條件；沒有的話請資訊單位協助安裝）。</li>
+        <li>☐ 在公司網路使用：已設定 proxy（見下方「第一次使用」）。</li>
+        <li>☐ 準備一個<b>練習用資料夾</b>，只放可以給 AI 讀的資料。</li>
+        <li>☐ 預留 60 分鐘，跟著「跟著做」實際操作一次。</li>
+      </ul>
+    </section>
 
     <section class="card" id="diff">
       <h2>它和 NotebookLM 有什麼不同？</h2>
@@ -30,6 +50,26 @@
         <tr><td>能做什麼</td><td>回答、摘要、Studio 產出</td><td>讀寫檔案、執行指令、安裝軟體，產出 HTML／PPTX／Word</td></tr>
         <tr><td>適合的工作</td><td>讀懂資料、問答查證</td><td>多步驟工作：規劃、整理文件、建工具</td></tr>
         <tr><td>你的角色</td><td>提問＋核對引用</td><td>下任務＋核准計畫＋審查成果</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="concept">
+      <h2>先搞懂：它是怎麼幫你做事的？</h2>
+      <p>把它想成<b>一位很聰明、但第一天上班的助理</b>：做事很快，但不了解你的公司，也看不到你沒給它的資料。你負責交代清楚、核准做法、檢查成果。</p>
+      <ol class="flow">
+        <li><b>你</b>交代任務</li>
+        <li><b>AI</b> 讀資料、反問</li>
+        <li><b>AI</b> 提出做法</li>
+        <li><b>你</b>核准</li>
+        <li><b>AI</b> 動手做</li>
+        <li><b>你</b>檢查、要求修改</li>
+      </ol>
+      <div class="x"><table class="tbl">
+        <tr><th>新手要知道的事</th><th>所以你要</th></tr>
+        <tr><td>它只看得到你給的資料夾、檔案和網路上的公開資料</td><td>把需要的資料放進專案，或用 @ 指定檔案</td></tr>
+        <tr><td>每個工作階段的記憶是分開的</td><td>同一件事在同一個工作階段做完；換主題就開新的</td></tr>
+        <tr><td>它真的會動手：建檔、改檔、執行指令</td><td>動手前會先問你，看懂再允許（見「看懂權限詢問」）</td></tr>
+        <tr><td>它會出錯，而且講得很有自信</td><td>數字、日期、規定一定要核對來源</td></tr>
       </table></div>
     </section>
 
@@ -107,6 +147,57 @@
       <p class="callout ok">不確定就選 <b>Plan</b>：AI 不會直接改檔案，你看過計畫才放行。用其他模式時，在提示詞寫「先提出規劃，待核准才可動工」，效果也一樣。</p>
     </section>
 
+    <section class="card" id="first">
+      <h2>跟著做：10 分鐘完成第一個任務</h2>
+      <p>目標：請 AI 讀一份會議紀錄，整理成待辦清單並存檔。全程用虛構資料，做錯也沒關係。</p>
+      <ol class="timeline">
+        <li>在桌面建立資料夾「AI練習」，用記事本新增「會議紀錄.txt」，貼上下面的範例文字後存檔。</li>
+        <li>在 Copilot 側欄「專案」旁按「＋」，選「AI練習」資料夾；再按專案旁的「＋」開新工作階段，模式選 <b>Plan</b>、模型選 <b>Auto</b>。</li>
+        <li>貼上下面的提示詞，按送出。</li>
+        <li><b>你會看到：</b>AI 先讀檔，回覆它打算怎麼做（例如：讀檔 → 找出待辦 → 建立表格 → 存檔）。看過沒問題，回覆「OK，開始」或按核准。</li>
+        <li><b>你會看到：</b>要建立檔案時跳出<b>權限詢問</b>。確認位置在「AI練習」資料夾裡，再按允許。</li>
+        <li><b>你會看到：</b>AI 回報完成。輸入「開啟待辦清單.md 供我審閱」，右側畫布會顯示內容；打開資料夾也能看到新檔案。</li>
+        <li>親自要求修改一次，例如：「期限改成日期格式，並依期限排序」。</li>
+      </ol>
+      <p><b>範例會議紀錄（虛構）</b></p>
+      <div class="sample">週會紀錄　10/20
+1. 新人教育訓練教材，小林負責更新，月底前完成。
+2. 客服常見問題整理成 FAQ，阿美下週三前交初稿。
+3. 下季預算表格式要統一，由組長確認後通知大家。
+4. 下次週會改到 10/27 下午兩點。</div>
+      <div class="prompt"><div class="prompt-h"><b>💬 第一個任務的提示詞</b><small>直接複製</small></div><pre>請讀 @會議紀錄.txt，整理出待辦事項表格（欄位：事項、負責人、期限），存成「待辦清單.md」。
+請先說明你的做法，待我核准後再動工。</pre></div>
+      <details class="ref"><summary>參考結果（每次內容可能略有不同）</summary><div class="ref-b">
+        <div class="x"><table class="tbl">
+          <tr><th>事項</th><th>負責人</th><th>期限</th></tr>
+          <tr><td>更新新人教育訓練教材</td><td>小林</td><td>月底前</td></tr>
+          <tr><td>客服常見問題整理成 FAQ 初稿</td><td>阿美</td><td>下週三前</td></tr>
+          <tr><td>統一下季預算表格式</td><td>組長</td><td>未定（確認後通知）</td></tr>
+        </table></div>
+        <p class="chk"><b>檢查重點：</b>第 4 點「改開會時間」不是待辦，AI 若把它列進去，請它說明理由或刪除；期限不明的不能自己編日期。</p>
+      </div></details>
+      <p class="done">完成標準：「AI練習」資料夾裡多了「待辦清單.md」，內容是表格；你看過它的做法、處理過一次權限詢問，並親自要求修改過 1 次。</p>
+    </section>
+
+    <section class="card" id="permit">
+      <h2>看懂權限詢問：按「允許」前問自己 3 個問題</h2>
+      <p>AI 要建立或修改檔案、執行指令、安裝軟體時，會先停下來問你。按鈕名稱可能隨版本不同，但意思都是「允許」或「拒絕」。</p>
+      <ol>
+        <li><b>在我的專案資料夾裡嗎？</b>動到專案以外的地方要特別小心。</li>
+        <li><b>我看得懂它要做什麼嗎？</b>看不懂就先別允許。</li>
+        <li><b>做錯了救得回來嗎？</b>刪除、覆蓋、安裝軟體，救不回來的事先備份。</li>
+      </ol>
+      <div class="x"><table class="tbl">
+        <tr><th>AI 想做的事</th><th>風險</th><th>建議</th></tr>
+        <tr><td>讀取專案裡的檔案</td><td>低</td><td>通常可以允許</td></tr>
+        <tr><td>新增、修改檔案</td><td>中</td><td>確認檔名和位置；重要檔案先備份</td></tr>
+        <tr><td>執行指令</td><td>中</td><td>看不懂就問：「這個指令會做什麼？有什麼風險？」</td></tr>
+        <tr><td>安裝軟體</td><td>高</td><td>依公司規定，必要時先問資訊單位</td></tr>
+        <tr><td>刪除檔案、資料夾</td><td>高</td><td>先備份；不確定就拒絕，請它改成「搬到備份資料夾」</td></tr>
+      </table></div>
+      <p class="callout ok">按了拒絕也不會壞掉。AI 會停下來，你可以接著說：「請先說明這一步要做什麼、為什麼需要。」</p>
+    </section>
+
     <section class="card" id="case1">
       <h2>案例一：電信 BSS 五年演進規劃（規劃型）</h2>
       <p class="ctx"><b>背景</b>　要向高階主管提出系統五年演進計畫。手上只有主管提供的研討會簡報，和部門的中長期工作主軸。</p>
@@ -179,6 +270,28 @@
       <p class="note">這個知識庫後來透過 MCP 接回 Copilot，其他工作階段也能直接查詢。做法見第 4 級〈<a href="mobile-order-kb.html">知識庫分享</a>〉。</p>
     </section>
 
+    <section class="card" id="better">
+      <h2>提示詞從 60 分到 90 分：6 個原則</h2>
+      <p>整理自 GitHub 官方的提示詞建議，換成工作上的例子。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>原則</th><th>為什麼</th><th>例子</th></tr>
+        <tr><td>先講目標，再列細節</td><td>AI 最重視開頭和結尾的要求</td><td>第一句說要做什麼，最重要的條件放前面</td></tr>
+        <tr><td>給範例</td><td>比形容詞清楚</td><td>「格式像這樣：事項｜負責人｜期限」</td></tr>
+        <tr><td>拆成小步驟</td><td>大任務容易走偏</td><td>先大綱 → 再第一章 → 再審查</td></tr>
+        <tr><td>不要說「這個」</td><td>AI 不知道你指哪個</td><td>說「@規劃報告.html 的第 3 節」</td></tr>
+        <tr><td>直接下規則</td><td>比「記得要…」有效</td><td>「用表格輸出」，而不是「記得用表格」</td></tr>
+        <tr><td>換任務就開新工作階段</td><td>舊對話會干擾新任務</td><td>新主題 → 新工作階段</td></tr>
+      </table></div>
+      <div class="vs">
+        <div class="bad"><b>❌ 太模糊</b>幫我看一下這個，弄得好一點。</div>
+        <div class="good"><b>✅ 清楚具體</b>請讀 @部門季報.docx，以主管的角度挑出 3 個最需要補強的地方，每點 50 字內，用表格列出「問題｜建議改法」。</div>
+      </div>
+      <div class="vs">
+        <div class="bad"><b>❌ 一次要全部</b>幫我做一份完整的五年規劃簡報。</div>
+        <div class="good"><b>✅ 拆步驟、先確認</b>我要做五年規劃簡報，對象是高階主管。請先提出 10 頁以內的大綱給我確認，有不清楚的先問我。</div>
+      </div>
+    </section>
+
     <section class="card" id="prompts">
       <h2>常用句型（可直接複製）</h2>
       <p>把底線 ___ 換成你的內容。可以組合使用，例如①＋②一起放在開場。</p>
@@ -225,6 +338,25 @@
       </table></div>
     </section>
 
+    <section class="card" id="faq">
+      <h2>新手常見問題</h2>
+      <details class="ref"><summary>我不會寫程式，可以用嗎？</summary><div class="ref-b"><p>可以。用中文描述你要的結果就好。它原本為開發者設計，但整理文件、做規劃、產出 HTML 簡報都能做；本課兩個案例都不用寫程式。</p></div></details>
+      <details class="ref"><summary>它會不會把我的檔案改壞？</summary><div class="ref-b"><p>有可能，所以：① 第一次用 Plan，先看它打算做什麼；② 重要檔案先複製一份到練習資料夾再處理；③ 如果專案是 Git repo，可以按「Changes」看它改了哪些地方。</p></div></details>
+      <details class="ref"><summary>它記得我上次說過的話嗎？</summary><div class="ref-b"><p>同一個工作階段記得；開新的工作階段就不記得。每次都要套用的偏好（例如「說明儘量簡單」）寫進自訂指示；要接續舊工作，貼上前次的結論，或用 /chronicle 查過去的紀錄。</p></div></details>
+      <details class="ref"><summary>「對話（Chats）」和「工作階段」差在哪？</summary><div class="ref-b"><p>Chats 只聊天，不綁資料夾，適合先發想、釐清需求；確定要讀檔、產出檔案，再開工作階段。官方也建議先用 Chats 想清楚，可以減少重工。</p></div></details>
+      <details class="ref"><summary>模型要選哪個？會不會很耗用量？</summary><div class="ref-b"><p>不確定就選 <b>Auto</b>，它會依任務難度自動挑。簡單工作用輕量模型，複雜規劃再用高階模型；換任務就開新工作階段，不帶著一長串無關的對話，也比較省用量。用量額度依公司方案而定。</p></div></details>
+      <details class="ref"><summary>AI 回答得很肯定，就一定對嗎？</summary><div class="ref-b"><p>不一定。AI 會出錯，而且常常講得很有自信。數字、日期、規定一定要核對；可以要求它「列出依據的檔案和段落」，再自己對一次。</p></div></details>
+      <details class="ref"><summary>公司資料放進去安全嗎？</summary><div class="ref-b"><p>依公司的授權方案和規定。企業版可以由管理者設定哪些檔案不給 AI 讀（content exclusion）。不確定能不能用的資料，就不要放進專案資料夾。</p></div></details>
+    </section>
+
+    <section class="card" id="check">
+      <h2>自我檢核：3 題小測驗</h2>
+      <p>先自己想答案，再點開看解答。</p>
+      <details class="ref"><summary>1. 你要請 AI 整理 200 份文件，第一步最好怎麼做？</summary><div class="ref-b"><p><b>先處理 5 份，確認結果再做其餘的。</b>小量試做可以早點發現問題（例如舊格式轉檔失敗），不會整批重來。</p></div></details>
+      <details class="ref"><summary>2. AI 跳出權限詢問：要刪除「舊資料」資料夾，但你不知道為什麼。怎麼辦？</summary><div class="ref-b"><p><b>先拒絕，再請它說明。</b>刪除救不回來；可以請它改成「搬到備份資料夾」。</p></div></details>
+      <details class="ref"><summary>3. 上午做完五年規劃，下午要整理會議紀錄。要在同一個工作階段繼續嗎？</summary><div class="ref-b"><p><b>不要，開新的工作階段。</b>不同主題混在一起，AI 容易被前面的內容干擾，也比較耗用量。</p></div></details>
+    </section>
+
     <section class="card" id="practice">
       <h2>練習：用 Copilot 規劃一份小計畫</h2>
       <p>主題：〈部門 AI 工具導入 3 個月計畫〉，也可以換成你手上的真實工作。</p>
@@ -245,7 +377,7 @@
       <li>一個主題一個工作階段；@ 加檔案、/ 叫指令、畫布看成果。</li>
       <li>不確定就用 Plan：先規劃、待核准、再動工。</li>
       <li>好用技巧：指定角色、請 AI 反問、多角色審查、小量試做再全量、經驗回寫流程。</li>
-      <li>執行指令前看懂再允許；產出一定要人工審查。</li>
+      <li>權限詢問先問 3 件事：在專案裡嗎？看得懂嗎？救得回來嗎？產出一定要人工審查。</li>
     </ul><p class="next">下一步：到第 4 級〈<a href="mobile-order-kb.html">知識庫分享</a>〉，看 AI＋MCP 怎麼把規格文件變成可查詢的知識庫。</p></section>
   </main>
   <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>
