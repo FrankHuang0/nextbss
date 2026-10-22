@@ -21,7 +21,7 @@ const LESSONS=[
 {f:'mobile-order-kb.html',t:'知識庫分享',s:4,who:'開發／系統分析人員',time:'約 20 分',pre:'能閱讀基本程式碼',out:'自己專案的知識庫建置藍圖'},
 {f:'kb-project-analysis.html',t:'知識庫應用：專案分析',s:4,who:'規劃／分析人員',time:'約 40 分',pre:'知識庫分享',out:'一份人機分工規劃書與報告範本'},
 {f:'page-spec-reengineering.html',t:'網頁功能 Reengineering',s:4,who:'開發／系統分析人員',time:'約 60 分',pre:'知識庫分享',out:'一份頁面規格書草稿'},
-  {f:'large-refactor.html',t:'大型專案重構',s:4,who:'開發／系統分析人員',time:'約 60 分',pre:'Copilot 桌面版入門',out:'一份重構 Roadmap 與第一批規格'},
+  {f:'large-refactor.html',t:'大型專案重構',s:4,who:'開發／系統分析人員',time:'約 60 分',pre:'Copilot 桌面版入門',out:'會用 Superpowers 7 站流程帶 AI 做重構'},
 {f:'wrapup.html',t:'課後總結',s:5,who:'全員',time:'約 10 分',pre:'完成任一級',out:'我的第一個情境與 8 週計畫'}];
 // 貫穿案例（虛構）：業務小林經營製造業客戶「台鴻精工」的 5 個關卡，對應練習包情境 1–5
 const STORY=[
