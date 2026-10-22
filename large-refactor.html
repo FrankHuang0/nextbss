@@ -9,13 +9,13 @@
 <body>
   <header>
     <h1>大型專案重構：用 Superpowers 讓 AI 照 SOP 做事</h1>
-    <p>AI 很會寫程式，但常常「沒問清楚就動手、沒測試就說完成」。小功能還好，大型重構一出錯就很難收拾。本課從零開始，一步一步帶你認識 <b>Superpowers</b>——一套讓 AI 照標準流程（SOP）做事的 Skill 組合，最後再把它用在大型專案重構。</p>
-    <div class="stats"><span>9 個步驟</span><span>7 站流水線</span><span>6 則提示詞</span><span>5 題自我檢核</span></div>
+    <p>AI 很會寫程式，但常常「沒問清楚就動手、沒測試就說完成」。小功能還好，大型重構一出錯就很難收拾。本課從零開始，一步一步帶你認識 <b>Superpowers</b>——一套讓 AI 照標準流程（SOP）做事的 Skill 組合，再教你用 <b>Doxygen</b> 靜態分析舊程式、產生說明網頁，最後把整套流程用在大型專案重構。</p>
+    <div class="stats"><span>10 個步驟</span><span>7 站流水線</span><span>9 則提示詞</span><span>7 題自我檢核</span></div>
   </header>
   <main>
     <nav class="card"><ul class="toc">
       <li><a href="#goal">學習路線</a></li><li><a href="#s1">1 看差別</a></li><li><a href="#s2">2 Skill 是什麼</a></li><li><a href="#s3">3 安裝與確認</a></li><li><a href="#s4">4 七站流水線</a></li><li><a href="#s5">5 先問清楚</a></li>
-      <li><a href="#s6">6 寫計畫</a></li><li><a href="#s7">7 執行與測試</a></li><li><a href="#s8">8 驗證與收尾</a></li><li><a href="#s9">9 用在大型重構</a></li><li><a href="#prompts">提示詞</a></li><li><a href="#check">自我檢核</a></li>
+      <li><a href="#s6">6 寫計畫</a></li><li><a href="#s7">7 執行與測試</a></li><li><a href="#s8">8 驗證與收尾</a></li><li><a href="#s9">9 靜態分析舊程式</a></li><li><a href="#s10">10 用在大型重構</a></li><li><a href="#prompts">提示詞</a></li><li><a href="#check">自我檢核</a></li>
     </ul></nav>
 
     <section class="card" id="goal">
@@ -24,7 +24,7 @@
       <ol class="timeline">
         <li><b>入門（第 1–3 步，約 15 分）：</b>看懂為什麼需要 Superpowers，裝好它，確認它會動。</li>
         <li><b>核心（第 4–8 步，約 30 分）：</b>認識 7 站流水線，學會每一站你要做什麼決定。</li>
-        <li><b>進階（第 9 步，約 15 分）：</b>把整套流程用在「幾萬行舊系統」的大型重構。</li>
+        <li><b>進階（第 9–10 步，約 30 分）：</b>先用 Doxygen 看懂舊程式，再把整套流程用在「幾萬行舊系統」的大型重構。</li>
       </ol>
       <p class="note">名詞小辭典：<b>Skill</b> = 寫給 AI 看的一份 SOP 說明書；<b>重構</b> = 外部行為不變、只改內部寫法；<b>子代理</b> = AI 另外派出去做單一小任務的「分身」。</p>
     </section>
@@ -176,7 +176,89 @@ copilot plugin install superpowers@superpowers-marketplace</code></pre>
     </section>
 
     <section class="card" id="s9">
-      <h2>第 9 步：進階——用 Superpowers 做大型專案重構</h2>
+      <h2>第 9 步：靜態分析舊程式——用 Doxygen 產生說明網頁</h2>
+      <p>要重構之前，得先看懂舊程式。<b>靜態分析</b> = 不執行程式、只讀原始碼，找出「有哪些函式、誰呼叫誰、寫在哪一行」。</p>
+      <p><b>比喻：</b>想像要翻修一棟老房子，動工前先請人畫出水電管線圖。<b>Doxygen</b> 就是幫程式畫管線圖的免費工具：它讀原始碼，產出一個可以點來點去的說明網站。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>誰</th><th>負責什麼</th><th>為什麼這樣分</th></tr>
+        <tr><td class="nw">Doxygen</td><td>函式清單、呼叫圖、被呼叫圖、原始碼連結</td><td>工具算出來的是<b>事實</b>，不會漏也不會編</td></tr>
+        <tr><td class="nw">AI</td><td>用中文解釋每個函式在做什麼、有哪些業務規則</td><td>擅長讀懂和寫說明，但程式太大會讀不完、會猜</td></tr>
+        <tr><td class="nw">人</td><td>確認 AI 標成「待確認」的地方</td><td>只有你知道業務上對不對</td></tr>
+      </table></div>
+
+      <h3>① 安裝（只要做一次）</h3>
+      <p>在終端機輸入（Graphviz 是用來畫呼叫圖的）：</p>
+      <pre><code>winget install --id DimitriVanHeesch.Doxygen -e
+winget install --id Graphviz.Graphviz -e</code></pre>
+      <p class="note">公司網路要先設好 proxy 環境變數。裝完<b>關掉終端機再重開</b>，輸入 <code>doxygen --version</code> 看到版本號就成功了。</p>
+
+      <h3>② 產生設定檔</h3>
+      <p>到舊程式的上一層資料夾，輸入 <code>doxygen -g Doxyfile</code>，會產生一個很長的設定檔 <code>Doxyfile</code>。不用全部看懂，把下面這段<b>貼到檔案最後面</b>就好（後面的設定會蓋過前面的）：</p>
+      <pre><code>PROJECT_NAME      = "舊系統說明"
+OUTPUT_LANGUAGE   = Chinese-Traditional
+INPUT             = src
+RECURSIVE         = YES
+FILE_PATTERNS     = *.c *.h *.ec *.pc
+EXTENSION_MAPPING = ec=C pc=C
+INPUT_ENCODING    = CP950
+EXTRACT_ALL       = YES
+EXTRACT_STATIC    = YES
+SOURCE_BROWSER    = YES
+REFERENCES_RELATION    = YES
+REFERENCED_BY_RELATION = YES
+HAVE_DOT          = YES
+CALL_GRAPH        = YES
+CALLER_GRAPH      = YES
+DOT_PATH          = "C:/Program Files/Graphviz/bin"
+GENERATE_LATEX    = NO
+GENERATE_XML      = YES</code></pre>
+      <div class="x"><table class="tbl">
+        <tr><th>設定</th><th>白話說明</th></tr>
+        <tr><td class="nw">INPUT、RECURSIVE</td><td>程式放在哪個資料夾；連子資料夾一起讀</td></tr>
+        <tr><td class="nw">FILE_PATTERNS、EXTENSION_MAPPING</td><td>要讀哪些副檔名；<code>.ec</code>、<code>.pc</code>（C 裡面夾 SQL 的舊程式）當成 C 來讀</td></tr>
+        <tr><td class="nw">INPUT_ENCODING</td><td>原始碼的編碼。繁體中文的舊程式多半是 CP950，中文註解才不會變亂碼；新程式用 UTF-8</td></tr>
+        <tr><td class="nw">EXTRACT_ALL</td><td class="hot">最重要：<b>沒寫註解的函式也要列出來</b>。舊程式通常沒什麼註解</td></tr>
+        <tr><td class="nw">SOURCE_BROWSER</td><td>說明頁可以點進去看原始碼</td></tr>
+        <tr><td class="nw">CALL_GRAPH、CALLER_GRAPH</td><td>畫出「這個函式呼叫誰」和「誰呼叫這個函式」</td></tr>
+        <tr><td class="nw">DOT_PATH</td><td>Graphviz 的位置（安裝時沒有自動加進 PATH，所以要寫出來）</td></tr>
+        <tr><td class="nw">GENERATE_XML</td><td>另外輸出結構化資料，之後可以交給 AI 整理</td></tr>
+      </table></div>
+      <p class="note">如果是 Java 程式：<code>FILE_PATTERNS = *.java</code>、<code>INPUT_ENCODING = UTF-8</code>，其他照抄。</p>
+
+      <h3>③ 產生說明網頁</h3>
+      <p>輸入 <code>doxygen Doxyfile</code>，跑完後打開 <code>html\index.html</code>。先看這 3 個地方：</p>
+      <ul class="check">
+        <li><b>檔案清單、函式清單：</b>知道舊系統有多大、有哪些函式。</li>
+        <li><b>呼叫圖：</b>從入口函式往下，一路會走到哪些函式——這就是重構的範圍。</li>
+        <li><b>被呼叫圖：</b>改了某個函式，會影響到誰。</li>
+      </ul>
+
+      <h3>④ 讓 AI 補中文註解，說明頁就會變完整</h3>
+      <p>沒有註解的舊程式，Doxygen 只能列出名稱和呼叫圖。請 AI 依 Doxygen 的格式（<code>@brief</code> 一句話用途、<code>@param</code> 參數、<code>@return</code> 傳回值、<code>@note</code> 業務規則）補上註解，再跑一次 Doxygen：</p>
+      <pre><code>/**
+ * @brief 計算月租費（按天數比例）。
+ * @param plan 資費方案代碼
+ * @param days 使用天數；超過 30 天以 30 天計
+ * @return 應收金額（元）
+ * @note 舊規則：天數上限 30 天，重構時要保留。
+ */
+int calc_fee(int plan, int days)</code></pre>
+      <figure class="shot"><img src="assets/img/doxygen-sample.png" alt="Doxygen 產生的 calc_fee 函式說明頁：中文說明、參數、傳回值、註記，下方是引用函數圖與呼叫者圖" width="480" height="715" loading="lazy">
+        <figcaption>實際用上面的設定跑出來的說明頁（範例程式）。圖上「繞回自己」的小箭頭是新版 Doxygen 的顯示習慣，可以忽略。</figcaption></figure>
+      <div class="vs">
+        <div class="bad"><b>❌ 讓 AI 邊加註解邊「順手整理」程式</b>原本的行為被改掉了，你卻以為只是加了說明。</div>
+        <div class="good"><b>✅ 只准加註解</b>在獨立分支做；完成後看 <code>git diff</code>，只能有註解行變動；看不懂的寫「待確認」，不准猜。</div>
+      </div>
+
+      <h3>⑤ 進一步：把 XML 交給 AI 整理函式清冊</h3>
+      <p><code>xml</code> 資料夾裡有每個函式的位置、參數和呼叫關係。請 AI 讀它，整理成一張「函式清冊」：名稱、檔案與行號、一句話用途、呼叫誰、被誰呼叫、行數。這張表就是第 10 步切批次的依據。</p>
+
+      <p class="callout warn"><strong>靜態分析看不到的地方：</strong>透過函式指標或動態載入的呼叫、巨集展開後的程式、SQL 實際讀寫哪些資料表、執行時才讀的設定。這些請 AI 另外搜尋整理，並標成「待確認」；最後再用第 10 步的特徵化測試補上。</p>
+      <p class="done">完成標準：打開 <code>html\index.html</code>，找得到入口函式，看得到它的呼叫圖和中文說明；手上有一份函式清冊。</p>
+    </section>
+
+    <section class="card" id="s10">
+      <h2>第 10 步：進階——用 Superpowers 做大型專案重構</h2>
       <p>前 8 步學的是「做好一個功能」。大型重構（例如幾萬行的舊模組換語言、換架構）只是<b>把同一套流程重複很多次</b>，再加 2 個觀念：</p>
       <div class="x"><table class="tbl">
         <tr><th>觀念</th><th>白話說明</th></tr>
@@ -185,7 +267,7 @@ copilot plugin install superpowers@superpowers-marketplace</code></pre>
       </table></div>
       <p>和 7 站流水線對起來：</p>
       <ol class="flow nonum">
-        <li><b>第 0 輪 brainstorming</b> 屬於 Architectural：先切出批次路線圖，每批小到能單獨驗收</li>
+        <li><b>第 0 輪</b> 先用第 9 步的說明網頁和函式清冊看全貌，再跑 brainstorming（屬於 Architectural）：切出批次路線圖，每批小到能單獨驗收</li>
         <li><b>每一批</b> 新開對話，重新跑一次 brainstorming → writing-plans</li>
         <li><b>計畫第一個任務</b> 先寫特徵化測試，鎖住舊行為</li>
         <li><b>執行</b> 任務多、代價高，選 subagent-driven-development</li>
@@ -210,20 +292,38 @@ copilot plugin install superpowers@superpowers-marketplace</code></pre>
       <div class="prompt"><div class="prompt-h"><b>💬 ③ 檢查計畫</b><small>第 6 步</small></div><pre>請檢查這份計畫有沒有 TBD、「適當的」這類空泛字眼、沒附測試碼的任務、「同任務 N」、或沒定義就使用的函式。列出位置並直接修正。</pre></div>
       <div class="prompt"><div class="prompt-h"><b>💬 ④ 開始執行</b><small>第 7 步</small></div><pre>請用【subagent-driven-development／executing-plans】執行這份計畫。每個任務先寫會失敗的測試再實作；不要推送到遠端，不可逆的操作先問我。</pre></div>
       <div class="prompt"><div class="prompt-h"><b>💬 ⑤ 要證據</b><small>第 8 步</small></div><pre>說完成之前，請重新執行全部測試，貼出實際輸出（通過數、失敗數、結束碼）。沒有全綠就照實告訴我卡在哪裡。</pre></div>
-      <div class="prompt"><div class="prompt-h"><b>💬 ⑥ 大型重構起手式</b><small>第 9 步</small></div><pre>我要把【舊模組】重構成【新技術】。請用 brainstorming 走 Architectural 流程：
-1. 先只讀不改，整理舊模組的範圍與呼叫關係。
+      <div class="prompt"><div class="prompt-h"><b>💬 ⑥ 產生 Doxygen 設定</b><small>第 9 步</small></div><pre>我的舊程式在【資料夾】，語言是【C／C 夾 SQL／Java】，檔案編碼是【CP950／UTF-8】。
+請幫我寫要貼在 Doxyfile 最後面的設定：
+- 沒有註解的函式也要列出來（EXTRACT_ALL）
+- 產生呼叫圖和被呼叫圖（CALL_GRAPH、CALLER_GRAPH）
+- 介面用繁體中文，另外輸出 XML
+每一行設定後面，用一句話說明用途。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ⑦ 補 Doxygen 註解</b><small>第 9 步</small></div><pre>請替【檔案】裡的每個函式補上 Doxygen 註解（@brief、@param、@return、@note），用繁體中文。
+規則：
+1. 只能新增註解，不准改任何一行程式碼。
+2. @note 寫出看得出來的業務規則（例如上限、特殊代碼）。
+3. 看不懂的地方寫「待確認：……」，不要猜。
+完成後執行 git diff，貼出結果證明只有註解行變動；能編譯的話再編譯一次。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ⑧ 整理函式清冊</b><small>第 9 步</small></div><pre>請讀 Doxygen 產生的 xml 資料夾，從【入口函式】往下，整理它會呼叫到的所有函式，做成一張表：
+名稱、檔案與行號、一句話用途、呼叫誰、被誰呼叫、行數。
+行數請用程式實際計算，不要估；另外搜尋程式裡的 SQL，列出每個函式讀寫的資料表。
+最後列出靜態分析看不到、需要我確認的地方（函式指標、動態呼叫等）。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ⑨ 大型重構起手式</b><small>第 10 步</small></div><pre>我要把【舊模組】重構成【新技術】。請用 brainstorming 走 Architectural 流程：
+1. 先只讀不改：讀 Doxygen 說明網頁和函式清冊，整理舊模組的範圍與呼叫關係。
 2. 用絞殺榕方式切成批次，每批小到能單獨驗收，列出順序與理由。
 3. 說明每批要怎麼用特徵化測試（黃金樣本）鎖住舊行為。
 寫成設計文件給我審，審過之前不要寫程式。</pre></div>
     </section>
 
     <section class="card" id="check">
-      <h2>自我檢核：5 題</h2>
+      <h2>自我檢核：7 題</h2>
       <details class="ref"><summary>1. 裝好之後，要怎麼知道 Superpowers 有在運作？</summary><div class="ref-b"><p><b>開新對話提一個需求。</b>AI 先問問題、給方案，而不是直接寫程式，就代表 brainstorming 有被觸發。</p></div></details>
       <details class="ref"><summary>2. 專案裡已經有登入功能，要加「PIN 碼快速登入」，屬於哪一類？</summary><div class="ref-b"><p><b>Bounded。</b>登入流程已經在專案裡，你是在改它。如果專案原本完全沒有登入，才是 Architectural。</p></div></details>
       <details class="ref"><summary>3. 計畫寫著「加上適當的驗證」，哪裡有問題？</summary><div class="ref-b"><p><b>「適當」沒有定義。</b>要寫出具體的輸入、預期結果和測試碼，否則每個執行者會照自己的品味亂補。</p></div></details>
       <details class="ref"><summary>4. 子代理回報「任務完成、測試全過」，可以直接做下一個嗎？</summary><div class="ref-b"><p><b>不行。</b>自己回報不算證據。要看程式差異、自己重跑一次測試，看到實際輸出才算。</p></div></details>
       <details class="ref"><summary>5. 大型重構為什麼要先寫特徵化測試？</summary><div class="ref-b"><p><b>先鎖住舊行為。</b>舊系統的細節常常連文件都沒寫。先把「同樣輸入 → 什麼輸出」錄成黃金樣本，新程式對得上才能證明沒改壞。</p></div></details>
+      <details class="ref"><summary>6. AI 說「註解補好了」，怎麼確認它沒有偷改程式？</summary><div class="ref-b"><p><b>看 git diff。</b>變動的應該全部是註解行；能編譯就重新編譯一次。有實際輸出當證據才算數。</p></div></details>
+      <details class="ref"><summary>7. Doxygen 的被呼叫圖顯示某個函式沒人呼叫，就可以刪掉嗎？</summary><div class="ref-b"><p><b>不一定。</b>靜態分析看不到函式指標、動態載入，或其他程式、排程從外面呼叫的情況。先標成「待確認」，查證後再決定。</p></div></details>
     </section>
 
     <section class="card recap"><h2>重點回顧</h2><ul>
@@ -231,9 +331,10 @@ copilot plugin install superpowers@superpowers-marketplace</code></pre>
       <li>7 站流水線：問清楚 → 隔離 → 寫計畫 → 執行 → 每任務 TDD → 任務間審查 → 由你決定合併。</li>
       <li>先分類：Spike、Bounded、Architectural，看「專案裡有沒有這條流程」。</li>
       <li>計畫不能有 TBD 和空泛字眼；每個任務先紅後綠；沒有證據不准說完成。</li>
+      <li>重構前先做靜態分析：Doxygen 算出函式清單與呼叫圖，AI 補中文說明，人確認「待確認」的地方。</li>
       <li>大型重構 = 絞殺榕分批取代 + 特徵化測試鎖住舊行為 + 每批重跑一次流水線。</li>
     </ul>
-    <p class="note">參考資料：<a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">Superpowers 官方 GitHub</a>、<a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">作者介紹文章</a>、<a href="https://github.com/jnMetaCode/superpowers-zh" target="_blank" rel="noopener">superpowers-zh 中文增強版</a>、<a href="https://learn-superpowers-skills.vercel.app" target="_blank" rel="noopener">learn-superpowers-skills 中文課程</a>、<a href="https://martinfowler.com/bliki/StranglerFigApplication.html" target="_blank" rel="noopener">Martin Fowler：Strangler Fig</a>、<a href="https://en.wikipedia.org/wiki/Characterization_test" target="_blank" rel="noopener">Characterization test（維基百科）</a>。</p>
+    <p class="note">參考資料：<a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">Superpowers 官方 GitHub</a>、<a href="https://blog.fsck.com/2025/10/09/superpowers/" target="_blank" rel="noopener">作者介紹文章</a>、<a href="https://github.com/jnMetaCode/superpowers-zh" target="_blank" rel="noopener">superpowers-zh 中文增強版</a>、<a href="https://learn-superpowers-skills.vercel.app" target="_blank" rel="noopener">learn-superpowers-skills 中文課程</a>、<a href="https://www.doxygen.nl/manual/config.html" target="_blank" rel="noopener">Doxygen 設定說明</a>、<a href="https://martinfowler.com/bliki/StranglerFigApplication.html" target="_blank" rel="noopener">Martin Fowler：Strangler Fig</a>、<a href="https://en.wikipedia.org/wiki/Characterization_test" target="_blank" rel="noopener">Characterization test（維基百科）</a>。</p>
     <p class="next">下一步：〈<a href="wrapup.html">課後總結</a>〉。挑一個小需求，從「第 3 步：確認安裝」開始試做。</p></section>
   </main>
   <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>

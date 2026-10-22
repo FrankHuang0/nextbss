@@ -222,3 +222,6 @@ nav.top .nb-tbtn{padding:12px 18px;border:0;box-shadow:0 6px 24px #0002;font-siz
 .tbl td.gap,.gap-k{color:var(--p);font-weight:700;background:var(--tint2);border:1px dashed var(--p)}
 .hot-k,.gap-k{display:inline-block;padding:0 8px;border-radius:4px}
 .tbl td.nw{white-space:nowrap}
+/* 教材截圖 */
+.shot{margin:12px 0 16px;text-align:center}.shot img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:10px;background:#fff}
+.shot figcaption{margin-top:6px;font-size:.85rem;color:var(--mut)}
