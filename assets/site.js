@@ -13,7 +13,7 @@ const vars=t=>V.map((v,i)=>`--nb-${v}:${t[i+2]}`).join(';');
 const LESSONS=[
 {f:'notebooklm-basics.html',t:'NotebookLM 入門',s:1,who:'全員',time:'約 15 分',pre:'可登入的 Google 帳號',out:'第一本筆記本，會看來源導覽與引用'},
 {f:'card.html',t:'上手步驟卡',s:1,who:'全員',time:'約 5 分',pre:'NotebookLM 入門',out:'一頁式速查卡（可列印）'},
-{f:'notebooklm-ai-training.html',t:'NotebookLM 業務助理',s:2,who:'業務同仁',time:'約 30 分',pre:'NotebookLM 入門',out:'5 大業務情境的做法與提示詞'},
+{f:'notebooklm-ai-training.html',t:'NotebookLM 業務助理',s:2,who:'業務同仁',time:'約 30 分',pre:'NotebookLM 入門',out:'5 大業務情境的做法與提示詞（附人偶語音導讀）'},
 {f:'practice.html',t:'實作練習包',s:2,who:'業務同仁',time:'每題 10 分',pre:'NotebookLM 業務助理',out:'待辦表、比較表等練習成果'},
 {f:'quiz.html',t:'情境題暖身測驗',s:2,who:'全員',time:'約 10 分',pre:'實作練習包',out:'10 題得分與易錯觀念'},
 {f:'ai-presentation-workflow.html',t:'AI 簡報工作流',s:3,who:'需要製作簡報者',time:'約 60 分',pre:'第 2 級：應用',out:'一份可核對來源的簡報大綱'},
