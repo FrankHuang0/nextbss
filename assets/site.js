@@ -18,6 +18,7 @@ const LESSONS=[
 {f:'quiz.html',t:'情境題暖身測驗',s:2,who:'全員',time:'約 10 分',pre:'實作練習包',out:'10 題得分與易錯觀念'},
 {f:'ai-presentation-workflow.html',t:'AI 簡報工作流',s:3,who:'需要製作簡報者',time:'約 60 分',pre:'第 2 級：應用',out:'一份可核對來源的簡報大綱'},
 {f:'copilot-desktop-basics.html',t:'Copilot 桌面版入門',s:3,who:'需要做規劃與文件者',time:'約 60 分',pre:'NotebookLM 入門（提示詞公式）',out:'一份經角色審查的規劃 HTML'},
+{f:'duo-narrated-deck.html',t:'人偶導讀簡報',s:3,who:'需要製作教材者',time:'約 45 分',pre:'Copilot 桌面版入門',out:'一份會自己講的人偶導讀教材，附 Skill 完整內容'},
 {f:'mobile-order-kb.html',t:'知識庫分享',s:4,who:'開發／系統分析人員',time:'約 20 分',pre:'能閱讀基本程式碼',out:'自己專案的知識庫建置藍圖（附人偶語音導讀）'},
 {f:'kb-project-analysis.html',t:'知識庫應用：專案分析',s:4,who:'規劃／分析人員',time:'約 40 分',pre:'知識庫分享',out:'一份人機分工規劃書與報告範本'},
 {f:'page-spec-reengineering.html',t:'網頁功能 Reengineering',s:4,who:'開發／系統分析人員',time:'約 60 分',pre:'知識庫分享',out:'一份頁面規格書草稿'},
