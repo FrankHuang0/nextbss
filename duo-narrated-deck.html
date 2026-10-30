@@ -1,0 +1,1189 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>人偶導讀簡報：用 duo-narrated-deck 讓教材自己講</title>
+  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
+  <style>
+    .duo-hero{display:flex;gap:6px;align-items:flex-end;justify-content:center;margin:6px 0 2px}
+    .duo-hero img{width:72px;height:72px}
+    .gate{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:#d97706;color:#fff;font-size:.78rem;font-weight:700;vertical-align:middle}
+    .tree td:first-child{white-space:nowrap}
+    kbd{display:inline-block;padding:0 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;background:var(--surface);font:inherit;font-size:.85em}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="duo-hero" aria-hidden="true"><img src="assets/img/duo-cat.png" alt=""><img src="assets/img/duo-robot.png" alt=""></div>
+    <h1>人偶導讀簡報：用 duo-narrated-deck 讓教材自己講</h1>
+    <p>把一份 HTML 教材，變成<b>小貓問、機器人答</b>的語音導讀：兩隻人偶會走到正在講的重點旁邊，配上字幕和打亮，可以一路自動播完。本課教你用 <b>duo-narrated-deck</b> 這個 Skill，從擬教案、寫對話稿、產生語音，做到上線。最後附上 Skill 完整內容，可以直接下載。</p>
+    <div class="stats"><span>10 個步驟</span><span>3 道審核關卡</span><span>8 則提示詞</span><span>7 題自我檢核</span></div>
+  </header>
+  <main>
+    <nav class="card"><ul class="toc">
+      <li><a href="#goal">學習路線</a></li><li><a href="#s1">1 先看成果</a></li><li><a href="#s2">2 它怎麼運作</a></li><li><a href="#s3">3 安裝與確認</a></li><li><a href="#s4">4 十步與三關</a></li>
+      <li><a href="#s5">5 擬教案</a></li><li><a href="#s6">6 寫對話稿</a></li><li><a href="#s7">7 語音與嵌入</a></li><li><a href="#s8">8 驗證與上線</a></li>
+      <li><a href="#faq">常見問題</a></li><li><a href="#prompts">提示詞</a></li><li><a href="#skill">Skill 完整內容</a></li><li><a href="#check">自我檢核</a></li>
+    </ul></nav>
+
+    <section class="card" id="goal">
+      <h2>學習路線：由淺入深</h2>
+      <ol class="timeline">
+        <li><b>入門（第 1–3 步，約 10 分）：</b>看成果、懂原理、裝好 Skill。</li>
+        <li><b>核心（第 4–6 步，約 20 分）：</b>認識 10 個步驟和 3 道審核關卡，學會審教案、審對話稿。</li>
+        <li><b>收尾（第 7–8 步，約 15 分）：</b>產生語音、嵌入網頁、驗證後上線。</li>
+      </ol>
+      <p class="note">名詞小辭典：<b>Skill</b> = 寫給 AI 看的 SOP 說明書；<b>TTS</b> = 文字轉語音；<b>錨點</b> = 人偶要走過去的那段畫面文字；<b>LEVEL1／2／3</b> = 一頁的大標題／小標題／小標底下的細項。</p>
+    </section>
+
+    <section class="card" id="s1">
+      <h2>第 1 步：先看成果</h2>
+      <p>本站有兩課已經用這個 Skill 做好，打開後按右上角 <b>▶ 聽報告</b>（或按 <kbd>P</kbd>）：</p>
+      <ul>
+        <li>〈<a href="notebooklm-ai-training.html">NotebookLM 業務助理</a>〉：29 頁，約 30 分。</li>
+        <li>〈<a href="mobile-order-kb.html">知識庫分享</a>〉：17 頁，約 21 分，深講版。</li>
+      </ul>
+      <p>你會看到 5 件事：</p>
+      <ol>
+        <li><b>人偶走位：</b>小貓先出發，機器人晚半秒跟上，走到正在講的重點旁邊。</li>
+        <li><b>泡泡：</b>講話的那隻頭上有短句，另一隻轉頭看它。</li>
+        <li><b>打亮：</b>講到的區塊變亮，其他地方稍微變暗。</li>
+        <li><b>字幕：</b>畫面下方，標出是誰在講；講到成語會跳出白話小卡。</li>
+        <li><b>重點卡：</b>每頁講完，跳出「一句話重點」。</li>
+      </ol>
+      <p>播放列可勾「自動連播」（一路播完）、「字幕」、「人偶」，語速可切 1x／1.25x／1.5x。手機上人偶會隱藏，只留字幕。</p>
+      <p class="callout"><strong>重點：</strong>人偶不是裝飾。它帶著眼睛走，聽的人不會「聽到第三點，卻還在看第一點」。</p>
+    </section>
+
+    <section class="card" id="s2">
+      <h2>第 2 步：它怎麼運作</h2>
+      <p>整個 Skill 只有 3 支 Python 腳本，加一個播放器。資料這樣流：</p>
+      <ol class="flow">
+        <li><b>原網頁</b> .html</li>
+        <li><code>slides_text.py</code> 列出每頁文字</li>
+        <li><b>對話稿</b>（AI 寫、你審）</li>
+        <li><code>gen_duo_audio.py</code> 產生語音</li>
+        <li><b>duo.json</b></li>
+        <li><code>embed_duo.py</code> 嵌回網頁</li>
+        <li><b>會自己講的</b> .html</li>
+      </ol>
+      <p><b>比喻：</b>像拍一支導覽影片。原網頁是場景，對話稿是劇本，語音是配音，播放器是導演，告訴演員什麼時候走到哪裡。</p>
+      <ul>
+        <li>語音用微軟 Edge 的免費 TTS（edge-tts）：小貓是「曉臻」，機器人是「雲哲」。</li>
+        <li>語音直接包進 HTML，<b>只有一個檔案</b>，放上 GitHub Pages 就能用，不需要伺服器。</li>
+        <li>大小約「每分鐘語音 0.42 MB」：30 分鐘約 12.6 MB。</li>
+      </ul>
+    </section>
+
+    <section class="card" id="s3">
+      <h2>第 3 步：安裝與確認</h2>
+      <p><b>需要：</b>GitHub Copilot（桌面版或 CLI）、Python 3.10 以上。</p>
+      <ol>
+        <li>下載本頁最下方的 <a href="downloads/duo-narrated-deck.zip" download>duo-narrated-deck.zip</a>。</li>
+        <li>在 PowerShell 解壓到個人 Skill 資料夾，再裝語音套件：</li>
+      </ol>
+      <div class="prompt"><div class="prompt-h"><b>PowerShell</b><small>在 zip 所在的資料夾執行</small></div><pre>Expand-Archive duo-narrated-deck.zip -DestinationPath "$env:USERPROFILE\.agents\skills"
+pip install edge-tts</pre></div>
+      <p>裝好後，應該有這個檔案：<code>%USERPROFILE%\.agents\skills\duo-narrated-deck\SKILL.md</code>。</p>
+      <p class="callout warn"><strong>公司網路：</strong>pip 要加 <code>--proxy http://你的代理:port</code>；產生語音時也一定要加 <code>--proxy</code>，設環境變數沒有用。代理位址請問 IT。</p>
+      <p><b>確認它會動：</b>開一個<b>新對話</b>，輸入 <code>/duo-narrated-deck 列出這個 skill 的內容</code>。</p>
+      <ul class="check">
+        <li>✅ 正常：AI 列出「步驟 0～9」和 3 道審核關卡。</li>
+        <li>❌ 異常：AI 說不認得 → 檢查資料夾路徑，再重開 Copilot。</li>
+      </ul>
+      <p class="done">完成標準：新對話裡，AI 能說出這個 Skill 的步驟。</p>
+    </section>
+
+    <section class="card" id="s4">
+      <h2>第 4 步：十個步驟與三道審核關卡</h2>
+      <p>你不用背指令。說一句「幫這份教材加上人偶導讀」，AI 就會照下面的順序做。你要做的，是在<span class="gate">審核</span>關卡看過再放行。</p>
+      <div class="x"><table class="tbl">
+        <tr><th>步驟</th><th>AI 做什麼</th><th>你要做什麼</th></tr>
+        <tr><td class="nw">0 工作規劃</td><td>問你 4 件事</td><td>回答：取代原頁或另做？總長多久、聽眾是誰？要不要成語典故？淺講或深講？</td></tr>
+        <tr><td class="nw">1 看結構</td><td>列出每頁文字，檢查是不是「1 個 LEVEL1 + 3～4 個 LEVEL2」</td><td>—</td></tr>
+        <tr><td class="nw">2 擬教案 <span class="gate">審核</span></td><td>用資深教育人員的角度寫 <code>教案.md</code>，必要時提出改網頁的建議</td><td>看教學順序和每頁重點對不對；同意改網頁才改</td></tr>
+        <tr><td class="nw">3 寫對話稿</td><td>依教案寫 <code>對話稿.txt</code>，有指定風格時自己審 3 輪</td><td>—</td></tr>
+        <tr><td class="nw">4 給你看稿 <span class="gate">審核</span></td><td>跑檢查、列出每頁秒數和總長</td><td>看用語、比喻、有沒有亂加數字</td></tr>
+        <tr><td class="nw">5 產生語音</td><td>產生 <code>duo.json</code>，超過秒數上限會自己停</td><td>—</td></tr>
+        <tr><td class="nw">6 試做前 5 頁 <span class="gate">審核</span></td><td>嵌入前 5 頁給你看，並自己提出 5 個修改建議</td><td>實際聽一遍，挑要改的地方</td></tr>
+        <tr><td class="nw">7 嵌入</td><td>把全部語音嵌進網頁</td><td>—</td></tr>
+        <tr><td class="nw">8 驗證</td><td>自動連播跑完全部頁面、看手機版和深色主題</td><td>—</td></tr>
+        <tr><td class="nw">9 回報</td><td>給你網址、檔案大小、總時長</td><td>上線後按 Ctrl+F5 確認</td></tr>
+      </table></div>
+      <p class="callout"><strong>重點：</strong>3 道關卡是規定，不可以因為你沒空回覆就跳過。先審教案再審稿，比做完整份語音才發現方向錯，省下很多重工。</p>
+    </section>
+
+    <section class="card" id="s5">
+      <h2>第 5 步：擬教案──先懂教材，再寫稿</h2>
+      <p>好的導讀不是把字唸出來，而是照<b>教材的編寫思路</b>帶人走。所以 AI 先用資深教育人員的角度寫教案，內容有 4 塊：</p>
+      <ol>
+        <li><b>課程定位：</b>聽眾、先備知識、總時長、上完能做到的 2～3 件事。</li>
+        <li><b>教學脈絡：</b>分幾章、為什麼這樣排（例如引起動機 → 建立概念 → 實務經驗 → 動手應用）。</li>
+        <li><b>每頁表格：</b>LEVEL1、3～4 個 LEVEL2、每個 LEVEL2 怎麼扣回 LEVEL1、深講時選哪個 LEVEL3 當代表。</li>
+        <li><b>教材調整建議：</b>頁面結構不合時（LEVEL2 太多、太少、沒小標），提出怎麼改，<b>你同意才動網頁</b>。</li>
+      </ol>
+      <p>以〈知識庫分享〉第 3 頁為例：</p>
+      <div class="x"><table class="tbl">
+        <tr><th>層級</th><th>畫面上的字</th><th>導讀怎麼講</th></tr>
+        <tr><td class="nw">LEVEL1</td><td>我們遇到的問題</td><td>先講這頁要解決什麼：為什麼查一個問題要半小時</td></tr>
+        <tr><td class="nw">LEVEL2</td><td>規模龐大／名詞不對應／有文件 ≠ 有知識／新人訓練難</td><td>依畫面順序各講一輪，每輪都說「這是查很久的第 N 個原因」</td></tr>
+        <tr><td class="nw">LEVEL3</td><td>Java 5,076 支、SRS 寫「需檢查信用」……</td><td>不逐條唸，每個 LEVEL2 挑 1 個代表講透，其餘一句帶過</td></tr>
+      </table></div>
+      <p class="done">審教案時看 3 件事：章節順序合理嗎？每頁 LEVEL2 都有扣回 LEVEL1 嗎？代表的 LEVEL3 是新手最需要懂的嗎？</p>
+    </section>
+
+    <section class="card" id="s6">
+      <h2>第 6 步：寫對話稿</h2>
+      <p>對話稿是純文字，一頁一個區塊。每一段先寫「角色｜錨點｜泡泡」，下一行寫要唸的台詞：</p>
+      <div class="prompt"><div class="prompt-h"><b>對話稿.txt（節錄）</b></div><pre>【P3】重點：有文件不等於有知識，人人都在盲人摸象
+貓｜我們遇到的問題｜為什麼查這麼久
+為什麼問一個問題，常常要查半小時？
+機｜=｜盲人摸象
+因為人人都在盲人摸象，只摸到一部分，就以為懂了全部。這四張卡，是查很久的四個原因。
+貓｜規模龐大｜第一個原因
+第一個原因是什麼？
+機｜Java 5,076 支｜五千多支程式
+系統太大。光 Java 就五千零七十六支，選單功能一千三百多個。一個人看不完，只好每人顧一塊。</pre></div>
+      <ul>
+        <li><b>錨點</b>要從畫面上複製、只出現一次的字；<code>=</code> 表示跟上一段同位置；<code>家</code> 表示回角落。</li>
+        <li><b>泡泡</b>15 字以內；每段台詞 70 字以內，方便看字幕。</li>
+        <li><b>重點</b>是每頁講完跳出的「一句話重點」卡。</li>
+      </ul>
+      <h3>寫作 5 原則</h3>
+      <ol>
+        <li><b>先總後分：</b>每頁先講 LEVEL1，再照畫面順序講每個 LEVEL2，不可跳過。</li>
+        <li><b>三句法講 LEVEL3：</b>結論（扣回 LEVEL1）→ 實例（要有數字或情境）→ 意義（對聽眾有什麼用）。</li>
+        <li><b>小貓問聽眾心裡的問題：</b>「這跟我有什麼關係？」，不問答案已寫在題目裡的假問題。</li>
+        <li><b>去 AI 味：</b>不用驚嘆號，不用「讓我們、深入探討、賦能、打造」這類詞；用同事講話的口氣。</li>
+        <li><b>不加畫面沒有的數字：</b>連自己算出來的數字也不行。</li>
+      </ol>
+      <h3>淺講還是深講？</h3>
+      <div class="x"><table class="tbl">
+        <tr><th></th><th>淺講</th><th>深講</th></tr>
+        <tr><td class="nw">每頁上限</td><td>60 秒</td><td>90 秒（加 <code>--max-sec 90</code>）</td></tr>
+        <tr><td class="nw">講到哪一層</td><td>LEVEL1、LEVEL2</td><td>再加每個 LEVEL2 的 1 個代表 LEVEL3，主 LEVEL2 多追問一輪</td></tr>
+        <tr><td class="nw">適合</td><td>總覽、時間很少</td><td>新手、要真的聽懂</td></tr>
+      </table></div>
+      <p class="note">想要成語典故：一頁一個、出處要查證、全稿不重複、講完立刻白話。AI 會自己審 3 輪，紀錄寫在 <code>審查紀錄.md</code>。</p>
+    </section>
+
+    <section class="card" id="s7">
+      <h2>第 7 步：產生語音與嵌入</h2>
+      <p>這一步通常由 AI 幫你下指令。知道在做什麼就好：</p>
+      <div class="prompt"><div class="prompt-h"><b>① 檢查對話稿</b><small>錨點找不到、超過秒數都會報錯</small></div><pre>python scripts/gen_duo_audio.py 對話稿.txt --deck 簡報.html --check --max-sec 90</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>② 產生語音</b><small>改稿後重跑，只重做改過的段落</small></div><pre>python scripts/gen_duo_audio.py 對話稿.txt --deck 簡報.html -o duo.json --proxy http://你的代理:port --say 唸法.txt --max-sec 90</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>③ 嵌回網頁</b><small>可以重複執行，會先移除舊的</small></div><pre>python scripts/embed_duo.py 簡報.html duo.json -o 輸出.html --bar tr --cards 成語卡.txt</pre></div>
+      <ul>
+        <li><code>唸法.txt</code>：英文縮寫怎麼唸，例如 <code>kb_search=K B search</code>。只影響聲音，字幕照原文。</li>
+        <li><code>成語卡.txt</code>：例如 <code>狡兔三窟＝多準備幾條退路</code>，字幕講到就跳出小卡。</li>
+        <li>每頁 class 不是 <code>slide</code> 時，檢查用 <code>--slide-class 名稱</code>，嵌入用 <code>--slide .名稱</code>。</li>
+        <li>實際語音常比估計多 8～15%。超過上限就刪機器人台詞的贅字，不要刪比喻。</li>
+      </ul>
+    </section>
+
+    <section class="card" id="s8">
+      <h2>第 8 步：驗證與上線</h2>
+      <p>AI 會用瀏覽器自動測，你也可以自己點一遍：</p>
+      <ul class="check">
+        <li>✅ 勾「自動連播」，能一路翻頁講到最後一頁。</li>
+        <li>✅ 最長的那頁、最後一頁，人偶都站在對的重點旁。</li>
+        <li>✅ 手機寬度：播放列不蓋到翻頁鈕。</li>
+        <li>✅ 深色主題看得清楚。</li>
+      </ul>
+      <p><b>上線後提醒聽眾：</b></p>
+      <ol>
+        <li>按 <kbd>Ctrl</kbd>+<kbd>F5</kbd> 重新整理，才會載入新版。</li>
+        <li>用 Teams 分享時，要勾<b>「包含電腦音效」</b>，並分享<b>整個畫面</b>，不要只分享視窗。</li>
+      </ol>
+      <p class="done">完成標準：別人打開網址按 ▶，不用你在旁邊講，也能聽完整份教材。</p>
+    </section>
+
+    <section class="card" id="faq">
+      <h2>常見問題</h2>
+      <div class="x"><table class="tbl">
+        <tr><th>狀況</th><th>處理</th></tr>
+        <tr><td>產生語音卡住、連不上</td><td>公司網路一定要加 <code>--proxy</code>。</td></tr>
+        <tr><td>很多段 <code>NoAudioReceived</code></td><td>被限流。腳本會自動等一下再補做；最後還是失敗，隔幾分鐘重跑，已完成的不會重做。</td></tr>
+        <tr><td>錨點找不到</td><td>錨點必須是那頁看得到的字，避開「→、！」這類符號；圖片頁用 <code>家</code> 或 <code>@橫%,直%</code>。</td></tr>
+        <tr><td>按 ▶ 沒聲音</td><td>瀏覽器要求先點一下頁面。</td></tr>
+        <tr><td>人偶擋到內容</td><td>換一個更精準的錨點，或用 <code>@橫%,直%</code> 指定位置。</td></tr>
+        <tr><td>中文變亂碼</td><td>先執行 <code>$env:PYTHONUTF8=1</code>。</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="prompts">
+      <h2>提示詞：照順序貼</h2>
+      <p class="ctx">把【】換成你的內容。每貼一則，看完 AI 的回覆再貼下一則。</p>
+      <div class="prompt"><div class="prompt-h"><b>💬 ① 確認安裝</b><small>第 3 步</small></div><pre>/duo-narrated-deck 列出這個 skill 的內容</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ② 開工</b><small>第 4 步・步驟 0</small></div><pre>/duo-narrated-deck 【網址或檔案路徑】 為這個教學網頁加上人偶導讀。
+直接取代原網頁，總長約【20】分鐘，聽眾是新手，用語加入成語、典故，用【深講】。
+先提工作規劃給我看。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ③ 審教案</b><small>第 5 步・關卡 1</small></div><pre>教案我看過了，建議：【第 3 頁的 LEVEL2 太多，請合併成 3 個】。
+改好再給我看一次，通過後才寫稿。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ④ 自審對話稿</b><small>第 6 步</small></div><pre>稿子請先自己 review 並優化 3 次：檢查每個 LEVEL2 都有講到、沒有畫面上沒有的數字、沒有 AI 腔。
+再給我看稿子、每頁秒數和預估總長。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ⑤ 試做回饋</b><small>關卡 3</small></div><pre>前 5 頁已看過，建議：【貓先動，機器人再跟隨】。
+也請你自己 review，提出 5 個修改建議給我。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ⑥ 講得更深</b><small>改版時</small></div><pre>LEVEL2 的說明太簡單，請改成深講：每個 LEVEL2 挑一個 LEVEL3 講透（結論→實例→意義），每頁不超過 90 秒。
+先提規劃給我審。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ⑦ 上線</b><small>第 8 步</small></div><pre>全部做完後取代原網頁並部署，成功後通知我網址、檔案大小和總時長。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 ⑧ 把經驗寫回 Skill</b><small>做完一份之後</small></div><pre>/duo-narrated-deck 整理這次教材製作有新增和變更的原則，更新 skill。</pre></div>
+    </section>
+
+    <section class="card" id="skill">
+      <h2>Skill 完整內容</h2>
+      <p><a class="btn" href="downloads/duo-narrated-deck.zip" download>⬇ 下載 duo-narrated-deck.zip（約 86 KB）</a></p>
+      <p>解壓後的資料夾結構：</p>
+      <div class="x"><table class="tbl tree">
+        <tr><th>檔案</th><th>用途</th></tr>
+  <tr><td class="nw"><code>SKILL.md</code></td><td>AI 讀的主說明書：步驟、審核關卡、常見問題</td></tr>
+  <tr><td class="nw"><code>dialogue-guide.md</code></td><td>對話稿寫法：格式、LEVEL1～3、時長、文學風格</td></tr>
+  <tr><td class="nw"><code>scripts/slides_text.py</code></td><td>列出每頁文字，供挑錨點與檢查</td></tr>
+  <tr><td class="nw"><code>scripts/gen_duo_audio.py</code></td><td>檢查對話稿、產生雙聲道語音，輸出 duo.json</td></tr>
+  <tr><td class="nw"><code>scripts/embed_duo.py</code></td><td>把人偶、語音、播放列嵌進 HTML</td></tr>
+  <tr><td class="nw"><code>assets/duo.js</code></td><td>播放器：人偶走位、泡泡、字幕、打亮、重點卡</td></tr>
+  <tr><td class="nw"><code>assets/duo.css</code></td><td>人偶、字幕、播放列的樣式（含手機版）</td></tr>
+  <tr><td class="nw"><code>assets/cat.png</code></td><td>小貓人偶（Fluent 3D Emoji，MIT 授權）</td></tr>
+  <tr><td class="nw"><code>assets/robot.png</code></td><td>機器人人偶（Fluent 3D Emoji，MIT 授權）</td></tr>
+      </table></div>
+      <p class="note">網站是公開的，公司代理位址已改成 <code>http://你的代理:port</code>，請換成自己的。</p>
+      <p>點檔名展開全文，右上角可以一鍵複製：</p>
+      <details class="ref"><summary>📄 SKILL.md<small style="font-weight:400;color:var(--mut)">　AI 讀的主說明書：步驟、審核關卡、常見問題（99 行）</small></summary><div class="ref-b"><div class="prompt"><div class="prompt-h"><b>SKILL.md</b></div><pre style="max-height:480px;overflow:auto;white-space:pre-wrap">---
+name: duo-narrated-deck
+description: Use when an HTML slide deck needs spoken narration, mascots, or a self-playing presentation — e.g. 「加人偶」「加語音報告」「小貓問機器人答」「自動播放簡報」「旁白」「讓簡報自己講」, or when turning a training/briefing deck into something viewers can watch alone or over Teams.
+---
+
+# 雙人偶語音簡報（小貓問、機器人答）
+
+這個 skill 把任何 HTML 簡報變成兩隻人偶一問一答的「會自己講的簡報」，最後輸出一個 HTML 檔，語音也包在裡面。
+
+- **角色**：小貓負責提問（曉臻 `zh-TW-HsiaoChenNeural`），機器人負責回答（雲哲 `zh-TW-YunJheNeural`）。兩隻一直都在畫面上。
+- **講話時**：小貓先出發，機器人晚半秒跟上，兩隻各走一條弧線，走到正在講的重點旁邊並排。講話的那隻頭上出現泡泡，另一隻轉頭看著它、點頭。待命時縮小、半透明站在角落。
+- **自動補上 3 個幫助理解的措施**：
+  1. 講到的區塊會打亮，其他地方稍微變暗。
+  2. 下方顯示字幕，標出是誰在講。
+  3. 每頁講完，跳出「一句話重點」卡。
+- **播放方式**：按 ▶ 聽報告，或按 P 鍵；可勾選「自動連播」（跨頁一路播完）、「字幕」、「人偶」，語速鈕可切 1x／1.25x／1.5x。手動翻頁時，旁白會自動停止。
+- **手機（寬度 ≤ 720px）**：人偶隱藏、只留字幕；播放列只剩 ▶ 和「自動連播」，不擋翻頁鈕。
+
+## 步驟（照順序做；第 2、4、6 步是審核關卡，要等使用者同意才往下，不可因使用者沒空而自行跳過）
+
+0. **先提工作規劃，問清楚 4 件事**（使用者沒空回時，自己決定並寫明假設）：
+   - 直接取代原網頁，還是另做一個語音版？
+   - 總時長多少？聽眾是誰（新手要多一句白話）？
+   - 稿子要不要特別風格（例如成語、典故）？
+1. **確認簡報結構**：
+   - 執行 `python scripts/slides_text.py 簡報.html`，看看每頁的文字。
+   - 如果每一頁的 class 不是 `slide`，加上 `--slide-class 名稱`。
+   - 如果是 PPT，先轉成 HTML，每頁一個元素。
+   - 列出每頁的標題層級（h2 是 LEVEL1，h3 是 LEVEL2，小標底下的數字、清單、表格列是 LEVEL3），檢查是不是「1 個 LEVEL1 + 3～4 個 LEVEL2」。
+2. **擬教案 `教案.md`，給使用者審核**（站在資深教育人員的角度，先理解教材的編寫思路，再寫稿）：
+   - **課程定位**：聽眾、先備知識、總時長、上完能做到什麼（2～3 個學習目標）。
+   - **教學脈絡**：整份教材分成幾個章節、為什麼是這個順序（例如：引起動機 → 建立概念 → 實務經驗 → 動手應用），每章對應哪幾頁。
+   - **每頁表格**：LEVEL1 重點、3～4 個 LEVEL2 重點、每個 LEVEL2 怎麼扣回 LEVEL1（關聯句）、深講時每個 LEVEL2 選哪個 LEVEL3 當代表（和選它的理由）、哪個是主 LEVEL2、成語典故、和上一頁怎麼銜接。
+   - **教材調整建議**：頁面結構不符合「1 個 LEVEL1 + 3～4 個 LEVEL2」（LEVEL2 太少、太多、沒有標題）時，提出具體改法（加小標、合併分組、拆頁），說明理由。**使用者同意後才改網頁**，改完重新執行第 1 步。
+3. **寫對話稿** `對話稿.txt`：依核准的教案寫，格式、時長、風格見 [dialogue-guide.md](dialogue-guide.md)。
+   - 每頁先講 LEVEL1，再依畫面順序講每個 LEVEL2，每個 LEVEL2 都要扣回 LEVEL1，不可跳過任何一個 LEVEL2。
+   - 淺講每頁不超過 60 秒，深講不超過 90 秒，依總時長算出每頁秒數。
+   - 小貓先問，機器人用生活比喻回答。
+   - 不能有 AI 腔。
+   - 有指定風格時，自己審 3 輪再交稿，紀錄寫在 `審查紀錄.md`（第 1 輪要對照教案，確認每個 LEVEL2 都講到，深講時也確認每個代表 LEVEL3 都有數字或情境）。
+4. **給使用者看稿，等他同意。**
+   - 先跑 `python scripts/gen_duo_audio.py 對話稿.txt --deck 簡報.html --check [--max-sec 90]`，修到沒有「錯誤」，再把稿子、每頁秒數、預估總長給使用者看。
+   - 使用者改過稿後，要重新檢查。
+5. **產生語音**：
+   ```
+   python scripts/gen_duo_audio.py 對話稿.txt --deck 簡報.html -o duo.json --proxy http://你的代理:port [--say 唸法.txt] [--max-sec 90]
+   ```
+   - 語音會存到對話稿旁的 `duo_audio\` 當快取，改稿後重跑只會重做改過的段落。
+   - 失敗的段落會自動等一下再補做；還是失敗就稍後重跑同一指令。
+   - 有頁面實際超過上限（預設 60 秒，深講用 `--max-sec 90`）時，腳本會停下來：刪那頁的贅字再重跑。
+6. **先試做前 5 頁，給使用者看過再做全部**：
+   - 把前 5 頁另存成 `對話稿_試做.txt`，產生 `duo_P1-5.json`，嵌入後開給使用者看。
+   - 同時自己審一遍，提出 5 個具體修改建議（例如播放列位置、手機版、人偶擋字、語速、新手看不懂的詞）。
+   - 使用者同意後，才產生全部語音。
+7. **嵌入**：
+   ```
+   python scripts/embed_duo.py 簡報.html duo.json -o 輸出.html --bar tr [--cards 成語卡.txt]
+   ```
+   - `--next &quot;JS&quot;`：簡報不是用 → 鍵翻頁時，給翻到下一頁的 JS。
+   - `--active`：目前頁面的 class 不叫 `active` 時，用這個指定。
+   - `--slide .page`：每頁的 class 不是 `slide` 時，用 CSS 選擇器指定（和第 1 步的 `--slide-class` 對應）。
+   - **長頁面**（一頁比畫面高、要捲動）也能用：講到的重點在畫面外，會自動捲過去；換頁時回到頁首。錨點要挑「每段落各自的標題」，人偶才會一路往下帶。頁首有大圖時，第一句錨點選頁首標題，免得直接跳過大圖。
+   - `--home`、`--bar`：改人偶待命角落、播放列位置（人偶會自動讓開同一角的播放列）。簡報下方有頁碼、翻頁鈕時，用 `--bar tr` 放右上角。
+   - `--cards 成語卡.txt`：每行 `詞＝白話`，字幕講到該詞就在字幕上方跳出小卡（標點不影響比對）。
+   - 可以重複執行，會先移除舊的嵌入。
+   - 檔案大小約為「每分鐘語音 0.42 MB」：30 分鐘約 12.6 MB，GitHub Pages 可以放（單檔上限 100 MB），但開啟要等幾秒。
+8. **驗證**（用 Playwright 開輸出檔，透過本機 http server）：
+   - 按 ▶ 後，兩隻人偶會走到重點旁，泡泡、字幕、打亮都會出現。
+   - 抽查幾頁，一定要包含最長的那頁和最後一頁。
+   - Console 沒有 `[duo] 找不到錨點`。
+   - 勾「自動連播」後，會自己翻頁接著講。快速測：`DUO.audio.muted = true`，再每 100 毫秒設一次 `DUO.audio.playbackRate = 16`，用 `DUO.page` 看目前頁。
+   - 手機寬度（390px）：播放列不能蓋到翻頁鈕。
+   - 深色主題也看一次。
+9. **回報使用者**：
+   - 輸出檔位置（或上線網址）與大小。
+   - 全部自動連播要多久（`gen_duo_audio.py` 最後一行會印出來）。
+   - 放上網站時，提醒按 Ctrl+F5 重新整理。
+   - 提醒用 Teams 分享時，要勾「包含電腦音效」，並分享整個畫面，不要只分享視窗。
+
+## 常見問題
+
+| 狀況 | 處理 |
+|------|------|
+| edge-tts 連不上或卡住 | 公司網路一定要 `--proxy`，環境變數無效。腳本已內建 60 秒逾時和重試 6 次。 |
+| `NoAudioReceived` 很多 | 被限流。腳本會自動等 30、60…秒補做；最後仍失敗就隔幾分鐘重跑，快取不會重做。 |
+| 某頁實際超過上限秒數 | 估計常偏少 8～15%。刪那頁機器人台詞的贅字，重跑。 |
+| 中文亂碼（cp950） | 腳本已改成 UTF-8 輸出；自己寫的 Python 要先設 `$env:PYTHONUTF8=1` |
+| 錨點找不到 | 錨點必須是該頁上「看得到的文字」；圖片頁用 `家` 或 `@x,y` |
+| 按 ▶ 沒聲音 | 瀏覽器要求先點一下頁面；從檔案開啟可以正常播放 |
+| 人偶擋到內容 | 換一個更精準的錨點，或用 `@x,y` 指定位置 |
+| 字幕被簡報自己的浮動按鈕蓋住 | 人偶、字幕、播放列的 z-index 已提高到 100000 以上；仍被蓋住時，檢查簡報按鈕的 z-index |
+
+## 檔案
+
+- `scripts/slides_text.py`：列出每頁文字（也提供給檢查錨點用）。
+- `scripts/gen_duo_audio.py`：檢查對話稿，產生雙聲道語音，輸出 `duo.json`。
+- `scripts/embed_duo.py`：把 `assets/duo.js`、`duo.css`、人偶圖、語音嵌入 HTML。
+- `assets/robot.png`、`cat.png`：Microsoft Fluent 3D Emoji（MIT 授權）。
+</pre></div></div></details>
+      <details class="ref"><summary>📄 dialogue-guide.md<small style="font-weight:400;color:var(--mut)">　對話稿寫法：格式、LEVEL1～3、時長、文學風格（95 行）</small></summary><div class="ref-b"><div class="prompt"><div class="prompt-h"><b>dialogue-guide.md</b></div><pre style="max-height:480px;overflow:auto;white-space:pre-wrap"># 對話稿寫法
+
+## 格式
+
+```
+【P5】重點：營發處負責把客戶的申辦，變成系統做得出來的訂單
+貓｜簡單說｜營發處在忙什麼
+營發處平常到底在忙什麼？
+機｜=｜把申辦變成訂單
+簡單說，客戶在門市辦的每一件事，最後都要變成一張訂單，系統才知道要做什麼。我們就是管這張訂單的人。
+貓｜② 訂單處理｜一天有多少張
+那一天大概會有幾張？
+機｜=｜像物流中心
+很多。你可以把它想成物流中心，包裹一直進來，我們要確保每一件都送到對的地方。
+```
+
+- `【P頁碼】重點：…`：一頁一個區塊。「重點」是這一頁講完後跳出的「一句話重點」卡，20 字左右。
+- `角色｜錨點｜泡泡`：
+  - 角色：`貓` 或 `機`。
+  - 錨點有四種寫法：
+    - 一段這頁上的原文（建議 2～10 字，而且只出現一次）
+    - `=`：跟上一段同一個位置
+    - `家`：回角落待命
+    - `@橫%,直%`：例如 `@70,40`，給圖片頁用
+  - 泡泡：頭上顯示的短句，15 字以內。
+- 下一行起是要念出來的台詞，可以換行，會直接接在一起。台詞同時也是字幕。
+- `#` 開頭的行是註解。
+
+## 寫作原則
+
+1. **先總後分，照教案走**：每頁第 1 輪講 LEVEL1（頁面大標題：這頁要解決什麼問題），接著每個 LEVEL2（小標題）各 1 輪，依畫面由上到下。
+   - 每頁 4～5 輪：LEVEL1 一輪 + LEVEL2 三到四輪（深講再加主 LEVEL2 追問一輪）。每頁都由小貓先開口。
+   - 每個 LEVEL2 的回答要扣回 LEVEL1，例如 LEVEL1 是「為什麼查很久」，LEVEL2「名詞不對應」就要講「這是查很久的第二個原因」。
+   - 不可跳過畫面上的任何 LEVEL2。內容太多講不完時，回頭改教案（例如請使用者同意合併小標或拆頁），不要在稿子裡偷偷略過。
+   - 最後一個 LEVEL2 講完，用半句話收回 LEVEL1，接上「一句話重點」卡。
+2. **LEVEL3 不逐條唸，挑一個講透**（以一馭多）：LEVEL3 是 LEVEL2 底下的細項（數字、清單、表格列、步驟）。
+   - **挑代表**：每個 LEVEL2 從它的 LEVEL3 裡挑 1 個代表。優先挑：有數字的、有真實情境的、有前後對比的、新手最容易誤會的。
+   - **三句法**：機器人回答 LEVEL2 時照這個順序：
+     1. 結論：一句話，扣回 LEVEL1。
+     2. 實例：講那個代表 LEVEL3，要有數字或情境。
+     3. 意義：對聽眾有什麼用，或一個生活比喻。
+   - **其餘一句帶過**：說出共同點，例如「表上其他幾列病根相同：…」。不要逐條念，也不要說「請暫停細看」。
+   - **錨點跟著走**：小貓的錨點放 LEVEL2 小標，機器人的錨點放代表 LEVEL3 的原文，打亮才會落在細項上，眼睛跟得上。
+   - **主次分明**：每頁挑 1 個「主 LEVEL2」（最關鍵或最難懂的），小貓可以追問一輪（錨點用 `=`），往下多講一層「為什麼」或「其餘細項的共同點」。其他 LEVEL2 只講一輪。
+   - **表格**：先講這張表在比什麼（欄位怎麼讀），再念一列當示範。
+3. **小貓問的是聽眾心裡的問題**，例如：「這跟我有什麼關係？」「為什麼不能一套系統就好？」「這個英文縮寫是什麼？」。不要問答案已經寫在題目裡的假問題。
+4. **機器人答「深入淺出」**：
+   - 先講結論，一句話講完。
+   - 接著用生活例子比喻，例如物流、餐廳點餐、搬家。
+   - 最後拉回投影片上的字。
+5. **長度**：淺講每頁台詞合計約 250 字（約 60 秒），深講約 330 字（約 85 秒）。每段 70 字以內，方便看字幕。
+6. **錨點要對**：
+   - 每一輪問答指向這頁的一個重點區塊，依投影片由上到下的順序走。
+   - 錨點文字從 `slides_text.py` 的輸出直接複製。
+7. **去 AI 味**：
+   - 不用驚嘆號。
+   - 不用以下說法：讓我們、一起來、深入探討、總而言之、值得一提、賦能、助力、打造、旨在、至關重要、無縫。
+   - 用同事之間講話的口氣，可以用「其實」「說白了」「你可以想成」。
+8. **不加投影片沒有的數字或承諾**。自己算出來的數字也不行（例如「一天看十支要看一年半」）。不確定的內容就不要講。
+9. **專有名詞的唸法**寫在唸法檔，一行一個，格式是 `畫面字=唸法`，例如：
+   ```
+   mORDER=M Order
+   TMF622=TMF 六二二
+   ```
+   這只影響聲音，字幕仍顯示原文。
+10. **聽眾是新手時**：每個專有名詞、成語第一次出現，就緊接一句白話解釋。寧可多講一句，也不要讓人卡住。
+
+## 時長怎麼抓
+
+- **先選講解深度**（工作規劃時問使用者）：
+  - **淺講（每頁 ≤ 60 秒）**：只講 LEVEL1、LEVEL2，每輪約 11～12 秒。適合總覽、時間很少時。
+  - **深講（每頁 ≤ 90 秒，加 `--max-sec 90`）**：LEVEL2 用三句法帶 1 個 LEVEL3，每輪約 18～20 秒，外加主 LEVEL2 追問一輪。總長約為淺講的 1.45 倍。
+- **先定總長，再算每頁秒數**：每頁秒數 ≈ 總分鐘 × 60 ÷ 頁數 − 8（8 秒是重點卡加翻頁）。例如 30 分鐘、29 頁，每頁約 52～55 秒。
+- **估計會偏少**：實際語音約為估計 × 1.08，個別頁會多到 15%。`--check` 估計超過上限前 5 秒（例如 55 或 85 秒）會提醒，最好留 3～5 秒餘裕。
+- **超過上限時**：刪機器人台詞裡的贅字（例如「一張白紙」改「白紙」、「最後貼進」改「再貼進」），不要刪掉比喻或解釋。重跑時只會重做改過的段落。
+
+## 文學風格（使用者要求「成語、典故」時才用）
+
+1. **一頁一個主成語或典故**，放進「重點」，例如「工欲善其事，必先利其器」。
+2. **出處要查證**：講典故時說出人物和故事，例如「宋朝文與可畫竹前，心中早有竹子的樣子」。不確定出處的就不要講故事，只用成語。
+3. **全稿不重複**：同一個成語只用一次。寫完列一張「每頁重點」表檢查。
+4. **意思要貼切**：意思不合或容易聯想到別的事情的成語要換掉（例如「星星之火」）。
+5. **講完立刻白話**：例如「量體裁衣，就是看對象調整內容」。
+6. **做成語卡** `成語卡.txt`，嵌入時用 `--cards`：
+   ```
+   # 一行一個：詞＝白話（15 字左右）
+   言必有據＝說話要有根據
+   刻舟求劍＝拿舊方法套新情況
+   ```
+   只收新手可能看不懂的詞；大家都懂的（例如「與時俱進」）不用收。卡片的詞必須跟台詞一字不差（標點可不同）。
+7. **自己審 3 輪再給使用者看**，紀錄寫在 `審查紀錄.md`：
+   - 第 1 輪：加入成語典故，錨點和重點不動。
+   - 第 2 輪：查出處、去重複、補足或刪減秒數。
+   - 第 3 輪：替新手補白話，拆開太長的字幕。
+</pre></div></div></details>
+      <details class="ref"><summary>📄 scripts/slides_text.py<small style="font-weight:400;color:var(--mut)">　列出每頁文字，供挑錨點與檢查（66 行）</small></summary><div class="ref-b"><div class="prompt"><div class="prompt-h"><b>scripts/slides_text.py</b></div><pre style="max-height:480px;overflow:auto;white-space:pre">&quot;&quot;&quot;列出 HTML 簡報每一頁的文字，供撰寫對話稿與檢查錨點。
+
+用法：python slides_text.py deck.html [--slide-class slide]
+&quot;&quot;&quot;
+import argparse, re, sys
+from html.parser import HTMLParser
+
+VOID = {&#x27;area&#x27;, &#x27;base&#x27;, &#x27;br&#x27;, &#x27;col&#x27;, &#x27;embed&#x27;, &#x27;hr&#x27;, &#x27;img&#x27;, &#x27;input&#x27;, &#x27;link&#x27;, &#x27;meta&#x27;, &#x27;source&#x27;, &#x27;track&#x27;, &#x27;wbr&#x27;}
+BLOCK = {&#x27;p&#x27;, &#x27;div&#x27;, &#x27;li&#x27;, &#x27;h1&#x27;, &#x27;h2&#x27;, &#x27;h3&#x27;, &#x27;h4&#x27;, &#x27;h5&#x27;, &#x27;h6&#x27;, &#x27;tr&#x27;, &#x27;td&#x27;, &#x27;th&#x27;, &#x27;section&#x27;, &#x27;br&#x27;, &#x27;dt&#x27;, &#x27;dd&#x27;, &#x27;figcaption&#x27;, &#x27;text&#x27;}
+
+
+class _P(HTMLParser):
+    def __init__(self, cls):
+        super().__init__(convert_charrefs=True)
+        self.cls, self.depth, self.start, self.skip = cls, 0, None, 0
+        self.pages, self.buf = [], []
+
+    def handle_starttag(self, tag, attrs):
+        if tag in VOID:
+            if self.start is not None and tag in BLOCK: self.buf.append(&#x27;\n&#x27;)
+            return
+        self.depth += 1
+        if tag in (&#x27;script&#x27;, &#x27;style&#x27;): self.skip += 1
+        c = (dict(attrs).get(&#x27;class&#x27;) or &#x27;&#x27;).split()
+        if self.start is None and self.cls in c:
+            self.start, self.buf = self.depth, []
+        elif self.start is not None and tag in BLOCK:
+            self.buf.append(&#x27;\n&#x27;)
+
+    def handle_endtag(self, tag):
+        if tag in VOID: return
+        if tag in (&#x27;script&#x27;, &#x27;style&#x27;) and self.skip: self.skip -= 1
+        if self.start is not None and self.depth == self.start:
+            self.pages.append(&#x27;&#x27;.join(self.buf)); self.start = None
+        elif self.start is not None and tag in BLOCK:
+            self.buf.append(&#x27;\n&#x27;)
+        self.depth -= 1
+
+    def handle_data(self, d):
+        if self.start is not None and not self.skip: self.buf.append(d)
+
+
+def slide_texts(html_text, cls=&#x27;slide&#x27;):
+    &quot;&quot;&quot;回傳每頁文字（保留換行），頁碼＝索引＋1。&quot;&quot;&quot;
+    p = _P(cls); p.feed(html_text); p.close()
+    out = []
+    for t in p.pages:
+        lines = [&#x27; &#x27;.join(x.split()) for x in t.split(&#x27;\n&#x27;)]
+        out.append(&#x27;\n&#x27;.join(x for x in lines if x))
+    return out
+
+
+norm = lambda s: re.sub(r&#x27;\s+&#x27;, &#x27;&#x27;, s or &#x27;&#x27;)
+
+if __name__ == &#x27;__main__&#x27;:
+    sys.stdout.reconfigure(encoding=&#x27;utf-8&#x27;)
+    ap = argparse.ArgumentParser()
+    ap.add_argument(&#x27;deck&#x27;); ap.add_argument(&#x27;--slide-class&#x27;, default=&#x27;slide&#x27;)
+    a = ap.parse_args()
+    pages = slide_texts(open(a.deck, encoding=&#x27;utf-8-sig&#x27;).read(), a.slide_class)
+    if not pages: sys.exit(f&#x27;找不到 class=&quot;{a.slide_class}&quot; 的頁面，請用 --slide-class 指定&#x27;)
+    for i, t in enumerate(pages, 1):
+        print(f&#x27;【P{i}】&#x27; + (&#x27;（沒有文字，可能是圖片頁）&#x27; if not t else &#x27;&#x27;))
+        if t: print(t)
+        print()
+</pre></div></div></details>
+      <details class="ref"><summary>📄 scripts/gen_duo_audio.py<small style="font-weight:400;color:var(--mut)">　檢查對話稿、產生雙聲道語音，輸出 duo.json（173 行）</small></summary><div class="ref-b"><div class="prompt"><div class="prompt-h"><b>scripts/gen_duo_audio.py</b></div><pre style="max-height:480px;overflow:auto;white-space:pre">&quot;&quot;&quot;把「小貓問、機器人答」對話稿轉成語音，輸出 duo.json（語音以 base64 內嵌）。
+
+用法：
+  python gen_duo_audio.py 對話稿.txt --deck 簡報.html --check      # 只檢查格式、錨點、估算秒數
+  python gen_duo_audio.py 對話稿.txt --deck 簡報.html -o duo.json   # 產生語音
+選項：--proxy http://host:port（公司網路必填；edge-tts 不吃環境變數，要用參數傳）
+     --say 唸法.txt（每行「畫面字=唸法」，只影響聲音，不影響字幕）
+&quot;&quot;&quot;
+import argparse, asyncio, base64, hashlib, json, os, re, sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from slides_text import slide_texts, norm
+
+VOICE = {&#x27;cat&#x27;: &#x27;zh-TW-HsiaoChenNeural&#x27;, &#x27;robot&#x27;: &#x27;zh-TW-YunJheNeural&#x27;}     # 小貓＝曉臻、機器人＝雲哲
+RATE = {&#x27;cat&#x27;: &#x27;-2%&#x27;, &#x27;robot&#x27;: &#x27;-4%&#x27;}
+WHO = {&#x27;貓&#x27;: &#x27;cat&#x27;, &#x27;小貓&#x27;: &#x27;cat&#x27;, &#x27;cat&#x27;: &#x27;cat&#x27;, &#x27;機&#x27;: &#x27;robot&#x27;, &#x27;機器人&#x27;: &#x27;robot&#x27;, &#x27;robot&#x27;: &#x27;robot&#x27;}
+GAP, KEY_SEC, TURN_SEC, CPS = .45, 3.5, .7, 4.5                             # 段落間隔、重點卡、翻頁、每秒字數(估算)
+AI_TONE = [&#x27;讓我們&#x27;, &#x27;一起來&#x27;, &#x27;深入探討&#x27;, &#x27;總而言之&#x27;, &#x27;值得一提&#x27;, &#x27;不僅&#x27;, &#x27;賦能&#x27;, &#x27;助力&#x27;, &#x27;打造&#x27;, &#x27;旨在&#x27;, &#x27;至關重要&#x27;, &#x27;無縫&#x27;]
+BASE_SAY = [(&#x27;→&#x27;, &#x27;，&#x27;), (&#x27;➜&#x27;, &#x27;，&#x27;), (&#x27;／&#x27;, &#x27;、&#x27;), (&#x27;＋&#x27;, &#x27;加&#x27;), (&#x27;≥&#x27;, &#x27;至少&#x27;), (&#x27;≤&#x27;, &#x27;最多&#x27;), (&#x27;~&#x27;, &#x27;到&#x27;), (&#x27;～&#x27;, &#x27;到&#x27;)]
+
+
+def parse(src):
+    pages, errs = {}, []
+    for blk in re.split(r&#x27;\n(?=【P\d+】)&#x27;, &#x27;\n&#x27; + src.replace(&#x27;\r&#x27;, &#x27;&#x27;)):
+        m = re.match(r&#x27;【P(\d+)】(.*)&#x27;, blk.strip())
+        if not m: continue
+        n, head = int(m.group(1)), m.group(2).strip()
+        km = re.match(r&#x27;重點[:：]\s*(.+)&#x27;, head)
+        if not km: errs.append(f&#x27;P{n}：標題列要寫「【P{n}】重點：一句話重點」&#x27;)
+        segs, prev = [], None
+        for ln in blk.strip().split(&#x27;\n&#x27;)[1:]:
+            ln = ln.strip()
+            if not ln or ln.startswith(&#x27;#&#x27;): continue
+            h = re.match(r&#x27;^([^｜|]+)[｜|]([^｜|]*)[｜|](.*)$&#x27;, ln)
+            if h:
+                who = WHO.get(h.group(1).strip())
+                if not who: errs.append(f&#x27;P{n}：角色「{h.group(1)}」要寫 貓 或 機&#x27;); who = &#x27;robot&#x27;
+                a = h.group(2).strip()
+                if a == &#x27;=&#x27;:
+                    if prev is None: errs.append(f&#x27;P{n}：第一段不能用「=」&#x27;); at = {&#x27;home&#x27;: 1}
+                    else: at = dict(prev)
+                elif a in (&#x27;&#x27;, &#x27;家&#x27;, &#x27;home&#x27;): at = {&#x27;home&#x27;: 1}
+                elif a.startswith(&#x27;@&#x27;):
+                    try: x, y = [float(v) for v in a[1:].split(&#x27;,&#x27;)]; at = {&#x27;p&#x27;: [x, y]}
+                    except ValueError: errs.append(f&#x27;P{n}：位置「{a}」要寫成 @橫%,直%（例：@70,40）&#x27;); at = {&#x27;home&#x27;: 1}
+                else: at = {&#x27;q&#x27;: a}
+                prev = at
+                segs.append({&#x27;who&#x27;: who, &#x27;at&#x27;: at, &#x27;tip&#x27;: h.group(3).strip(), &#x27;t&#x27;: &#x27;&#x27;})
+            elif segs: segs[-1][&#x27;t&#x27;] += ln
+            else: errs.append(f&#x27;P{n}：台詞前面要先有「角色｜錨點｜泡泡」&#x27;)
+        for s in segs:
+            if not s[&#x27;t&#x27;]: errs.append(f&#x27;P{n}：「{s[&quot;tip&quot;]}」這段沒有台詞&#x27;)
+        pages[n] = {&#x27;key&#x27;: km.group(1).strip() if km else &#x27;&#x27;, &#x27;segs&#x27;: segs}
+    return pages, errs
+
+
+def lint(pages, deck_pages, max_sec=60):
+    errs, warns = [], []
+    for n, p in sorted(pages.items()):
+        if not p[&#x27;segs&#x27;]: errs.append(f&#x27;P{n}：沒有任何對話&#x27;); continue
+        if p[&#x27;segs&#x27;][0][&#x27;who&#x27;] != &#x27;cat&#x27;: warns.append(f&#x27;P{n}：建議由小貓先問&#x27;)
+        if deck_pages is not None:
+            if n &gt; len(deck_pages): errs.append(f&#x27;P{n}：簡報只有 {len(deck_pages)} 頁&#x27;); continue
+            txt = norm(deck_pages[n - 1])
+            for s in p[&#x27;segs&#x27;]:
+                q = s[&#x27;at&#x27;].get(&#x27;q&#x27;)
+                if q and norm(q) not in txt: errs.append(f&#x27;P{n}：錨點「{q}」不在這頁的文字裡（圖片頁請用 家 或 @x,y）&#x27;)
+        for s in p[&#x27;segs&#x27;]:
+            t = s[&#x27;t&#x27;]
+            if len(t) &gt; 70: warns.append(f&#x27;P{n}：「{t[:12]}…」{len(t)} 字，字幕太長，建議拆段&#x27;)
+            if re.search(r&#x27;[！!]&#x27;, t + s[&#x27;tip&#x27;]): warns.append(f&#x27;P{n}：「{t[:12]}…」有驚嘆號&#x27;)
+            for w in AI_TONE:
+                if w in t or w in s[&#x27;tip&#x27;]: warns.append(f&#x27;P{n}：「{w}」口氣太像 AI，換個說法&#x27;)
+        est = sum(len(re.sub(r&#x27;\s&#x27;, &#x27;&#x27;, s[&#x27;t&#x27;])) / CPS + GAP for s in p[&#x27;segs&#x27;])
+        p[&#x27;est&#x27;] = est
+        if est &gt; max_sec: errs.append(f&#x27;P{n}：估計 {est:.0f} 秒，超過 {max_sec} 秒，請刪字&#x27;)
+        elif est &gt; max_sec - 5: warns.append(f&#x27;P{n}：估計 {est:.0f} 秒，實際語音常比估計多 8～15%，可能超過 {max_sec} 秒&#x27;)
+    return errs, warns
+
+
+def load_say(path):
+    rules = list(BASE_SAY)
+    if path:
+        for ln in open(path, encoding=&#x27;utf-8-sig&#x27;):
+            if &#x27;=&#x27; in ln and not ln.startswith(&#x27;#&#x27;):
+                a, b = ln.rstrip(&#x27;\n&#x27;).split(&#x27;=&#x27;, 1); rules.insert(0, (a, b))
+    rules.sort(key=lambda r: -len(r[0]))
+    return rules
+
+
+async def tts(text, voice, rate, proxy, cache, sem):
+    import edge_tts
+    f = os.path.join(cache, hashlib.sha1(f&#x27;{voice}|{rate}|{text}&#x27;.encode()).hexdigest()[:16] + &#x27;.mp3&#x27;)
+    if os.path.exists(f): return f
+    async with sem:
+        async def one():
+            b = bytearray()
+            async for ch in edge_tts.Communicate(text, voice, rate=rate, proxy=proxy).stream():
+                if ch[&#x27;type&#x27;] == &#x27;audio&#x27;: b += ch[&#x27;data&#x27;]
+            return b
+        for k in range(6):
+            try:
+                b = await asyncio.wait_for(one(), 60)      # 偶爾會卡住，要有逾時
+                if b:
+                    open(f, &#x27;wb&#x27;).write(b); print(&#x27;  ok&#x27;, voice[6:-6], text[:14], flush=True); return f
+            except Exception as e:
+                print(&#x27;  retry&#x27;, k + 1, type(e).__name__, flush=True)
+            await asyncio.sleep(3)
+    print(&#x27;  失敗，稍後整批重試：&#x27;, text[:20], flush=True)
+    return None
+
+
+async def build(pages, a):
+    rules, cache = load_say(a.say), a.cache
+    os.makedirs(cache, exist_ok=True)
+    sem = asyncio.Semaphore(4)
+    def spoken(t):
+        for x, y in rules: t = t.replace(x, y)
+        return t
+    order = [(n, s) for n in sorted(pages) for s in pages[n][&#x27;segs&#x27;]]
+    print(&#x27;語音段數&#x27;, len(order), flush=True)
+    job = lambda s: tts(spoken(s[&#x27;t&#x27;]), VOICE[s[&#x27;who&#x27;]], RATE[s[&#x27;who&#x27;]], a.proxy, cache, sem)
+    files = await asyncio.gather(*[job(s) for _, s in order])
+    for r in range(5):                                   # edge-tts 常限流（NoAudioReceived），等一下再補做失敗的段落
+        bad = [i for i, f in enumerate(files) if not f]
+        if not bad: break
+        print(f&#x27;有 {len(bad)} 段失敗，{30 * (r + 1)} 秒後第 {r + 1} 次補做&#x27;, flush=True)
+        await asyncio.sleep(30 * (r + 1))
+        for i, f in zip(bad, await asyncio.gather(*[job(order[i][1]) for i in bad])): files[i] = f
+    if not all(files): sys.exit(&#x27;仍有語音段落失敗；已完成的都在快取裡，稍後重跑同一指令即可&#x27;)
+    sec = lambda f: os.path.getsize(f) * 8 / 48000                         # edge-tts 預設 48kbps
+    out, tot, worst = {}, 0, 0
+    for (n, s), f in zip(order, files):
+        p = out.setdefault(str(n), {&#x27;key&#x27;: pages[n][&#x27;key&#x27;], &#x27;segs&#x27;: [], &#x27;sec&#x27;: 0})
+        p[&#x27;segs&#x27;].append({&#x27;who&#x27;: s[&#x27;who&#x27;], &#x27;t&#x27;: s[&#x27;t&#x27;], &#x27;tip&#x27;: s[&#x27;tip&#x27;], &#x27;at&#x27;: s[&#x27;at&#x27;], &#x27;a&#x27;: base64.b64encode(open(f, &#x27;rb&#x27;).read()).decode()})
+        p[&#x27;sec&#x27;] += sec(f) + GAP
+    for n, p in out.items():
+        worst = max(worst, p[&#x27;sec&#x27;]); tot += p[&#x27;sec&#x27;] + KEY_SEC + TURN_SEC
+        print(f&#x27;P{n}: {p[&quot;sec&quot;]:.1f} 秒&#x27; + (f&#x27;  ← 超過 {a.max_sec} 秒&#x27; if p[&#x27;sec&#x27;] &gt; a.max_sec else &#x27;&#x27;))
+        p[&#x27;sec&#x27;] = round(p[&#x27;sec&#x27;], 1)
+    json.dump({&#x27;pages&#x27;: out}, open(a.out, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;), ensure_ascii=False)
+    print(f&#x27;輸出 {a.out}（{os.path.getsize(a.out) / 1e6:.1f} MB）；自動連播全部約 {int(tot // 60)} 分 {int(tot % 60)} 秒&#x27;)
+    if worst &gt; a.max_sec: sys.exit(f&#x27;有頁面超過 {a.max_sec} 秒，請刪減台詞後重跑&#x27;)
+
+
+def main():
+    sys.stdout.reconfigure(encoding=&#x27;utf-8&#x27;)
+    ap = argparse.ArgumentParser()
+    ap.add_argument(&#x27;script&#x27;); ap.add_argument(&#x27;--deck&#x27;); ap.add_argument(&#x27;--slide-class&#x27;, default=&#x27;slide&#x27;)
+    ap.add_argument(&#x27;-o&#x27;, &#x27;--out&#x27;, default=&#x27;duo.json&#x27;); ap.add_argument(&#x27;--say&#x27;)
+    ap.add_argument(&#x27;--proxy&#x27;, default=os.environ.get(&#x27;DUO_PROXY&#x27;) or os.environ.get(&#x27;HTTPS_PROXY&#x27;) or os.environ.get(&#x27;HTTP_PROXY&#x27;))
+    ap.add_argument(&#x27;--cache&#x27;); ap.add_argument(&#x27;--check&#x27;, action=&#x27;store_true&#x27;)
+    ap.add_argument(&#x27;--max-sec&#x27;, type=int, default=60, help=&#x27;每頁秒數上限：一般 60；L2 要帶 L3 實例時用 90&#x27;)
+    a = ap.parse_args()
+    a.cache = a.cache or os.path.join(os.path.dirname(os.path.abspath(a.script)), &#x27;duo_audio&#x27;)
+    pages, errs = parse(open(a.script, encoding=&#x27;utf-8-sig&#x27;).read())
+    dp = slide_texts(open(a.deck, encoding=&#x27;utf-8-sig&#x27;).read(), a.slide_class) if a.deck else None
+    e2, warns = lint(pages, dp, a.max_sec); errs = list(dict.fromkeys(errs + e2)); warns = list(dict.fromkeys(warns))
+    for n, p in sorted(pages.items()):
+        print(f&#x27;P{n}: {len(p[&quot;segs&quot;])} 段，估計 {p.get(&quot;est&quot;, 0):.0f} 秒&#x27;)
+    tot = sum(p.get(&#x27;est&#x27;, 0) * 1.08 + KEY_SEC + TURN_SEC for p in pages.values())
+    print(f&#x27;預估自動連播全部約 {int(tot // 60)} 分（實際語音約為估計 × 1.08）&#x27;)
+    for w in warns: print(&#x27;提醒：&#x27;, w)
+    for e in errs: print(&#x27;錯誤：&#x27;, e)
+    if errs: sys.exit(1)
+    if not pages: sys.exit(&#x27;對話稿裡沒有【P數字】段落&#x27;)
+    if a.check: print(&#x27;檢查通過&#x27;); return
+    asyncio.run(build(pages, a))
+
+
+if __name__ == &#x27;__main__&#x27;:
+    main()
+</pre></div></div></details>
+      <details class="ref"><summary>📄 scripts/embed_duo.py<small style="font-weight:400;color:var(--mut)">　把人偶、語音、播放列嵌進 HTML（50 行）</small></summary><div class="ref-b"><div class="prompt"><div class="prompt-h"><b>scripts/embed_duo.py</b></div><pre style="max-height:480px;overflow:auto;white-space:pre">&quot;&quot;&quot;把雙人偶旁白（程式、圖片、語音）嵌入 HTML 簡報，輸出單一檔案。可重複執行（會先移除舊的嵌入）。
+
+用法：python embed_duo.py 簡報.html duo.json -o 輸出.html
+選項：--slide .slide      每一頁的 CSS 選擇器
+     --active active     目前頁面的 class（沒有就自動找畫面中央那頁）
+     --next &quot;go(cur+1)&quot;  翻到下一頁的 JS（不給就模擬按 → 鍵）
+     --home tr|tl|br|bl  人偶待命角落（預設右上）
+     --bar bl|br|tl|tr   播放列位置（預設左下）
+     --cards 成語卡.txt   每行「詞＝白話」，字幕講到該詞就跳出小卡
+&quot;&quot;&quot;
+import argparse, base64, json, os, re, sys
+
+A = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), &#x27;assets&#x27;)
+BEGIN, END = &#x27;&lt;!--DUO:BEGIN--&gt;&#x27;, &#x27;&lt;!--DUO:END--&gt;&#x27;
+
+
+def main():
+    sys.stdout.reconfigure(encoding=&#x27;utf-8&#x27;)
+    ap = argparse.ArgumentParser()
+    ap.add_argument(&#x27;deck&#x27;); ap.add_argument(&#x27;duo&#x27;); ap.add_argument(&#x27;-o&#x27;, &#x27;--out&#x27;, required=True)
+    ap.add_argument(&#x27;--slide&#x27;, default=&#x27;.slide&#x27;); ap.add_argument(&#x27;--active&#x27;, default=&#x27;active&#x27;); ap.add_argument(&#x27;--next&#x27;, default=&#x27;&#x27;)
+    ap.add_argument(&#x27;--home&#x27;, default=&#x27;tr&#x27;, choices=[&#x27;tr&#x27;, &#x27;tl&#x27;, &#x27;br&#x27;, &#x27;bl&#x27;]); ap.add_argument(&#x27;--bar&#x27;, default=&#x27;bl&#x27;, choices=[&#x27;tr&#x27;, &#x27;tl&#x27;, &#x27;br&#x27;, &#x27;bl&#x27;])
+    ap.add_argument(&#x27;--cards&#x27;, default=&#x27;&#x27;)
+    a = ap.parse_args()
+
+    html = open(a.deck, encoding=&#x27;utf-8-sig&#x27;).read()
+    html = re.sub(re.escape(BEGIN) + r&#x27;.*?&#x27; + re.escape(END) + r&#x27;\n?&#x27;, &#x27;&#x27;, html, flags=re.S)
+    data = json.load(open(a.duo, encoding=&#x27;utf-8&#x27;))
+    img = {w: &#x27;data:image/png;base64,&#x27; + base64.b64encode(open(os.path.join(A, w + &#x27;.png&#x27;), &#x27;rb&#x27;).read()).decode() for w in (&#x27;cat&#x27;, &#x27;robot&#x27;)}
+    cfg = {&#x27;slide&#x27;: a.slide, &#x27;active&#x27;: a.active, &#x27;next&#x27;: a.next, &#x27;home&#x27;: a.home, &#x27;bar&#x27;: a.bar}
+    if a.cards:
+        cards = {}
+        for ln in open(a.cards, encoding=&#x27;utf-8-sig&#x27;):
+            ln = ln.strip()
+            if ln and not ln.startswith(&#x27;#&#x27;) and &#x27;＝&#x27; in ln:
+                k, v = ln.split(&#x27;＝&#x27;, 1); cards[k.strip()] = v.strip()
+        cfg[&#x27;cards&#x27;] = cards
+    js_safe = lambda o: json.dumps(o, ensure_ascii=False).replace(&#x27;&lt;/&#x27;, &#x27;&lt;\\/&#x27;)
+    block = (BEGIN + &#x27;&lt;style&gt;&#x27; + open(os.path.join(A, &#x27;duo.css&#x27;), encoding=&#x27;utf-8-sig&#x27;).read() + &#x27;&lt;/style&gt;&#x27;
+             + f&#x27;&lt;script&gt;window.DUO_CFG={js_safe(cfg)};window.DUO_IMG={js_safe(img)};window.DUO_DATA={js_safe(data)};&lt;/script&gt;&#x27;
+             + &#x27;&lt;script&gt;&#x27; + open(os.path.join(A, &#x27;duo.js&#x27;), encoding=&#x27;utf-8-sig&#x27;).read() + &#x27;&lt;/script&gt;&#x27; + END)
+    i = html.lower().rfind(&#x27;&lt;/body&gt;&#x27;)
+    html = html[:i] + block + &#x27;\n&#x27; + html[i:] if i &gt;= 0 else html + block
+    open(a.out, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;).write(html)
+    print(f&#x27;輸出 {a.out}（{os.path.getsize(a.out) / 1e6:.1f} MB），共 {len(data.get(&quot;pages&quot;, {}))} 頁有對話&#x27;)
+
+
+if __name__ == &#x27;__main__&#x27;:
+    main()
+</pre></div></div></details>
+      <details class="ref"><summary>📄 assets/duo.js<small style="font-weight:400;color:var(--mut)">　播放器：人偶走位、泡泡、字幕、打亮、重點卡（357 行）</small></summary><div class="ref-b"><div class="prompt"><div class="prompt-h"><b>assets/duo.js</b></div><pre style="max-height:480px;overflow:auto;white-space:pre">/* 雙人偶旁白：小貓問、機器人答。資料由 embed_duo.py 放在 window.DUO_DATA / DUO_IMG / DUO_CFG */
+(() =&gt; {
+  &#x27;use strict&#x27;;
+  const C = Object.assign({ slide: &#x27;.slide&#x27;, active: &#x27;active&#x27;, next: &#x27;&#x27;, home: &#x27;tr&#x27;, bar: &#x27;bl&#x27;, key: &#x27;p&#x27; }, window.DUO_CFG || {});
+  const PAGES = (window.DUO_DATA || {}).pages || {}, IMG = window.DUO_IMG || {};
+  const NAME = { cat: &#x27;小貓&#x27;, robot: &#x27;機器人&#x27; }, FW = 100, GAP = 10, IDLE = .72, RATES = [1, 1.25, 1.5];
+  const norm = s =&gt; (s || &#x27;&#x27;).replace(/\s+/g, &#x27;&#x27;);
+  const bare = s =&gt; norm(s).replace(/[，。、！？：；「」『』（）,.!?:;()]/g, &#x27;&#x27;);
+  const CARDS = Object.entries(C.cards || {}).map(([k, v]) =&gt; ({ k, v, n: bare(k) }));
+  const rnd = (a, b) =&gt; a + Math.random() * (b - a);
+  const calm = matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches;
+  const store = (k, v) =&gt; { try { if (v === undefined) return localStorage.getItem(&#x27;duo.&#x27; + k); localStorage.setItem(&#x27;duo.&#x27; + k, v); } catch (e) { return null; } };
+
+  // ---------- 畫面元件 ----------
+  const root = document.createElement(&#x27;div&#x27;); root.id = &#x27;duo&#x27;;
+  const fig = w =&gt; `&lt;div class=&quot;duo-m ${w}&quot;&gt;&lt;div class=&quot;duo-say&quot;&gt;&lt;/div&gt;&lt;div class=&quot;duo-fig&quot;&gt;&lt;div class=&quot;duo-body&quot;&gt;&lt;img alt=&quot;${NAME[w]}&quot; src=&quot;${IMG[w] || &#x27;&#x27;}&quot;&gt;&lt;/div&gt;&lt;div class=&quot;duo-shd&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;`;
+  root.innerHTML = fig(&#x27;cat&#x27;) + fig(&#x27;robot&#x27;)
+    + &#x27;&lt;div id=&quot;duoHL&quot;&gt;&lt;/div&gt;&lt;div id=&quot;duoCap&quot;&gt;&lt;div class=&quot;in&quot;&gt;&lt;span class=&quot;who&quot;&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&#x27;
+    + &#x27;&lt;div id=&quot;duoKey&quot;&gt;&lt;div class=&quot;in&quot;&gt;&lt;span class=&quot;lb&quot;&gt;一句話重點&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&#x27;
+    + &#x27;&lt;div id=&quot;duoIdm&quot;&gt;&lt;div class=&quot;in&quot;&gt;&lt;span class=&quot;lb&quot;&gt;成語小卡&lt;/span&gt;&lt;b class=&quot;k&quot;&gt;&lt;/b&gt;&lt;span class=&quot;tx&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&#x27;
+    + `&lt;div id=&quot;duoBar&quot; class=&quot;${C.bar}&quot;&gt;&lt;button id=&quot;duoPlay&quot; type=&quot;button&quot;&gt;▶ 聽報告&lt;/button&gt;&lt;button id=&quot;duoSpd&quot; type=&quot;button&quot; title=&quot;語速&quot;&gt;1x&lt;/button&gt;`
+    + &#x27;&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;duoAuto&quot;&gt;自動連播&lt;/label&gt;&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;duoSub&quot;&gt;字幕&lt;/label&gt;&#x27;
+    + &#x27;&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;duoShow&quot;&gt;人偶&lt;/label&gt;&lt;span class=&quot;pg&quot; id=&quot;duoPg&quot;&gt;&lt;/span&gt;&lt;/div&gt;&#x27;;
+  document.body.appendChild(root);
+  const $ = id =&gt; document.getElementById(id);
+  const hl = $(&#x27;duoHL&#x27;), cap = $(&#x27;duoCap&#x27;), keyc = $(&#x27;duoKey&#x27;), idm = $(&#x27;duoIdm&#x27;), btn = $(&#x27;duoPlay&#x27;), spd = $(&#x27;duoSpd&#x27;), cAuto = $(&#x27;duoAuto&#x27;), cSub = $(&#x27;duoSub&#x27;), cShow = $(&#x27;duoShow&#x27;), pg = $(&#x27;duoPg&#x27;);
+
+  const M = {};
+  [&#x27;cat&#x27;, &#x27;robot&#x27;].forEach(w =&gt; {
+    const el = root.querySelector(&#x27;.duo-m.&#x27; + w);
+    M[w] = { w, el, body: el.querySelector(&#x27;.duo-body&#x27;), shd: el.querySelector(&#x27;.duo-shd&#x27;), say: el.querySelector(&#x27;.duo-say&#x27;),
+      x: null, y: null, vx: 0, vy: 0, phase: 0, face: w === &#x27;cat&#x27; ? 1 : -1, nat: w === &#x27;cat&#x27; ? -1 : 1,   // 貓的圖原本面向左
+      tilt: 0, tiltTo: 0, tiltEnd: 0, hop: -1, next: 0, ok: false, k: IDLE };
+  });
+  let rate = +store(&#x27;rate&#x27;); if (!RATES.includes(rate)) rate = 1;
+  const setRate = r =&gt; { rate = r; spd.textContent = r + &#x27;x&#x27;; au.defaultPlaybackRate = au.playbackRate = r; };
+
+  cAuto.checked = store(&#x27;auto&#x27;) === &#x27;1&#x27;;
+  cSub.checked = store(&#x27;sub&#x27;) !== &#x27;0&#x27;;
+  cShow.checked = store(&#x27;show&#x27;) !== &#x27;0&#x27;;
+  const syncOpt = () =&gt; { root.classList.toggle(&#x27;duo-nosub&#x27;, !cSub.checked); root.classList.toggle(&#x27;duo-off&#x27;, !cShow.checked); };
+  syncOpt();
+  cAuto.onchange = () =&gt; { store(&#x27;auto&#x27;, cAuto.checked ? &#x27;1&#x27; : &#x27;0&#x27;); cAuto.blur(); };
+  cSub.onchange = () =&gt; { store(&#x27;sub&#x27;, cSub.checked ? &#x27;1&#x27; : &#x27;0&#x27;); syncOpt(); cSub.blur(); };
+  cShow.onchange = () =&gt; { store(&#x27;show&#x27;, cShow.checked ? &#x27;1&#x27; : &#x27;0&#x27;); syncOpt(); cShow.blur(); };
+  btn.onclick = () =&gt; { btn.blur(); NR.on ? stop() : start(); };   // start() 無參數＝手動開始
+  spd.onclick = () =&gt; { setRate(RATES[(RATES.indexOf(rate) + 1) % RATES.length]); store(&#x27;rate&#x27;, rate); spd.blur(); };
+  document.addEventListener(&#x27;keydown&#x27;, e =&gt; {
+    const t = e.target;
+    if (e.ctrlKey || e.altKey || e.metaKey || (t &amp;&amp; (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))) return;
+    if (e.key.toLowerCase() === C.key) { e.preventDefault(); NR.on ? stop() : start(); }
+  });
+
+  // ---------- 找目前頁面 ----------
+  let SL = [], cur = -1, Z = null, S = 1;
+  function scanSlides(){ const a = [...document.querySelectorAll(C.slide)]; SL = a.filter(e =&gt; !a.some(o =&gt; o !== e &amp;&amp; o.contains(e))); }
+  function curIdx(){
+    if (!SL.length || !SL[0].isConnected) scanSlides();
+    const i = SL.findIndex(e =&gt; e.classList.contains(C.active));
+    if (i &gt;= 0) return i;
+    let best = -1, bd = 1e9;                                      // 沒有 active class：取最靠近畫面中央、看得到的那頁
+    SL.forEach((e, k) =&gt; { const r = e.getBoundingClientRect(); if (!r.width || !r.height || r.bottom &lt; 0 || r.top &gt; innerHeight) return;
+      const d = Math.abs((r.top + r.bottom) / 2 - innerHeight / 2); if (d &lt; bd) { bd = d; best = k; } });
+    return best;
+  }
+  function frame(){                                               // 投影片比畫面高（長頁面）時，只取看得到的那一段
+    const r = SL[cur] &amp;&amp; SL[cur].getBoundingClientRect();
+    if (r &amp;&amp; r.width) { const t = Math.max(r.top, 0), b = Math.min(r.bottom, innerHeight); Z = { left: r.left, right: r.right, width: r.width, top: t, bottom: b, height: b - t }; }
+    else Z = { left: 0, top: 0, right: innerWidth, bottom: innerHeight, width: innerWidth, height: innerHeight };
+    S = Math.max(.45, Math.min(1.6, Z.width / 1600));
+  }
+  // 長頁面：講到的重點在畫面外就捲過去（只用在有 active class 的簡報，避免和使用者捲動打架）
+  function tall(){ const sl = SL[cur]; if (!sl || !sl.classList.contains(C.active)) return false; const r = sl.getBoundingClientRect(); return r.top &lt; -2 || r.bottom &gt; innerHeight + 2; }
+  function reveal(el){
+    if (!el || !tall()) return;
+    const r = el.getBoundingClientRect(), top = 90, bot = innerHeight - 170;
+    if (r.top &gt;= top &amp;&amp; Math.min(r.bottom, r.top + innerHeight * .45) &lt;= bot) return;
+    el.style.scrollMarginTop = top + &#x27;px&#x27;;
+    el.scrollIntoView({ behavior: calm ? &#x27;auto&#x27; : &#x27;smooth&#x27;, block: r.height &gt; innerHeight * .45 ? &#x27;start&#x27; : &#x27;center&#x27; });
+  }
+  addEventListener(&#x27;scroll&#x27;, () =&gt; { NR.tg = null; }, { passive: true, capture: true });
+
+  // ---------- 旁白狀態 ----------
+  const NR = { on: false, i: 0, segs: null, seg: null, el: null, tg: null, arr: 0, playing: false, timer: 0, pending: false, navAt: 0, hold: false, seen: new Set() };
+  const au = new Audio();
+  setRate(rate);
+  au.onended = () =&gt; { NR.playing = false; if (NR.on) NR.timer = setTimeout(() =&gt; runSeg(NR.i + 1), 450); };
+
+  function page(){ return PAGES[cur + 1]; }
+  function upd(){
+    const p = page();
+    btn.disabled = !p || !p.segs.length;
+    btn.textContent = NR.on ? &#x27;■ 停止&#x27; : &#x27;▶ 聽報告&#x27;;
+    pg.textContent = NR.on ? `${NR.i + 1} / ${NR.segs.length}` : &#x27;&#x27;;
+    root.classList.toggle(&#x27;duo-on&#x27;, NR.on);
+  }
+  function start(fromAuto){
+    const p = page();
+    if (!p || !p.segs.length) {                                   // 沒有對話的頁：連播中就停 4 秒再翻頁
+      NR.hold = fromAuto === true &amp;&amp; cAuto.checked &amp;&amp; cur &lt; SL.length - 1;
+      if (NR.hold) NR.timer = setTimeout(() =&gt; { NR.pending = true; NR.navAt = performance.now(); nextPage(); }, 4000);
+      return;
+    }
+    clearTimeout(NR.timer); NR.pending = false; NR.hold = false; NR.seen = new Set(); keyc.style.display = &#x27;none&#x27;;
+    Object.assign(NR, { on: true, segs: p.segs, el: null, tg: null, arr: 0 });
+    runSeg(0);
+  }
+  function stop(){
+    clearTimeout(NR.timer); NR.pending = false; NR.hold = false;
+    if (NR.on) { NR.on = false; au.pause(); NR.playing = false; }
+    clearSeg(); upd();
+  }
+  function clearSeg(){ NR.seg = null; NR.el = null; cap.style.display = &#x27;none&#x27;; hl.style.display = &#x27;none&#x27;; idm.style.display = &#x27;none&#x27;; M.cat.say.classList.remove(&#x27;on&#x27;); M.robot.say.classList.remove(&#x27;on&#x27;); }
+  function idiom(s){                                              // 講到成語就跳出小卡，同一頁同一詞只出現一次
+    const t = bare(s.t); let best = null;
+    for (const c of CARDS) { const at = t.indexOf(c.n); if (c.n &amp;&amp; at &gt;= 0 &amp;&amp; !NR.seen.has(c.k) &amp;&amp; (!best || at &lt; best.at)) best = { c, at }; }
+    if (!best) { idm.style.display = &#x27;none&#x27;; return; }
+    NR.seen.add(best.c.k);
+    idm.querySelector(&#x27;.k&#x27;).textContent = best.c.k; idm.querySelector(&#x27;.tx&#x27;).textContent = best.c.v;
+    idm.style.display = &#x27;none&#x27;; void idm.offsetWidth; idm.style.display = &#x27;block&#x27;;
+  }
+  function runSeg(i){
+    if (!NR.on) return;
+    const s = NR.segs[i];
+    if (!s) { endPage(); return; }
+    const el = s.at.q ? findEl(s.at.q) : null;
+    if (el !== NR.el || s.at.p || s.at.home) NR.tg = null;
+    NR.i = i; NR.seg = s; NR.el = el;
+    reveal(el);
+    const sp = M[s.who], ot = M[s.who === &#x27;cat&#x27; ? &#x27;robot&#x27; : &#x27;cat&#x27;];
+    ot.say.classList.remove(&#x27;on&#x27;); sp.say.classList.remove(&#x27;on&#x27;); sp.say.innerHTML = s.tip;
+    cap.querySelector(&#x27;.who&#x27;).className = &#x27;who &#x27; + s.who; cap.querySelector(&#x27;.who&#x27;).textContent = NAME[s.who];
+    cap.querySelector(&#x27;.tx&#x27;).textContent = s.t; cap.style.display = &#x27;block&#x27;;
+    idiom(s);
+    au.src = &#x27;data:audio/mpeg;base64,&#x27; + s.a; NR.playing = false; au.defaultPlaybackRate = au.playbackRate = rate;
+    au.play().then(() =&gt; { NR.playing = true; }).catch(e =&gt; {
+      if (e.name === &#x27;NotAllowedError&#x27;) stop(); else NR.timer = setTimeout(() =&gt; runSeg(i + 1), 300);
+    });
+    upd();
+  }
+  function endPage(){
+    const p = page(), auto = cAuto.checked &amp;&amp; cur &lt; SL.length - 1;
+    NR.on = false; NR.playing = false; NR.hold = auto; clearSeg(); upd();
+    if (p &amp;&amp; p.key) { keyc.querySelector(&#x27;.tx&#x27;).textContent = p.key; keyc.style.display = &#x27;block&#x27;; }
+    if (auto) NR.timer = setTimeout(() =&gt; { keyc.style.display = &#x27;none&#x27;; NR.pending = true; NR.navAt = performance.now(); nextPage(); }, p &amp;&amp; p.key ? 3500 : 1000);
+  }
+  function nextPage(){
+    if (C.next) { try { new Function(C.next)(); return; } catch (e) { console.warn(&#x27;[duo] next 指令失敗&#x27;, e); } }
+    const e = new KeyboardEvent(&#x27;keydown&#x27;, { key: &#x27;ArrowRight&#x27;, code: &#x27;ArrowRight&#x27;, bubbles: true, cancelable: true });
+    Object.defineProperty(e, &#x27;keyCode&#x27;, { get: () =&gt; 39 }); Object.defineProperty(e, &#x27;which&#x27;, { get: () =&gt; 39 });
+    document.body.dispatchEvent(e);
+  }
+  function onPage(){
+    keyc.style.display = &#x27;none&#x27;; clearTimeout(NR.timer);
+    if (tall() &amp;&amp; SL[cur].getBoundingClientRect().top &lt; 0) SL[cur].scrollIntoView({ block: &#x27;start&#x27; });   // 換頁後從頁首開始
+    if (NR.pending) { NR.pending = false; NR.on = false; clearSeg(); NR.timer = setTimeout(() =&gt; start(true), 700); upd(); }
+    else stop();
+  }
+
+  // ---------- 錨點與站位 ----------
+  function findEl(q){
+    const n = norm(q), sl = SL[cur]; if (!sl) return null;
+    const els = [...sl.querySelectorAll(&#x27;*&#x27;)].filter(e =&gt; e.getClientRects().length &amp;&amp; norm(e.textContent).includes(n));
+    els.sort((a, b) =&gt; a.textContent.length - b.textContent.length);
+    if (!els[0]) console.warn(&#x27;[duo] 第&#x27;, cur + 1, &#x27;頁找不到錨點文字：&#x27;, q);
+    return els[0] || null;
+  }
+  function boxOf(el){                                             // 重點的實際範圍：有底色/框線就用整塊，否則只包住文字
+    if (el instanceof SVGElement) return el.getBoundingClientRect();
+    let h = el;
+    while (h.parentElement &amp;&amp; h.parentElement !== SL[cur] &amp;&amp; getComputedStyle(h).display.startsWith(&#x27;inline&#x27;)) h = h.parentElement;
+    const cs = getComputedStyle(h), bg = cs.backgroundColor;
+    if ((bg &amp;&amp; bg !== &#x27;transparent&#x27; &amp;&amp; !/,\s*0\)$/.test(bg)) || parseFloat(cs.borderTopWidth) &gt; 0 || parseFloat(cs.borderLeftWidth) &gt; 0 || /^(TD|TH|IMG)$/.test(h.tagName)) return h.getBoundingClientRect();
+    const rg = document.createRange(); rg.selectNodeContents(h);
+    const rs = [...rg.getClientRects()].filter(q =&gt; q.width &amp;&amp; q.height);
+    if (!rs.length) return h.getBoundingClientRect();
+    const l = Math.min(...rs.map(q =&gt; q.left)), t = Math.min(...rs.map(q =&gt; q.top)), r = Math.max(...rs.map(q =&gt; q.right)), b = Math.max(...rs.map(q =&gt; q.bottom));
+    return { left: l, top: t, right: r, bottom: b, width: r - l, height: b - t };
+  }
+  function hlRect(el){
+    const r = boxOf(el);
+    return r.width * r.height &gt; Z.width * Z.height * .55 ? null : r;
+  }
+  function obstacles(){
+    const out = [], rg = document.createRange(), sl = SL[cur], w = document.createTreeWalker(sl, NodeFilter.SHOW_TEXT);
+    for (let n; (n = w.nextNode());) {
+      if (!n.nodeValue.trim()) continue;
+      if (n.parentElement.closest(&#x27;svg&#x27;)) { const r = n.parentElement.getBoundingClientRect(); if (r.width) out.push(r); continue; }
+      rg.selectNodeContents(n); for (const r of rg.getClientRects()) if (r.width) out.push(r);
+    }
+    sl.querySelectorAll(&#x27;img,canvas,video&#x27;).forEach(e =&gt; { const r = e.getBoundingClientRect(); if (r.width) out.push(r); });
+    return out;
+  }
+  function bubbleLeft(w, mx, bw){                                 // 泡泡往外側展開，且不超出投影片
+    const c = mx + FW * S / 2, L = w === &#x27;cat&#x27; ? c - bw + 34 * S : c - 34 * S;
+    return Math.max(Z.left + 4 * S, Math.min(Z.right - 4 * S - bw, L));
+  }
+  function bottomPad(){ return (cSub.checked ? 100 : 14) * S; }
+  let barR = null;
+  function homeOf(w){                                             // 待命：縮小站在角落，並讓開播放列
+    const fw = FW * S * IDLE, g = GAP * S, left = C.home[1] === &#x27;l&#x27;, top = C.home[0] !== &#x27;b&#x27;;
+    const rx = left ? Z.left + 14 * S + fw + g : Z.right - 14 * S - fw;
+    let y = top ? Z.top + 12 * S : Z.bottom - fw - bottomPad();
+    const b = barR;
+    if (b &amp;&amp; b.width &amp;&amp; b.right &gt; rx - fw - g &amp;&amp; b.left &lt; rx + fw &amp;&amp; b.bottom &gt; y &amp;&amp; b.top &lt; y + fw) y = top ? b.bottom + 6 * S : b.top - fw - 6 * S;
+    return w === &#x27;robot&#x27; ? { x: rx, y } : { x: rx - fw - g, y };
+  }
+  // 兩隻人偶並排（貓左、機器人右）站在重點旁邊，挑「蓋到最少文字、又離重點近」的位置
+  function pairTarget(now){
+    const at = NR.seg.at, fw = FW * S, g = GAP * S, W = 2 * fw + g;
+    const x0 = Z.left + 6 * S, x1 = Z.right - W - 6 * S, y0 = Z.top + 120 * S, y1 = Math.max(y0, Z.bottom - fw - bottomPad());
+    const cl = (x, y) =&gt; [Math.max(x0, Math.min(x1, x)), Math.max(y0, Math.min(y1, y))];
+    if (at.home) return null;
+    if (at.p) { const [x, y] = cl(Z.left + at.p[0] / 100 * Z.width - W / 2, Z.top + at.p[1] / 100 * Z.height - fw / 2); return { x, y }; }
+    if (!NR.el) return null;
+    const c = NR.tg;
+    if (c &amp;&amp; c.S === S &amp;&amp; (c.done || now - c.t &lt; 900)) return c;
+    const r = boxOf(NR.el), obs = obstacles(), sp = NR.seg.who;
+    const bw = M[sp].say.offsetWidth * S, bh = M[sp].say.offsetHeight * S;
+    const ov = (x, y, w, h) =&gt; { let s = 0; for (const o of obs) { const dx = Math.min(x + w, o.right) - Math.max(x, o.left), dy = Math.min(y + h, o.bottom) - Math.max(y, o.top); if (dx &gt; 0 &amp;&amp; dy &gt; 0) s += dx * dy; } return s; };
+    const rg = document.createRange(); rg.selectNodeContents(NR.el); const tr = [...rg.getClientRects()].filter(q =&gt; q.width).pop();
+    const cy = r.top + Math.min(r.height / 2, 50 * S) - fw / 2, xs = [r.left, r.left + r.width / 2 - W / 2, r.right - W];
+    const cand = [[r.right + g, cy], [r.left - g - W, cy], [r.right + g, r.top - fw / 2], [r.left - g - W, r.top - fw / 2]];
+    xs.forEach(x =&gt; cand.push([x, r.top - fw - g], [x, r.bottom + g]));
+    if (tr) cand.push([tr.right + g, tr.top + tr.height / 2 - fw / 2]);
+    for (let a = NR.el.parentElement, k = 0; a &amp;&amp; a !== SL[cur] &amp;&amp; k &lt; 4; a = a.parentElement, k++) {   // 也試試站在整個表格/區塊旁邊
+      const ar = a.getBoundingClientRect();
+      if (ar.right &gt; r.right + 1) cand.push([ar.right + g, cy]);
+      if (ar.left &lt; r.left - 1) cand.push([ar.left - g - W, cy]);
+    }
+    const hit = (x, y, w, h) =&gt; Math.max(0, Math.min(x + w, r.right) - Math.max(x, r.left)) * Math.max(0, Math.min(y + h, r.bottom) - Math.max(y, r.top));
+    let best = null;
+    for (const p of cand) {
+      const [x, y] = cl(p[0], p[1]), sx = sp === &#x27;cat&#x27; ? x : x + fw + g;
+      const bx = bubbleLeft(sp, sx, bw), by = y - bh - 12 * S, fx = x + fw * .15, fy = y + fw * .1, fW = W - fw * .3, fH = fw * .85;
+      const dx = Math.max(r.left - (x + W), 0, x - r.right), dy = Math.max(r.top - (y + fw), 0, y - r.bottom);
+      const sc = 2 * ov(fx, fy, fW, fH) + 1.4 * ov(bx, by, bw, bh) + 4 * hit(fx, fy, fW, fH) + 2 * hit(bx, by, bw, bh) + Math.hypot(dx, dy) * fw * .25;
+      if (!best || sc &lt; best.sc) best = { x, y, sc };
+    }
+    NR.tg = { x: best.x, y: best.y, S, t: c &amp;&amp; c.S === S ? c.t : now, done: !!c &amp;&amp; c.S === S };
+    return NR.tg;
+  }
+
+  // ---------- 走路 ----------
+  // 各走各的路：貓先出發，機器人晚一點才跟上；遠距離時兩隻各自走一條往不同邊彎的弧線
+  const LAG = 520;
+  function plan(m, t, now){
+    const want = m.nt || m.tg;
+    if (want &amp;&amp; Math.hypot(t.x - want.x, t.y - want.y) &lt; 2 * S) return;
+    if (Math.hypot(t.x - m.x, t.y - m.y) &lt; 60 * S) { m.tg = t; m.nt = null; m.wp = null; return; }   // 小幅修正直接調整
+    if (!m.nt) m.go = now + (m.w === &#x27;robot&#x27; ? LAG : 0);
+    m.nt = t;
+  }
+  function depart(m){
+    m.tg = m.nt; m.nt = null; m.wp = null;
+    const dx = m.tg.x - m.x, dy = m.tg.y - m.y, d = Math.hypot(dx, dy);
+    if (d &lt; 150 * S || calm) return;
+    const bend = d * (m.w === &#x27;robot&#x27; ? -.22 : .1), fw = FW * S;
+    m.wp = { x: Math.max(0, Math.min(innerWidth - fw, m.x + dx / 2 - dy / d * bend)),
+             y: Math.max(0, Math.min(innerHeight - fw, m.y + dy / 2 + dx / d * bend)) };
+  }
+  function steer(m, t, vmax, dt, pass){
+    const dx = t.x - m.x, dy = t.y - m.y, d = Math.hypot(dx, dy), slow = 120 * S;
+    const want = d &lt; slow &amp;&amp; !pass ? vmax * d / slow : vmax;
+    let ax = (d &gt; .5 ? dx / d * want : 0) - m.vx, ay = (d &gt; .5 ? dy / d * want : 0) - m.vy;
+    const a = Math.hypot(ax, ay), acc = 600 * S * dt;
+    if (a &gt; acc) { ax *= acc / a; ay *= acc / a; }
+    m.vx += ax; m.vy += ay; m.x += m.vx * dt; m.y += m.vy * dt;
+    return d;
+  }
+  function idle(m, other, now){                                    // 待命時各自有小動作
+    const r = Math.random();
+    if (r &lt; .35) { m.tiltTo = Math.random() &lt; .5 ? -7 : 7; m.tiltEnd = now + 900; }
+    else if (r &lt; .7) m.face = other.x &gt; m.x ? 1 : -1;               // 看向對方
+    else if (r &lt; .85) m.face = -m.face;                             // 左右張望
+    else m.hop = now;
+    m.next = now + rnd(2600, 5600);
+  }
+
+  let last = 0, lastScan = 0, hlR = null;
+  function tick(now){
+    requestAnimationFrame(tick);
+    const dt = Math.min(.05, last ? (now - last) / 1000 : .016); last = now;
+    if (now - lastScan &gt; 150) {
+      lastScan = now; const i = curIdx();
+      if (i !== cur) { const first = cur &lt; 0; cur = i; if (!first) onPage(); upd(); }
+      else if (NR.pending &amp;&amp; now - NR.navAt &gt; 2500) { NR.pending = false; console.warn(&#x27;[duo] 換頁沒有反應，請用 --next 指定換頁指令&#x27;); }
+    }
+    frame();
+    barR = document.getElementById(&#x27;duoBar&#x27;).getBoundingClientRect();
+    const fw = FW * S, g = GAP * S, on = NR.on &amp;&amp; NR.seg, hold = !on &amp;&amp; NR.hold &amp;&amp; M.cat.tg;
+    root.classList.toggle(&#x27;duo-act&#x27;, !!(on || hold));
+    const pt = on ? pairTarget(now) : null;
+    const T = pt ? { cat: { x: pt.x, y: pt.y }, robot: { x: pt.x + fw + g, y: pt.y } }
+      : hold ? { cat: M.cat.tg, robot: M.robot.tg } : { cat: homeOf(&#x27;cat&#x27;), robot: homeOf(&#x27;robot&#x27;) };
+    const vmax = (on ? 320 : 200) * S;
+    let both = true;
+    for (const w of [&#x27;cat&#x27;, &#x27;robot&#x27;]) {
+      const m = M[w], o = M[w === &#x27;cat&#x27; ? &#x27;robot&#x27; : &#x27;cat&#x27;];
+      if (m.x === null) { m.x = T[w].x; m.y = T[w].y; m.tg = T[w]; m.next = now + rnd(2000, 4000); }
+      plan(m, T[w], now);
+      if (m.nt &amp;&amp; now &gt;= m.go) depart(m);
+      if (m.wp &amp;&amp; Math.hypot(m.wp.x - m.x, m.wp.y - m.y) &lt; 40 * S) m.wp = null;
+      steer(m, m.wp || m.tg, vmax * (w === &#x27;robot&#x27; ? 1.12 : 1), dt, !!m.wp);
+      const sp = Math.hypot(m.vx, m.vy), d = Math.hypot(m.tg.x - m.x, m.tg.y - m.y);
+      m.ok = !m.nt &amp;&amp; !m.wp &amp;&amp; d &lt; 5 * S &amp;&amp; sp &lt; 15 * S; both = both &amp;&amp; m.ok;
+      const moving = sp &gt; 18 * S, amp = Math.min(1, sp / (180 * S));
+      if (moving) { m.phase += sp * dt / (38 * S) * Math.PI; if (Math.abs(m.vx) &gt; 14 * S) m.face = m.vx &lt; 0 ? -1 : 1; }
+      else if (m.nt) m.face = o.x &gt; m.x ? 1 : -1;                  // 還沒出發的那隻先轉頭看對方
+      else if (on) {
+        m.face = w === &#x27;cat&#x27; ? 1 : -1;                              // 對話時面對面
+        if (NR.seg.who !== w &amp;&amp; now &gt; m.next) { m.tiltTo = Math.random() &lt; .5 ? -5 : 5; m.tiltEnd = now + 500; m.next = now + rnd(1800, 3200); }   // 聽的人點點頭
+      } else if (now &gt; m.next) idle(m, o, now);
+      if (now &gt; m.tiltEnd) m.tiltTo = 0;
+      m.tilt += (m.tiltTo - m.tilt) * Math.min(1, dt * 8);
+      const step = Math.abs(Math.sin(m.phase));
+      let lift = moving ? step * 10 * amp : 0, rot = (moving ? Math.sin(m.phase) * 7 * amp : 0) + m.tilt, sq = moving ? 1 - .06 * (1 - step) * amp : 1;
+      if (m.hop &gt;= 0) { const k = (now - m.hop) / 380; if (k &gt;= 1) m.hop = -1; else lift += Math.sin(k * Math.PI) * 20; }
+      if (on &amp;&amp; NR.playing &amp;&amp; NR.seg.who === w &amp;&amp; !moving) sq *= 1 + .035 * Math.sin(now / 75);   // 說話時嘴巴動的感覺
+      if (calm) { lift = 0; rot = 0; sq = 1; }
+      m.k += ((on || hold ? 1 : IDLE) - m.k) * Math.min(1, dt * 4);
+      m.el.style.transform = `translate(${m.x}px,${m.y}px) scale(${S * m.k})`;
+      m.body.style.transform = `translateY(${-lift}px) rotate(${rot}deg) scale(${m.face * m.nat}, ${sq})`;
+      m.shd.style.transform = `scale(${1 - lift / 45})`; m.shd.style.opacity = 1 - lift / 55;
+    }
+    NR.arr = on &amp;&amp; both ? NR.arr || now : 0;
+
+    if (on) {
+      // 泡泡：兩隻都站好 0.2 秒後才出現
+      const m = M[NR.seg.who], show = NR.arr &amp;&amp; now - NR.arr &gt; 200;
+      if (show) {
+        const bw = m.say.offsetWidth * S, L = bubbleLeft(m.w, m.x, bw);
+        m.say.style.left = (L - m.x) / S + &#x27;px&#x27;;
+        m.say.style.setProperty(&#x27;--tx&#x27;, Math.max(16, Math.min(m.say.offsetWidth - 16, (m.x + fw / 2 - L) / S)) + &#x27;px&#x27;);
+      }
+      m.say.classList.toggle(&#x27;on&#x27;, !!show);
+      // ① 打亮
+      const r = NR.el ? hlRect(NR.el) : null;
+      if (r) {
+        const p = 8 * S, t = { x: r.left - p, y: r.top - p, w: r.width + 2 * p, h: r.height + 2 * p }, k = hl.style.display === &#x27;none&#x27; || !hlR ? 1 : Math.min(1, dt * 10);
+        hlR = hlR &amp;&amp; k &lt; 1 ? { x: hlR.x + (t.x - hlR.x) * k, y: hlR.y + (t.y - hlR.y) * k, w: hlR.w + (t.w - hlR.w) * k, h: hlR.h + (t.h - hlR.h) * k } : t;
+        Object.assign(hl.style, { display: &#x27;block&#x27;, transform: `translate(${hlR.x}px,${hlR.y}px)`, width: hlR.w + &#x27;px&#x27;, height: hlR.h + &#x27;px&#x27; });
+      } else { hl.style.display = &#x27;none&#x27;; hlR = null; }
+    }
+    // ② 字幕、③ 重點卡 跟著投影片縮放，並避開播放列
+    const fs = Math.max(15, 24 * S), bar = barR;
+    const low = bar.height &amp;&amp; bar.top &gt; innerHeight / 2 ? innerHeight - bar.top + 8 : 0, cb = Math.max(innerHeight - Z.bottom + 16 * S, low);
+    Object.assign(cap.style, { left: Z.left + Z.width * .08 + &#x27;px&#x27;, width: Z.width * .84 + &#x27;px&#x27;, bottom: cb + &#x27;px&#x27;, fontSize: fs + &#x27;px&#x27; });
+    Object.assign(idm.style, { left: Z.left + Z.width * .08 + &#x27;px&#x27;, bottom: cb + (cap.offsetHeight || 0) + 10 * S + &#x27;px&#x27;, fontSize: Math.max(14, 20 * S) + &#x27;px&#x27; });
+    Object.assign(keyc.style, { left: Z.left + Z.width * .1 + &#x27;px&#x27;, width: Z.width * .8 + &#x27;px&#x27;, bottom: Math.max(innerHeight - Z.bottom + 40 * S, low) + &#x27;px&#x27;, fontSize: Math.max(18, 30 * S) + &#x27;px&#x27; });
+  }
+
+  scanSlides(); cur = curIdx(); frame(); upd();
+  requestAnimationFrame(tick);
+  window.DUO = { start, stop, audio: au, get page(){ return cur + 1; } };
+})();
+</pre></div></div></details>
+      <details class="ref"><summary>📄 assets/duo.css<small style="font-weight:400;color:var(--mut)">　人偶、字幕、播放列的樣式（含手機版）（72 行）</small></summary><div class="ref-b"><div class="prompt"><div class="prompt-h"><b>assets/duo.css</b></div><pre style="max-height:480px;overflow:auto;white-space:pre">/* 雙人偶旁白（小貓問、機器人答）— 由 embed_duo.py 注入 */
+#duo, #duo * { box-sizing:border-box; }
+#duo { font-family:&quot;Microsoft JhengHei&quot;,&quot;PingFang TC&quot;,&quot;Noto Sans TC&quot;,system-ui,sans-serif; }
+#duo .duo-m { position:fixed; left:0; top:0; width:100px; transform-origin:0 0; pointer-events:none; z-index:100002; will-change:transform; opacity:.6; transition:opacity .4s; }
+#duo.duo-act .duo-m { opacity:1; }
+#duo.duo-off .duo-m { display:none; }
+#duo .duo-fig { position:relative; width:100px; height:100px; }
+#duo .duo-body { width:100%; height:100%; transform-origin:50% 100%; }
+#duo .duo-body img { display:block; width:100%; height:100%; filter:drop-shadow(0 4px 6px rgba(0,0,0,.28)); }
+#duo .duo-shd { position:absolute; left:24%; right:24%; bottom:-5px; height:11px; border-radius:50%; background:rgba(0,0,0,.2); }
+
+/* 說話泡泡：在頭上，往外側展開 */
+#duo .duo-say { position:absolute; bottom:calc(100% + 12px); left:0; width:max-content; max-width:330px;
+  background:#fff; color:#003366; font-size:18px; font-weight:700; line-height:1.45; padding:9px 15px; border-radius:14px;
+  box-shadow:0 3px 10px rgba(0,0,0,.2); opacity:0; transform:translateY(6px) scale(.94); transition:opacity .2s, transform .2s; }
+#duo .duo-say::after { content:&quot;&quot;; position:absolute; top:100%; left:var(--tx, 40px); transform:translateX(-50%);
+  border:9px solid transparent; border-top-color:#fff; border-bottom:0; }
+#duo .duo-m.cat .duo-say { border:2px solid #f39c34; }
+#duo .duo-m.robot .duo-say { border:2px solid #3d8bd9; }
+#duo .duo-say.on { opacity:1; transform:none; }
+
+/* ① 講到的區塊打亮 */
+#duoHL { position:fixed; left:0; top:0; pointer-events:none; z-index:100000; border:3px solid #ffb900; border-radius:10px; display:none;
+  box-shadow:0 0 0 9999px rgba(0,20,45,.13), 0 0 18px rgba(255,185,0,.55); animation:duo-glow 1.8s ease-in-out infinite; }
+@keyframes duo-glow { 50% { box-shadow:0 0 0 9999px rgba(0,20,45,.13), 0 0 4px rgba(255,185,0,.25); } }
+
+/* ② 字幕 */
+#duoCap { position:fixed; z-index:100003; pointer-events:none; display:none; text-align:center; }
+#duoCap .in { display:inline-block; background:rgba(8,22,40,.86); color:#fff; font-weight:600; line-height:1.5;
+  padding:.35em .9em; border-radius:.5em; text-align:left; }
+#duoCap .who { display:inline-block; font-size:.78em; font-weight:900; padding:0 .55em; border-radius:.4em; margin-right:.5em; vertical-align:.08em; }
+#duoCap .who.cat { background:#f39c34; color:#3a1d00; }
+#duoCap .who.robot { background:#3d8bd9; color:#fff; }
+#duo.duo-nosub #duoCap { display:none !important; }
+
+/* ③ 一句話重點 */
+#duoKey { position:fixed; z-index:100004; pointer-events:none; display:none; text-align:center; }
+#duoKey .in { display:inline-block; background:#fffbea; color:#003366; border:3px solid #ffb900; border-radius:.6em;
+  padding:.5em 1.1em; font-weight:800; line-height:1.45; box-shadow:0 8px 24px rgba(0,0,0,.25); animation:duo-pop .35s ease-out; }
+#duoKey .lb { display:block; font-size:.62em; letter-spacing:.15em; color:#a06a00; margin-bottom:.15em; }
+@keyframes duo-pop { from { opacity:0; transform:translateY(12px) scale(.94); } to { opacity:1; transform:none; } }
+
+/* ④ 成語小卡：講到成語時，在字幕上方補一句白話 */
+#duoIdm { position:fixed; z-index:100003; pointer-events:none; display:none; max-width:70vw; }
+#duoIdm .in { display:inline-block; background:#fdf6e3; color:#4a2c0a; border:2px solid #c98a3d; border-radius:.5em;
+  padding:.35em .9em .4em; line-height:1.45; box-shadow:0 6px 18px rgba(0,0,0,.22); animation:duo-pop .3s ease-out; }
+#duoIdm .lb { display:block; font-size:.62em; letter-spacing:.18em; color:#a0601a; font-weight:800; }
+#duoIdm .k { font-size:1.12em; font-weight:900; margin-right:.55em; color:#7a3b00; }
+#duoIdm .tx { font-weight:600; }
+
+/* 播放列 */
+#duoBar { position:fixed; z-index:100100; display:flex; gap:10px; align-items:center; padding:6px 10px; border-radius:10px;
+  background:rgba(255,255,255,.92); box-shadow:0 2px 10px rgba(0,0,0,.18); font-size:14px; color:#003366; opacity:.55; transition:opacity .2s; }
+#duoBar:hover, #duo.duo-on #duoBar { opacity:1; }
+#duoBar.bl { left:10px; bottom:10px; } #duoBar.br { right:10px; bottom:10px; }
+#duoBar.tl { left:10px; top:10px; }    #duoBar.tr { right:10px; top:10px; }
+#duoBar button { font:inherit; font-weight:800; padding:4px 12px; border:none; border-radius:8px; background:#003366; color:#ffb900; cursor:pointer; }
+#duoBar button:disabled { opacity:.4; cursor:default; }
+#duoBar #duoSpd { background:#e3ebf4; color:#003366; padding:4px 8px; min-width:3.3em; }
+#duoBar label { display:flex; gap:3px; align-items:center; cursor:pointer; user-select:none; }
+#duoBar .pg { min-width:3em; color:#6b7a8c; }
+
+/* 手機：人偶太小看不清，只留字幕；播放列精簡，不擋翻頁鈕 */
+@media (max-width:720px) {
+  #duo .duo-m { display:none; }
+  #duoBar[class] { left:8px; right:auto; top:auto; bottom:8px; gap:8px; padding:5px 8px; opacity:.92; }
+  #duoBar label:not(:first-of-type), #duoBar .pg, #duoBar #duoSpd { display:none; }
+}
+
+@media (prefers-reduced-motion: reduce) { #duoHL, #duoKey .in, #duoIdm .in { animation:none; } #duo .duo-say { transition:none; } }
+@media print { #duo { display:none; } }
+</pre></div></div></details>
+    </section>
+
+    <section class="card" id="check">
+      <h2>自我檢核：7 題</h2>
+      <details class="ref"><summary>1. 為什麼要先擬教案，再寫對話稿？</summary><div class="ref-b"><p><b>先懂教材的思路。</b>知道每頁的 LEVEL1 和 LEVEL2 怎麼連，稿子才會先總後分，不會東一句、西一句。</p></div></details>
+      <details class="ref"><summary>2. 某頁有 6 個 LEVEL2，講不完，怎麼辦？</summary><div class="ref-b"><p><b>在教案階段提出來。</b>建議合併小標或拆頁，你同意後才改網頁。不可以在稿子裡偷偷略過。</p></div></details>
+      <details class="ref"><summary>3. 錨點寫「→ 答錯了！」卻找不到，為什麼？</summary><div class="ref-b"><p><b>符號容易對不上。</b>錨點要挑那頁看得到、只出現一次的字，改成「答錯了」就好。</p></div></details>
+      <details class="ref"><summary>4. 淺講和深講差在哪？</summary><div class="ref-b"><p><b>差在 LEVEL3。</b>淺講每頁 60 秒，只講 LEVEL1、LEVEL2；深講每頁 90 秒，每個 LEVEL2 再挑 1 個 LEVEL3 用三句法講透。</p></div></details>
+      <details class="ref"><summary>5. 深講版某頁實際 94 秒，怎麼辦？</summary><div class="ref-b"><p><b>刪機器人台詞的贅字，再重跑。</b>不要刪比喻和解釋。重跑只會重做改過的段落。</p></div></details>
+      <details class="ref"><summary>6. 稿子可以說「一天看十支，要看一年半」嗎？</summary><div class="ref-b"><p><b>不行。</b>這是自己算出來的數字，畫面上沒有。不確定的內容就不要講。</p></div></details>
+      <details class="ref"><summary>7. 用 Teams 分享時，大家聽不到聲音？</summary><div class="ref-b"><p><b>勾「包含電腦音效」，並分享整個畫面。</b>只分享視窗時，聲音常常傳不出去。</p></div></details>
+    </section>
+
+    <section class="card recap"><h2>重點回顧</h2><ul>
+      <li>duo-narrated-deck 把 HTML 教材變成小貓問、機器人答的語音導讀，語音包在同一個檔案裡。</li>
+      <li>流程 10 步，3 道審核關卡：教案、對話稿、前 5 頁試做，都要你同意才往下。</li>
+      <li>先擬教案：照教材思路，每頁 1 個 LEVEL1 + 3～4 個 LEVEL2。</li>
+      <li>寫稿先總後分；深講用三句法帶 1 個 LEVEL3；不加畫面沒有的數字。</li>
+      <li>上線後提醒 Ctrl+F5；Teams 分享要含電腦音效、分享整個畫面。</li>
+    </ul>
+    <p class="note">參考資料：<a href="https://github.com/rany2/edge-tts" target="_blank" rel="noopener">edge-tts</a>、<a href="https://github.com/microsoft/fluentui-emoji" target="_blank" rel="noopener">Microsoft Fluent UI Emoji（MIT）</a>。</p>
+    <p class="next">下一步：挑一份你自己的教材，從「提示詞 ② 開工」開始試做。</p></section>
+  </main>
+  <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>
+</body>
+</html>
