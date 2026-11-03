@@ -26,5 +26,6 @@ pops.forEach(([b,m])=>b.addEventListener('click',e=>{const v=m.hidden;close(b);m
   if(v){const a=m.querySelector('a');if(a&&e.detail===0)a.focus()}}));
 document.addEventListener('click',e=>{if(!e.target.closest('.dd,.mpanel,.mb'))close()});
 n.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const o=pops.find(([b,m])=>!m.hidden);if(o){close();o[0].focus()}});
-document.body.insertAdjacentHTML('beforeend','<footer>AI 業務助理課程 · NotebookLM 業務應用</footer>');
+const CL={'patent-plan.html':'kb-project-analysis.html','patent-report.html':'kb-project-analysis.html'},clf=CL[cur]||(NB.lessons.some(x=>x.f===cur)?cur:'');
+document.body.insertAdjacentHTML('beforeend',`<footer>AI 業務助理課程 · NotebookLM 業務應用 · <a class="cl-foot" href="changelog.html${clf?'#'+clf:''}">📝 ${clf?'本課修改歷程':'教材修改歷程'}</a></footer>`);
 })();
