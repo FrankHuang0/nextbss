@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI 分身平行作業</title>
+  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>AI 分身平行作業</h1>
+    <p>一件一件交給 AI 做，還是要排隊。本課教你在 Copilot 桌面版裡，讓一個「主 AI」把工作拆開、分給幾個「子 AI」同時做，最後幫你整合、檢查。你負責定目標、做決定。</p>
+    <div class="stats"><span>20 分鐘跟著做</span><span>8 張練習客訴單</span><span>2 種做法</span><span>12 則可複製提示詞</span></div>
+  </header>
+  <main>
+    <nav class="card"><ul class="toc">
+      <li><a href="#goal">學完你會</a></li><li><a href="#story">真實故事</a></li><li><a href="#why">一個 AI vs 一組 AI</a></li><li><a href="#roles">誰做什麼</a></li>
+      <li><a href="#fit">哪些工作能平行</a></li><li><a href="#clash">撞在一起怎麼辦</a></li><li><a href="#proof">「做完」要有證據</a></li><li><a href="#human">你要自己判斷的 4 件事</a></li>
+      <li><a href="#tools">桌面版的平行工具</a></li><li><a href="#try">跟著做 A：/fleet</a></li><li><a href="#project">跟著做 B：Projects</a></li><li><a href="#save">把方法存起來</a></li>
+      <li><a href="#prompts">提示詞總表</a></li><li><a href="#apply">換成你的工作</a></li><li><a href="#faq">常見問題</a></li><li><a href="#check">自我檢核</a></li>
+    </ul></nav>
+
+    <p class="callout">本課改編自內部分享〈AI Agent 平行開發實戰：流程導入、效率提升與應用心得〉。原本是程式開發的案例，這裡換成<b>不用寫程式</b>的客服情境；練習資料全部虛構。介面畫面是<b>示意圖</b>，實際按鈕名稱可能隨版本更新而不同。</p>
+
+    <section class="card" id="goal">
+      <h2>學完你會、開始前準備</h2>
+      <h3>學完這一課，你可以</h3>
+      <ol>
+        <li>判斷一批工作<b>能不能</b>拆給多個 AI 同時做。</li>
+        <li>在 Copilot 桌面版用 <code>/plan</code> ＋ <code>/fleet</code>，讓主 AI 拆工作、派給子 AI、收回成果。</li>
+        <li>設好「規範」和「回報格式」，讓每個子 AI 交出<b>看得到的證據</b>，不是只說「完成了」。</li>
+        <li>知道哪 4 件事一定要自己判斷，不能交給 AI。</li>
+      </ol>
+      <h3>開始前，確認這 4 件事</h3>
+      <ul class="check">
+        <li>☐ 已上完〈<a href="copilot-desktop-basics.html">Copilot 桌面版入門</a>〉：會開工作階段、會用 Plan 模式、看得懂權限詢問。</li>
+        <li>☐ Copilot 桌面版已登入，可以正常對話。</li>
+        <li>☐ 下載練習包：<a href="downloads/agent-parallel-practice.zip" download>agent-parallel-practice.zip</a>（6 KB，8 張虛構客訴單），解壓縮到桌面。</li>
+        <li>☐ 預留 60 分鐘，其中 20 分鐘實際操作。</li>
+      </ul>
+    </section>
+
+    <section class="card" id="story">
+      <h2>真實故事：1 個人、2 天、近 30 件</h2>
+      <p>某專案上線前的使用者測試，收到 <b>83 項</b>回饋（47 項錯誤＋36 項需求和優化），修正期限只有 <b>20 天</b>。</p>
+      <ol class="flow">
+        <li><b>以前</b>：一件一件看、改、測、記錄</li>
+        <li><b>估計</b>：近 30 件要 1 週以上</li>
+        <li><b>這次</b>：主 AI 拆工作、子 AI 同時做</li>
+        <li><b>結果</b>：1 人 2 天完成近 30 件</li>
+      </ol>
+      <div class="callout warn"><b>⚠️ 這個數字要誠實看</b>
+        <ul>
+          <li><b>2 天</b>包含分析、修改、自動檢查、整理證據，<b>不含</b>上線前的人工審查、使用者確認。</li>
+          <li><b>1 週以上</b>是依過去做法估算，不是嚴格的實驗對照。</li>
+          <li>這 30 件是<b>挑過的</b>：規格清楚、範圍小、彼此不相關、做完能檢查。</li>
+        </ul>
+      </div>
+      <p class="callout ok">換成你的工作也一樣：<b>能挑出「規則清楚、互不相干」的一批工作</b>，才會有這種效果。下面教你怎麼挑、怎麼做。</p>
+    </section>
+
+    <section class="card" id="why">
+      <h2>一個 AI vs 一組 AI</h2>
+      <p>用餐廳比喻：一位廚師再厲害，10 桌客人點菜也只能一道一道做。換成「主廚＋幾位二廚」，主廚分配菜單、二廚同時開火、主廚出菜前檢查，就快很多。</p>
+      <figure class="mock" aria-label="排隊做與同時做的時間對照示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>8 張客訴單：排隊做 vs 同時做</b></div>
+        <div class="mock-body c1">
+          <div class="mp"><h4><em>1</em>一個 AI：排隊做</h4>
+            <div class="lane"><b>AI</b><i style="--w:9%">01</i><i style="--w:9%">02</i><i style="--w:9%">03</i><i style="--w:9%">04</i><i style="--w:9%">05</i><i style="--w:9%">06</i><i style="--w:9%">07</i>            <i style="--w:9%">08</i><em>全部完成</em></div>
+            <div class="axis"><span>開始</span><span>時間 →</span></div>
+            <p>做完一件才做下一件，總時間 ＝ 8 件加起來。</p></div>
+          <div class="mp"><h4><em>2</em>主 AI 帶子 AI：同時做</h4>
+            <div class="lane"><b>主 AI</b><i class="pl" style="--w:12%">拆工作</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">01</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">02</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">06</i><i style="--w:9%">03</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">04</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">05</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">07</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">08</i></div>
+            <div class="lane"><b>主 AI</b><i class="sp" style="--w:30%"></i><i class="ck" style="--w:16%">整合檢查</i><em>全部完成（約快一半）</em></div>
+            <div class="axis"><span>開始</span><span>時間 →</span></div></div>
+        </div>
+        <figcaption>示意圖（長度只代表概念，不是實測時間）：多出「拆工作」和「整合檢查」兩段，但中間 8 件同時做，整體還是快很多。最慢的那條（03＋06 排隊）決定什麼時候全部完成。</figcaption>
+      </figure>
+      <div class="x"><table class="tbl">
+        <tr><th></th><th>一個 AI（排隊）</th><th>你自己開很多視窗</th><th>主 AI 帶子 AI（本課）</th></tr>
+        <tr><td>怎麼做</td><td>做完第 1 件才做第 2 件</td><td>每個視窗各做一件，你來回切換</td><td>主 AI 拆工作、派工、收回、檢查</td></tr>
+        <tr><td>誰協調</td><td>不用協調</td><td><b>你</b>（很累，容易漏）</td><td><b>主 AI</b>（你只看結果和決定）</td></tr>
+        <tr><td>撞在一起</td><td>不會</td><td>常常兩邊改同一份檔案</td><td>主 AI 事先排開</td></tr>
+        <tr><td>適合</td><td>少量、前後相關的工作</td><td>2～3 件，偶一為之</td><td>一批規則相同、互不相干的工作</td></tr>
+      </table></div>
+      <p class="callout">重點不是「AI 越多越好」，而是<b>適合平行的工作，用適量的 AI</b>。AI 越多，拆工作、整合、檢查的成本也越高，用量（AI Credits）也越多。</p>
+    </section>
+
+    <section class="card" id="roles">
+      <h2>誰做什麼：你、主 AI、子 AI</h2>
+      <figure class="mock" aria-label="角色分工示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>角色分工</b></div>
+        <div class="mock-body">
+          <div class="mp"><h4><em>1</em>👤 你（組長）</h4>
+            <div class="tile">定目標、給規範</div>
+            <div class="tile">看計畫、核准</div>
+            <div class="tile">做規則、金額的決定</div>
+            <div class="tile">最後審查、決定送出</div></div>
+          <div class="mp"><h4><em>2</em>🤖 主 AI（主廚）</h4>
+            <div class="tile">① 分析：讀完全部工作</div>
+            <div class="tile">② 分組：哪些同時做、哪些排隊</div>
+            <div class="tile">③ 派工：一件工作一個子 AI</div>
+            <div class="tile">④ 追蹤：照回報格式收成果</div>
+            <div class="tile">⑤ 處理例外：重做、改排隊、交給你</div></div>
+          <div class="mp"><h4><em>3</em>🤖🤖🤖 子 AI（二廚）</h4>
+            <div class="tile">只拿到自己那件工作</div>
+            <div class="tile">照規範做、自己先檢查</div>
+            <div class="tile">交回成果＋證據</div>
+            <div class="tile">只動自己那份檔案</div></div>
+        </div>
+        <figcaption>示意圖：主 AI 知道全局；每個子 AI 只知道自己那件事。最後由你把關。</figcaption>
+      </figure>
+      <h3>品質要過 3 關</h3>
+      <ol class="flow">
+        <li><b>子 AI 自我檢查</b>：逐條對規範</li>
+        <li><b>主 AI 整合檢查</b>：格式、互相矛盾、漏做</li>
+        <li><b>你審查</b>：規則、語氣、能不能送出</li>
+      </ol>
+      <h3>為什麼子 AI 只知道自己那件事？</h3>
+      <p>就像派工單：二廚只需要知道「3 號桌，牛排五分熟，不要洋蔥」，不需要知道整間餐廳今天的訂位。資訊少，反而不容易搞混。主 AI 派工時要給齊 4 樣東西：<b>工作內容、要遵守的規範、可以動的檔案、回報格式</b>。</p>
+    </section>
+
+    <section class="card" id="fit">
+      <h2>哪些工作能平行？先過 5 項檢查</h2>
+      <div class="x"><table class="tbl">
+        <tr><th>✅ 適合平行</th><th>生活例子</th><th>❌ 先不要平行</th><th>生活例子</th></tr>
+        <tr><td>驗收標準清楚</td><td>回覆要道歉、說原因、給時間</td><td>規則還沒定</td><td>今年補償標準還在開會</td></tr>
+        <tr><td>範圍界定得出來</td><td>一張客訴單一份回覆</td><td>大改架構</td><td>重寫整本服務手冊</td></tr>
+        <tr><td>彼此不相干</td><td>不同客戶、不同訂單</td><td>大家都要改同一份</td><td>8 個人同時改一張總表</td></tr>
+        <tr><td>做完能檢查</td><td>對照規範逐條打勾</td><td>沒辦法核對對錯</td><td>「寫得有溫度一點」</td></tr>
+        <tr><td>有留紀錄</td><td>每份存成獨立檔案</td><td>高風險、直接生效</td><td>直接寄給客戶、直接改正式資料</td></tr>
+      </table></div>
+      <p class="callout">一句話判斷：<b>「這幾件事，交給 3 個不認識彼此的同事同時做，會不會出問題？」</b>不會，就可以平行。</p>
+    </section>
+
+    <section class="card" id="clash">
+      <h2>撞在一起怎麼辦？</h2>
+      <p>原本的案例裡，有 2 個錯誤都要改同一支程式。如果同時改，後改的會蓋掉先改的。解法是：<b>改成排隊</b>，第 2 個等第 1 個做完，<b>重新讀最新版本</b>再改。</p>
+      <p>換成文書工作，最常見的「撞在一起」有 2 種：</p>
+      <figure class="mock" aria-label="多個 AI 同時改同一份檔案的前後對照示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>追蹤總表：誰來改？</b></div>
+        <div class="mock-body c2">
+          <div class="mp"><h4><em>1</em><span class="bad">❌ 子 AI 各自改總表</span></h4>
+            <div class="job">10:00 子 AI-01 打開總表（舊版）<span class="st">讀</span></div>
+            <div class="job">10:00 子 AI-02 打開總表（舊版）<span class="st">讀</span></div>
+            <div class="job">10:05 子 AI-01 寫入「01 已回覆」<span class="st ok">存檔</span></div>
+            <div class="job">10:06 子 AI-02 寫入「02 已回覆」<span class="st ok">存檔</span></div>
+            <div class="a"><span class="bad">結果：</span>02 是拿舊版改的，存檔時把 01 的更新<b>蓋掉了</b>。總表上 01 又變回「待處理」。</div></div>
+          <div class="mp"><h4><em>2</em><span class="good">✅ 各寫各的，最後只由主 AI 改</span></h4>
+            <div class="job">子 AI-01 只建立 回覆_01.md<span class="st ok">完成</span></div>
+            <div class="job">子 AI-02 只建立 回覆_02.md<span class="st ok">完成</span></div>
+            <div class="job">……其他子 AI 也各寫各的<span class="st ok">完成</span></div>
+            <div class="job">主 AI 讀最新版總表，一次更新 8 列<span class="st run">最後做</span></div>
+            <div class="a"><span class="good">結果：</span>沒有人互相蓋掉，總表 8 列都正確。</div></div>
+        </div>
+        <figcaption>示意圖：兩個人同時拿舊版本修改同一份檔案，後存檔的會蓋掉先存檔的。這就是為什麼「共用的檔案只給一個人改」。</figcaption>
+      </figure>
+      <div class="x"><table class="tbl">
+        <tr><th>狀況</th><th>練習包裡的例子</th><th>怎麼處理</th></tr>
+        <tr><td><b>同一份檔案</b></td><td>8 份回覆都要更新「追蹤總表.csv」</td><td>子 AI <b>不准</b>碰總表；全部做完後，由主 AI 一次更新</td></tr>
+        <tr><td><b>同一個對象</b></td><td>客訴單 03 和 06 是同一位張太太、同一張訂單</td><td>交給<b>同一個子 AI</b>，或排隊做，讓兩份回覆說法一致</td></tr>
+      </table></div>
+      <p class="callout ok">原則：<b>先排開，再整合，最後檢查</b>。事先預估不可能百分之百準確，所以子 AI 做到一半發現要動別的檔案時，要先回報主 AI，不可以自己動手。</p>
+    </section>
+
+    <section class="card" id="proof">
+      <h2>「做完」要有證據</h2>
+      <p>子 AI 回一句「完成了」，你看不出它做得對不對。請它照固定格式回報，主 AI 和你才能快速檢查：</p>
+      <div class="x"><table class="tbl">
+        <tr><th>回報項目</th><th>為什麼要</th></tr>
+        <tr><td>產出檔案</td><td>知道東西在哪，可以打開看</td></tr>
+        <tr><td>規範逐條檢查</td><td>每條寫「符合」或「不符合＋原因」，不能只寫「都符合」</td></tr>
+        <tr><td>需要人判斷的事</td><td>規則外、拿不定的，一定要浮上來給你</td></tr>
+        <tr><td>動到哪些檔案</td><td>確認沒有亂動別人的東西</td></tr>
+      </table></div>
+      <figure class="mock" aria-label="子 AI 完成回報的好壞對照示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>子 AI・客訴 01 的完成回報</b></div>
+        <div class="mock-body c2">
+          <div class="mp"><h4><em>1</em><span class="bad">❌ 看不出對錯</span></h4>
+            <div class="a">完成了！回覆已經寫好，全部符合規範。😊</div>
+            <p>寫在哪？哪幾條符合？有沒有答應不該答應的事？<b>都不知道</b>，只能自己從頭檢查。</p></div>
+          <div class="mp"><h4><em>2</em><span class="good">✅ 照回報格式</span></h4>
+            <div class="job">產出檔案：回覆/回覆_01.md<span class="st run">可打開</span></div>
+            <div class="job">1 開頭：稱呼陳小姐，第一段道歉<span class="st ok">符合</span></div>
+            <div class="job">2 原因：只寫「物流轉運中心爆量」<span class="st ok">符合</span></div>
+            <div class="job">3 處理＋時間：3 個工作天內寄出折抵券<span class="st ok">符合</span></div>
+            <div class="job">4 補償：運費折抵券 60 元（延遲 3 天以上）<span class="st ok">符合</span></div>
+            <div class="job">5 字數：186 字<span class="st ok">符合</span></div>
+            <div class="job">6 隱私：沒有提到其他客戶<span class="st ok">符合</span></div>
+            <div class="job">需要人判斷：無<span class="st">—</span></div>
+            <div class="job">動到的檔案：只有 回覆_01.md<span class="st ok">沒越界</span></div></div>
+        </div>
+        <figcaption>示意圖：右邊這種回報，主 AI 和你只要掃一眼，就知道哪裡要細看。實際文字依 AI 而異。</figcaption>
+      </figure>
+      <p>練習包的〈回覆規範.md〉最後已經附好這個格式，提示詞裡只要說「照回報格式」就好。</p>
+    </section>
+
+    <section class="card" id="human">
+      <h2>你要自己判斷的 4 件事</h2>
+      <p>AI 加快的是「執行和協調」，不是取代你的責任。下面 4 件事，就算 AI 寫得再好，也要你看過、你決定：</p>
+      <div class="x"><table class="tbl">
+        <tr><th>判斷</th><th>原案例（開發）</th><th>本課（客服）</th></tr>
+        <tr><td>1. 規則對不對</td><td>業務規則是否正確</td><td>補償、退款條件有沒有超出權限</td></tr>
+        <tr><td>2. 關鍵內容</td><td>關鍵程式邏輯</td><td>原因有沒有亂編、承諾的日期做不做得到</td></tr>
+        <tr><td>3. 會不會影響別人</td><td>跨功能影響</td><td>同一位客戶的兩份回覆有沒有矛盾</td></tr>
+        <tr><td>4. 要不要送出</td><td>上線決定</td><td>回覆要不要寄出、何時寄</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="tools">
+      <h2>Copilot 桌面版的平行工具</h2>
+      <p>不用安裝任何東西，在輸入框打 <code>/</code> 就能找到這些指令：</p>
+      <div class="x"><table class="tbl">
+        <tr><th>工具</th><th>做什麼</th><th>本課怎麼用</th></tr>
+        <tr><td><code>/plan</code></td><td>切到 Plan 模式：先提計畫，你核准才動手</td><td>請主 AI 先拆工作、分組，給你看</td></tr>
+        <tr><td><code>/fleet</code></td><td>主 AI 把工作分給多個子 AI <b>同時</b>做，再收回成果</td><td><b>跟著做 A</b>：核准計畫後開工</td></tr>
+        <tr><td>Projects（預覽版）</td><td>描述目標，Copilot 幫你開好幾個工作階段，在看板上追進度</td><td><b>跟著做 B</b>：想看到每個分身時用</td></tr>
+        <tr><td><code>/spawn</code></td><td>另開一個專心做某件事的子工作階段</td><td>知道就好：手動派一件工作出去</td></tr>
+        <tr><td><code>/orchestrate</code></td><td>跨多個工作階段、多個資料夾協調工作</td><td>知道就好：工作分散在不同資料夾時</td></tr>
+        <tr><td>Skill、自動化</td><td>把做法存起來，下次一句話叫出來；或定時自動跑</td><td><a href="#save">把方法存起來</a></td></tr>
+      </table></div>
+      <div class="callout"><b>名詞提醒</b>入門課說的「專案」，是指你加進來的<b>資料夾</b>。本課的 <b>Projects</b> 是另一個新功能（側欄有自己的區塊），像一塊<b>工作看板</b>。兩個不一樣，別搞混。</div>
+    </section>
+
+    <section class="card" id="try">
+      <h2>跟著做 A：用 /plan ＋ /fleet 回覆 8 張客訴單</h2>
+      <p><b>情境：</b>你是「好日子生活館」客服組長，下班前要回覆 8 張客訴單，並更新追蹤總表。我們讓一個主 AI 帶子 AI 一起做。</p>
+
+      <h3>步驟 1　打開練習資料夾</h3>
+      <ol class="timeline">
+        <li>把練習包解壓縮到桌面，會得到「平行練習」資料夾。先打開〈回覆規範.md〉看一下：這就是<b>驗收標準</b>。</li>
+        <li>在 Copilot 側欄「工作階段」旁按「＋」，選「開啟本機資料夾」，選「平行練習」。<small>入門課學過的方式也可以，只要工作階段是開在「平行練習」資料夾就好。</small></li>
+        <li>輸入框下方：模式選 <b>Plan</b>、模型選 <b>Auto</b>。</li>
+      </ol>
+      <figure class="mock" aria-label="開啟練習資料夾並選擇模式的示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>GitHub Copilot app · 開新工作階段</b></div>
+        <div class="mock-body">
+          <div class="mp"><h4><em>1</em>側欄按「＋」</h4>
+            <div class="tile">💬 工作階段（Sessions）<b>＋</b></div>
+            <div class="a">在哪裡開始？（Start session in）<br>📁 選擇已加入的專案…<br><b>📂 開啟本機資料夾（Open local folder）</b> ← 選這個</div></div>
+          <div class="mp"><h4><em>2</em>選「平行練習」</h4>
+            <div class="src on">📂 桌面\平行練習</div>
+            <div class="src">　├ 📂 客訴單（01～08.txt）</div>
+            <div class="src">　├ 📂 回覆（空的）</div>
+            <div class="src">　├ 📄 回覆規範.md</div>
+            <div class="src">　├ 📄 追蹤總表.csv</div>
+            <div class="src">　└ 📄 讀我.txt</div>
+            <div class="btns"><span class="pri">選擇資料夾</span></div></div>
+          <div class="mp"><h4><em>3</em>輸入框下方</h4>
+            <div class="in">輸入任務… @ 加檔案、/ 叫指令</div>
+            <div class="opt"><span>這台電腦 ▾</span><span><b>模式：Plan ▾</b></span><span><b>模型：Auto ▾</b></span></div>
+            <div class="a" style="margin-top:8px">側欄出現「平行練習」就成功了。接著貼上提示詞 1。</div></div>
+        </div>
+        <figcaption>示意圖（非實際畫面）：按鈕可能是中文或英文，位置依版本而異。重點是工作階段要開在「平行練習」資料夾。</figcaption>
+      </figure>
+
+      <h3>步驟 2　請主 AI 先拆工作、分組（還不准動手）</h3>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 1：拆工作、分組</b><small>直接複製貼上</small></div><pre>/plan 你是客服組長的助理，擔任「主 AI」。
+請讀「客訴單」資料夾裡的 8 張客訴單、@回覆規範.md、@追蹤總表.csv。
+目標：每張客訴單寫一份回覆，存到「回覆」資料夾，最後更新追蹤總表。
+
+先不要寫回覆。請給我一份工作計畫，用表格列出：
+1. 每張客訴單：客戶、問題、預計怎麼處理、補償是否在權限表內
+2. 分組：哪些可以同時交給子 AI 做、哪些要排隊或合併給同一個子 AI，說明理由
+   （注意：同一位客戶、同一張訂單的客訴，回覆要一致）
+3. 需要我判斷的事：超出補償權限、資料不足的，全部列出來
+4. 追蹤總表：說明只由你（主 AI）在最後統一更新，子 AI 不准改
+等我核准後才開始。</pre></div>
+      <figure class="mock" aria-label="主 AI 回覆工作計畫的示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>GitHub Copilot app · 平行練習</b></div>
+        <div class="mock-body c2">
+          <div class="mp"><h4><em>1</em>側欄</h4>
+            <div class="tile">📁 平行練習</div>
+            <div class="src on">● 客訴回覆（主 AI）</div>
+            <div class="add">＋ 新工作階段</div></div>
+          <div class="mp"><h4><em>2</em>主 AI 的計畫</h4>
+            <div class="q">/plan 你是客服組長的助理，擔任「主 AI」……</div>
+            <div class="a"><b>分組建議</b><br>
+              <span class="tag">同時做</span>01、02、04、05、07：不同客戶、互不相干，各派 1 個子 AI<br>
+              <span class="tag">合併</span>03＋06：同一位張太太、同一張訂單，交給同 1 個子 AI，寫兩份但說法一致<br>
+              <span class="tag">要你決定</span>08：客戶要求賠償 2,000 元，超出權限表，回覆會寫【待主管決定】<br>
+              <span class="tag">最後</span>追蹤總表由我統一更新<br>
+              共 7 個子 AI。核准後開始。</div>
+            <div class="btns"><span class="pri">核准</span><span>我要修改</span></div></div>
+        </div>
+        <figcaption>示意圖（非實際畫面）：你會先看到計畫，還沒有任何檔案被改。實際的分組可能和這裡略有不同。</figcaption>
+      </figure>
+
+      <h3>步驟 3　你檢查計畫（最重要的 1 分鐘）</h3>
+      <ul class="check">
+        <li>☐ 03 和 06 有沒有被<b>合併或排隊</b>？（同一位客戶）</li>
+        <li>☐ 08 有沒有被列為<b>要你決定</b>？（超出補償權限）</li>
+        <li>☐ 追蹤總表是不是<b>只有主 AI</b> 在最後改？</li>
+        <li>☐ 子 AI 的數量，<b>沒有比可以同時做的工作多</b>？</li>
+      </ul>
+      <p>有一項不對，就用提示詞 2 請它改；全部 OK 就進步驟 4。</p>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 2：修正計畫</b><small>計畫有問題時用；把 ___ 換掉</small></div><pre>計畫要修改：___（例：03 和 06 是同一位客戶，請交給同一個子 AI，並先寫 06 再寫 03）。
+請更新計畫表格，其他不變，再給我確認。</pre></div>
+
+      <h3>步驟 4　核准後，用 /fleet 開工</h3>
+      <p>如果畫面出現核准選項，選「自己輸入提示詞」那一種（練習時比較看得清楚每一步），再貼上：</p>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 3：派工執行</b><small>直接複製貼上</small></div><pre>/fleet 計畫核准，請照計畫執行。
+派工給每個子 AI 時，要給齊 4 樣東西：
+1. 它負責的客訴單（只給它自己那張；03 和 06 給同一個子 AI）
+2. @回覆規範.md 全文
+3. 它唯一可以建立的檔案：「回覆/回覆_編號.md」
+4. 回報格式：照〈回覆規範.md〉最後的「完成回報格式」
+
+規則：
+- 子 AI 不准修改追蹤總表、客訴單、規範
+- 需要動到其他檔案時，先停下來回報你，不可以自己動手
+- 遇到規範沒寫到的情況，寫【待主管決定】，不可以自己決定
+全部子 AI 完成後，先把每份回報彙整給我看，還不要更新追蹤總表。</pre></div>
+      <figure class="mock" aria-label="子 AI 同時工作的示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>GitHub Copilot app · 平行練習</b></div>
+        <div class="mock-body c2">
+          <div class="mp"><h4><em>1</em>子 AI 進度</h4>
+            <div class="job">子 AI・客訴 01<span class="st ok">完成</span></div>
+            <div class="job">子 AI・客訴 02<span class="st ok">完成</span></div>
+            <div class="job">子 AI・客訴 03＋06<span class="st run">進行中</span></div>
+            <div class="job">子 AI・客訴 04<span class="st ok">完成</span></div>
+            <div class="job">子 AI・客訴 05<span class="st run">進行中</span></div>
+            <div class="job">子 AI・客訴 07<span class="st run">進行中</span></div>
+            <div class="job">子 AI・客訴 08<span class="st wait">需要人判斷</span></div></div>
+          <div class="mp"><h4><em>2</em>權限詢問</h4>
+            <div class="a">🔐 子 AI 要<b>建立檔案</b>：<br>平行練習\回覆\回覆_02.md</div>
+            <div class="btns"><span class="pri">允許</span><span>拒絕</span></div>
+            <div class="a" style="margin-top:8px">先看 2 件事：① 位置在「回覆」資料夾裡嗎？② 檔名是自己那張的嗎？都對才允許。</div></div>
+        </div>
+        <figcaption>示意圖（非實際畫面）：子 AI 會同時進行，完成順序不一定。真正的進度顯示方式依版本而異，通常會在對話裡陸續出現各子 AI 的回報。</figcaption>
+      </figure>
+      <div class="callout warn"><b>⚠️ 權限詢問會比平常多</b>7 個子 AI 各要建立檔案，就會問好幾次。練習時每次都看一下位置再允許，是很好的練習。真的太多，可以把<b>工具權限</b>暫時改成「Assisted（輔助）」，<b>只限練習資料夾</b>，做完改回來。</div>
+
+      <h3>步驟 5　主 AI 整合檢查</h3>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 4：整合檢查</b><small>子 AI 都回報後用</small></div><pre>請以主 AI 的身分，整合檢查全部回覆：
+1. 打開「回覆」資料夾的每一份，逐條對照 @回覆規範.md 第 1～6 條，用表格列出結果
+   （不要只看子 AI 的回報，要自己打開檔案檢查）
+2. 03 和 06：兩份回覆的說法、補償、日期有沒有矛盾
+3. 有沒有任何回覆答應了補償權限表以外的東西
+4. 有沒有提到其他客戶的資料
+不符合的，直接請負責的子 AI 重寫一次；重寫還是不行，就列給我。
+全部檢查完，再更新 @追蹤總表.csv：狀態、回覆檔、需要人判斷 這 3 欄。</pre></div>
+      <figure class="mock" aria-label="主 AI 整合檢查抓到錯誤的示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>GitHub Copilot app · 平行練習</b></div>
+        <div class="mock-body c2">
+          <div class="mp"><h4><em>1</em>主 AI 的檢查表</h4>
+            <div class="job">01<span class="st wait">不符合第 2 條</span></div>
+            <div class="job">02、04、05、07<span class="st ok">6 條都符合</span></div>
+            <div class="job">03＋06 說法一致？<span class="st ok">一致</span></div>
+            <div class="job">08<span class="st wait">待主管決定</span></div>
+            <div class="job">超出權限的承諾<span class="st ok">沒有</span></div>
+            <div class="job">提到其他客戶<span class="st ok">沒有</span></div></div>
+          <div class="mp"><h4><em>2</em>主 AI 的處理</h4>
+            <div class="a">⚠️ <b>回覆_01.md</b> 寫「因颱風影響，物流延遲」。<br>客訴單只查到「物流轉運中心爆量」，沒有提到颱風。<br>→ 不符合規範第 2 條（不可以自己猜原因）。<br>已請子 AI 重寫。</div>
+            <div class="a" style="margin-top:8px">✅ 重寫完成：改成「物流轉運中心 10/3～10/7 爆量，延遲 5 天」，6 條全部符合。</div>
+            <div class="a" style="margin-top:8px">📋 追蹤總表已更新 8 列。<br>❓ <b>08 需要你決定</b>：客戶要求賠償 2,000 元。</div></div>
+        </div>
+        <figcaption>示意圖（非實際畫面）：「颱風」是故意舉的例子。實際操作時 AI 不一定犯這個錯，但如果犯了，主 AI 打開檔案逐條對規範就抓得到。</figcaption>
+      </figure>
+      <details class="ref"><summary>參考結果（每次內容可能略有不同）</summary><div class="ref-b">
+        <div class="x"><table class="tbl">
+          <tr><th>編號</th><th>狀態</th><th>回覆檔</th><th>需要人判斷</th></tr>
+          <tr><td>01</td><td>已回覆</td><td>回覆_01.md</td><td>無（運費折抵券 60 元，在權限內）</td></tr>
+          <tr><td>02</td><td>已回覆</td><td>回覆_02.md</td><td>無</td></tr>
+          <tr><td>03</td><td>已回覆</td><td>回覆_03.md</td><td>無（9 折券；和 06 一致）</td></tr>
+          <tr><td>04～07</td><td>已回覆</td><td>回覆_04～07.md</td><td>無</td></tr>
+          <tr><td>08</td><td>待主管決定</td><td>回覆_08.md</td><td>客戶要求賠償 2,000 元，超出權限</td></tr>
+        </table></div>
+        <p class="chk"><b>檢查重點：</b>01 的原因只能寫「物流轉運中心爆量」，不能自己加「颱風」之類沒查到的原因；07 的退款時間如果寫「明天到帳」，要問它根據是什麼。</p>
+      </div></details>
+
+      <h3>步驟 6　你做決定，請主 AI 收尾</h3>
+      <p>08 的賠償要你決定（真實工作中要問主管）。決定後告訴主 AI：</p>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 5：人工決定回填</b><small>把 ___ 換成你的決定</small></div><pre>08 的決定：___（例：不給現金賠償；改送 500 元購物金，並由主管本人打電話致歉）。
+請只修改「回覆/回覆_08.md」，把【待主管決定】換成這個決定，其他內容不變。
+改完重新對照規範第 1～6 條檢查一次，並更新追蹤總表 08 這一列。
+最後給我一份總結：完成幾件、改過幾次、還有沒有要我處理的事。</pre></div>
+      <p class="done">完成標準：「回覆」資料夾有 8 份回覆；03 和 06 說法一致；08 是照你的決定寫的；追蹤總表 8 列都更新了；而且你親自打開看過至少 3 份。</p>
+    </section>
+
+    <section class="card" id="project">
+      <h2>跟著做 B（選做）：用 Projects 看到每個分身</h2>
+      <p>做法 A 的子 AI 都在同一個對話裡，做完就收回。如果工作比較大、要好幾天、或你想<b>點進去看每個分身在做什麼</b>，可以改用 <b>Projects</b>（目前是預覽版）。</p>
+      <ol class="timeline">
+        <li>側欄「Projects」旁按「＋」，開啟「新專案」頁面。<small>可以不選 GitHub repository。</small></li>
+        <li>在說明欄貼上提示詞 6（目標＋規則＋第一批工作），建立。</li>
+        <li>右邊的 <b>Library</b> 分頁按「Add」→「Add folder…」，加入「平行練習」資料夾，讓所有工作階段都讀得到資料。</li>
+        <li>Copilot 會依目標開出幾個工作階段。到 <b>Overview</b> 分頁看進度：分成「Needs input（等你回答）」「Open」「Working」「Done」。</li>
+        <li>看到「Needs input」就點進去回答（例如 08 的賠償）。想改某個分身的方向，點進去用「Steer this session」直接跟它說。</li>
+      </ol>
+      <figure class="mock" aria-label="Projects 看板示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>GitHub Copilot app · Projects</b></div>
+        <div class="mock-body">
+          <div class="mp"><h4><em>1</em>側欄</h4>
+            <div class="tile">📋 Projects</div>
+            <div class="src on">● 客訴回覆 10/12</div>
+            <div class="src">　├ 回覆 01、02</div>
+            <div class="src">　├ 回覆 03＋06</div>
+            <div class="src">　├ 回覆 04、05、07</div>
+            <div class="src">　└ 回覆 08</div></div>
+          <div class="mp"><h4><em>2</em>和主 AI 對話</h4>
+            <div class="q">目標：今天下班前回覆 8 張客訴單……</div>
+            <div class="a">已開 4 個工作階段。08 需要你決定賠償方式，請到 Overview 的 Needs input 回答。</div>
+            <div class="in">輸入訊息…</div></div>
+          <div class="mp"><h4><em>3</em>Overview</h4>
+            <div class="job">Needs input<span class="st wait">1</span></div>
+            <div class="job">Working<span class="st run">2</span></div>
+            <div class="job">Done<span class="st ok">1</span></div>
+            <div class="opt"><span>Library</span><span>Overview</span><span>Automations</span></div></div>
+        </div>
+        <figcaption>示意圖（非實際畫面）：Projects 把多個工作階段放在同一塊看板上。預覽版功能，名稱和位置可能變動。</figcaption>
+      </figure>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 6：Projects 目標描述</b><small>貼到「新專案」說明欄</small></div><pre>目標：今天下班前，回覆「平行練習」資料夾裡的 8 張客訴單，並更新追蹤總表。
+
+規則：
+- 每份回覆都要符合〈回覆規範.md〉第 1～6 條，存到「回覆/回覆_編號.md」
+- 同一位客戶、同一張訂單的客訴（03 和 06）交給同一個工作階段處理，說法要一致
+- 補償只能用規範裡的權限表；超出的寫【待主管決定】，並把問題丟到 Needs input 問我
+- 追蹤總表只由協調者在最後統一更新，其他工作階段不准修改
+- 只用資料夾裡的資料，不要自己編原因
+
+第一批工作：
+1. 讀完 8 張客訴單，提出分組計畫給我核准
+2. 核准後，依分組開工作階段撰寫回覆
+3. 全部完成後，逐份對照規範檢查，更新追蹤總表，給我一份總結</pre></div>
+      <div class="x"><table class="tbl">
+        <tr><th></th><th>做法 A：/fleet</th><th>做法 B：Projects</th></tr>
+        <tr><td>子 AI 在哪</td><td>同一個對話裡，做完收回</td><td>每個都是獨立的工作階段，可以點進去</td></tr>
+        <tr><td>適合</td><td>今天做完的一批工作</td><td>要好幾天、要邊做邊調整的工作</td></tr>
+        <tr><td>你怎麼追進度</td><td>看對話裡的回報</td><td>看 Overview 看板</td></tr>
+        <tr><td>建議</td><td><b>先學這個</b></td><td>熟了再用</td></tr>
+      </table></div>
+    </section>
+
+    <section class="card" id="save">
+      <h2>把方法存起來：下次一句話開工</h2>
+      <p>原案例的第 2 個心得是：<b>把規範寫成 Skill</b>，AI 每次都照同一套做法，不用重講。你可以請 AI 幫你寫：</p>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 7：存成 Skill</b><small>做完一輪之後用</small></div><pre>請把這次「主 AI 帶子 AI 平行回覆客訴」的做法，整理成一個個人 Skill，名稱用 parallel-reply。
+內容包含：
+1. 什麼時候用（描述要寫清楚，讓你以後判斷得出來）
+2. 步驟：先 /plan 拆工作分組 → 我核准 → /fleet 派工 → 主 AI 整合檢查 → 我決定 → 收尾
+3. 派工 4 樣東西、子 AI 不准做的事、回報格式
+4. 這次遇到的問題和解法（例如：同一位客戶要合併、總表只能主 AI 改）
+寫好後，告訴我存在哪裡、下次怎麼叫出來。</pre></div>
+      <p>存好後，下次在新工作階段輸入 <code>/parallel-reply</code>，再說「這次的客訴單在 ___ 資料夾」就能開工。看不到的話，輸入 <code>/skills reload</code> 重新載入。</p>
+      <h3>每週固定要做？設成自動化</h3>
+      <p>Projects 的 <b>Automations</b> 分頁可以設定定時任務。例如：</p>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 8：每週自動化</b><small>貼到 Automations 的說明</small></div><pre>每週一早上 9:00：讀「客訴單」資料夾裡上週新進的客訴單，用 parallel-reply 的做法分組並寫好回覆草稿，存到「回覆」資料夾。
+只寫草稿，不要寄出；超出補償權限的一律寫【待主管決定】。
+完成後給我一份清單：幾件、哪幾件需要我判斷。</pre></div>
+      <p class="callout warn">自動化只產生<b>草稿</b>。寄出永遠是你決定（你要自己判斷的第 4 件事）。</p>
+    </section>
+
+    <section class="card" id="prompts">
+      <h2>提示詞總表</h2>
+      <p>提示詞 1～8 在上面的步驟裡。下面 4 則是<b>通用</b>的，換成任何工作都能用：</p>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 9：判斷能不能平行</b><small>動手前先問</small></div><pre>我有一批工作：___（例：整理 12 份供應商報價，每份寫一頁摘要）。
+請用下面 5 項檢查，判斷適不適合拆給多個子 AI 同時做：
+1. 驗收標準清不清楚  2. 範圍界定得出來嗎  3. 彼此相不相干  4. 做完能不能檢查  5. 有沒有留紀錄
+每項給「是／否＋理由」。不適合的話，告訴我先補什麼。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 10：先寫規範</b><small>還沒有規範時</small></div><pre>我要請多個 AI 同時做：___。
+請幫我寫一份「規範.md」，包含：
+1. 每份成果都要符合的條件（5～7 條，每條都要能檢查對錯）
+2. AI 可以自己決定的事、一定要問我的事
+3. 存檔位置和檔名規則
+4. 完成回報格式（產出檔案、規範逐條檢查、需要人判斷、動到哪些檔案）
+有不清楚的地方先問我。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 11：撞在一起時</b><small>發現兩件工作有關聯</small></div><pre>___ 和 ___ 會動到同一份檔案（或同一個對象）。
+請改成排隊：先做 ___，做完後，下一個子 AI 要重新讀最新版本再做。
+請更新計畫，說明新的順序，等我核准。</pre></div>
+      <div class="prompt"><div class="prompt-h"><b>💬 提示詞 12：失敗時重來</b><small>某個子 AI 做不好</small></div><pre>___ 的成果不符合規範第 ___ 條（問題：___）。
+請先分析原因：是規範沒寫清楚、資料不夠，還是子 AI 沒照做？
+- 規範沒寫清楚：提出規範的修改建議給我核准
+- 資料不夠：列出缺什麼，交給我
+- 沒照做：派一個新的子 AI 重寫，並把這次的錯誤寫進派工說明
+重寫 2 次還不行，就停下來交給我。</pre></div>
+    </section>
+
+    <section class="card" id="apply">
+      <h2>換成你的工作：4 步驟開始</h2>
+      <ol class="timeline">
+        <li><b>挑 2～3 件低風險的工作</b>：規則清楚、互不相干、做錯也救得回來。<small>例：整理 3 份會議紀錄的待辦、3 份供應商報價摘要、3 間分店的月報重點。</small></li>
+        <li><b>寫一份最小的規範</b>：用提示詞 10，5～7 條就好，不求完整。<small>規範太少 AI 會猜；太多會分心。從錯誤中慢慢補。</small></li>
+        <li><b>畫好界線</b>：AI 只能寫草稿、只能動指定資料夾；規則、金額、送出由你決定。</li>
+        <li><b>記錄、再擴大</b>：做完填下面這張表，效果好再加量。</li>
+      </ol>
+      <div class="x"><table class="tbl">
+        <tr><th>記錄項目</th><th>第 1 次</th><th>第 2 次</th></tr>
+        <tr><td>件數</td><td></td><td></td></tr>
+        <tr><td>以前大約要多久</td><td></td><td></td></tr>
+        <tr><td>這次花多久（含你檢查的時間）</td><td></td><td></td></tr>
+        <tr><td>重做幾次</td><td></td><td></td></tr>
+        <tr><td>你親手改了幾處</td><td></td><td></td></tr>
+      </table></div>
+      <p class="callout">導入最難的通常不是工具，而是<b>把規則講清楚</b>。規則模糊，AI 只會更快地做出不穩定的結果。反過來說，為了用 AI 而把規範寫清楚，本身就讓團隊更有效率。</p>
+    </section>
+
+    <section class="card" id="faq">
+      <h2>常見問題</h2>
+      <details class="ref"><summary>我不會寫程式，可以用嗎？</summary><div class="ref-b"><p>可以。原案例是改程式，但方法一樣：清楚的規範、互不相干的工作、看得到的證據。本課全程只用文件。</p></div></details>
+      <details class="ref"><summary>AI 開越多越快嗎？</summary><div class="ref-b"><p>不一定。AI 越多，拆工作、整合、檢查的成本越高，撞在一起的機會也越大。子 AI 的數量<b>不要超過能同時做的工作數</b>。大家都要改同一份東西時，開再多也只會互相蓋掉。</p></div></details>
+      <details class="ref"><summary>會不會比較耗用量？</summary><div class="ref-b"><p>會。每個子 AI 都各自和模型溝通，<code>/fleet</code> 通常會用掉比較多 AI Credits。要比的是整體：你省下的時間、等待和重做，是不是比多用的量值得。只有適合平行的工作才用。</p></div></details>
+      <details class="ref"><summary>子 AI 說「完成了」，就是完成了嗎？</summary><div class="ref-b"><p>不是。要看證據：檔案打開來看、規範逐條檢查的結果、動了哪些檔案。提示詞 4 特別要求主 AI「自己打開檔案檢查，不要只看回報」，就是這個原因。</p></div></details>
+      <details class="ref"><summary>主 AI 也會判斷錯嗎？</summary><div class="ref-b"><p>會，它也是 AI。所以計畫要你核准（步驟 3）、成果要你抽查、規則和金額由你決定。高風險或大家都要動的工作，就不要平行，改成一件一件做。</p></div></details>
+      <details class="ref"><summary>做法 A（/fleet）和做法 B（Projects）要選哪個？</summary><div class="ref-b"><p>先用 A：一個對話就能完成，容易看懂。工作要做好幾天、要隨時調整某個分身的方向，再用 B。B 目前是預覽版，畫面可能常變。</p></div></details>
+      <details class="ref"><summary>原案例「2 天 30 件」，我也做得到嗎？</summary><div class="ref-b"><p>不要直接比。那 30 件是挑過的（規格清楚、範圍小），而且 2 天不含後續審查。建議從 2～3 件開始，用「換成你的工作」那張表記錄自己的數字。</p></div></details>
+      <details class="ref"><summary>規範改了，Skill 會過時嗎？</summary><div class="ref-b"><p>會。規範一改，就請 AI 同步更新 Skill（例：「補償權限表改了，請更新 parallel-reply」）。AI 重複犯同一個錯時，也把解法寫回 Skill。</p></div></details>
+      <details class="ref"><summary>Skill、提示詞、規範有什麼不同？</summary><div class="ref-b"><p><b>提示詞</b>：這一次要做什麼。<b>規範</b>：這批工作要符合的條件。<b>Skill</b>：一整套做法，存起來以後重複用，AI 需要時才載入。</p></div></details>
+    </section>
+
+    <section class="card" id="check">
+      <h2>自我檢核</h2>
+      <details class="ref"><summary>1. 你有 10 份會議紀錄要整理待辦，另外要把所有待辦合併成一張部門總表。怎麼分工？</summary><div class="ref-b"><p><b>10 份整理可以平行</b>（互不相干），每個子 AI 各自存一個檔案；<b>總表只由主 AI 最後統一合併</b>，避免大家同時改同一份。</p></div></details>
+      <details class="ref"><summary>2. 子 AI 回報「全部符合規範」，你應該怎麼做？</summary><div class="ref-b"><p>要求它<b>逐條</b>寫符合或不符合，並請主 AI 自己打開檔案檢查。再自己抽查幾份。</p></div></details>
+      <details class="ref"><summary>3. 客戶要求的補償超出權限表，AI 該怎麼處理？</summary><div class="ref-b"><p>回覆寫【待主管決定】，並在回報中標示「需要人判斷」。<b>規則和金額由人決定</b>，AI 不能自己答應。</p></div></details>
+      <details class="ref"><summary>4. 公司的年度預算分配規則還在討論，可以先叫 5 個 AI 同時寫各部門的預算說明嗎？</summary><div class="ref-b"><p>先不要。<b>規則還沒定</b>，AI 只會各自猜，寫出 5 份不一致的版本。等規則確定、寫成規範後再平行。</p></div></details>
+    </section>
+
+    <section class="card recap"><h2>重點回顧</h2><ul>
+      <li>一個 AI 會排隊；主 AI 帶子 AI，可以把<b>互不相干</b>的工作同時做完。</li>
+      <li>先過 5 項檢查：標準清楚、範圍界定、彼此不相干、能檢查、有紀錄。</li>
+      <li>會撞在一起的（同一份檔案、同一個對象）：改成排隊，或只讓主 AI 統一改。</li>
+      <li>桌面版做法：<code>/plan</code> 先拆工作、你核准 → <code>/fleet</code> 派工 → 主 AI 整合檢查 → 你決定 → 收尾。</li>
+      <li>「完成」要有證據；規則、關鍵內容、對別人的影響、要不要送出，由你判斷。</li>
+      <li>做順了，存成 Skill；每週固定的，設成自動化（只產生草稿）。</li>
+    </ul><p class="next">下一步：用提示詞 9 檢查你手上的一批工作，挑 2～3 件試做，並填好記錄表。</p></section>
+  </main>
+  <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>
+</body>
+</html>
