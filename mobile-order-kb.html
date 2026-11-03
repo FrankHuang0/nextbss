@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI 知識庫經驗分享</title>
 <script src="assets/site.js"></script>
 <style>
-:root{--blue:#81C7D4;--red:#E08B81;--green:#A3D6C1;--gray:#F0F0F0;--bg:#FDFDFD;--text:#333;--body:#555;--quote:#CC6666;--sidebar-w:220px;--side:#1E3A5F;--tint:#FFF0EE}
-[data-theme="ocean"]{--red:#2563eb;--blue:#60a5fa;--quote:#1d4ed8;--side:#1e293b;--tint:#eff6ff}
-[data-theme="forest"]{--red:#15803d;--blue:#86d6a8;--quote:#166534;--side:#1c2a22;--tint:#ecfdf3}
-[data-theme="grape"]{--red:#7c3aed;--blue:#c4b5fd;--quote:#6d28d9;--side:#2e1f47;--tint:#f5f3ff}
-[data-theme="dark"]{--red:#e8615c;--side:#0d0f12;--tint:#fde8e7}
+:root{--redd:#b8504a;--blue:#81C7D4;--red:#E08B81;--green:#A3D6C1;--gray:#F0F0F0;--bg:#FDFDFD;--text:#333;--body:#555;--quote:#CC6666;--sidebar-w:220px;--side:#1E3A5F;--tint:#FFF0EE}
+[data-theme="ocean"]{--redd:#2563eb;--red:#2563eb;--blue:#60a5fa;--quote:#1d4ed8;--side:#1e293b;--tint:#eff6ff}
+[data-theme="forest"]{--redd:#15803d;--red:#15803d;--blue:#86d6a8;--quote:#166534;--side:#1c2a22;--tint:#ecfdf3}
+[data-theme="grape"]{--redd:#7c3aed;--red:#7c3aed;--blue:#c4b5fd;--quote:#6d28d9;--side:#2e1f47;--tint:#f5f3ff}
+[data-theme="dark"]{--red:#ff8a85;--redd:#c0403b;--side:#0d0f12;--tint:#2c2326;--bg:#15181d;--text:#f1f3f5;--body:#d6d9de;--gray:#2a2f37;--quote:#ff8a85;color-scheme:dark}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"Microsoft JhengHei","PingFang TC",sans-serif;background:var(--bg);color:var(--text);line-height:1.8}
 
 /* === SIDEBAR === */
 .sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--side);overflow-y:auto;padding:16px 0;z-index:100}
-.sidebar h2{color:#fff;font-size:.85em;padding:8px 16px;margin:0;opacity:.6;text-transform:uppercase;letter-spacing:1px}
+.sidebar h2{color:#fff;font-size:.85em;padding:8px 16px;margin:0;opacity:.75;text-transform:uppercase;letter-spacing:1px;background:none;border:0;border-radius:0}
 .sidebar a{display:block;color:#BFD7ED;text-decoration:none;padding:8px 20px;font-size:.88em;border-left:3px solid transparent;transition:all .15s}
 .sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
 .sidebar a.active{border-left-color:var(--blue);color:#fff;background:rgba(129,199,212,.15);font-weight:bold}
@@ -43,7 +43,7 @@ p{color:var(--body);margin:6px 0}
 <!-- SIDEBAR NAVIGATION -->
 <nav class="sidebar">
   <div class="logo">📚 AI 知識庫分享</div>
-  <button onclick="openPresenterView()" style="display:block;width:calc(100% - 32px);margin:8px 16px;padding:8px;background:var(--red);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:.85em">🎤 簡報者模式</button>
+  <button onclick="openPresenterView()" style="display:block;width:calc(100% - 32px);margin:8px 16px;padding:8px;background:var(--redd);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:.85em">🎤 簡報者模式</button>
   <h2>簡報</h2>
   <a href="#" onclick="go('cover')" class="active">封面</a>
   <a href="#" onclick="go('concept')">🤖 設計理念</a>
@@ -81,13 +81,13 @@ p{color:var(--body);margin:6px 0}
 
 /* Tags */
 .tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.8em;font-weight:bold;margin:2px 4px}
-.tag.blue{background:var(--blue);color:#fff}
-.tag.red{background:var(--red);color:#fff}
-.tag.green{background:var(--green);color:#fff}
+.tag.blue{background:var(--blue);color:var(--side)}
+.tag.red{background:var(--redd);color:#fff}
+.tag.green{background:var(--green);color:var(--side)}
 
 /* Tables */
 table{border-collapse:collapse;width:100%;margin:10px 0;font-size:.9em}
-th{background:var(--blue);color:#fff;padding:9px 12px;text-align:left}
+th{background:var(--blue);color:var(--side);padding:9px 12px;text-align:left}
 td{padding:8px 12px;border:1px solid #e0e0e0;vertical-align:top}
 tr:nth-child(even) td{background:#FAFAFA}
 
@@ -97,7 +97,7 @@ tr:nth-child(even) td{background:#FAFAFA}
 .diagram-section .annotation{font-size:.9em;color:var(--body)}
 .diagram-section .annotation ol{padding-left:18px}
 .diagram-section .annotation li{margin:8px 0;line-height:1.6}
-.diagram-section .annotation .num{display:inline-block;width:22px;height:22px;background:var(--blue);color:#fff;border-radius:50%;text-align:center;font-size:.75em;line-height:22px;margin-right:6px}
+.diagram-section .annotation .num{display:inline-block;width:22px;height:22px;background:var(--blue);color:var(--side);border-radius:50%;text-align:center;font-size:.75em;line-height:22px;margin-right:6px}
 .diagram{background:#fff;border:2px solid #e0e0e0;border-radius:10px;padding:16px;margin:16px 0;overflow:visible}
 
 /* Comparison */
@@ -120,6 +120,54 @@ pre code{background:none;color:inherit;padding:0}
 /* Page transition */
 .page{animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+/* === 深色主題：主內容、卡片、表格變暗；流程圖維持淺底（mermaid 用淺色主題繪製） === */
+[data-theme="dark"] .card{background:#1f232a;border-color:#3a414b;box-shadow:none}
+[data-theme="dark"] .card.blue{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 12%,#1f232a)}
+[data-theme="dark"] .card.red{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,#1f232a)}
+[data-theme="dark"] .card[style*="background:#FFF8F7"]{background:color-mix(in srgb,var(--red) 12%,#1f232a)!important}
+[data-theme="dark"] .card.green{border-color:var(--green);background:color-mix(in srgb,var(--green) 12%,#1f232a)}
+[data-theme="dark"] .card.gray{border-color:#3a414b;background:#262b33}
+[data-theme="dark"] .card.warn{border-color:#FFB74D;background:color-mix(in srgb,#FFB74D 12%,#1f232a)}
+[data-theme="dark"] td{border-color:#3a414b}
+[data-theme="dark"] tr:nth-child(even) td{background:#1a1e24}
+[data-theme="dark"] tr td.grp-row{background:var(--tint)}
+[data-theme="dark"] .vs-left{background:color-mix(in srgb,var(--red) 12%,#1f232a)}
+[data-theme="dark"] .vs-right{background:color-mix(in srgb,var(--green) 12%,#1f232a)}
+[data-theme="dark"] blockquote{background:#2c2326}
+[data-theme="dark"] code{background:#2a2f37;color:#ff9e9e}
+[data-theme="dark"] pre{background:#0d0f12}
+[data-theme="dark"] pre code{background:none;color:inherit}
+[data-theme="dark"] .diagram{--text:#333;--body:#555;--red:#c0403b;--quote:#b03a3a;background:#eef1f5;border-color:#3a414b;color:#333}
+[data-theme="dark"] #page-std h3[style*="color:#1E3A5F"]{color:#9cc3ea!important}
+[data-theme="dark"] #page-std h3[style*="color:#C62828"]{color:#ff9e9e!important}
+[data-theme="dark"] #page-std h3[style*="color:#2E7D5B"]{color:#7fd1a8!important}
+[data-theme="dark"] #diagramScaleCtrl{background:#1f232a!important;border-color:#3a414b!important;color:#d6d9de}
+[data-theme="dark"] #diagramScaleCtrl label{color:#9cc3ea!important}
+
+/* === 手機版：側欄改成頂部可橫向捲動的頁籤列，內容改單欄 === */
+@media(max-width:720px){
+.sidebar{position:sticky;top:0;width:100%;height:auto;display:flex;overflow-x:auto;white-space:nowrap;padding:52px 8px 6px;scrollbar-width:thin}
+.sidebar .logo,.sidebar h2,.sidebar>button{display:none!important}
+.sidebar a{display:inline-block;flex:none;border-left:0;border-bottom:3px solid transparent;padding:8px 12px}
+.sidebar a.active{border-bottom-color:var(--blue)}
+.main{margin-left:0}
+.page{padding:20px 16px;min-height:0;overflow-wrap:anywhere}
+h1{font-size:1.5em}
+h2{font-size:1.25em}
+.grid2,.grid3,.grid4,.diagram-section,.vs,.page [style*="grid-template-columns"]{grid-template-columns:1fr!important}
+.grid2>*,.grid3>*,.grid4>*,.diagram-section>*,.vs>*,.page [style*="grid-template-columns"]>*{min-width:0}
+.vs-left,.vs-right{border-radius:12px}
+.vs-mid{justify-content:center;padding:4px 0;background:none}
+.page [style*="grid-template-columns:1fr 40px"]>div:not(.card){transform:rotate(90deg);padding:4px 0}
+table{display:block;overflow-x:auto;max-width:100%}
+.diagram{overflow-x:auto!important;max-width:100%!important;overflow-wrap:normal}
+.diagram>div[style*="flex-wrap:nowrap"]{flex-direction:column!important;align-items:stretch!important}
+.diagram>div[style*="flex-wrap:nowrap"]>*{flex:none!important}
+.diagram>div[style*="flex-wrap:nowrap"]>div[style*="color:var(--red)"]{align-self:center;transform:rotate(90deg)}
+#diagramScaleCtrl{bottom:8px!important;right:8px!important;padding:4px 8px!important}
+#diagramScaleCtrl .sc-t,#diagramScaleCtrl .sc-u,#scaleNum{display:none}
+#scaleRange{width:96px;vertical-align:middle}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
 <script>
@@ -606,7 +654,7 @@ flowchart LR
   <div style="display:flex;align-items:stretch;gap:6px;flex-wrap:nowrap">
     <!-- 階段1：來源 -->
     <div style="flex:1;background:#FFF8E1;border:2px solid #FFB74D;border-radius:10px;padding:10px">
-      <div style="font-weight:bold;color:#E08B00;text-align:center;margin-bottom:8px">① 資料來源</div>
+      <div style="font-weight:bold;color:#a15c00;text-align:center;margin-bottom:8px">① 資料來源</div>
       <div style="display:flex;flex-direction:column;gap:5px;font-size:.82em">
         <div style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:4px 6px">SRS/SDS .doc</div>
         <div style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:4px 6px">Java / JSP</div>
@@ -728,7 +776,7 @@ flowchart LR
     <!-- 主控 -->
     <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
       <div style="background:#1565c0;color:#fff;border-radius:8px;padding:8px 12px;font-weight:bold;text-align:center">chk***st.jsp<br><span style="font-size:.85em;font-weight:normal">主控框架</span></div>
-      <div style="color:#999">▼</div>
+      <div style="color:#6b6b6b">▼</div>
       <div style="background:#f39c12;color:#fff;border-radius:8px;padding:8px 12px;font-weight:bold;text-align:center">chk***oc<br><span style="font-size:.85em;font-weight:normal">路由</span></div>
     </div>
     <div style="color:var(--red);font-size:1.4em;font-weight:bold">→</div>
@@ -746,9 +794,9 @@ flowchart LR
     <!-- Bean + Helper + 放行 -->
     <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
       <div style="background:#34495e;color:#fff;border-radius:14px;padding:6px 10px;text-align:center">Che***ng</div>
-      <div style="color:#999">▼</div>
+      <div style="color:#6b6b6b">▼</div>
       <div style="background:#fff;border:1px solid #34495e;border-radius:14px;padding:4px 10px">Che***er → 外部系統</div>
-      <div style="color:#999">▼</div>
+      <div style="color:#6b6b6b">▼</div>
       <div style="background:#27ae60;color:#fff;border-radius:6px;padding:6px 12px;font-weight:bold">全過 → 繼續受理</div>
     </div>
   </div>
@@ -780,7 +828,7 @@ flowchart LR
       <span style="background:#e74c3c;color:#fff;border-radius:6px;padding:4px 10px">否則→禁止受理</span>
     </span>
   </div>
-  <p style="font-size:.78em;color:#999;margin-top:6px">未命中 2***/3***/3*** → 續判其他規則</p>
+  <p style="font-size:.78em;color:#6b6b6b;margin-top:6px">未命中 2***/3***/3*** → 續判其他規則</p>
 </div>
 </div>
 
@@ -804,10 +852,10 @@ flowchart LR
   <!-- HTML+CSS 流程（取代 Mermaid） -->
   <div style="font-size:.85em">
     <div style="background:#E3F2FD;border:1px solid #42A5F5;border-radius:6px;padding:5px 10px;display:inline-block">取得風險種類</div>
-    <div style="color:#999;margin:4px 0 4px 20px">▼</div>
+    <div style="color:#6b6b6b;margin:4px 0 4px 20px">▼</div>
     <!-- 三個 OR 條件 -->
     <div style="border:1px dashed #FFB74D;border-radius:8px;padding:8px;background:#FFFDF5">
-      <div style="font-weight:bold;color:#E08B00;margin-bottom:6px">符合任一條件 → 需主管複核</div>
+      <div style="font-weight:bold;color:#a15c00;margin-bottom:6px">符合任一條件 → 需主管複核</div>
       <div style="display:flex;flex-direction:column;gap:4px">
         <span style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:3px 8px">① 05/22 且起始日 ≥ 2007</span>
         <span style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:3px 8px">② 其他高風險代碼（0***/0***/0***…3***）</span>
@@ -815,14 +863,14 @@ flowchart LR
         <span style="background:#fff;border:1px solid #FFD180;border-radius:5px;padding:3px 8px">④ 07/14/16 且為經銷商通路</span>
       </div>
     </div>
-    <div style="color:#999;margin:4px 0 4px 20px">▼ 需複核</div>
+    <div style="color:#6b6b6b;margin:4px 0 4px 20px">▼ 需複核</div>
     <div style="background:#f39c12;color:#fff;border-radius:6px;padding:5px 10px;display:inline-block">輸入主管 → LDAP 驗證 + PRG***sk 職級</div>
-    <div style="color:#999;margin:4px 0 4px 20px">▼</div>
+    <div style="color:#6b6b6b;margin:4px 0 4px 20px">▼</div>
     <div style="display:flex;gap:10px">
       <span style="background:#27ae60;color:#fff;border-radius:6px;padding:5px 12px">驗證通過 → 放行</span>
       <span style="background:#e74c3c;color:#fff;border-radius:6px;padding:5px 12px">驗證失敗 → 阻擋</span>
     </div>
-    <p style="font-size:.78em;color:#999;margin-top:6px">皆不符合上述條件 → 不需複核，續往下一規則</p>
+    <p style="font-size:.78em;color:#6b6b6b;margin-top:6px">皆不符合上述條件 → 不需複核，續往下一規則</p>
   </div>
 </div>
 </div>
@@ -891,11 +939,11 @@ flowchart LR
       </div>
       <!-- Human -->
       <div style="background:#FFF8E1;border:2px solid #FFB74D;border-radius:10px;padding:12px 14px">
-        <div style="font-weight:bold;color:#E08B00;margin-bottom:8px">🧑‍💻 工程師</div>
+        <div style="font-weight:bold;color:#a15c00;margin-bottom:8px">🧑‍💻 工程師</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px">
-          <span style="background:#FFB74D;color:#fff;padding:3px 10px;border-radius:20px;font-size:.8em;font-weight:bold">驗證邏輯</span>
-          <span style="background:#FFB74D;color:#fff;padding:3px 10px;border-radius:20px;font-size:.8em;font-weight:bold">補業務背景</span>
-          <span style="background:#FFB74D;color:#fff;padding:3px 10px;border-radius:20px;font-size:.8em;font-weight:bold">回報問題</span>
+          <span style="background:#FFB74D;color:#5a3500;padding:3px 10px;border-radius:20px;font-size:.8em;font-weight:bold">驗證邏輯</span>
+          <span style="background:#FFB74D;color:#5a3500;padding:3px 10px;border-radius:20px;font-size:.8em;font-weight:bold">補業務背景</span>
+          <span style="background:#FFB74D;color:#5a3500;padding:3px 10px;border-radius:20px;font-size:.8em;font-weight:bold">回報問題</span>
         </div>
       </div>
     </div>
@@ -1348,10 +1396,10 @@ window.addEventListener('load', () => {
 
 <!-- Diagram Scale Control (like page-spec) -->
 <div id="diagramScaleCtrl" style="position:fixed;bottom:20px;right:20px;background:#fff;border:1px solid #90caf9;border-radius:8px;padding:10px 14px;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.2);font-size:.88em">
-  <label style="font-weight:bold;color:#1E3A5F;margin-right:8px">🔎 流程圖大小</label>
-  <input type="range" id="scaleRange" min="30" max="150" value="100" step="5" oninput="applyScale(this.value)">
-  <input type="number" id="scaleNum" min="30" max="150" value="100" style="width:50px" oninput="applyScale(this.value)">
-  <span>%</span>
+  <label for="scaleRange" style="font-weight:bold;color:#1E3A5F;margin-right:8px">🔎 <span class="sc-t">流程圖大小</span></label>
+  <input type="range" id="scaleRange" aria-label="流程圖大小" min="30" max="150" value="100" step="5" oninput="applyScale(this.value)">
+  <input type="number" id="scaleNum" aria-label="流程圖大小（%）" min="30" max="150" value="100" style="width:50px" oninput="applyScale(this.value)">
+  <span class="sc-u">%</span>
 </div>
 <script>
 function applyScale(val) {
@@ -1494,6 +1542,8 @@ window.go = function(key) {
   }
   document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
   if (event && event.target) event.target.classList.add('active');
+  var act = document.querySelector('.sidebar a.active');
+  if (act && window.innerWidth <= 720) act.parentNode.scrollLeft = act.offsetLeft - 16;
   // sync presenter
   setTimeout(updatePresenterView, 50);
 };

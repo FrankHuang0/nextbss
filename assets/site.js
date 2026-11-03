@@ -1,14 +1,15 @@
 /* AI 助理課程：全站共用（主題配色、課程資料、主題選單、複製按鈕）。請在 <head> 以同步方式載入。 */
 (function(){
 const de=document.documentElement,K='nextbss-theme';
-// [代號, 名稱, 主色, 深主色, 主色上的字, 面板, 文字, 次要字, 分隔線, 淡底, 深底]
+// [代號, 名稱, 主色, 深主色, 主色上的字, 面板, 文字, 次要字, 分隔線, 淡底, 深底, 文字用主色, 文字用深主色]
+// 「文字用主色」給文字與白字底色用（對白底 ≥4.5:1）；珊瑚紅主色太亮，另給加深一階的值，其他主題同主色
 const THEMES=[
-['coral','珊瑚紅','#fc6a65','#e0534e','#fff','#fff','#2b2f36','#6b6b6b','#e4e5e8','#fff1f0','#2b2f36'],
-['ocean','海洋藍','#2563eb','#1d4ed8','#fff','#fff','#1e293b','#64748b','#e2e8f0','#eff6ff','#1e293b'],
-['forest','森林綠','#15803d','#166534','#fff','#fff','#1c2a22','#5f6b63','#dfe7e2','#ecfdf3','#1c2a22'],
-['grape','葡萄紫','#7c3aed','#6d28d9','#fff','#fff','#2e1f47','#6b6480','#e6e1f0','#f5f3ff','#2e1f47'],
-['dark','夜間','#ff8a85','#ff6f69','#1a1a1a','#1f232a','#e8eaed','#a3abb5','#3a414b','#2c2326','#0d0f12']];
-const V=['p','p2','on','sf','ink','mut','line','tint','dark'];
+['coral','珊瑚紅','#fc6a65','#e0534e','#fff','#fff','#2b2f36','#6b6b6b','#d8d8d8','#fff1f0','#2b2f36','#c43c37','#a8322e'],
+['ocean','海洋藍','#2563eb','#1d4ed8','#fff','#fff','#1e293b','#64748b','#e2e8f0','#eff6ff','#1e293b','#2563eb','#1d4ed8'],
+['forest','森林綠','#15803d','#166534','#fff','#fff','#1c2a22','#5f6b63','#dfe7e2','#ecfdf3','#1c2a22','#15803d','#166534'],
+['grape','葡萄紫','#7c3aed','#6d28d9','#fff','#fff','#2e1f47','#6b6480','#e6e1f0','#f5f3ff','#2e1f47','#7c3aed','#6d28d9'],
+['dark','夜間','#ff8a85','#ff6f69','#1a1a1a','#1f232a','#e8eaed','#a3abb5','#3a414b','#2c2326','#0d0f12','#ff8a85','#ff6f69']];
+const V=['p','p2','on','sf','ink','mut','line','tint','dark','pt','pt2'];
 const vars=t=>V.map((v,i)=>`--nb-${v}:${t[i+2]}`).join(';');
 const LESSONS=[
 {f:'notebooklm-basics.html',t:'NotebookLM 入門',s:1,who:'全員',time:'約 15 分',pre:'可登入的 Google 帳號',out:'第一本筆記本，會看來源導覽與引用'},
@@ -42,14 +43,14 @@ const css=`:root{${vars(THEMES[0])}}
 ${THEMES.slice(1).map(t=>`[data-theme="${t[0]}"]{${vars(t)}}`).join('\n')}
 .nb-theme{position:relative;flex:none;font-family:inherit;line-height:1.2}
 .nb-tbtn{display:inline-flex;align-items:center;gap:4px;margin:0;background:var(--nb-sf);color:var(--nb-ink);border:1px solid var(--nb-line);border-radius:999px;padding:8px 14px;font:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:.15s}
-.nb-tbtn:hover,.nb-tbtn[aria-expanded="true"]{background:var(--nb-sf);color:var(--nb-p);border-color:var(--nb-p)}
+.nb-tbtn:hover,.nb-tbtn[aria-expanded="true"]{background:var(--nb-sf);color:var(--nb-pt);border-color:var(--nb-p)}
 .nb-tmenu{position:absolute;right:0;top:calc(100% + 8px);z-index:1000;background:var(--nb-sf);border:1px solid var(--nb-line);border-radius:10px;box-shadow:0 10px 28px #0003;padding:6px;min-width:150px;display:grid;gap:2px}
 .nb-tmenu[hidden]{display:none}
 .nb-left .nb-tmenu{left:0;right:auto}
 .nb-tmenu button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;color:var(--nb-ink);cursor:pointer;font-size:.92rem;white-space:nowrap}
 .nb-tmenu button:hover,.nb-tmenu button:focus-visible{background:var(--nb-tint)}
 .nb-tmenu button:focus-visible{outline:2px solid var(--nb-p);outline-offset:-2px}
-.nb-tmenu button[aria-pressed="true"]{font-weight:700;color:var(--nb-p)}
+.nb-tmenu button[aria-pressed="true"]{font-weight:700;color:var(--nb-pt)}
 .nb-tmenu button[aria-pressed="true"]::after{content:"✓";margin-left:auto}
 .nb-tmenu i{width:18px;height:18px;border-radius:50%;border:1px solid #0003;flex:none}
 .nb-compact .nb-tbtn{border:0;background:none;padding:6px 10px}
@@ -73,7 +74,7 @@ const NB=window.NB={
   mount(host,o){
     o=o||{};const id='nbt'+(++seq),w=document.createElement('div');
     w.className='nb-theme'+(o.compact?' nb-compact':'')+(o.left?' nb-left':'');
-    w.innerHTML=`<button type="button" class="nb-tbtn" aria-haspopup="true" aria-expanded="false" aria-controls="${id}" title="切換主題配色">🎨<span>主題</span></button>`
+    w.innerHTML=`<button type="button" class="nb-tbtn" aria-haspopup="true" aria-expanded="false" aria-controls="${id}" aria-label="切換主題" title="切換主題配色">🎨<span>主題</span></button>`
       +`<div class="nb-tmenu" id="${id}" role="group" aria-label="主題配色" hidden>`
       +THEMES.map(t=>`<button type="button" data-t="${t[0]}" aria-pressed="false"><i style="background:${t[2]}"></i>${t[1]}</button>`).join('')+'</div>';
     host.appendChild(w);
@@ -84,6 +85,7 @@ const NB=window.NB={
     m.addEventListener('click',e=>{const x=e.target.closest('button');if(!x)return;NB.set(x.dataset.t);open(false);b.focus()});
     document.addEventListener('click',e=>{if(!m.hidden&&!w.contains(e.target))open(false)});
     w.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){open(false);b.focus()}});
+    w.addEventListener('focusout',e=>{if(!m.hidden&&e.relatedTarget&&!w.contains(e.relatedTarget))open(false)});
     return w;
   },
   copy(text,btn){
@@ -114,5 +116,8 @@ const enhance=()=>{
     b.addEventListener('click',()=>NB.copy(body.textContent.trim(),b));h.appendChild(b);
   });
 };
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',enhance);else enhance();
+// 表格寬過容器時（.x 可左右捲）加 x-scroll，由 style.css 顯示「可左右滑動」提示
+const scrollHint=()=>document.querySelectorAll('.x').forEach(x=>x.classList.toggle('x-scroll',x.scrollWidth>x.clientWidth+2));
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(scrollHint,150)});addEventListener('load',scrollHint);
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{enhance();scrollHint()});else{enhance();scrollHint()}
 })();

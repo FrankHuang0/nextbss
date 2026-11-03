@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -91,9 +91,10 @@
   .g4{grid-template-columns:repeat(4,1fr)}
   .card{
     background:linear-gradient(180deg,var(--surface),var(--surface2));
-    border:1px solid var(--line);border-radius:18px;padding:22px 24px;
-    box-shadow:var(--shadow);
+    border:1px solid var(--line);border-radius:12px;padding:22px 24px;
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
   }
+  html[data-theme="dark"] .card{box-shadow:0 4px 14px rgba(0,0,0,.3)}
   .card h3{color:var(--heading)}
   .card p{font-size:16px}
   .pill{display:inline-block;background:color-mix(in srgb,var(--brand) 12%,transparent);border:1px solid color-mix(in srgb,var(--brand) 42%,transparent);
@@ -291,6 +292,43 @@
     .slide{padding:40px 44px 80px}
     h1{font-size:40px} h2{font-size:30px}
     .split{grid-template-columns:1fr}
+  }
+  /* ===== 投影片內容超高時可在頁內捲動（手機／矮螢幕） ===== */
+  .slide{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin}
+  .slide.center{justify-content:safe center}
+  .split,.io{flex:1 0 auto}
+  html[data-theme="dark"] .dot.active{color:#1a1a1a}
+  /* 人偶播放列：不半透明，「▶ 聽報告」黃字對比 ≥ 4.5 */
+  #duoBar#duoBar{opacity:1}
+  #duoBar#duoBar .pg{color:#5a6878}
+  html[data-theme="dark"] #duoBar#duoBar{background:rgba(31,35,42,.95);color:#e8eaed;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+  html[data-theme="dark"] #duoBar#duoBar #duoSpd{background:#2c323b;color:#e8eaed}
+  html[data-theme="dark"] #duoBar#duoBar .pg{color:#a3abb5}
+  @media (max-width:720px){
+    .slide{padding:64px 16px 76px}
+    .kick{font-size:12.5px;letter-spacing:.1em}
+    h1{font-size:30px;margin:10px 0 8px} h2{font-size:23px} h3{font-size:17px}
+    p{font-size:15.5px;line-height:1.65} .lead{font-size:17px}
+    .hero-badge{font-size:13.5px;padding:6px 12px}
+    .pill{font-size:13px;padding:5px 11px}
+    .grid{gap:12px;margin-top:14px}
+    .g2,.g3,.g4,.io{grid-template-columns:1fr}
+    .card{padding:14px 16px} .card p{font-size:14.5px}
+    ul.clean{gap:8px} ul.clean li{font-size:15.5px;padding-left:24px} ul.clean li::before{top:7px;width:12px;height:12px}
+    .split,.io{flex:none;gap:14px;margin-top:12px}
+    .panel,.io .col{overflow:visible;padding:16px}
+    .num{flex-basis:32px;height:32px;font-size:15px;border-radius:10px}
+    .step{gap:12px} .step .body b{font-size:16px} .step .body span{font-size:14.5px}
+    table.tbl{font-size:14px} table.tbl th,table.tbl td{padding:8px 9px}
+    .scene-tag{position:static;order:-1;margin-bottom:4px;font-size:13px}
+    .chartwrap,.mindwrap{flex:none}
+    .chartwrap svg{height:auto;max-height:none}
+    .mind{height:auto;max-height:70vh}
+    .warnbox{padding:12px 14px}
+    .dots{display:none}
+    .nav{right:8px;bottom:8px;gap:8px}
+    .nav button{width:42px;height:42px}
+    .pagenum{right:108px;bottom:15px}
   }
 </style>
 </head>
@@ -1203,6 +1241,7 @@
   function go(n){
     i=Math.max(0,Math.min(slides.length-1,n));
     slides.forEach((s,idx)=>s.classList.toggle('active',idx===i));
+    slides[i].scrollTop=0;
     dots.forEach((d,idx)=>d.classList.toggle('active',idx===i));
     progress.style.transform='scaleX('+((i+1)/slides.length)+')';
     pageno.innerHTML='<b>'+(i+1)+'</b> / '+slides.length;
@@ -1365,6 +1404,20 @@
     window.__fdg=api;
   })();
   go(0);
+  // 投影片可捲動時：人偶講到的重點若在畫面外，自動把它捲進可視範圍（使用者自己在捲時不搶）
+  (function(){
+    var userAt=0;
+    ['wheel','touchmove','pointerdown'].forEach(function(t){document.addEventListener(t,function(){userAt=Date.now()},{passive:true})});
+    setInterval(function(){
+      var hl=document.getElementById('duoHL'), sl=slides[i];
+      if(!hl||!sl||hl.style.display!=='block'||sl.scrollHeight<=sl.clientHeight+1||Date.now()-userAt<2500) return;
+      var r=hl.getBoundingClientRect(), cs=getComputedStyle(sl);
+      var top=parseFloat(cs.paddingTop), bot=sl.clientHeight-parseFloat(cs.paddingBottom);
+      if(r.top>=top-4&&r.bottom<=bot+4) return;
+      var d=(r.height>bot-top)?r.top-top:(r.top+r.bottom)/2-(top+bot)/2;
+      sl.scrollBy({top:d,behavior:'smooth'});
+    },600);
+  })();
 </script>
 <script src="assets/lesson.js" data-mode="float"></script>
 <!--DUO:BEGIN--><style>/* 雙人偶旁白（小貓問、機器人答）— 由 embed_duo.py 注入 */
