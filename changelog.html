@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>教材修改歷程</title>
+  <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
+  <script src="assets/changelog.js"></script>
+</head>
+<body>
+  <header><h1>教材修改歷程</h1><p>每門課什麼時候改了什麼，都記在這裡。可以只看某一門課。</p>
+    <div class="stats" id="cl-stats"><span>由新到舊排列</span></div></header>
+  <main>
+    <nav class="card"><ul class="toc"><li><a href="#about">怎麼看這頁</a></li><li><a href="#log">修改紀錄</a></li></ul></nav>
+    <section class="card" id="about">
+      <h2>怎麼看這頁</h2>
+      <p>每一筆紀錄都標了類型，看標籤就知道是哪一種修改：</p>
+      <ul class="cl-legend">
+        <li><span class="cl-k cl-k-add">新增</span>新課程，或課程裡多了新段落、新範例</li>
+        <li><span class="cl-k cl-k-mod">修改</span>原本的內容重寫、補充或換成更好讀的寫法</li>
+        <li><span class="cl-k cl-k-fix">修正</span>改掉錯誤，或遮蔽不該公開的資料</li>
+      </ul>
+      <p class="note">標著「待上版」的紀錄，代表還在審核、正式網站還看不到。數字開頭有 # 的是修改編號，點下去可以看修改明細。</p>
+    </section>
+    <section class="card" id="log">
+      <h2>修改紀錄</h2>
+      <div class="cl-f" id="cl-f" role="group" aria-label="依課程篩選"></div>
+      <p class="cl-n" id="cl-n" aria-live="polite"></p>
+      <div id="cl-list"></div>
+    </section>
+  </main>
+  <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>
+  <script>
+  (function(){
+    const NB=window.NB,data=(window.NB_CHANGELOG||[]).map((x,i)=>Object.assign({i},x)),esc=NB.esc;
+    const REPO='https://github.com/FrankHuang0/nextbss/pull/';
+    const K={'新增':'add','修改':'mod','修正':'fix'};
+    const name=f=>f==='site'?'全站':((NB.lessons.find(x=>x.f===f)||{}).t||f);
+    const top=x=>Math.max(0,...[].concat(x.pr||0));
+    data.sort((a,b)=>b.d.localeCompare(a.d)||top(b)-top(a)||a.i-b.i);
+    const used=new Set(data.map(x=>x.f));
+    const keys=['all','site'].concat(NB.lessons.map(x=>x.f).filter(f=>used.has(f)));
+    const label=k=>k==='all'?'全部':name(k);
+    const count=k=>k==='all'?data.length:data.filter(x=>x.f===k).length;
+    document.getElementById('cl-f').innerHTML=keys.map(k=>`<a href="#${k}" data-k="${k}">${esc(label(k))}<small>${count(k)}</small></a>`).join('');
+    const days=[...new Set(data.map(x=>x.d))];
+    document.getElementById('cl-list').innerHTML=days.map(d=>`<section class="cl-day" data-d="${d}"><h3>${d}</h3><ul class="cl-ul">`
+      +data.filter(x=>x.d===d).map(x=>`<li class="cl-i" data-f="${esc(x.f)}"><span class="cl-k cl-k-${K[x.k]||'mod'}">${esc(x.k)}</span>`
+        +(x.f==='site'?`<b class="cl-c">全站</b>`:`<a class="cl-c" href="${esc(x.f)}">${esc(name(x.f))}</a>`)
+        +`<span class="cl-pr">${x.wait?'<em class="cl-wait">待上版</em>':''}${[].concat(x.pr||[]).map(n=>`<a href="${REPO}${n}" target="_blank" rel="noopener" title="看修改明細">#${n}</a>`).join(' ')}</span>`
+        +`<p class="cl-t">${esc(x.t)}</p></li>`).join('')+'</ul></section>').join('');
+    const courses=new Set(data.filter(x=>x.f!=='site').map(x=>x.f)).size;
+    document.getElementById('cl-stats').innerHTML=`<span>共 ${data.length} 筆紀錄</span><span>涵蓋 ${courses} 門課</span><span>最近更新 ${days[0]||'—'}</span>`;
+    let cur='all';
+    const apply=(k,scroll)=>{
+      cur=k;
+      document.querySelectorAll('#cl-f a').forEach(a=>{if(a.dataset.k===k)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')});
+      document.querySelectorAll('.cl-i').forEach(li=>li.hidden=!(k==='all'||li.dataset.f===k));
+      document.querySelectorAll('.cl-day').forEach(s=>s.hidden=!s.querySelector('.cl-i:not([hidden])'));
+      document.getElementById('cl-n').textContent=(k==='all'?'全部課程':label(k))+`：共 ${count(k)} 筆`;
+      if(scroll)document.getElementById('log').scrollIntoView();
+    };
+    const read=scroll=>{
+      let h='';try{h=decodeURIComponent(location.hash.slice(1))}catch(e){}
+      if(keys.includes(h))apply(h,scroll);
+      else if(h!=='about'&&h!=='log')apply('all',false);
+    };
+    addEventListener('hashchange',()=>read(false));
+    read(true);
+    if(!location.hash)apply('all',false);
+  })();
+  </script>
+</body>
+</html>
