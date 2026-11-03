@@ -62,6 +62,27 @@
     <section class="card" id="why">
       <h2>一個 AI vs 一組 AI</h2>
       <p>用餐廳比喻：一位廚師再厲害，10 桌客人點菜也只能一道一道做。換成「主廚＋幾位二廚」，主廚分配菜單、二廚同時開火、主廚出菜前檢查，就快很多。</p>
+      <figure class="mock" aria-label="排隊做與同時做的時間對照示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>8 張客訴單：排隊做 vs 同時做</b></div>
+        <div class="mock-body c1">
+          <div class="mp"><h4><em>1</em>一個 AI：排隊做</h4>
+            <div class="lane"><b>AI</b><i style="--w:9%">01</i><i style="--w:9%">02</i><i style="--w:9%">03</i><i style="--w:9%">04</i><i style="--w:9%">05</i><i style="--w:9%">06</i><i style="--w:9%">07</i>            <i style="--w:9%">08</i><em>全部完成</em></div>
+            <div class="axis"><span>開始</span><span>時間 →</span></div>
+            <p>做完一件才做下一件，總時間 ＝ 8 件加起來。</p></div>
+          <div class="mp"><h4><em>2</em>主 AI 帶子 AI：同時做</h4>
+            <div class="lane"><b>主 AI</b><i class="pl" style="--w:12%">拆工作</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">01</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">02</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">06</i><i style="--w:9%">03</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">04</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">05</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">07</i></div>
+            <div class="lane"><b>子 AI</b><i class="sp" style="--w:12%"></i><i style="--w:9%">08</i></div>
+            <div class="lane"><b>主 AI</b><i class="sp" style="--w:30%"></i><i class="ck" style="--w:16%">整合檢查</i><em>全部完成（約快一半）</em></div>
+            <div class="axis"><span>開始</span><span>時間 →</span></div></div>
+        </div>
+        <figcaption>示意圖（長度只代表概念，不是實測時間）：多出「拆工作」和「整合檢查」兩段，但中間 8 件同時做，整體還是快很多。最慢的那條（03＋06 排隊）決定什麼時候全部完成。</figcaption>
+      </figure>
       <div class="x"><table class="tbl">
         <tr><th></th><th>一個 AI（排隊）</th><th>你自己開很多視窗</th><th>主 AI 帶子 AI（本課）</th></tr>
         <tr><td>怎麼做</td><td>做完第 1 件才做第 2 件</td><td>每個視窗各做一件，你來回切換</td><td>主 AI 拆工作、派工、收回、檢查</td></tr>
@@ -123,6 +144,24 @@
       <h2>撞在一起怎麼辦？</h2>
       <p>原本的案例裡，有 2 個錯誤都要改同一支程式。如果同時改，後改的會蓋掉先改的。解法是：<b>改成排隊</b>，第 2 個等第 1 個做完，<b>重新讀最新版本</b>再改。</p>
       <p>換成文書工作，最常見的「撞在一起」有 2 種：</p>
+      <figure class="mock" aria-label="多個 AI 同時改同一份檔案的前後對照示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>追蹤總表：誰來改？</b></div>
+        <div class="mock-body c2">
+          <div class="mp"><h4><em>1</em><span class="bad">❌ 子 AI 各自改總表</span></h4>
+            <div class="job">10:00 子 AI-01 打開總表（舊版）<span class="st">讀</span></div>
+            <div class="job">10:00 子 AI-02 打開總表（舊版）<span class="st">讀</span></div>
+            <div class="job">10:05 子 AI-01 寫入「01 已回覆」<span class="st ok">存檔</span></div>
+            <div class="job">10:06 子 AI-02 寫入「02 已回覆」<span class="st ok">存檔</span></div>
+            <div class="a"><span class="bad">結果：</span>02 是拿舊版改的，存檔時把 01 的更新<b>蓋掉了</b>。總表上 01 又變回「待處理」。</div></div>
+          <div class="mp"><h4><em>2</em><span class="good">✅ 各寫各的，最後只由主 AI 改</span></h4>
+            <div class="job">子 AI-01 只建立 回覆_01.md<span class="st ok">完成</span></div>
+            <div class="job">子 AI-02 只建立 回覆_02.md<span class="st ok">完成</span></div>
+            <div class="job">……其他子 AI 也各寫各的<span class="st ok">完成</span></div>
+            <div class="job">主 AI 讀最新版總表，一次更新 8 列<span class="st run">最後做</span></div>
+            <div class="a"><span class="good">結果：</span>沒有人互相蓋掉，總表 8 列都正確。</div></div>
+        </div>
+        <figcaption>示意圖：兩個人同時拿舊版本修改同一份檔案，後存檔的會蓋掉先存檔的。這就是為什麼「共用的檔案只給一個人改」。</figcaption>
+      </figure>
       <div class="x"><table class="tbl">
         <tr><th>狀況</th><th>練習包裡的例子</th><th>怎麼處理</th></tr>
         <tr><td><b>同一份檔案</b></td><td>8 份回覆都要更新「追蹤總表.csv」</td><td>子 AI <b>不准</b>碰總表；全部做完後，由主 AI 一次更新</td></tr>
@@ -141,6 +180,25 @@
         <tr><td>需要人判斷的事</td><td>規則外、拿不定的，一定要浮上來給你</td></tr>
         <tr><td>動到哪些檔案</td><td>確認沒有亂動別人的東西</td></tr>
       </table></div>
+      <figure class="mock" aria-label="子 AI 完成回報的好壞對照示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>子 AI・客訴 01 的完成回報</b></div>
+        <div class="mock-body c2">
+          <div class="mp"><h4><em>1</em><span class="bad">❌ 看不出對錯</span></h4>
+            <div class="a">完成了！回覆已經寫好，全部符合規範。😊</div>
+            <p>寫在哪？哪幾條符合？有沒有答應不該答應的事？<b>都不知道</b>，只能自己從頭檢查。</p></div>
+          <div class="mp"><h4><em>2</em><span class="good">✅ 照回報格式</span></h4>
+            <div class="job">產出檔案：回覆/回覆_01.md<span class="st run">可打開</span></div>
+            <div class="job">1 開頭：稱呼陳小姐，第一段道歉<span class="st ok">符合</span></div>
+            <div class="job">2 原因：只寫「物流轉運中心爆量」<span class="st ok">符合</span></div>
+            <div class="job">3 處理＋時間：3 個工作天內寄出折抵券<span class="st ok">符合</span></div>
+            <div class="job">4 補償：運費折抵券 60 元（延遲 3 天以上）<span class="st ok">符合</span></div>
+            <div class="job">5 字數：186 字<span class="st ok">符合</span></div>
+            <div class="job">6 隱私：沒有提到其他客戶<span class="st ok">符合</span></div>
+            <div class="job">需要人判斷：無<span class="st">—</span></div>
+            <div class="job">動到的檔案：只有 回覆_01.md<span class="st ok">沒越界</span></div></div>
+        </div>
+        <figcaption>示意圖：右邊這種回報，主 AI 和你只要掃一眼，就知道哪裡要細看。實際文字依 AI 而異。</figcaption>
+      </figure>
       <p>練習包的〈回覆規範.md〉最後已經附好這個格式，提示詞裡只要說「照回報格式」就好。</p>
     </section>
 
@@ -181,6 +239,27 @@
         <li>在 Copilot 側欄「工作階段」旁按「＋」，選「開啟本機資料夾」，選「平行練習」。<small>入門課學過的方式也可以，只要工作階段是開在「平行練習」資料夾就好。</small></li>
         <li>輸入框下方：模式選 <b>Plan</b>、模型選 <b>Auto</b>。</li>
       </ol>
+      <figure class="mock" aria-label="開啟練習資料夾並選擇模式的示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>GitHub Copilot app · 開新工作階段</b></div>
+        <div class="mock-body">
+          <div class="mp"><h4><em>1</em>側欄按「＋」</h4>
+            <div class="tile">💬 工作階段（Sessions）<b>＋</b></div>
+            <div class="a">在哪裡開始？（Start session in）<br>📁 選擇已加入的專案…<br><b>📂 開啟本機資料夾（Open local folder）</b> ← 選這個</div></div>
+          <div class="mp"><h4><em>2</em>選「平行練習」</h4>
+            <div class="src on">📂 桌面\平行練習</div>
+            <div class="src">　├ 📂 客訴單（01～08.txt）</div>
+            <div class="src">　├ 📂 回覆（空的）</div>
+            <div class="src">　├ 📄 回覆規範.md</div>
+            <div class="src">　├ 📄 追蹤總表.csv</div>
+            <div class="src">　└ 📄 讀我.txt</div>
+            <div class="btns"><span class="pri">選擇資料夾</span></div></div>
+          <div class="mp"><h4><em>3</em>輸入框下方</h4>
+            <div class="in">輸入任務… @ 加檔案、/ 叫指令</div>
+            <div class="opt"><span>這台電腦 ▾</span><span><b>模式：Plan ▾</b></span><span><b>模型：Auto ▾</b></span></div>
+            <div class="a" style="margin-top:8px">側欄出現「平行練習」就成功了。接著貼上提示詞 1。</div></div>
+        </div>
+        <figcaption>示意圖（非實際畫面）：按鈕可能是中文或英文，位置依版本而異。重點是工作階段要開在「平行練習」資料夾。</figcaption>
+      </figure>
 
       <h3>步驟 2　請主 AI 先拆工作、分組（還不准動手）</h3>
       <div class="prompt"><div class="prompt-h"><b>💬 提示詞 1：拆工作、分組</b><small>直接複製貼上</small></div><pre>/plan 你是客服組長的助理，擔任「主 AI」。
@@ -268,6 +347,23 @@
 4. 有沒有提到其他客戶的資料
 不符合的，直接請負責的子 AI 重寫一次；重寫還是不行，就列給我。
 全部檢查完，再更新 @追蹤總表.csv：狀態、回覆檔、需要人判斷 這 3 欄。</pre></div>
+      <figure class="mock" aria-label="主 AI 整合檢查抓到錯誤的示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>GitHub Copilot app · 平行練習</b></div>
+        <div class="mock-body c2">
+          <div class="mp"><h4><em>1</em>主 AI 的檢查表</h4>
+            <div class="job">01<span class="st wait">不符合第 2 條</span></div>
+            <div class="job">02、04、05、07<span class="st ok">6 條都符合</span></div>
+            <div class="job">03＋06 說法一致？<span class="st ok">一致</span></div>
+            <div class="job">08<span class="st wait">待主管決定</span></div>
+            <div class="job">超出權限的承諾<span class="st ok">沒有</span></div>
+            <div class="job">提到其他客戶<span class="st ok">沒有</span></div></div>
+          <div class="mp"><h4><em>2</em>主 AI 的處理</h4>
+            <div class="a">⚠️ <b>回覆_01.md</b> 寫「因颱風影響，物流延遲」。<br>客訴單只查到「物流轉運中心爆量」，沒有提到颱風。<br>→ 不符合規範第 2 條（不可以自己猜原因）。<br>已請子 AI 重寫。</div>
+            <div class="a" style="margin-top:8px">✅ 重寫完成：改成「物流轉運中心 10/3～10/7 爆量，延遲 5 天」，6 條全部符合。</div>
+            <div class="a" style="margin-top:8px">📋 追蹤總表已更新 8 列。<br>❓ <b>08 需要你決定</b>：客戶要求賠償 2,000 元。</div></div>
+        </div>
+        <figcaption>示意圖（非實際畫面）：「颱風」是故意舉的例子。實際操作時 AI 不一定犯這個錯，但如果犯了，主 AI 打開檔案逐條對規範就抓得到。</figcaption>
+      </figure>
       <details class="ref"><summary>參考結果（每次內容可能略有不同）</summary><div class="ref-b">
         <div class="x"><table class="tbl">
           <tr><th>編號</th><th>狀態</th><th>回覆檔</th><th>需要人判斷</th></tr>
