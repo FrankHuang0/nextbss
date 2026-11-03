@@ -25,6 +25,9 @@ const close=(except)=>pops.forEach(([b,m])=>{if(b!==except){m.hidden=true;b.setA
 pops.forEach(([b,m])=>b.addEventListener('click',e=>{const v=m.hidden;close(b);m.hidden=!v;b.setAttribute('aria-expanded',v);
   if(v){const a=m.querySelector('a');if(a&&e.detail===0)a.focus()}}));
 document.addEventListener('click',e=>{if(!e.target.closest('.dd,.mpanel,.mb'))close()});
+// 用鍵盤 Tab 離開下拉選單時自動關閉
+pops.forEach(([b,m])=>{const box=b.closest('.dd')||b;[box,m].forEach(el=>el.addEventListener('focusout',e=>{const t=e.relatedTarget;
+  if(m.hidden||!t||box.contains(t)||m.contains(t))return;m.hidden=true;b.setAttribute('aria-expanded','false')}))});
 n.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const o=pops.find(([b,m])=>!m.hidden);if(o){close();o[0].focus()}});
 const CL={'patent-plan.html':'kb-project-analysis.html','patent-report.html':'kb-project-analysis.html'},clf=CL[cur]||(NB.lessons.some(x=>x.f===cur)?cur:'');
 document.body.insertAdjacentHTML('beforeend',`<footer>AI 業務助理課程 · NotebookLM 業務應用 · <a class="cl-foot" href="changelog.html${clf?'#'+clf:''}">📝 ${clf?'本課修改歷程':'教材修改歷程'}</a></footer>`);

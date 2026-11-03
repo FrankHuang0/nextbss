@@ -9,7 +9,10 @@
 <script src="assets/qrcode.min.js"></script>
 <script>
 const base=location.href.replace(/[^/]*$/,'');
-[['q1','u1',base],['q2','u2',base+'practice.html']].forEach(([q,u,url])=>{
- new QRCode(document.getElementById(q),{text:url,width:320,height:320});
+[['q1','u1',base,'課程入口'],['q2','u2',base+'practice.html','練習包']].forEach(([q,u,url,t])=>{
+ const el=document.getElementById(q);
+ new QRCode(el,{text:url,width:320,height:320});
+ el.querySelectorAll('img').forEach(i=>i.alt='QR Code：用手機掃描開啟'+t);
+ el.querySelectorAll('canvas').forEach(c=>c.setAttribute('aria-hidden','true'));
  document.getElementById(u).textContent=url;});
 </script><script src="assets/nav.js"></script></body></html>

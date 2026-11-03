@@ -5,18 +5,42 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AI 分身平行作業</title>
   <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
+  <style>
+    /* 實戰案例：分工圖、數字卡、前後對照（只用主題變數，夜間主題自動套用） */
+    .apw-flow{padding:12px;display:flex;flex-direction:column}
+    .apw-node{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 12px;text-align:center;color:var(--ink);line-height:1.6}
+    .apw-node b{color:var(--strong)}.apw-node small{display:block;color:var(--mut);font-size:.82rem}
+    .apw-node.lead{background:var(--tint);border-color:var(--tline)}
+    .apw-node.human{background:var(--pt);border-color:var(--pt);color:var(--on-p)}
+    .apw-node.human b,.apw-node.human small{color:var(--on-p)}
+    .apw-down{text-align:center;color:var(--mut);font-size:1.1rem;line-height:1.7}
+    .apw-round{border:2px dashed var(--tline);border-radius:12px;padding:10px;background:var(--tint2)}
+    .apw-round h4{margin:0 0 8px;font-size:.95rem;color:var(--strong);text-align:center}
+    .apw-round p{margin:8px 0 0;font-size:.85rem;color:var(--mut);text-align:center}
+    .apw-agents{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+    @media(max-width:600px){.apw-agents{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .apw-agents li{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 8px;font-size:.88rem;text-align:center;color:var(--ink);line-height:1.5}
+    .apw-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:10px;margin:12px 0 16px}
+    .apw-kpi{border:1px solid var(--tline);background:var(--tint2);border-radius:10px;padding:12px 14px}
+    .apw-kpi span{display:block;font-size:.88rem;color:var(--mut)}
+    .apw-kpi b{display:block;font-size:1.9rem;line-height:1.3;color:var(--pt);font-weight:700}
+    .apw-kpi small{display:block;color:var(--ink);font-size:.88rem;line-height:1.6}
+    .apw-ba{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:744px;margin:8px auto 18px}
+    .apw-ba .shot{margin:0}.apw-ba .shot img{width:100%}
+    .apw-ba .shot figcaption b{color:var(--strong)}
+  </style>
 </head>
 <body>
   <header>
     <h1>AI 分身平行作業</h1>
     <p>一件一件交給 AI 做，還是要排隊。本課教你在 Copilot 桌面版裡，讓一個「主 AI」把工作拆開、分給幾個「子 AI」同時做，最後幫你整合、檢查。你負責定目標、做決定。</p>
-    <div class="stats"><span>20 分鐘跟著做</span><span>8 張練習客訴單</span><span>2 種做法</span><span>12 則可複製提示詞</span></div>
+    <div class="stats"><span>20 分鐘跟著做</span><span>8 張練習客訴單</span><span>2 種做法</span><span>13 則可複製提示詞</span></div>
   </header>
   <main>
     <nav class="card"><ul class="toc">
       <li><a href="#goal">學完你會</a></li><li><a href="#story">真實故事</a></li><li><a href="#why">一個 AI vs 一組 AI</a></li><li><a href="#roles">誰做什麼</a></li>
       <li><a href="#fit">哪些工作能平行</a></li><li><a href="#clash">撞在一起怎麼辦</a></li><li><a href="#proof">「做完」要有證據</a></li><li><a href="#human">你要自己判斷的 4 件事</a></li>
-      <li><a href="#tools">桌面版的平行工具</a></li><li><a href="#try">跟著做 A：/fleet</a></li><li><a href="#project">跟著做 B：Projects</a></li><li><a href="#save">把方法存起來</a></li>
+            <li><a href="#case">實戰案例：整理本網站</a></li><li><a href="#tools">桌面版的平行工具</a></li><li><a href="#try">跟著做 A：/fleet</a></li><li><a href="#project">跟著做 B：Projects</a></li><li><a href="#save">把方法存起來</a></li>
       <li><a href="#prompts">提示詞總表</a></li><li><a href="#apply">換成你的工作</a></li><li><a href="#faq">常見問題</a></li><li><a href="#check">自我檢核</a></li>
     </ul></nav>
 
@@ -212,6 +236,132 @@
         <tr><td>3. 會不會影響別人</td><td>跨功能影響</td><td>同一位客戶的兩份回覆有沒有矛盾</td></tr>
         <tr><td>4. 要不要送出</td><td>上線決定</td><td>回覆要不要寄出、何時寄</td></tr>
       </table></div>
+    </section>
+
+    <section class="card" id="case">
+      <h2>實戰案例：用 AI 分身一起整理這個教學網站</h2>
+      <p>你正在看的這個教學網站，也是用本課的方法整理的。<b>結論：約 30 分鐘做完原本要 100 分鐘以上的工作，而且每一項都有檢查證據。</b>下面的「分身」就是前面說的子 AI。</p>
+
+      <h3>任務是什麼</h3>
+      <p>網站有 20 頁。我們想一次把這幾件事全部整理好：</p>
+      <ul>
+        <li><b>版面</b>：每一頁看起來一致。</li>
+        <li><b>手機版</b>：手機上不會左右亂捲、內容不會被切掉。</li>
+        <li><b>深色主題</b>：切到夜間模式，字還是看得清楚。</li>
+        <li><b>好不好讀</b>：第一次來的人，找得到要看什麼。</li>
+        <li><b>無障礙</b>：視力不好、用螢幕報讀軟體的人也能用。</li>
+      </ul>
+
+      <h3>怎麼分工</h3>
+      <p>分兩輪：第 1 輪只「看」，第 2 輪才「改」。看的時候大家讀同一批頁面也不會撞在一起；改的時候就要<b>依檔案分工</b>。</p>
+      <figure class="mock" aria-label="實戰案例分工圖：主 AI 先派 4 個分身審查，彙整後再派 8 個分身修改，最後主 AI 複查、人類審核">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>整理教學網站：分工流程</b></div>
+        <div class="apw-flow">
+          <div class="apw-node lead"><b>主 AI（組長）</b><small>定目標、拆工作、派分身</small></div>
+          <div class="apw-down" aria-hidden="true">↓</div>
+          <div class="apw-round">
+            <h4>第 1 輪「審查」：4 個分身同時看</h4>
+            <ul class="apw-agents">
+              <li>視覺一致性</li><li>手機版＋深色主題</li><li>新手好讀好找</li><li>無障礙＋速度</li>
+            </ul>
+            <p>每個分身看全部 20 頁，但只看自己那個角度；這一輪不改任何檔案。</p>
+          </div>
+          <div class="apw-down" aria-hidden="true">↓</div>
+          <div class="apw-node lead"><b>主 AI 彙整</b><small>65 個問題 → 刪掉重複、合併 → 22 項待改</small></div>
+          <div class="apw-down" aria-hidden="true">↓</div>
+          <div class="apw-round">
+            <h4>第 2 輪「修改」：8 個分身同時改</h4>
+            <ul class="apw-agents">
+              <li>全站共用</li><li>知識庫分享</li><li>NotebookLM 業務助理</li><li>人偶導讀簡報</li>
+              <li>AI 簡報工作流</li><li>NotebookLM 入門</li><li>網頁功能 Reengineering</li><li>課後總結</li>
+            </ul>
+            <p>每個分身只改自己的檔案；大家共用的檔案只交給「全站共用」分身。</p>
+          </div>
+          <div class="apw-down" aria-hidden="true">↓</div>
+          <div class="apw-node lead"><b>主 AI 複查</b><small>20 頁 × 電腦／手機 × 3 種主題，一頁一頁打開看</small></div>
+          <div class="apw-down" aria-hidden="true">↓</div>
+          <div class="apw-node human"><b>人類審核</b><small>負責人看過、說「通過」，才上線</small></div>
+        </div>
+        <figcaption>示意圖：依這次實際的分工畫成，方塊大小不代表花的時間。</figcaption>
+      </figure>
+
+      <h3>結果：用數字看</h3>
+      <div class="apw-kpis">
+        <div class="apw-kpi"><span>第 1 輪審查（4 個分身）</span><b>17.5 分鐘</b><small>一個一個做約 48 分鐘</small></div>
+        <div class="apw-kpi"><span>第 2 輪修改（8 個分身）</span><b>12 分鐘</b><small>一個一個做約 54 分鐘</small></div>
+        <div class="apw-kpi"><span>合計</span><b>約快 3.4 倍</b><small>實際約 30 分鐘；一個一個做約 101 分鐘</small></div>
+        <div class="apw-kpi"><span>找到的問題</span><b>65 → 22 項</b><small>65 個問題整理成 22 項，全部修好</small></div>
+        <div class="apw-kpi"><span>主 AI 複查</span><b>0 破版</b><small>20 頁 × 2 種寬度 × 3 種主題，共 120 種組合，0 錯誤</small></div>
+      </div>
+      <p>幾個看得出差別的改善（「對比」是文字和底色的深淺差，數字越大越好讀，標準是 4.5 以上）：</p>
+      <div class="x"><table class="tbl">
+        <tr><th>改善項目</th><th>改之前</th><th>改之後</th></tr>
+        <tr><td>手機看「知識庫分享」17 頁，畫面會左右亂捲</td><td>頁面寬 624～1191</td><td>全部剛好 390（手機寬）</td></tr>
+        <tr><td>手機看「NotebookLM 業務助理」，投影片內容被切掉</td><td>16 張</td><td>0 張</td></tr>
+        <tr><td>珊瑚紅主題的白字對比</td><td>2.84（不夠）</td><td>5.19</td></tr>
+        <tr><td>全站對比不足的地方</td><td>44～103 處</td><td>0 處</td></tr>
+      </table></div>
+      <p class="callout warn"><b>這些數字要誠實看</b>：這是個人經驗，不保證你也一樣。「一個一個做」是把每個分身各自花的時間加起來估算的；30 分鐘<b>不含</b>寫任務說明和人類審核的時間。</p>
+
+      <h3>改之前、改之後（手機畫面）</h3>
+      <p><b>首頁</b>：多了「第一次來？從這裡開始」按鈕，並依身分列出建議的上課順序。</p>
+      <div class="apw-ba">
+        <figure class="shot"><img src="assets/img/ux-case-index-before.webp" width="360" height="640" loading="lazy" alt="改之前的首頁手機畫面：只有標題、說明和 3 個標籤，沒有告訴新手從哪裡開始"><figcaption><b>改之前</b>：不知道從哪一課開始</figcaption></figure>
+        <figure class="shot"><img src="assets/img/ux-case-index-after.webp" width="360" height="640" loading="lazy" alt="改之後的首頁手機畫面：有「第一次來？從這裡開始」按鈕，並依業務同仁、要做簡報、開發三種身分列出建議路線"><figcaption><b>改之後</b>：一進來就有開始按鈕和建議路線</figcaption></figure>
+      </div>
+      <p><b>知識庫分享</b>：手機上側邊目錄占掉大半畫面，標題被擠成一字一行；改成上方可左右滑的分頁列。</p>
+      <div class="apw-ba">
+        <figure class="shot"><img src="assets/img/ux-case-kb-before.webp" width="360" height="640" loading="lazy" alt="改之前的知識庫分享手機畫面：左邊深色目錄占掉一半以上，右邊標題被擠成一個字一行"><figcaption><b>改之前</b>：目錄占半個畫面，標題一字一行</figcaption></figure>
+        <figure class="shot"><img src="assets/img/ux-case-kb-after.webp" width="360" height="640" loading="lazy" alt="改之後的知識庫分享手機畫面：目錄改成上方一列分頁，標題橫排完整顯示，下方是清楚的數字卡"><figcaption><b>改之後</b>：目錄移到上方，內容滿版好讀</figcaption></figure>
+      </div>
+      <p><b>NotebookLM 業務助理</b>：手機上翻頁的頁碼按鈕疊在文字上，內容被蓋住；改成只顯示「1 / 29」和左右鍵。</p>
+      <div class="apw-ba">
+        <figure class="shot"><img src="assets/img/ux-case-notebooklm-before.webp" width="360" height="640" loading="lazy" alt="改之前的 NotebookLM 業務助理手機畫面：標題很大占掉半個畫面，下方 29 個頁碼按鈕疊在說明文字上，文字看不清楚"><figcaption><b>改之前</b>：頁碼按鈕蓋住文字</figcaption></figure>
+        <figure class="shot"><img src="assets/img/ux-case-notebooklm-after.webp" width="360" height="640" loading="lazy" alt="改之後的 NotebookLM 業務助理手機畫面：標題大小適中，說明文字完整，右下角只有「1 / 29」和左右翻頁鍵"><figcaption><b>改之後</b>：文字完整，翻頁鍵移到角落</figcaption></figure>
+      </div>
+
+      <h3>學到的 4 個重點</h3>
+      <ol class="timeline">
+        <li><b>先「多人審查」，再修改</b>：4 個分身各從一個角度看，找到的問題比一個人從頭看到尾更全。<small>審查只看不改，所以大家看同一頁也不會撞在一起。</small></li>
+        <li><b>一個檔案只給一個分身改</b>：大家共用的檔案交給「全站共用」分身，其他分身只改自己那一課，就不會互相蓋掉。</li>
+        <li><b>主 AI 負責彙整和複查</b>：分身的回報不一定完全對。<small>例：有個分身為了不碰共用檔，用「權宜做法」繞過去；主 AI 複查時發現，改回正式做法。</small></li>
+        <li><b>人類最後把關</b>：全部做完，先給負責人看，同意了才上線。</li>
+      </ol>
+
+      <h3>換你試試：整理一批文件</h3>
+      <p>同樣的流程，也能用在整理共用文件、多份報告。在 Copilot 桌面版開一個新的工作階段，貼上下面這段，把【】換成你的內容：</p>
+      <div class="prompt"><div class="prompt-h"><b>💬 案例提示詞：主 AI 帶分身整理一批文件</b><small>把【】換掉後直接貼上</small></div><pre>你是我的「主 AI」（組長助理）。我要整理【資料夾名稱，例：部門季報】裡的【份數，例：6】份文件。
+目標：【例：格式一致、數字正確、主管 3 分鐘看得懂重點】。
+請照下面 5 步做，每一步做完先停下來給我看，我說「可以」再做下一步。
+
+第 1 步：多人審查（只看，不改）
+- 開 4 個分身（子 AI）同時審查全部文件，每個只看一個角度：
+  1. 格式一致：標題、表格、日期和數字的寫法
+  2. 內容正確：數字、單位、前後有沒有矛盾
+  3. 好不好讀：第一次看的人懂不懂、重點有沒有放前面
+  4. 有沒有漏：該有的段落、附件、資料出處
+- 每個分身回報：哪個檔案、哪一段、問題是什麼、建議怎麼改、嚴重程度（高／中／低）。
+- 這一步任何檔案都不准改。
+
+第 2 步：彙整成待改清單
+- 把 4 份回報合併，刪掉重複的，整理成一張表：編號、檔案、問題、改法、嚴重程度、交給哪個分身。
+- 標出哪些要我決定（例如：規則、金額、要不要刪掉內容）。
+- 等我核准清單再往下做。
+
+第 3 步：分工修改
+- 依「檔案」分工：一個檔案只交給一個分身，不可以兩個分身改同一個檔案。
+- 很多文件共用的東西（例如：範本、封面、名詞表）只交給一個「共用」分身改，其他分身不准動。
+- 每個分身只改清單上分給它的項目，做完回報：改了哪幾項、改之前和改之後各一句、沒改的原因。
+
+第 4 步：你自己複查
+- 你親自打開每個檔案檢查，不要只看分身的回報。
+- 逐項對照待改清單，標成：已修好／沒修好／新冒出的問題。
+- 如果分身用「權宜做法」繞過規則（例如：不能改共用範本，就在自己的檔案另外硬寫一份），請改回正式做法。
+
+第 5 步：交給我審核
+- 給我一份總結：改了幾項、還剩哪些、哪些需要我決定。
+- 在我說「通過」之前，不要寄出、不要覆蓋正式版本、不要通知其他人。</pre></div>
+      <p class="note">主 AI 沒有自己開分身的話，在核准清單後輸入 <code>/fleet 請照清單執行</code>（見下方「跟著做 A」）。第一次試，建議先挑 3～6 份文件就好。</p>
     </section>
 
     <section class="card" id="tools">
@@ -460,7 +610,7 @@
 
     <section class="card" id="prompts">
       <h2>提示詞總表</h2>
-      <p>提示詞 1～8 在上面的步驟裡。下面 4 則是<b>通用</b>的，換成任何工作都能用：</p>
+      <p>提示詞 1～8 在上面的步驟裡；整理一批文件的完整流程，在「<a href="#case">實戰案例</a>」的案例提示詞。下面 4 則是<b>通用</b>的，換成任何工作都能用：</p>
       <div class="prompt"><div class="prompt-h"><b>💬 提示詞 9：判斷能不能平行</b><small>動手前先問</small></div><pre>我有一批工作：___（例：整理 12 份供應商報價，每份寫一頁摘要）。
 請用下面 5 項檢查，判斷適不適合拆給多個子 AI 同時做：
 1. 驗收標準清不清楚  2. 範圍界定得出來嗎  3. 彼此相不相干  4. 做完能不能檢查  5. 有沒有留紀錄
@@ -529,6 +679,7 @@
       <li>會撞在一起的（同一份檔案、同一個對象）：改成排隊，或只讓主 AI 統一改。</li>
       <li>桌面版做法：<code>/plan</code> 先拆工作、你核准 → <code>/fleet</code> 派工 → 主 AI 整合檢查 → 你決定 → 收尾。</li>
       <li>「完成」要有證據；規則、關鍵內容、對別人的影響、要不要送出，由你判斷。</li>
+      <li>大型整理工作：先多個分身從不同角度審查 → 主 AI 彙整 → 一個檔案一個分身修改 → 主 AI 複查 → 你審核（見實戰案例）。</li>
       <li>做順了，存成 Skill；每週固定的，設成自動化（只產生草稿）。</li>
     </ul><p class="next">下一步：用提示詞 9 檢查你手上的一批工作，挑 2～3 件試做，並填好記錄表。</p></section>
   </main>

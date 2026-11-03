@@ -3,32 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>NotebookLM 基礎操作</title>
+  <title>NotebookLM 入門</title>
   <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
   <header>
-    <h1>NotebookLM 基礎操作</h1>
-    <p>Google 的 AI 筆記工具：上傳資料，自動產生摘要、重要主題、FAQ 與簡報文件，回答附引用。</p>
+    <h1>NotebookLM 入門</h1>
+    <p>學會 NotebookLM 的基礎操作。它是 Google 的 AI 筆記工具：上傳資料，自動產生摘要、重要主題、FAQ 與簡報文件，回答附引用。</p>
     <div class="stats"><span>Google 帳號登入</span><span>3 個視窗</span><span>回答可回查來源</span></div>
   </header>
   <main>
     <div class="case" data-step="1" data-note="本課最後的練習，就是幫小林整理台鴻精工的首次拜訪紀錄。學會基本操作後，到第 2 級把 5 個關卡做完。"></div>
-    <section class="card">
+    <nav class="card"><ul class="toc">
+      <li><a href="#ui">介面：3 個視窗</a></li><li><a href="#steps">操作步驟</a></li><li><a href="#ask">提問：同一份資料，問法決定品質</a></li><li><a href="#sources">來源類型與限制</a></li><li><a href="#studio">Studio 產出怎麼用</a></li><li><a href="#practice">練習：整理台鴻精工的首次拜訪紀錄</a></li><li><a href="#tips">使用提醒</a></li><li><a href="#recap">重點回顧</a></li>
+    </ul></nav>
+    <section class="card" id="ui">
       <h2>介面：3 個視窗</h2>
       <figure class="mock" aria-label="NotebookLM 介面示意圖">
         <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>台鴻精工 拜訪準備</b></div>
         <div class="mock-body">
-          <div class="mp"><h4><em>1</em>來源</h4>
+          <div class="mp"><h4 aria-level="3"><em>1</em>來源</h4>
             <div class="src on">☑ 首次拜訪紀錄.txt</div>
             <div class="src on">☑ 方案 X／Y／Z 型錄.pdf</div>
             <div class="src">☐ 年報摘要.pdf</div>
             <div class="add">＋ 新增來源</div></div>
-          <div class="mp"><h4><em>2</em>對話</h4>
+          <div class="mp"><h4 aria-level="3"><em>2</em>對話</h4>
             <div class="q">客戶最在意的兩件事是什麼？</div>
             <div class="a">1. 產線網路常斷線，希望有備援 <sup class="hl">1</sup><br>2. 資安監控，下週五前要初步報價 <sup>1</sup><br>可搭配方案 Y 行動備援 <sup>2</sup></div>
             <div class="in">開始輸入…</div></div>
-          <div class="mp"><h4><em>3</em>Studio</h4>
+          <div class="mp"><h4 aria-level="3"><em>3</em>Studio</h4>
             <div class="tile">🎧 語音摘要</div>
             <div class="tile">📑 簡報文件</div>
             <div class="tile">❓ 常見問題</div>
@@ -36,15 +39,15 @@
         </div>
         <figcaption>示意圖（非實際畫面，版面會隨官方更新）：只有<b>勾選</b>的來源會被用來回答；回答中的數字是<b>引用</b>，點開會跳到原文段落。</figcaption>
       </figure>
-      <table class="tbl">
+      <div class="x"><table class="tbl">
         <tr><th>視窗</th><th>用途</th></tr>
         <tr><td>來源</td><td>新增、勾選資料；點來源可看「來源導覽」：摘要與重要主題。</td></tr>
         <tr><td>對話</td><td>針對已勾選來源提問，回答附引用編號，點開可對照原文。</td></tr>
         <tr><td>Studio</td><td>一鍵產生研讀指南、簡報文件、常見問題、時間軸、語音摘要。</td></tr>
-      </table>
+      </table></div>
     </section>
 
-    <section class="card">
+    <section class="card" id="steps">
       <h2>操作步驟</h2>
       <ol class="timeline">
         <li>登入 <a href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLM</a>，按「新增」建立筆記本。</li>
@@ -55,7 +58,7 @@
       </ol>
     </section>
 
-    <section class="card">
+    <section class="card" id="ask">
       <h2>提問：同一份資料，問法決定品質</h2>
       <div class="vs">
         <div class="bad"><b>✘ 模糊的問法</b>幫我整理一下這份會議紀錄。<br><small>AI 只能猜你要什麼：可能寫成長篇摘要、漏掉待辦，也不知道要給誰看。</small></div>
@@ -64,15 +67,15 @@
       <p>記住公式：<b>角色＋任務＋輸出格式＋限制</b>。第一次結果不滿意時，不要整段重問，而是補一個條件（例如「改成表格」、「只列 3 點」）。</p>
     </section>
 
-    <section class="card">
+    <section class="card" id="sources">
       <h2>來源類型與限制</h2>
-      <table class="tbl">
+      <div class="x"><table class="tbl">
         <tr><th>方式</th><th>內容</th></tr>
         <tr><td>上傳</td><td>PDF、.txt、Markdown、音訊（如 MP3）</td></tr>
         <tr><td>Google 雲端硬碟</td><td>文件、簡報</td></tr>
         <tr><td>連結</td><td>網站（不含圖片、嵌入影片）、YouTube 公開影片字幕</td></tr>
         <tr><td>貼上文字</td><td>直接貼上複製內容</td></tr>
-      </table>
+      </table></div>
       <ul>
         <li>上限：每個來源 50 萬字或 200 MB；免費版每本最多 50 個來源。</li>
         <li>匯入的是靜態副本，原檔更新後不會自動同步；雲端檔需手動按同步。</li>
@@ -80,9 +83,9 @@
       </ul>
     </section>
 
-    <section class="card">
+    <section class="card" id="studio">
       <h2>Studio 產出怎麼用</h2>
-      <table class="tbl">
+      <div class="x"><table class="tbl">
         <tr><th>功能</th><th>產出</th><th>工作用途</th></tr>
         <tr><td>研讀指南</td><td>重點回顧、簡答題、名詞解釋</td><td>新人教育、規格自學</td></tr>
         <tr><td>簡報文件</td><td>簡介、主要主題、引用、結論</td><td>會議或文件摘要</td></tr>
@@ -90,10 +93,10 @@
         <tr><td>時間軸</td><td>事件序與角色列表</td><td>案件、專案進度回顧</td></tr>
         <tr><td>語音摘要</td><td>對話式音檔，可下載</td><td>通勤時快速吸收</td></tr>
         <tr><td>轉換為來源</td><td>把記事變成新來源</td><td>多份摘要再彙整</td></tr>
-      </table>
+      </table></div>
     </section>
 
-    <section class="card">
+    <section class="card" id="practice">
       <h2>練習：整理台鴻精工的首次拜訪紀錄</h2>
       <p>案例主線第 1 關（客戶、人物與數字皆為虛構）。以「貼上文字」新增為來源：</p>
       <div class="prompt"><div class="prompt-h"><b>📄 範例資料</b><small>貼成來源</small></div><pre>
@@ -111,7 +114,7 @@
       <p class="done">完成標準：重點都能點引用回查；待辦不超出來源內容。</p>
     </section>
 
-    <section class="card">
+    <section class="card" id="tips">
       <h2>使用提醒</h2>
       <ul>
         <li>只放核准資料；勿上傳客戶資料、個資、密碼或未授權文件。</li>
@@ -121,7 +124,7 @@
       </ul>
       <p><small>參考：<a href="https://www.cc.ntu.edu.tw/chinese/epaper/home/20250320_007206.html" target="_blank" rel="noopener">臺大計中電子報〈AI 筆記工具：NotebookLM 應用簡介〉</a>（2025-03）。介面與限制以官方說明為準。</small></p>
     </section>
-    <section class="card recap"><h2>重點回顧</h2><ul><li>NotebookLM 只依你加入的來源回答，回答附引用編號，可點開回查原文。</li><li>三個區塊：來源、對話、Studio。先看來源導覽，再開始提問。</li><li>提問要具體：角色＋任務＋輸出格式；查不到時要求標示「來源未提供」。</li><li>只放核准、已去識別化的資料；重要結論一定核對原文。</li></ul><p class="next">下一步：用 <a href="card.html">上手步驟卡</a> 複習 5 步驟，再進入第 2 級業務情境。</p></section>
+    <section class="card recap" id="recap"><h2>重點回顧</h2><ul><li>NotebookLM 只依你加入的來源回答，回答附引用編號，可點開回查原文。</li><li>三個區塊：來源、對話、Studio。先看來源導覽，再開始提問。</li><li>提問要具體：角色＋任務＋輸出格式；查不到時要求標示「來源未提供」。</li><li>只放核准、已去識別化的資料；重要結論一定核對原文。</li></ul><p class="next">下一步：用 <a href="card.html">上手步驟卡</a> 複習 5 步驟，再進入第 2 級業務情境。</p></section>
   </main>
   <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>
 </body>
