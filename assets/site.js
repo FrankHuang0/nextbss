@@ -21,6 +21,7 @@ const LESSONS=[
 {f:'copilot-desktop-basics.html',t:'Copilot 桌面版入門',s:3,who:'需要做規劃與文件者',time:'約 60 分',pre:'NotebookLM 入門（提示詞公式）',out:'一份經角色審查的規劃 HTML'},
 {f:'duo-narrated-deck.html',t:'人偶導讀簡報',s:3,who:'需要製作教材者',time:'約 45 分',pre:'Copilot 桌面版入門',out:'一份會自己講的人偶導讀教材，附 Skill 完整內容'},
 {f:'agent-parallel-workflow.html',t:'AI 分身平行作業',s:3,who:'要處理一批相似工作者',time:'約 60 分',pre:'Copilot 桌面版入門',out:'用 /plan＋/fleet 讓主 AI 帶子 AI 完成 8 張客訴回覆，附 12 則提示詞'},
+{f:'report-styles.html',t:'工作報告風格包',s:3,who:'需要做月報、週報、提案者',time:'約 60 分',pre:'Copilot 桌面版入門',out:'一份有故事線、套用設計風格、通過 4 道檢查的報告，附 Skill 完整下載'},
 {f:'mobile-order-kb.html',t:'知識庫分享',s:4,who:'開發／系統分析人員',time:'約 20 分',pre:'能閱讀基本程式碼',out:'自己專案的知識庫建置藍圖（附人偶語音導讀）'},
 {f:'kb-project-analysis.html',t:'知識庫應用：專案分析',s:4,who:'規劃／分析人員',time:'約 40 分',pre:'知識庫分享',out:'一份人機分工規劃書與報告範本'},
 {f:'page-spec-reengineering.html',t:'網頁功能 Reengineering',s:4,who:'開發／系統分析人員',time:'約 60 分',pre:'知識庫分享',out:'一份頁面規格書草稿'},
