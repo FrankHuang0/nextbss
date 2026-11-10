@@ -48,15 +48,36 @@
   .nt-page a.dl:hover{transform:translate(1px,1px);box-shadow:2px 3px 0 var(--n-ink)}
   .nt-page a.dl svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
   .nt-page .dlrow small{color:var(--n-muted);font-size:.92rem}
-  /* 目錄 */
-  .nt-page nav.toc{display:block;margin:6px 0 26px}
-  .nt-page .toc .toc-t{margin:0 0 6px;font-size:1.3rem;color:var(--n-teal)}
-  .nt-page .toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 36px;grid-auto-flow:column;grid-template-rows:repeat(4,auto)}
-  .nt-page .toc a{display:flex;align-items:baseline;gap:8px;border:0;border-radius:0;padding:5px 0;color:var(--n-ink);text-decoration:none;font-size:1rem}
-  .nt-page .toc a b{flex:none;color:var(--n-teal);font-weight:700;min-width:4.2em}
-  .nt-page .toc a i{flex:1;border-bottom:2px dotted var(--n-tline);transform:translateY(-4px);min-width:16px}
-  .nt-page .toc a em{flex:none;font-style:normal;color:var(--n-red);font-weight:700}
-  .nt-page .toc a:hover{color:var(--n-teal)}
+  /* 左側目錄選單 */
+  .nt-page .seg,.nt-page .ex,.nt-page>header{scroll-margin-top:72px}
+  .nt-page .side-toc{position:fixed;left:16px;top:var(--st-top,112px);z-index:60;width:240px;max-height:calc(100vh - var(--st-top,112px) - 16px);overflow:auto;box-sizing:border-box;padding:12px 10px 12px;background:var(--n-paper);color:var(--n-ink);border:2.4px solid var(--n-ink);border-radius:14px 18px 12px 16px/16px 12px 18px 14px;box-shadow:4px 5px 0 var(--n-shadow);font-size:.93rem;line-height:1.35;scrollbar-width:thin}
+  .nt-page .st-h{display:flex;align-items:baseline;justify-content:space-between;margin:0 6px 8px;padding-bottom:6px;font-size:1.25rem;color:var(--n-teal);border-bottom:2px dashed var(--n-tline)}
+  .nt-page .st-h small{font:700 .85rem "Noto Sans TC","Microsoft JhengHei",sans-serif;color:var(--n-red)}
+  .nt-page .side-toc ol{list-style:none;margin:0;padding:0}
+  .nt-page .side-toc li{margin:0 0 2px}
+  .nt-page .side-toc li.st-gap{margin-top:8px;padding-top:8px;border-top:2px dashed var(--n-tline)}
+  .nt-page .side-toc a{display:flex;align-items:baseline;gap:8px;padding:6px 8px;border-radius:10px;color:var(--n-ink);text-decoration:none}
+  .nt-page .side-toc a b{flex:none;width:1.3em;text-align:center;color:var(--n-teal);font-size:1.15rem;font-weight:900}
+  .nt-page .side-toc a span{flex:1}
+  .nt-page .side-toc a em{flex:none;font-style:normal;font-size:.8rem;font-weight:700;color:var(--n-red)}
+  .nt-page .side-toc a.sub{padding:4px 8px 4px 37px;font-size:.84rem;color:var(--n-muted)}
+  .nt-page .side-toc a:hover{background:color-mix(in srgb,var(--n-teal) 10%,transparent);color:var(--n-teal)}
+  .nt-page .side-toc a.on{background:var(--n-teal);color:var(--n-on);font-weight:700}
+  .nt-page .side-toc a.on b,.nt-page .side-toc a.on em{color:var(--n-on)}
+  .nt-page .side-toc a.sub.on{background:color-mix(in srgb,var(--n-teal) 16%,transparent);color:var(--n-teal);box-shadow:inset 3px 0 0 var(--n-teal)}
+  .nt-page .side-toc a:focus-visible,.nt-page .st-btn:focus-visible{outline:3px solid var(--n-orange);outline-offset:2px}
+  .nt-page .st-btn{display:none;position:fixed;left:12px;bottom:16px;z-index:61;align-items:center;gap:6px;padding:10px 16px;border:2.4px solid var(--n-ink);border-radius:14px 18px 12px 16px;background:var(--n-teal);color:var(--n-on);font:700 1rem "Noto Sans TC","Microsoft JhengHei",sans-serif;box-shadow:3px 4px 0 var(--n-shadow);cursor:pointer}
+  .nt-page .st-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
+  @media(min-width:1240px){
+    .nt-page>header,.nt-page .lx-meta,.nt-page main{margin-left:max(292px,calc((100vw - 1088px)/2));margin-right:auto;max-width:min(1088px,calc(100vw - 316px))}
+  }
+  @media(max-width:1239px){
+    .nt-page .st-btn{display:inline-flex}
+    .nt-page .side-toc{top:auto;bottom:72px;left:12px;width:min(280px,calc(100vw - 24px));max-height:calc(100vh - 150px);transform:translateX(calc(-100% - 24px));visibility:hidden;transition:transform .2s ease,visibility 0s .2s}
+    .nt-page .side-toc.open{transform:none;visibility:visible;transition:transform .2s ease}
+  }
+  @media(prefers-reduced-motion:reduce){.nt-page .side-toc{transition:none!important}}
+  @media print{.nt-page .side-toc,.nt-page .st-btn{display:none!important}}
   /* 段落 */
   .nt-page .seg{margin:0 0 20px;padding:24px 0 8px;border-top:2px dashed var(--n-tline)}
   .nt-page .seg>h2{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:0 0 6px;font-size:1.75rem;color:var(--n-teal);font-weight:700;line-height:1.35}
@@ -171,7 +192,7 @@
     .nt-page>header{margin-top:80px;padding:28px 16px 18px 26px}
     .nt-page .lx-meta{padding:2px 12px 14px 22px}
     .nt-page main{padding:14px 14px 40px 24px}
-    .nt-page .toc ol,.nt-page .two,.nt-page .duo,.nt-page .nums{grid-template-columns:1fr}.nt-page .toc ol{grid-auto-flow:row;grid-template-rows:none}
+    .nt-page .two,.nt-page .duo,.nt-page .nums{grid-template-columns:1fr}
     .nt-page .seg>h2{font-size:1.45rem}
     .nt-page .ex{padding:30px 14px 12px}.nt-page .nc{padding:24px 14px 10px}
     .nt-page ol.steps>li{padding-left:44px}
@@ -180,7 +201,22 @@
   </style>
 </head>
 <body class="nt-page">
-  <header>
+  <button type="button" class="st-btn" aria-controls="side-toc" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>目錄</button>
+  <nav class="side-toc" id="side-toc" aria-label="本課目錄">
+    <p class="st-h kai">目錄<small>60 分</small></p>
+    <ol>
+      <li><a href="#top"><b class="hand">↑</b><span>開頭、下載練習包</span></a></li>
+      <li><a href="#s0"><b class="hand">0</b><span>開場：它怎麼運作</span><em>5 分</em></a></li>
+      <li><a href="#s1"><b class="hand">1</b><span>登入、建筆記本</span><em>8 分</em></a><a class="sub" href="#ex1">練習 1　建立筆記本</a></li>
+      <li><a href="#s2"><b class="hand">2</b><span>加入來源</span><em>10 分</em></a><a class="sub" href="#ex2">練習 2　放入紀錄和型錄</a></li>
+      <li><a href="#s3"><b class="hand">3</b><span>第一次提問</span><em>15 分</em></a><a class="sub" href="#ex3">練習 3　問 4 個問題</a></li>
+      <li><a href="#s4"><b class="hand">4</b><span>Studio 一鍵產出</span><em>10 分</em></a><a class="sub" href="#ex4">練習 4　做簡報文件</a></li>
+      <li><a href="#s5"><b class="hand">5</b><span>資料安全、總結</span><em>12 分</em></a><a class="sub" href="#ex5">練習 5　能不能放</a></li>
+      <li class="st-gap"><a href="#help"><b class="hand">?</b><span>卡住怎麼辦</span><em>查表</em></a></li>
+      <li><a href="#recap"><b class="hand">✓</b><span>重點回顧</span></a></li>
+    </ol>
+  </nav>
+  <header id="top">
     <p class="kick">第 1 級 · 入門 · 課前自學</p>
     <h1 class="kai">NotebookLM 入門</h1>
     <p class="sub">手把手 6 段，跟著做完，你會有自己的第一本筆記本。</p>
@@ -207,20 +243,6 @@
     </svg>
 
     <div class="case" data-step="1" data-note="本課最後的練習，就是幫小林整理台鴻精工的首次拜訪紀錄。學會基本操作後，到第 2 級把 5 個關卡做完。"></div>
-
-    <nav class="toc" aria-label="本課目錄">
-      <p class="toc-t kai">目錄</p>
-      <ol>
-        <li><a href="#s0"><b>第 0 段</b>開場：它怎麼運作<i></i><em>5 分</em></a></li>
-        <li><a href="#s1"><b>第 1 段</b>登入、建筆記本<i></i><em>8 分</em></a></li>
-        <li><a href="#s2"><b>第 2 段</b>加入來源<i></i><em>10 分</em></a></li>
-        <li><a href="#s3"><b>第 3 段</b>第一次提問<i></i><em>15 分</em></a></li>
-        <li><a href="#s4"><b>第 4 段</b>Studio 一鍵產出<i></i><em>10 分</em></a></li>
-        <li><a href="#s5"><b>第 5 段</b>資料安全、總結<i></i><em>12 分</em></a></li>
-        <li><a href="#help"><b>查表</b>卡住怎麼辦<i></i><em>隨時看</em></a></li>
-        <li><a href="#recap"><b>最後</b>重點回顧<i></i><em>1 頁</em></a></li>
-      </ol>
-    </nav>
 
     <section class="seg" id="s0">
       <h2 class="kai"><span class="sn hand">0</span><span class="tt">開場：NotebookLM 怎麼運作</span><small class="tm">第 0 段 · 5 分</small></h2>
@@ -424,7 +446,7 @@
         <li>刪掉原本的字，貼上練習 1 的名稱，按 Enter。<span class="see"><b>按完你會看到</b>左上角變成「台鴻精工 拜訪準備」。</span></li>
       </ol>
 
-      <div class="ex">
+      <div class="ex" id="ex1">
         <h3><span class="no hand">練習<b>1</b></span>建立「台鴻精工 拜訪準備」</h3>
         <p>照上面 6 個步驟做。名稱請直接複製，避免打錯字。</p>
         <div class="prompt"><div class="prompt-h"><b>筆記本名稱</b><small>按右邊「複製」</small></div><pre>台鴻精工 拜訪準備</pre></div>
@@ -484,7 +506,7 @@
       </ol>
       <p class="note">第 3、4 步也可以改成直接上傳 01_首次拜訪紀錄.txt，結果一樣。</p>
 
-      <div class="ex">
+      <div class="ex" id="ex2">
         <h3><span class="no hand">練習<b>2</b></span>放入拜訪紀錄和型錄</h3>
         <p>這份拜訪紀錄是虛構的，可以放心貼。</p>
         <div class="prompt"><div class="prompt-h"><b>練習資料：首次拜訪紀錄</b><small>複製後貼到「複製的文字」</small></div><pre>【台鴻精工（虛構）首次拜訪紀錄】
@@ -573,7 +595,7 @@
         <li>不滿意就補一句，例如「改成表格」。<span class="see"><b>按完你會看到</b>新的回答照你的條件改好。</span></li>
       </ol>
 
-      <div class="ex">
+      <div class="ex" id="ex3">
         <h3><span class="no hand">練習<b>3</b></span>問 4 個問題，點引用核對</h3>
         <p>依序複製 3-1 到 3-4，一題一題問。每題都點一個引用看原文。</p>
         <div class="prompt"><div class="prompt-h"><b>3-1 客戶最在意什麼</b><small>熱身題</small></div><pre>你是業務助理。請依來源，列出台鴻精工最在意的 3 件事。每件事一句話，並標出引用。</pre></div>
@@ -650,7 +672,7 @@
         <li>回到對話，貼上練習 4 的提示詞，指定要的格式。<span class="see"><b>按完你會看到</b>照 4 個部分整理好的內容。</span></li>
       </ol>
 
-      <div class="ex">
+      <div class="ex" id="ex4">
         <h3><span class="no hand">練習<b>4</b></span>做一份給主管看的簡報文件</h3>
         <p>先用 Studio 按一次。再用下面的提示詞，在對話裡指定格式。</p>
         <div class="prompt"><div class="prompt-h"><b>4 給主管的簡報文件</b><small>貼到對話輸入框</small></div><pre>請依來源寫一份給主管看的簡報文件，用台灣繁體中文。
@@ -709,7 +731,7 @@
       </div>
 
       <h3 class="ph"><i>做</i>判斷 5 份資料（約 5 分鐘）</h3>
-      <div class="ex">
+      <div class="ex" id="ex5">
         <h3><span class="no hand">練習<b>5</b></span>這份資料能不能放？</h3>
         <p>每一份寫下你的判斷：○ 可以放、△ 先去識別化、× 不可以。</p>
         <div class="x"><table class="tbl wide">
@@ -795,6 +817,32 @@
       <p class="next">下一步：用 <a href="card.html">上手步驟卡</a> 複習，再進入 <a href="notebooklm-ai-training.html">第 2 級業務情境</a>。</p>
     </section>
   </main>
+  <script>
+  (function(){
+    var nav=document.getElementById('side-toc'),btn=document.querySelector('.st-btn');if(!nav)return;
+    var links=[].slice.call(nav.querySelectorAll('a[href^="#"]')),items=[];
+    links.forEach(function(a){var t=document.getElementById(a.getAttribute('href').slice(1));if(t)items.push({a:a,t:t,sub:a.classList.contains('sub')});});
+    function narrow(){return getComputedStyle(btn).display!=='none';}
+    function setOpen(v){nav.classList.toggle('open',v);btn.setAttribute('aria-expanded',v?'true':'false');}
+    btn.addEventListener('click',function(e){e.stopPropagation();setOpen(!nav.classList.contains('open'));});
+    nav.addEventListener('click',function(e){if(e.target.closest('a')&&narrow())setOpen(false);});
+    document.addEventListener('click',function(e){if(nav.classList.contains('open')&&!nav.contains(e.target))setOpen(false);});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&nav.classList.contains('open')){setOpen(false);btn.focus();}});
+    var tick=0;
+    function spy(){
+      tick=0;nav.style.setProperty('--st-top',narrow()?'':Math.max(72,112-scrollY)+'px');var line=innerHeight*.3,main=null,sub=null;
+      items.forEach(function(it){var r=it.t.getBoundingClientRect();
+        if(it.sub){if(r.top<=line&&r.bottom>line)sub=it;}else if(r.top<=line)main=it;});
+      if(!main)main=items[0];
+      if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)main=items[items.length-1],sub=null;
+      items.forEach(function(it){var on=it===main||it===sub;it.a.classList.toggle('on',on);if(on)it.a.setAttribute('aria-current','true');else it.a.removeAttribute('aria-current');});
+      var a=(sub||main).a,nt=nav.getBoundingClientRect(),ar=a.getBoundingClientRect();
+      if(ar.top<nt.top+40||ar.bottom>nt.bottom-10)nav.scrollTop+=ar.top-nt.top-nav.clientHeight/2;
+    }
+    addEventListener('scroll',function(){if(!tick)tick=requestAnimationFrame(spy);},{passive:true});
+    addEventListener('resize',spy);spy();
+  })();
+  </script>
   <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>
 </body>
 </html>
