@@ -5,126 +5,795 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>NotebookLM 入門</title>
   <script src="assets/site.js"></script><link rel="stylesheet" href="assets/style.css">
+  <style>
+  /* 本頁專用：筆記本速查表（⑦）＋手繪圖（⑧）。全部限定在 body.nt-page，不影響其他課程。 */
+  .nt-page{--n-desk:#E7E1D5;--n-paper:#FFFDF7;--n-rule:#DDE7F1;--n-margin:#EFA3A3;--n-ink:#2B2B33;--n-muted:#6B6B78;--n-teal:#17807C;--n-red:#D2423F;--n-hl:rgba(255,112,166,.32);
+    --n-sticky:#FFE679;--n-sticky-ink:#3A3320;--n-on:#fff;--n-shadow:rgba(60,48,30,.22);
+    --n-blue:#3F7FD0;--n-blue-bg:#EAF2FC;--n-green:#2F9459;--n-green-bg:#E8F6EC;--n-orange:#DB7A1F;--n-orange-bg:#FFF1E2;--n-purple:#7454C2;--n-purple-bg:#F2EDFC;
+    --n-code-line:#8FB4E3;--n-code-bg:#F5F9FF;--n-tline:#C9D3DE;
+    --n-sk-bg:#FFFFFF;--n-sk-ink:#1F2328;--n-sk-mut:#646B75;--n-sk-box:#FFFFFF;--n-sk-off:#F1F2F4;--n-sk-zone:#7D848E;--n-sk-q:#EAF1FC;
+    --n-wave:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='10'%3E%3Cpath d='M0 6 Q7.5 0 15 6 T30 6' fill='none' stroke='%2317807C' stroke-width='2.6'/%3E%3C/svg%3E");
+    --n-ring:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='58'%3E%3Crect x='6' y='20' width='62' height='18' rx='9' fill='none' stroke='%238D9099' stroke-width='4'/%3E%3Ccircle cx='57' cy='29' r='4' fill='%234C4741'/%3E%3C/svg%3E");
+    --n-sheet:linear-gradient(90deg,transparent 112px,var(--n-margin) 112px 114px,transparent 114px),repeating-linear-gradient(180deg,transparent 0 43px,var(--n-rule) 43px 44px),var(--n-paper);
+    background:var(--n-desk);color:var(--n-ink)}
+  [data-theme="dark"] .nt-page{--n-desk:#0E1013;--n-paper:var(--nb-sf);--n-rule:rgba(255,255,255,.07);--n-margin:rgba(239,140,140,.38);--n-ink:var(--nb-ink);--n-muted:var(--nb-mut);--n-teal:#5CC4BE;--n-red:#FF8682;--n-hl:rgba(255,112,166,.28);
+    --n-sticky:#5A5228;--n-sticky-ink:#F4EDC6;--n-on:#15171B;--n-shadow:rgba(0,0,0,.5);
+    --n-blue:#86B4EE;--n-blue-bg:#1B2533;--n-green:#74CC95;--n-green-bg:#16271E;--n-orange:#F0A55E;--n-orange-bg:#2D2216;--n-purple:#B09AF2;--n-purple-bg:#231F35;
+    --n-code-line:#4E6E99;--n-code-bg:#18202B;--n-tline:#3A414B;
+    --n-sk-bg:#1A1D22;--n-sk-ink:#E4E7EB;--n-sk-mut:#A3ABB5;--n-sk-box:#22262D;--n-sk-off:#2E333B;--n-sk-zone:#8A929C;--n-sk-q:#1D2A40;
+    --n-wave:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='10'%3E%3Cpath d='M0 6 Q7.5 0 15 6 T30 6' fill='none' stroke='%235CC4BE' stroke-width='2.6'/%3E%3C/svg%3E");
+    --n-ring:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='58'%3E%3Crect x='6' y='20' width='62' height='18' rx='9' fill='none' stroke='%236B707A' stroke-width='4'/%3E%3Ccircle cx='57' cy='29' r='4' fill='%23000'/%3E%3C/svg%3E")}
+  .nt-page .hand{font-family:"Ink Free","Segoe Print","Microsoft JhengHei",cursive}
+  .nt-page .kai{font-family:"DFKai-SB","標楷體","BiauKai","Kaiti TC",serif;font-weight:700}
+  .nt-page>header,.nt-page .lx-meta,.nt-page main{position:relative;box-sizing:border-box;max-width:1088px;margin-left:auto;margin-right:auto;background:var(--n-sheet)}
+  .nt-page>header::before,.nt-page .lx-meta::before,.nt-page main::before{content:"";position:absolute;left:-32px;top:0;bottom:0;width:80px;background:var(--n-ring) 0 0/80px 58px;background-repeat:no-repeat round;pointer-events:none}
+  .nt-page>header{margin-top:112px;padding:46px 300px 26px 150px;color:var(--n-ink);border-radius:16px 16px 0 0;border-bottom:0}
+  .nt-page>header p,.nt-page>header div{color:inherit;font-size:1.05rem;max-width:none}
+  .nt-page>header .kick{margin:0 0 4px;color:var(--n-muted);font-size:.95rem}
+  .nt-page>header h1{display:inline-block;margin:0 0 10px;font-size:clamp(2.2rem,5vw,3.4rem);color:var(--n-teal);letter-spacing:.06em;line-height:1.3;padding-bottom:12px;background:var(--n-wave) left bottom/30px 10px repeat-x}
+  .nt-page>header .sub{margin:4px 0 16px;color:var(--n-muted)}
+  .nt-page .lx-meta{margin-top:0;padding:4px 52px 20px 150px}
+  .nt-page main{padding:18px 52px 56px 150px;border-radius:0 0 16px 16px;box-shadow:0 26px 30px -20px var(--n-shadow);margin-bottom:28px}
+  .nt-page .sticky{position:absolute;right:40px;top:40px;width:210px;box-sizing:border-box;padding:24px 18px 16px;background:var(--n-sticky);color:var(--n-sticky-ink);text-align:center;transform:rotate(2.5deg);box-shadow:0 10px 18px var(--n-shadow)}
+  .nt-page .sticky::before{content:"";position:absolute;top:-12px;left:50%;width:92px;height:24px;margin-left:-46px;background:rgba(255,255,255,.55);transform:rotate(-3deg)}
+  .nt-page .sticky b{display:block;font-size:1.05rem}
+  .nt-page .sticky .big{display:block;font-size:4.4rem;line-height:1.05;color:var(--n-red);font-weight:900}
+  .nt-page .sticky .big small{font-size:1.4rem;margin-left:4px;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif}
+  .nt-page .sticky span:last-child{display:block;font-size:.95rem}
+  .nt-page .sum{position:relative;border:2.5px dashed var(--n-purple);border-radius:16px;background:color-mix(in srgb,var(--n-purple-bg) 70%,transparent);padding:12px 18px;margin:12px 0 18px;line-height:1.8}
+  .nt-page .sum .tag{display:inline-block;background:var(--n-purple);color:var(--n-on);font-weight:700;font-size:.9rem;border-radius:8px;padding:1px 10px;margin-right:10px;vertical-align:1px}
+  .nt-page .mk{background:linear-gradient(transparent 58%,var(--n-hl) 58%);padding:0 2px}
+  .nt-page .dlrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:6px 0 4px}
+  .nt-page a.dl{display:inline-flex;align-items:center;gap:10px;background:var(--n-teal);color:var(--n-on);font-weight:700;font-size:1.08rem;text-decoration:none;padding:12px 24px;border-radius:14px 18px 12px 20px;box-shadow:3px 4px 0 var(--n-ink)}
+  .nt-page a.dl:hover{transform:translate(1px,1px);box-shadow:2px 3px 0 var(--n-ink)}
+  .nt-page a.dl svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .nt-page .dlrow small{color:var(--n-muted);font-size:.92rem}
+  /* 目錄 */
+  .nt-page nav.toc{display:block;margin:6px 0 26px}
+  .nt-page .toc .toc-t{margin:0 0 6px;font-size:1.3rem;color:var(--n-teal)}
+  .nt-page .toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 36px;grid-auto-flow:column;grid-template-rows:repeat(4,auto)}
+  .nt-page .toc a{display:flex;align-items:baseline;gap:8px;border:0;border-radius:0;padding:5px 0;color:var(--n-ink);text-decoration:none;font-size:1rem}
+  .nt-page .toc a b{flex:none;color:var(--n-teal);font-weight:700;min-width:4.2em}
+  .nt-page .toc a i{flex:1;border-bottom:2px dotted var(--n-tline);transform:translateY(-4px);min-width:16px}
+  .nt-page .toc a em{flex:none;font-style:normal;color:var(--n-red);font-weight:700}
+  .nt-page .toc a:hover{color:var(--n-teal)}
+  /* 段落 */
+  .nt-page .seg{margin:0 0 20px;padding:24px 0 8px;border-top:2px dashed var(--n-tline)}
+  .nt-page .seg>h2{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:0 0 6px;font-size:1.75rem;color:var(--n-teal);font-weight:700;line-height:1.35}
+  .nt-page .seg>h2 .tt{padding-bottom:10px;background:var(--n-wave) left bottom/30px 10px repeat-x}
+  .nt-page .seg>h2 .sn{font-size:2.2rem;color:var(--n-red);font-weight:900;line-height:1}
+  .nt-page .seg>h2 .tm{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;font-size:.95rem;font-weight:700;color:var(--n-red);border:2px solid var(--n-red);border-radius:999px;padding:0 12px;white-space:nowrap}
+  .nt-page .ph{display:flex;align-items:center;gap:10px;margin:22px 0 8px;font-size:1.15rem;color:var(--n-ink);font-weight:700}
+  .nt-page .ph i{font-style:normal;display:inline-grid;place-items:center;min-width:2.6em;height:1.8em;border:2px solid var(--n-teal);color:var(--n-teal);border-radius:999px;font-size:.9rem}
+  .nt-page p,.nt-page li{line-height:1.8}
+  /* 色卡：藍＝事實／介面，綠＝做對時你會看到，橘＝卡住怎麼辦，紫＝規則／提醒 */
+  .nt-page .nc{--c:var(--n-blue);--bg:var(--n-blue-bg);position:relative;border:2.5px solid var(--c);background:var(--bg);border-radius:16px;padding:24px 20px 12px;margin:30px 0 18px}
+  .nt-page .nc.green{--c:var(--n-green);--bg:var(--n-green-bg)}.nt-page .nc.orange{--c:var(--n-orange);--bg:var(--n-orange-bg)}.nt-page .nc.purple{--c:var(--n-purple);--bg:var(--n-purple-bg)}
+  .nt-page .nc>h3:first-child,.nt-page .nc>h4:first-child{position:absolute;top:-17px;left:16px;margin:0;background:var(--c);color:var(--n-on);font-size:1rem;font-weight:700;padding:3px 14px;border-radius:10px;line-height:1.6}
+  .nt-page .nc>p:first-of-type{margin-top:0}.nt-page .nc>:last-child{margin-bottom:4px}
+  .nt-page .nc ul:not(.checks){padding-left:1.3em;margin:4px 0}
+  /* 步驟、檢核 */
+  .nt-page ol.steps{list-style:none;padding:0;margin:10px 0 16px;counter-reset:st}
+  .nt-page ol.steps>li{position:relative;counter-increment:st;padding:3px 0 14px 50px}
+  .nt-page ol.steps>li::before{content:counter(st);position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;background:var(--n-teal);color:var(--n-on);display:grid;place-items:center;font:900 1.2rem "Ink Free","Microsoft JhengHei",sans-serif}
+  .nt-page ol.steps>li:not(:last-child)::after{content:"";position:absolute;left:16px;top:38px;bottom:2px;border-left:2px dashed var(--n-tline)}
+  .nt-page .see{display:block;margin-top:4px;padding:4px 12px;border-radius:8px;background:var(--n-green-bg);color:var(--n-ink);font-size:.95rem}
+  .nt-page .see b{color:var(--n-green);margin-right:6px}
+  .nt-page ul.checks{list-style:none;padding:0;margin:6px 0 10px}
+  .nt-page ul.checks>li{position:relative;padding:3px 0 3px 32px}
+  .nt-page ul.checks>li::before{content:"";position:absolute;left:2px;top:.5em;width:15px;height:15px;border:2px solid var(--n-green);border-radius:4px}
+  .nt-page ul.checks.ok>li::before{content:"✓";border:0;top:.1em;color:var(--n-green);font-weight:900;font-size:1.15rem}
+  .nt-page ul.checks.warn>li::before{content:"!";border:0;top:.35em;width:20px;height:20px;border-radius:50%;background:var(--n-orange);color:var(--n-on);display:grid;place-items:center;font-weight:900;font-size:.8rem}
+  .nt-page .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 26px}
+  .nt-page .two h4{margin:4px 0 0;font-size:1rem}
+  /* 流程 */
+  .nt-page .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:12px 0 14px;padding:0}
+  .nt-page .flow .st{--fc:var(--n-purple);flex:1 1 130px;border:2px solid var(--fc);background:var(--n-paper);border-radius:12px;padding:8px 12px;text-align:center;line-height:1.5}
+  .nt-page .flow .st:nth-of-type(2){--fc:var(--n-blue)}.nt-page .flow .st:nth-of-type(3){--fc:var(--n-green)}.nt-page .flow .st:nth-of-type(4){--fc:var(--n-orange)}
+  .nt-page .flow .st b{display:block;color:var(--fc);font-size:1.05rem}
+  .nt-page .flow .st small{color:var(--n-muted);font-size:.9rem}
+  .nt-page .flow .ar{align-self:center;color:var(--n-muted);font-weight:700}
+  /* 提示詞：⑦ 虛線程式框 */
+  .nt-page .prompt{border:2px dashed var(--n-code-line);background:var(--n-code-bg);border-radius:12px;margin:10px 0 16px}
+  .nt-page .prompt-h{background:transparent;border-bottom:1.5px dashed var(--n-code-line);padding:6px 14px}
+  .nt-page .prompt-h b{color:var(--n-blue)}.nt-page .prompt-h small{color:var(--n-muted)}
+  .nt-page .prompt-h button{background:var(--n-blue);color:var(--n-on)}
+  .nt-page .prompt pre{background:transparent;color:var(--n-ink);font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;font-size:1rem;line-height:1.75;padding:10px 16px;margin:0}
+  /* 練習框 */
+  .nt-page .ex{position:relative;margin:40px 0 22px;padding:30px 22px 14px;background:var(--n-paper)}
+  .nt-page .ex::before{content:"";position:absolute;inset:0;border:2.6px solid var(--n-ink);border-radius:16px 22px 14px 24px/22px 14px 24px 16px;pointer-events:none}
+  .nt-page .ex>h3:first-child{position:absolute;top:-24px;left:18px;margin:0;background:var(--n-paper);padding:0 12px;display:flex;align-items:baseline;gap:10px;font-size:1.15rem;color:var(--n-ink)}
+  .nt-page .ex>h3 .no{color:var(--n-red);font-size:1.05rem}.nt-page .ex>h3 .no b{font-size:2rem;margin-left:4px}
+  .nt-page .ex .nc{margin-top:28px}
+  /* 參考答案 */
+  .nt-page details.ref{border:2px dashed var(--n-teal);border-radius:12px;background:transparent;margin:10px 0 8px}
+  .nt-page details.ref>summary{color:var(--n-teal)}
+  .nt-page details.ref[open]>summary{border-bottom:2px dashed var(--n-teal)}
+  .nt-page .ref .ref-b p,.nt-page .ref .ref-b li{margin:2px 0}
+  /* 表格 */
+  .nt-page .tbl{width:100%;border-collapse:collapse;background:var(--n-paper);font-size:.98rem}
+  .nt-page .tbl th,.nt-page .tbl td{border:1.5px solid var(--n-tline);padding:7px 12px;text-align:left;vertical-align:top;line-height:1.65}
+  .nt-page .tbl th{background:var(--n-blue-bg);color:var(--n-ink);white-space:nowrap}
+  .nt-page .tbl.help th{background:var(--n-orange-bg)}
+  .nt-page .x .tbl.help,.nt-page .x .tbl.wide{min-width:640px}
+  .nt-page .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;vertical-align:0}
+  .nt-page .dot.g{background:#2F9459}.nt-page .dot.y{background:#E2B007}.nt-page .dot.r{background:#D2423F}
+  .nt-page .note{color:var(--n-muted);font-size:.92rem}
+  .nt-page .duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:10px 0 16px}
+  .nt-page .duo>div{border:2px solid var(--n-tline);border-radius:14px;padding:12px 16px;background:var(--n-paper)}
+  .nt-page .duo>div.good{border-color:var(--n-teal)}
+  .nt-page .duo h4{margin:0 0 6px;font-size:1rem}.nt-page .duo .good h4{color:var(--n-teal)}
+  .nt-page .duo p{margin:4px 0}
+  .nt-page .cite{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:50%;background:var(--n-blue);color:var(--n-on);font-size:.75rem;font-weight:700;vertical-align:.15em;margin-left:2px}
+  .nt-page .case{background:var(--n-paper)}
+  .nt-page .mock{margin-top:12px}
+  .nt-page .mock figcaption b{color:var(--n-red)}
+  /* ⑧ 手繪圖 */
+  .nt-page .sk{margin:14px 0 18px;padding:12px 12px 6px;background:var(--n-sk-bg);border-radius:14px;border:1.5px solid var(--n-tline)}
+  .nt-page .sk-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .nt-page .sk-canvas{position:relative;min-width:720px}
+  .nt-page .sk-canvas>svg{display:block;width:100%;height:auto}
+  .nt-page .sk-canvas>svg.wires{position:absolute;left:0;top:0;height:100%;pointer-events:none;overflow:visible}
+  .nt-page svg.wires path{fill:none;stroke-linecap:round;filter:url(#nt-rough-l)}
+  .nt-page .sk text{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;fill:var(--n-sk-ink)}
+  .nt-page .sk .tb{font-size:23px;font-weight:700}.nt-page .sk .ts{font-size:17px;fill:var(--n-sk-mut)}.nt-page .sk .tm{font-size:18px;paint-order:stroke;stroke:var(--n-sk-bg);stroke-width:6px;stroke-linejoin:round}
+  .nt-page .sk .th{font-family:"Ink Free","Microsoft JhengHei",sans-serif;font-weight:700}
+  .nt-page .sk .fr{fill:var(--n-sk-box);stroke:var(--n-sk-ink);stroke-width:2.6;filter:url(#nt-rough)}
+  .nt-page .sk .fr.off{fill:var(--n-sk-off);stroke:#8C939C}
+  .nt-page .sk .zn{fill:none;stroke:var(--n-sk-zone);stroke-width:2.4;stroke-dasharray:9 7;filter:url(#nt-rough)}
+  .nt-page .sk .lb{fill:var(--n-sk-bg)}
+  .nt-page .sk .ln{fill:none;stroke:var(--n-sk-ink);stroke-width:2.2}
+  .nt-page .sk .ic{fill:none;stroke:var(--n-sk-ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .nt-page .sk .q{fill:var(--n-sk-q);stroke:#2F6FDB;stroke-width:1.5}
+  .nt-page .sk .soft{fill:var(--n-sk-off);stroke:none}
+  .nt-page .sk .dash{fill:none;stroke:var(--n-sk-mut);stroke-width:1.8;stroke-dasharray:6 5}
+  .nt-page .sk .red{fill:#D63B3B}.nt-page .sk .blue{fill:#2F6FDB}.nt-page .sk .green{fill:#2E9A55}.nt-page .sk .orange{fill:#DD7716}.nt-page .sk .mut{fill:var(--n-sk-mut)}.nt-page .sk .w{fill:#fff}
+  [data-theme="dark"] .nt-page .sk .red{fill:#FF7B78}[data-theme="dark"] .nt-page .sk .blue{fill:#7FAEF2}[data-theme="dark"] .nt-page .sk .green{fill:#6CCB8F}[data-theme="dark"] .nt-page .sk .orange{fill:#F2A65E}
+  .nt-page .legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 20px;margin:0 0 10px;padding:8px 14px;border:2px solid var(--n-tline);border-radius:12px;font-size:.92rem;color:var(--n-sk-ink)}
+  .nt-page .legend b{font-family:"Ink Free","Microsoft JhengHei",sans-serif;margin-right:4px}
+  .nt-page .legend span{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+  .nt-page .legend svg{width:44px;height:16px;flex:none;overflow:visible}
+  .nt-page .sk figcaption{font-size:.95rem;color:var(--n-sk-ink);padding:6px 4px 4px}
+.nt-page .sk figcaption .note{display:inline-block;margin-top:10px}
+  .nt-page .sk .hint{display:none;font-size:.85rem;color:var(--n-sk-mut);margin:0 0 6px}
+  .nt-page .nums{list-style:none;padding:0;margin:4px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 24px}
+  .nt-page .nums li{position:relative;padding-left:34px}
+  .nt-page .nums li i{position:absolute;left:0;top:.25em;width:24px;height:24px;border-radius:50%;color:#fff;font:900 .9rem "Ink Free","Microsoft JhengHei",sans-serif;font-style:normal;display:grid;place-items:center}
+  .nt-page .nums li.full{grid-column:1/-1}
+  .nt-page .nums i.b{background:#2F6FDB}.nt-page .nums i.g{background:#2E9A55}.nt-page .nums i.o{background:#DD7716}.nt-page .nums i.r{background:#D63B3B}.nt-page .nums i.k{background:var(--n-sk-ink);color:var(--n-sk-bg)}
+  .nt-page .recap{border:0;background:transparent}
+  .nt-page .recap h2::before{display:none}
+  @media(max-width:860px){.nt-page>header{padding-right:52px}.nt-page .sticky{position:static;transform:none;width:auto;margin:16px 0 4px;display:flex;align-items:center;justify-content:center;gap:4px 16px;flex-wrap:wrap;padding:12px 16px}.nt-page .sticky::before{display:none}.nt-page .sticky .big{font-size:2.6rem}}
+  @media(max-width:760px){
+    .nt-page{--n-sheet:linear-gradient(90deg,transparent 10px,var(--n-margin) 10px 12px,transparent 12px),repeating-linear-gradient(180deg,transparent 0 43px,var(--n-rule) 43px 44px),var(--n-paper)}
+    .nt-page>header::before,.nt-page .lx-meta::before,.nt-page main::before{display:none}
+    .nt-page>header,.nt-page .lx-meta,.nt-page main{margin-left:8px;margin-right:8px}
+    .nt-page>header{margin-top:80px;padding:28px 16px 18px 26px}
+    .nt-page .lx-meta{padding:2px 12px 14px 22px}
+    .nt-page main{padding:14px 14px 40px 24px}
+    .nt-page .toc ol,.nt-page .two,.nt-page .duo,.nt-page .nums{grid-template-columns:1fr}.nt-page .toc ol{grid-auto-flow:row;grid-template-rows:none}
+    .nt-page .seg>h2{font-size:1.45rem}
+    .nt-page .ex{padding:30px 14px 12px}.nt-page .nc{padding:24px 14px 10px}
+    .nt-page ol.steps>li{padding-left:44px}
+    .nt-page .sk .hint{display:block}
+  }
+  </style>
 </head>
-<body>
+<body class="nt-page">
   <header>
-    <h1>NotebookLM 入門</h1>
-    <p>學會 NotebookLM 的基礎操作。它是 Google 的 AI 筆記工具：上傳資料，自動產生摘要、重要主題、FAQ 與簡報文件，回答附引用。</p>
-    <div class="stats"><span>Google 帳號登入</span><span>3 個視窗</span><span>回答可回查來源</span></div>
+    <p class="kick">第 1 級 · 入門 · 課前自學</p>
+    <h1 class="kai">NotebookLM 入門</h1>
+    <p class="sub">手把手 6 段，跟著做完，你會有自己的第一本筆記本。</p>
+    <p class="sum"><span class="tag">一句話</span>把客戶資料放進 NotebookLM 問問題，<span class="mk">每個答案都能點回原文查證</span>。</p>
+    <div class="dlrow"><a class="dl" href="downloads/notebooklm-basics-practice.zip" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 19h14"/></svg>下載練習包（zip）</a><small>內含拜訪紀錄、方案型錄、練習題卡，全是虛構資料。</small></div>
+    <aside class="sticky" aria-label="本課長度"><b class="hand">本課長度</b><span class="big hand">60<small>分</small></span><span>6 段 · 5 個練習</span></aside>
   </header>
   <main>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="nt-rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/></filter>
+        <filter id="nt-rough-l" filterUnits="userSpaceOnUse" x="-50" y="-50" width="1100" height="620"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+        <marker id="nt-m-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2F6FDB"/></marker>
+        <marker id="nt-m-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2E9A55"/></marker>
+        <marker id="nt-m-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#DD7716"/></marker>
+        <symbol id="nt-d-doc" viewBox="0 0 48 48"><path d="M12 6h17l9 9v27H12z"/><path d="M29 6v9h9M17 24h15M17 31h15"/></symbol>
+        <symbol id="nt-d-list" viewBox="0 0 48 48"><rect x="9" y="8" width="30" height="32" rx="3"/><path d="M15 17h18M15 24h18M15 31h12"/></symbol>
+        <symbol id="nt-d-lock" viewBox="0 0 48 48"><rect x="11" y="21" width="26" height="19" rx="3"/><path d="M16 21v-6a8 8 0 0 1 16 0v6M24 28v5"/></symbol>
+        <symbol id="nt-d-flag" viewBox="0 0 48 48"><path d="M12 42V7M12 9h22l-5 7 5 7H12"/></symbol>
+        <symbol id="nt-d-check" viewBox="0 0 48 48"><rect x="9" y="9" width="30" height="30" rx="4"/><path d="M16 24l6 6 11-12"/></symbol>
+        <symbol id="nt-d-cite" viewBox="0 0 48 48"><path d="M8 6h18l8 8v12M8 6v34h16"/><path d="M13 18h14M13 25h10"/><circle cx="34" cy="35" r="8"/><path d="M34 31v8"/></symbol>
+        <symbol id="nt-d-chat" viewBox="0 0 48 48"><path d="M8 12h32v20H22l-8 7v-7H8z"/><path d="M14 19h20M14 25h13"/></symbol>
+      </defs>
+    </svg>
+
     <div class="case" data-step="1" data-note="本課最後的練習，就是幫小林整理台鴻精工的首次拜訪紀錄。學會基本操作後，到第 2 級把 5 個關卡做完。"></div>
-    <nav class="card"><ul class="toc">
-      <li><a href="#ui">介面：3 個視窗</a></li><li><a href="#steps">操作步驟</a></li><li><a href="#ask">提問：同一份資料，問法決定品質</a></li><li><a href="#sources">來源類型與限制</a></li><li><a href="#studio">Studio 產出怎麼用</a></li><li><a href="#practice">練習：整理台鴻精工的首次拜訪紀錄</a></li><li><a href="#tips">使用提醒</a></li><li><a href="#recap">重點回顧</a></li>
-    </ul></nav>
-    <section class="card" id="ui">
-      <h2>介面：3 個視窗</h2>
-      <figure class="mock" aria-label="NotebookLM 介面示意圖">
-        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>台鴻精工 拜訪準備</b></div>
-        <div class="mock-body">
-          <div class="mp"><h4 aria-level="3"><em>1</em>來源</h4>
-            <div class="src on">☑ 首次拜訪紀錄.txt</div>
-            <div class="src on">☑ 方案 X／Y／Z 型錄.pdf</div>
-            <div class="src">☐ 年報摘要.pdf</div>
-            <div class="add">＋ 新增來源</div></div>
-          <div class="mp"><h4 aria-level="3"><em>2</em>對話</h4>
-            <div class="q">客戶最在意的兩件事是什麼？</div>
-            <div class="a">1. 產線網路常斷線，希望有備援 <sup class="hl">1</sup><br>2. 資安監控，下週五前要初步報價 <sup>1</sup><br>可搭配方案 Y 行動備援 <sup>2</sup></div>
-            <div class="in">開始輸入…</div></div>
-          <div class="mp"><h4 aria-level="3"><em>3</em>Studio</h4>
-            <div class="tile">🎧 語音摘要</div>
-            <div class="tile">📑 簡報文件</div>
-            <div class="tile">❓ 常見問題</div>
-            <div class="tile">🗓 時間軸</div></div>
-        </div>
-        <figcaption>示意圖（非實際畫面，版面會隨官方更新）：只有<b>勾選</b>的來源會被用來回答；回答中的數字是<b>引用</b>，點開會跳到原文段落。</figcaption>
-      </figure>
-      <div class="x"><table class="tbl">
-        <tr><th>視窗</th><th>用途</th></tr>
-        <tr><td>來源</td><td>新增、勾選資料；點來源可看「來源導覽」：摘要與重要主題。</td></tr>
-        <tr><td>對話</td><td>針對已勾選來源提問，回答附引用編號，點開可對照原文。</td></tr>
-        <tr><td>Studio</td><td>一鍵產生研讀指南、簡報文件、常見問題、時間軸、語音摘要。</td></tr>
-      </table></div>
-    </section>
 
-    <section class="card" id="steps">
-      <h2>操作步驟</h2>
-      <ol class="timeline">
-        <li>登入 <a href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLM</a>，按「新增」建立筆記本。</li>
-        <li>新增來源：上傳檔案、匯入雲端硬碟、貼上連結或文字。</li>
-        <li>點來源看「來源導覽」，先掌握摘要與重要主題。<small>點重要主題，會在對話中展開該主題說明。</small></li>
-        <li>在對話提問，點引用核對原文。</li>
-        <li>在 Studio 產生所需文件，人工審閱後再使用。<small>產出的記事可「轉換為來源」，再延伸分析。</small></li>
+    <nav class="toc" aria-label="本課目錄">
+      <p class="toc-t kai">目錄</p>
+      <ol>
+        <li><a href="#s0"><b>第 0 段</b>開場：它怎麼運作<i></i><em>5 分</em></a></li>
+        <li><a href="#s1"><b>第 1 段</b>登入、建筆記本<i></i><em>8 分</em></a></li>
+        <li><a href="#s2"><b>第 2 段</b>加入來源<i></i><em>10 分</em></a></li>
+        <li><a href="#s3"><b>第 3 段</b>第一次提問<i></i><em>15 分</em></a></li>
+        <li><a href="#s4"><b>第 4 段</b>Studio 一鍵產出<i></i><em>10 分</em></a></li>
+        <li><a href="#s5"><b>第 5 段</b>資料安全、總結<i></i><em>12 分</em></a></li>
+        <li><a href="#help"><b>查表</b>卡住怎麼辦<i></i><em>隨時看</em></a></li>
+        <li><a href="#recap"><b>最後</b>重點回顧<i></i><em>1 頁</em></a></li>
       </ol>
+    </nav>
+
+    <section class="seg" id="s0">
+      <h2 class="kai"><span class="sn hand">0</span><span class="tt">開場：NotebookLM 怎麼運作</span><small class="tm">第 0 段 · 5 分</small></h2>
+      <p class="sum"><span class="tag">一句話</span>這段看完，你會知道它和一般 AI 聊天哪裡不一樣。</p>
+
+      <h3 class="ph"><i>看</i>它只讀你給的資料</h3>
+      <p>NotebookLM 是 Google 的 AI 筆記工具。</p>
+      <p>你先把資料放進去，它就<span class="mk">只根據這些資料回答</span>。</p>
+      <div class="nc blue">
+        <h3>先認識 2 個詞</h3>
+        <ul>
+          <li><b>來源</b>：你放進筆記本的資料，例如拜訪紀錄、方案型錄。</li>
+          <li><b>引用</b>：回答後面的小數字 <span class="cite">1</span>，點下去會跳到原文那一段。</li>
+        </ul>
+      </div>
+
+      <figure class="sk" aria-label="NotebookLM 怎麼運作的手繪示意圖">
+        <div class="legend">
+          <b>圖例</b>
+          <span><svg viewBox="0 0 44 16"><path d="M2 8H38" stroke="#2F6FDB" stroke-width="3" marker-end="url(#nt-m-blue)"/></svg>讀資料</span>
+          <span><svg viewBox="0 0 44 16"><path d="M2 8H38" stroke="#2E9A55" stroke-width="3" marker-end="url(#nt-m-green)"/></svg>整理</span>
+          <span><svg viewBox="0 0 44 16"><path d="M2 8H38" stroke="#DD7716" stroke-width="3" marker-end="url(#nt-m-orange)"/></svg>產出</span>
+          <span><svg viewBox="0 0 44 16"><path d="M2 8H42" stroke="#D63B3B" stroke-width="3" stroke-dasharray="7 5"/></svg>擋下，不可以放</span>
+          <span>實線框＝資料或功能</span><span>虛線框＝區域</span><span>灰底＝不能放的資料</span>
+        </div>
+        <p class="hint">手機上可以左右滑動看完整張圖。</p>
+        <div class="sk-scroll"><div class="sk-canvas">
+          <svg viewBox="0 0 1000 470" role="img" aria-label="A 你的來源經過 B NotebookLM，變成 C 產出">
+            <rect class="zn" x="15" y="40" width="280" height="410" rx="26"/>
+            <rect class="zn" x="360" y="40" width="280" height="410" rx="26"/>
+            <rect class="zn" x="705" y="40" width="280" height="410" rx="26"/>
+            <rect class="lb" x="35" y="24" width="150" height="34"/><circle class="blue" cx="54" cy="41" r="15"/><text class="w th" x="54" y="47" text-anchor="middle" font-size="18">A</text><text class="tb" x="76" y="49">你的來源</text>
+            <rect class="lb" x="380" y="24" width="178" height="34"/><circle class="green" cx="399" cy="41" r="15"/><text class="w th" x="399" y="47" text-anchor="middle" font-size="18">B</text><text class="tb" x="421" y="49" font-size="22">NotebookLM</text>
+            <rect class="lb" x="725" y="24" width="110" height="34"/><circle class="orange" cx="744" cy="41" r="15"/><text class="w th" x="744" y="47" text-anchor="middle" font-size="18">C</text><text class="tb" x="766" y="49">產出</text>
+
+            <rect class="fr" x="30" y="80" width="250" height="86" rx="12"/><use class="ic" href="#nt-d-doc" x="42" y="100" width="46" height="46"/><text class="tb" x="102" y="116">拜訪紀錄</text><text class="ts" x="102" y="146">01_首次拜訪紀錄.txt</text>
+            <rect class="fr" x="30" y="206" width="250" height="86" rx="12"/><use class="ic" href="#nt-d-list" x="42" y="226" width="46" height="46"/><text class="tb" x="102" y="242">方案型錄</text><text class="ts" x="102" y="272">02_方案型錄.pdf</text>
+            <rect class="fr off" x="30" y="340" width="250" height="86" rx="12"/><use class="ic" href="#nt-d-lock" x="42" y="360" width="46" height="46" style="stroke:#D63B3B"/><text class="tb red" x="102" y="376">客戶個資</text><text class="ts" x="102" y="406">身分證、手機、合約</text>
+
+            <rect class="fr" x="375" y="80" width="250" height="86" rx="12"/><use class="ic" href="#nt-d-check" x="387" y="100" width="46" height="46"/><text class="tb" x="447" y="116">只讀勾選的來源</text><text class="ts" x="447" y="146">沒打勾就不會用</text>
+            <rect class="fr" x="375" y="206" width="250" height="86" rx="12"/><use class="ic" href="#nt-d-cite" x="387" y="226" width="46" height="46"/><text class="tb" x="447" y="242">回答附引用</text><text class="ts" x="447" y="272">點 [1] 看原文</text>
+            <text class="ts" x="500" y="380" text-anchor="middle">客戶個資，</text><text class="ts" x="500" y="406" text-anchor="middle">一開始就不要放進來</text>
+
+            <rect class="fr" x="720" y="80" width="250" height="86" rx="12"/><use class="ic" href="#nt-d-chat" x="732" y="100" width="46" height="46"/><text class="tb" x="792" y="116">對話回答</text><text class="ts" x="792" y="146">可複製、可追問</text>
+            <rect class="fr" x="720" y="206" width="250" height="86" rx="12"/><use class="ic" href="#nt-d-doc" x="732" y="226" width="46" height="46"/><text class="tb" x="792" y="242">Studio 文件</text><text class="ts" x="792" y="272">簡報文件、語音摘要</text>
+            <rect class="fr" x="720" y="340" width="250" height="86" rx="12"/><use class="ic" href="#nt-d-flag" x="732" y="360" width="46" height="46"/><text class="tb" x="792" y="376">你再檢查</text><text class="ts" x="792" y="406">核對引用才使用</text>
+
+            <text class="tm blue" x="327" y="64" text-anchor="middle" font-size="16">讀資料</text><circle class="blue" cx="327" cy="84" r="14"/><text class="w th" x="327" y="90" text-anchor="middle" font-size="17">1</text>
+            <circle class="green" cx="472" cy="186" r="14"/><text class="w th" x="472" y="192" text-anchor="middle" font-size="17">2</text><text class="tm green" x="516" y="192">整理回答</text>
+            <circle class="orange" cx="672" cy="294" r="14"/><text class="w th" x="672" y="300" text-anchor="middle" font-size="17">3</text><text class="tm orange" x="672" y="332" text-anchor="middle">產出</text>
+            <circle class="orange" cx="812" cy="316" r="14"/><text class="w th" x="812" y="322" text-anchor="middle" font-size="17">4</text><text class="tm orange" x="862" y="322">看過再用</text>
+            <text class="tm red" x="324" y="362" text-anchor="middle" font-size="16">擋下</text>
+          </svg>
+          <svg class="wires" viewBox="0 0 1000 470" aria-hidden="true">
+            <path d="M286 112 L369 112" stroke="#2F6FDB" stroke-width="3" marker-end="url(#nt-m-blue)"/>
+            <path d="M286 249 C 328 249, 328 150, 369 150" stroke="#2F6FDB" stroke-width="3" marker-end="url(#nt-m-blue)"/>
+            <path d="M500 171 L500 200" stroke="#2E9A55" stroke-width="3" marker-end="url(#nt-m-green)"/>
+            <path d="M631 236 C 672 236, 672 123, 714 123" stroke="#DD7716" stroke-width="3" marker-end="url(#nt-m-orange)"/>
+            <path d="M631 262 L714 262" stroke="#DD7716" stroke-width="3" marker-end="url(#nt-m-orange)"/>
+            <path d="M845 297 L845 334" stroke="#DD7716" stroke-width="3" marker-end="url(#nt-m-orange)"/>
+            <path d="M286 383 L352 383" stroke="#D63B3B" stroke-width="3" stroke-dasharray="9 7"/>
+            <path d="M309 372 L327 394 M327 372 L309 394" stroke="#D63B3B" stroke-width="3.4"/>
+          </svg>
+        </div></div>
+        <figcaption>
+          <ol class="nums">
+            <li><i class="b">1</i>藍線：NotebookLM 只讀你放進來、有打勾的資料。</li>
+            <li><i class="g">2</i>綠線：整理成回答，每一句都標出引用。</li>
+            <li><i class="o">3</i>橘線：產出對話回答，或 Studio 的整份文件。</li>
+            <li><i class="o">4</i>最後一定是你看過、核對過，才拿去用。</li>
+            <li class="full"><i class="r">!</i>紅虛線：客戶個資、公司機密，從一開始就不要放進來。</li>
+          </ol>
+          <span class="note">手繪示意圖，非實際畫面。</span>
+        </figcaption>
+      </figure>
+
+      <h3 class="ph"><i>看</i>同一個問題，兩種答案</h3>
+      <div class="duo">
+        <div><h4>一般 AI 聊天</h4><p>問：「台鴻精工的合約什麼時候到期？」</p><p>答：它不知道，或憑感覺猜一個日期。</p></div>
+        <div class="good"><h4>NotebookLM（已放入拜訪紀錄）</h4><p>問：同一句話。</p><p>答：「現行合約 12 月到期 <span class="cite">1</span>」，點 1 就看到原文。</p></div>
+      </div>
+      <div class="nc blue">
+        <h3>能做與不能做</h3>
+        <div class="two">
+          <div><h4>能做</h4><ul class="checks ok"><li>讀你放的資料，整理重點</li><li>回答附引用，可以點回原文</li><li>一鍵做出簡報文件、語音摘要</li></ul></div>
+          <div><h4>不能做</h4><ul class="checks warn"><li>不會拿網路上的資料來回答你</li><li>不保證一定對，要你點引用檢查</li><li>不能放客戶個資和公司機密</li></ul></div>
+        </div>
+      </div>
+
+      <h3 class="ph"><i>做</i>課前準備（約 2 分鐘）</h3>
+      <ol class="steps">
+        <li>用電腦打開 Chrome 或 Edge 瀏覽器。<span class="see"><b>按完你會看到</b>一個新的瀏覽器視窗。</span></li>
+        <li>準備一個可登入的 Google 帳號。請用公司允許的帳號。<span class="see"><b>做完你會有</b>帳號和密碼，等一下第 1 段要用。</span></li>
+        <li>按下面的「下載練習包」，存到桌面。<span class="see"><b>按完你會看到</b>桌面多一個 zip 壓縮檔。</span></li>
+        <li>在 zip 上按右鍵，選「解壓縮全部」。<span class="see"><b>按完你會看到</b>資料夾裡有 3 個檔：01_首次拜訪紀錄.txt、02_方案型錄.pdf、03_練習題卡.pdf。</span></li>
+        <li>把 03_練習題卡.pdf 印出來，或開在螢幕旁邊。<span class="see"><b>做完你會有</b>5 個練習的清單，做完一題勾一題。</span></li>
+      </ol>
+      <div class="dlrow"><a class="dl" href="downloads/notebooklm-basics-practice.zip" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 19h14"/></svg>下載練習包（zip）</a><small>公司電腦擋下載時，請找講師拿檔案。</small></div>
+
+      <h3 class="ph"><i>檢查</i>小測驗</h3>
+      <ul class="checks">
+        <li>說得出「來源」和「引用」是什麼。</li>
+        <li>3 個練習檔已經解壓縮在電腦上。</li>
+      </ul>
+      <details class="ref"><summary>NotebookLM 會用網路上的所有資料回答嗎？（點開看答案）</summary>
+        <div class="ref-b"><p>不會。它只用你加入、而且有打勾的來源。</p><p>所以來源放什麼，答案就跟著什麼走。</p></div>
+      </details>
     </section>
 
-    <section class="card" id="ask">
-      <h2>提問：同一份資料，問法決定品質</h2>
+    <section class="seg" id="s1">
+      <h2 class="kai"><span class="sn hand">1</span><span class="tt">登入、建立第一本筆記本</span><small class="tm">第 1 段 · 8 分</small></h2>
+      <p class="sum"><span class="tag">一句話</span>這段做完，你會有一本叫「台鴻精工 拜訪準備」的筆記本。</p>
+
+      <h3 class="ph"><i>看</i>筆記本裡有 3 個視窗</h3>
+      <p>打開一本筆記本，畫面分成左、中、右 3 塊。</p>
+      <figure class="sk" aria-label="NotebookLM 三個視窗的手繪示意圖">
+        <div class="legend">
+          <b>圖例</b>
+          <span><svg viewBox="0 0 44 16"><path d="M2 8H38" stroke="#2F6FDB" stroke-width="3" marker-end="url(#nt-m-blue)"/></svg>打勾的來源被讀進去</span>
+          <span><svg viewBox="0 0 44 16"><circle cx="10" cy="8" r="7" fill="#2F6FDB"/><text class="w" x="10" y="12" font-size="10" text-anchor="middle">1</text></svg>引用編號</span>
+          <span><svg viewBox="0 0 44 16"><circle cx="10" cy="8" r="7" fill="#D63B3B"/><text class="w" x="10" y="12" font-size="10" text-anchor="middle">i</text></svg>讀取失敗</span>
+          <span>虛線框＝可以按的地方</span>
+        </div>
+        <p class="hint">手機上可以左右滑動看完整張圖。</p>
+        <div class="sk-scroll"><div class="sk-canvas">
+          <svg viewBox="0 0 1000 500" role="img" aria-label="左邊來源、中間對話、右邊 Studio">
+            <rect class="fr" x="10" y="10" width="980" height="480" rx="18"/>
+            <path class="ln" d="M12 64 H988"/>
+            <text class="tb th" x="34" y="46">NotebookLM</text><text class="tm" x="200" y="45">台鴻精工 拜訪準備</text><text class="ts" x="966" y="45" text-anchor="end">示意圖</text>
+
+            <rect class="fr" x="30" y="84" width="260" height="340" rx="14"/>
+            <circle class="mut" cx="56" cy="112" r="14"/><text class="w th" x="56" y="118" text-anchor="middle" font-size="17">1</text><text class="tb" x="80" y="120">來源</text>
+            <rect class="dash" x="46" y="136" width="228" height="40" rx="8"/><text class="tm" x="160" y="162" text-anchor="middle">＋ 新增來源</text>
+            <rect class="q" x="40" y="190" width="240" height="34" rx="8"/><rect class="ln" x="50" y="198" width="18" height="18" rx="3"/><path class="ln" d="M54 207l4 4 7-8"/><text class="tm" x="78" y="214">01_首次拜訪紀錄</text>
+            <rect class="q" x="40" y="230" width="240" height="34" rx="8"/><rect class="ln" x="50" y="238" width="18" height="18" rx="3"/><path class="ln" d="M54 247l4 4 7-8"/><text class="tm" x="78" y="254">02_方案型錄</text>
+            <rect class="ln" x="50" y="278" width="18" height="18" rx="3"/><text class="tm mut" x="78" y="294">舊報價單（沒打勾）</text>
+            <circle class="red" cx="59" cy="328" r="10"/><text class="w" x="59" y="334" text-anchor="middle" font-size="15" font-weight="700">i</text><text class="tm red" x="78" y="334">掃描檔.pdf（失敗）</text>
+            <text class="ts" x="160" y="400" text-anchor="middle">打勾的才會被讀</text>
+
+            <rect class="fr" x="340" y="84" width="340" height="340" rx="14"/>
+            <circle class="mut" cx="366" cy="112" r="14"/><text class="w th" x="366" y="118" text-anchor="middle" font-size="17">2</text><text class="tb" x="390" y="120">對話</text>
+            <rect class="q" x="430" y="134" width="234" height="44" rx="14"/><text class="tm" x="547" y="162" text-anchor="middle">客戶最在意哪 3 件事？</text>
+            <rect class="soft" x="356" y="194" width="308" height="150" rx="12"/>
+            <text class="tm" x="372" y="228">1. 產線網路常斷線</text><circle class="blue" cx="620" cy="222" r="11"/><text class="w" x="620" y="227" text-anchor="middle" font-size="13" font-weight="700">1</text>
+            <text class="tm" x="372" y="266">2. 想要資安監控</text><circle class="blue" cx="620" cy="260" r="11"/><text class="w" x="620" y="265" text-anchor="middle" font-size="13" font-weight="700">1</text>
+            <text class="tm" x="372" y="304">3. 月預算 8 萬內</text><circle class="blue" cx="620" cy="298" r="11"/><text class="w" x="620" y="303" text-anchor="middle" font-size="13" font-weight="700">1</text>
+            <rect class="dash" x="356" y="360" width="308" height="46" rx="23"/><text class="ts" x="378" y="389">開始輸入…</text><path class="mut" d="M628 371 L650 383 L628 395z"/>
+
+            <rect class="fr" x="730" y="84" width="240" height="340" rx="14"/>
+            <circle class="mut" cx="756" cy="112" r="14"/><text class="w th" x="756" y="118" text-anchor="middle" font-size="17">3</text><text class="tb" x="780" y="120">Studio</text>
+            <rect class="dash" x="746" y="134" width="208" height="48" rx="10"/><text class="tm" x="766" y="165">語音摘要</text>
+            <rect class="dash" x="746" y="194" width="208" height="48" rx="10"/><text class="tm" x="766" y="225">報告（簡報文件）</text>
+            <rect class="dash" x="746" y="254" width="208" height="48" rx="10"/><text class="tm" x="766" y="285">其他產出</text>
+            <text class="ts" x="850" y="350" text-anchor="middle">按鈕名稱會隨</text><text class="ts" x="850" y="374" text-anchor="middle">官方更新而改變</text>
+
+            <text class="ts blue" x="505" y="448" text-anchor="middle">Studio 也只用打勾的來源</text>
+          </svg>
+          <svg class="wires" viewBox="0 0 1000 500" aria-hidden="true">
+            <path d="M296 230 L334 230" stroke="#2F6FDB" stroke-width="3" marker-end="url(#nt-m-blue)"/>
+            <path d="M160 430 L160 460 L850 460 L850 432" stroke="#2F6FDB" stroke-width="3" marker-end="url(#nt-m-blue)"/>
+          </svg>
+        </div></div>
+        <figcaption>
+          <ol class="nums">
+            <li><i class="k">1</i>來源：放資料、打勾。點檔名可看摘要。</li>
+            <li><i class="k">2</i>對話：在下方輸入框提問，回答附引用。</li>
+            <li><i class="k">3</i>Studio：一鍵做出整份文件或語音摘要。</li>
+            <li><i class="b">→</i>藍線：只有打勾的來源，會被對話和 Studio 讀到。</li>
+          </ol>
+          <span class="note">手繪示意圖，非實際畫面。介面會隨官方更新，請以實際畫面為準。</span>
+        </figcaption>
+      </figure>
+      <div class="nc blue">
+        <h3>3 個視窗各做什麼</h3>
+        <div class="x"><table class="tbl">
+          <tr><th>視窗</th><th>用途</th></tr>
+          <tr><td>來源</td><td>新增、勾選資料。點來源可看「來源導覽」：摘要與重要主題。</td></tr>
+          <tr><td>對話</td><td>針對打勾的來源提問。回答附引用編號，點開可對照原文。</td></tr>
+          <tr><td>Studio</td><td>一鍵產生簡報文件、語音摘要等整份產出。</td></tr>
+        </table></div>
+        <p class="note">手機、平板的排法不一樣。本課用電腦操作。</p>
+      </div>
+
+      <h3 class="ph"><i>做</i>建立筆記本（約 5 分鐘）</h3>
+      <figure class="mock" aria-label="NotebookLM 首頁示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>NotebookLM 首頁</b></div>
+        <div class="mock-body c1">
+          <div class="mp"><h4 aria-level="4"><em>1</em>我的筆記本</h4>
+            <div class="btns"><span class="pri">＋ 新建</span><span>依日期排序</span></div>
+            <div class="opt"><span>（第一次登入時，這裡是空的）</span></div>
+          </div>
+        </div>
+        <figcaption>示意圖，非實際畫面。按鈕可能寫「新建」或「建立新的筆記本」，<b>通常在畫面上方或清單第一格</b>。</figcaption>
+      </figure>
+      <ol class="steps">
+        <li>在網址列輸入 <b>notebooklm.google.com</b>，按 Enter。<span class="see"><b>按完你會看到</b>NotebookLM 的介紹頁，或直接進到首頁。</span></li>
+        <li>按「登入」或「試用」，選你的 Google 帳號。第一次用，可能要先按同意。<span class="see"><b>按完你會看到</b>首頁的筆記本清單。第一次是空的。</span></li>
+        <li>按「＋ 新建」（有的版本寫「建立新的筆記本」）。<span class="see"><b>按完你會看到</b>進到新筆記本，並跳出「新增來源」的視窗。</span></li>
+        <li>先按這個視窗右上角的 ✕ 關掉。來源第 2 段再加。<span class="see"><b>按完你會看到</b>3 個視窗的空白畫面。</span></li>
+        <li>點左上角的筆記本名稱。預設是「未命名」之類的字。<span class="see"><b>按完你會看到</b>名稱變成可以打字的框。</span></li>
+        <li>刪掉原本的字，貼上練習 1 的名稱，按 Enter。<span class="see"><b>按完你會看到</b>左上角變成「台鴻精工 拜訪準備」。</span></li>
+      </ol>
+
+      <div class="ex">
+        <h3><span class="no hand">練習<b>1</b></span>建立「台鴻精工 拜訪準備」</h3>
+        <p>照上面 6 個步驟做。名稱請直接複製，避免打錯字。</p>
+        <div class="prompt"><div class="prompt-h"><b>筆記本名稱</b><small>按右邊「複製」</small></div><pre>台鴻精工 拜訪準備</pre></div>
+        <div class="nc green">
+          <h3>做對時你會看到</h3>
+          <ul class="checks ok"><li>左上角寫著「台鴻精工 拜訪準備」。</li><li>回到首頁，清單裡有這本筆記本。</li></ul>
+        </div>
+        <details class="ref"><summary>參考答案（做完再點開）</summary>
+          <div class="ref-b"><p>名稱沒變？多半是改完沒按 Enter。再點一次名稱，貼上後按 Enter。</p><p>想回首頁：點左上角的 NotebookLM 圖示。</p></div>
+        </details>
+        <p class="note">登不進去？請看 <a href="#help">卡住怎麼辦</a> 第 1 列。</p>
+      </div>
+
+      <h3 class="ph"><i>檢查</i>這段完成了嗎</h3>
+      <ul class="checks"><li>筆記本名稱是「台鴻精工 拜訪準備」。</li><li>指得出來源、對話、Studio 各在哪裡。</li></ul>
+    </section>
+
+    <section class="seg" id="s2">
+      <h2 class="kai"><span class="sn hand">2</span><span class="tt">加入來源</span><small class="tm">第 2 段 · 10 分</small></h2>
+      <p class="sum"><span class="tag">一句話</span>這段做完，筆記本裡會有拜訪紀錄和方案型錄 2 個來源。</p>
+
+      <h3 class="ph"><i>看</i>哪些資料可以當來源</h3>
+      <div class="nc blue">
+        <h3>來源類型與限制</h3>
+        <div class="x"><table class="tbl">
+          <tr><th>方式</th><th>內容</th></tr>
+          <tr><td>上傳</td><td>PDF、.txt、Markdown、音訊（如 MP3）</td></tr>
+          <tr><td>Google 雲端硬碟</td><td>文件、簡報</td></tr>
+          <tr><td>連結</td><td>網站（不含圖片、嵌入影片）、YouTube 公開影片字幕</td></tr>
+          <tr><td>貼上文字</td><td>直接貼上複製的內容</td></tr>
+        </table></div>
+        <ul>
+          <li>上限：每個來源 50 萬字或 200 MB；免費版每本最多 50 個來源。</li>
+          <li>放進來的是一份副本。原檔之後改了，這裡不會自動更新。</li>
+          <li>雲端硬碟的檔案，要自己按「同步」才會更新。</li>
+        </ul>
+      </div>
+      <figure class="mock" aria-label="新增來源視窗示意圖">
+        <div class="mock-bar" aria-hidden="true"><span></span><span></span><span></span><b>新增來源</b></div>
+        <div class="mock-body c1">
+          <div class="mp"><h4 aria-level="4"><em>2</em>新增來源</h4>
+            <div class="add">把檔案拖到這裡，或按「上傳」選檔案</div>
+            <div class="opt"><span>上傳檔案</span><span>Google 雲端硬碟</span><span>網站</span><span>YouTube</span><span>複製的文字</span></div>
+          </div>
+        </div>
+        <figcaption>示意圖，非實際畫面。選項名稱和排列會隨官方更新；「複製的文字」有時叫<b>「貼上文字」</b>。</figcaption>
+      </figure>
+
+      <h3 class="ph"><i>做</i>放入 2 個來源（約 6 分鐘）</h3>
+      <ol class="steps">
+        <li>在左邊「來源」視窗，按上方的「＋ 新增」。<span class="see"><b>按完你會看到</b>上面這個「新增來源」視窗。</span></li>
+        <li>按「上傳」，選練習包裡的 <b>02_方案型錄.pdf</b>。<span class="see"><b>按完你會看到</b>來源清單多一筆。先轉圈，跑完出現檔名。</span></li>
+        <li>再按一次「＋ 新增」，這次選「複製的文字」。<span class="see"><b>按完你會看到</b>一個可以貼字的大框。</span></li>
+        <li>複製下方練習 2 的拜訪紀錄，貼進大框，按「插入」。<span class="see"><b>按完你會看到</b>來源清單變成 2 筆。</span></li>
+        <li>點一下「拜訪紀錄」這個來源的名稱。<span class="see"><b>按完你會看到</b>「來源導覽」：一段摘要和幾個重要主題。</span></li>
+        <li>回到來源清單，確認 2 筆前面都有打勾。<span class="see"><b>按完你會看到</b>2 個勾。打勾＝這份會被拿來回答。</span></li>
+      </ol>
+      <p class="note">第 3、4 步也可以改成直接上傳 01_首次拜訪紀錄.txt，結果一樣。</p>
+
+      <div class="ex">
+        <h3><span class="no hand">練習<b>2</b></span>放入拜訪紀錄和型錄</h3>
+        <p>這份拜訪紀錄是虛構的，可以放心貼。</p>
+        <div class="prompt"><div class="prompt-h"><b>練習資料：首次拜訪紀錄</b><small>複製後貼到「複製的文字」</small></div><pre>【台鴻精工（虛構）首次拜訪紀錄】
+日期：2026/09/18
+地點：台鴻精工總部會議室
+與會：王經理（資訊）、陳副總；我方：業務小林
+
+一、客戶現況
+1. 總部加上 3 個廠區。
+2. 3 條產線的網路常斷線。
+3. 斷線時，跨廠系統和視訊會議會中斷，曾影響訂單處理。
+
+二、客戶需求
+1. 王經理希望有專線，加上斷線時的備援。
+2. 月預算約 8 萬元以內。
+3. 陳副總詢問有沒有資安監控（SOC）服務。
+4. 陳副總希望下週五前收到初步報價。
+5. 明年海外新廠要能連回總部。
+
+三、競爭狀況
+1. 現行合約 12 月到期。
+2. 競爭對手報價約低 10%。
+
+四、雙方約定
+1. 我方 9/25 前提供備援架構圖。
+2. 我方下週五前提供初步報價（含 SOC）。
+3. 客戶會提供廠區 IP 清單。
+
+※ 本紀錄為課程練習用，公司、人名、數字皆為虛構。</pre></div>
+        <div class="nc green">
+          <h3>做對時你會看到</h3>
+          <ul class="checks ok">
+            <li>來源清單有 2 筆，都有打勾。</li>
+            <li>2 筆旁邊都沒有紅色的 i 圖示。</li>
+            <li>拜訪紀錄的摘要提到斷線、資安、預算或合約。</li>
+          </ul>
+        </div>
+        <details class="ref"><summary>參考答案：來源導覽大概長這樣（做完再點開）</summary>
+          <div class="ref-b"><p>「這份紀錄是業務小林首次拜訪台鴻精工。客戶 3 條產線網路常斷線，想要專線加備援，月預算約 8 萬內，也問到資安監控。現行合約 12 月到期，對手報價低約 10%。」</p><p class="note">每次產生的文字不一樣。重點有出現就算對。</p></div>
+        </details>
+      </div>
+
+      <div class="nc orange">
+        <h3>上傳失敗：來源旁出現 i 圖示</h3>
+        <p>i 圖示＝這份資料沒讀進去。常見原因有 3 個：</p>
+        <ul><li>檔案太大，超過上限。</li><li>PDF 設了「禁止複製」。</li><li>是掃描的圖片檔，裡面沒有文字。</li></ul>
+        <p>處理：刪掉後重傳。還是不行，就打開原檔複製文字，改用「複製的文字」貼上。</p>
+      </div>
+      <div class="nc purple">
+        <h3>放資料前的規則</h3>
+        <p>練習資料是虛構的。真實的拜訪紀錄，要先拿掉客戶個資再放。第 5 段會教怎麼做。</p>
+      </div>
+
+      <h3 class="ph"><i>檢查</i>這段完成了嗎</h3>
+      <ul class="checks"><li>2 個來源都打勾，沒有 i 圖示。</li><li>看過一次「來源導覽」。</li></ul>
+    </section>
+
+    <section class="seg" id="s3">
+      <h2 class="kai"><span class="sn hand">3</span><span class="tt">第一次提問</span><small class="tm">第 3 段 · 15 分</small></h2>
+      <p class="sum"><span class="tag">一句話</span>這段做完，你會用提示詞問出能直接用的答案，並點引用查證。</p>
+
+      <h3 class="ph"><i>看</i>問法決定答案好不好用</h3>
+      <p><b>提示詞</b>：就是你打給 AI 的那段話。</p>
+      <div class="nc purple">
+        <h3>提問公式：4 個零件</h3>
+        <div class="flow">
+          <div class="st"><b>角色</b><small>你是業務助理</small></div><span class="ar">→</span>
+          <div class="st"><b>任務</b><small>整理客戶需求</small></div><span class="ar">→</span>
+          <div class="st"><b>格式</b><small>表格、只列 3 點</small></div><span class="ar">→</span>
+          <div class="st"><b>限制</b><small>沒寫就說「未提供」</small></div>
+        </div>
+        <p>不用每次 4 個都有。但「限制」最好都加，可以減少亂編。</p>
+      </div>
       <div class="vs">
         <div class="bad"><b>✘ 模糊的問法</b>幫我整理一下這份會議紀錄。<br><small>AI 只能猜你要什麼：可能寫成長篇摘要、漏掉待辦，也不知道要給誰看。</small></div>
         <div class="good"><b>✔ 具體的問法</b>你是業務助理。請依來源整理：① 三行摘要 ② 待辦表（項目／負責人／期限）。來源沒寫的期限標示「來源未提供」。<br><small>有角色、任務、格式與限制，結果可以直接拿去用，也容易檢查。</small></div>
       </div>
-      <p>記住公式：<b>角色＋任務＋輸出格式＋限制</b>。第一次結果不滿意時，不要整段重問，而是補一個條件（例如「改成表格」、「只列 3 點」）。</p>
-    </section>
+      <p>第一次結果不滿意，不要整段重問。補一個條件就好，例如「改成表格」「只列 3 點」。</p>
 
-    <section class="card" id="sources">
-      <h2>來源類型與限制</h2>
-      <div class="x"><table class="tbl">
-        <tr><th>方式</th><th>內容</th></tr>
-        <tr><td>上傳</td><td>PDF、.txt、Markdown、音訊（如 MP3）</td></tr>
-        <tr><td>Google 雲端硬碟</td><td>文件、簡報</td></tr>
-        <tr><td>連結</td><td>網站（不含圖片、嵌入影片）、YouTube 公開影片字幕</td></tr>
-        <tr><td>貼上文字</td><td>直接貼上複製內容</td></tr>
-      </table></div>
-      <ul>
-        <li>上限：每個來源 50 萬字或 200 MB；免費版每本最多 50 個來源。</li>
-        <li>匯入的是靜態副本，原檔更新後不會自動同步；雲端檔需手動按同步。</li>
-        <li>來源旁出現 i 圖示代表匯入失敗，常見原因：超過上限、PDF 禁止複製、影片無字幕。</li>
-      </ul>
-    </section>
-
-    <section class="card" id="studio">
-      <h2>Studio 產出怎麼用</h2>
-      <div class="x"><table class="tbl">
-        <tr><th>功能</th><th>產出</th><th>工作用途</th></tr>
-        <tr><td>研讀指南</td><td>重點回顧、簡答題、名詞解釋</td><td>新人教育、規格自學</td></tr>
-        <tr><td>簡報文件</td><td>簡介、主要主題、引用、結論</td><td>會議或文件摘要</td></tr>
-        <tr><td>常見問題</td><td>FAQ 問答</td><td>客服與內部 Q&amp;A</td></tr>
-        <tr><td>時間軸</td><td>事件序與角色列表</td><td>案件、專案進度回顧</td></tr>
-        <tr><td>語音摘要</td><td>對話式音檔，可下載</td><td>通勤時快速吸收</td></tr>
-        <tr><td>轉換為來源</td><td>把記事變成新來源</td><td>多份摘要再彙整</td></tr>
-      </table></div>
-    </section>
-
-    <section class="card" id="practice">
-      <h2>練習：整理台鴻精工的首次拜訪紀錄</h2>
-      <p>案例主線第 1 關（客戶、人物與數字皆為虛構）。以「貼上文字」新增為來源：</p>
-      <div class="prompt"><div class="prompt-h"><b>📄 範例資料</b><small>貼成來源</small></div><pre>
-【台鴻精工（虛構）首次拜訪紀錄】
-資訊主管：總部與 3 個廠區之間的網路不穩，跨廠系統與視訊會議常受影響，現場作業已收到反映。
-資訊主管：近期有其他業者提出整合多個據點的網路方案，價格較有吸引力，希望比較不同做法。
-採購代表：現有合約 12 月到期，希望評估是否與網路服務一併討論。
-資訊主管：過去曾發生網路中斷並影響訂單處理；也關心服務備援與資安防護。明年海外新廠啟用，需要評估連回既有據點的方式。
-我方業務：會整理既有網路升級與整合式方案的比較，並請相關同仁評估備援、資安及海外連線需求。</pre></div>
-      <ol>
-        <li>看來源導覽：摘要是否抓到跨廠網路、競業比較、備援與資安、海外據點？</li>
-        <li>在 Studio 產生「簡報文件」，檢查每個重點是否附引用。</li>
-        <li>在對話提問：列出待辦、負責人與期限；未提供者標示「來源未提供」，不要推測。</li>
+      <h3 class="ph"><i>做</i>提問、點引用（每題約 2 分鐘）</h3>
+      <ol class="steps">
+        <li>按練習 3-1 右上角的「複製」。<span class="see"><b>按完你會看到</b>按鈕短暫變成「已複製」。</span></li>
+        <li>點中間「對話」視窗最下面的輸入框，貼上。<span class="see"><b>按完你會看到</b>框裡出現整段提示詞。</span></li>
+        <li>按 Enter，或按輸入框右邊的送出箭頭。<span class="see"><b>按完你會看到</b>幾秒後出現回答，句子後面有小數字。</span></li>
+        <li>把滑鼠移到小數字上，或點一下。<span class="see"><b>按完你會看到</b>原文那一段，相關的句子會被標出來。</span></li>
+        <li>不滿意就補一句，例如「改成表格」。<span class="see"><b>按完你會看到</b>新的回答照你的條件改好。</span></li>
       </ol>
-      <p class="done">完成標準：重點都能點引用回查；待辦不超出來源內容。</p>
+
+      <div class="ex">
+        <h3><span class="no hand">練習<b>3</b></span>問 4 個問題，點引用核對</h3>
+        <p>依序複製 3-1 到 3-4，一題一題問。每題都點一個引用看原文。</p>
+        <div class="prompt"><div class="prompt-h"><b>3-1 客戶最在意什麼</b><small>熱身題</small></div><pre>你是業務助理。請依來源，列出台鴻精工最在意的 3 件事。每件事一句話，並標出引用。</pre></div>
+        <div class="prompt"><div class="prompt-h"><b>3-2 整理待辦表</b><small>練「來源未提供」</small></div><pre>你是業務助理。請依拜訪紀錄，整理一張待辦表。
+欄位：待辦事項／負責人／期限。
+來源沒寫的期限，請填「來源未提供」。
+請用台灣繁體中文回答。</pre></div>
+        <div class="prompt"><div class="prompt-h"><b>3-3 建議方案組合</b><small>練「只依來源」</small></div><pre>你是業務顧問。客戶月預算約 8 萬元以內，需要專線、備援和資安監控。
+請只依方案型錄，建議方案組合，並列出月費起價。
+型錄沒寫的，請說「資料未提供」。</pre></div>
+        <div class="prompt"><div class="prompt-h"><b>3-4 陷阱題</b><small>看它會不會亂編</small></div><pre>方案 X 可以提供 20G 的頻寬嗎？</pre></div>
+        <div class="nc green">
+          <h3>做對時你會看到</h3>
+          <ul class="checks ok">
+            <li>每一點後面都有引用的小數字。</li>
+            <li>3-2：廠區 IP 清單的期限是「來源未提供」。</li>
+            <li>3-3：建議 X＋Y＋Z，月費 4.3 萬起，在 8 萬內。</li>
+            <li>3-4：它說型錄最高到 10G，沒有說「可以」。</li>
+          </ul>
+        </div>
+        <details class="ref"><summary>參考答案（4 題都問完再點開）</summary>
+          <div class="ref-b">
+            <p><b>3-1</b>：① 產線網路常斷線，要專線加備援。② 想要資安監控（SOC）。③ 月預算 8 萬內，下週五前要報價。</p>
+            <p><b>3-2</b>：</p>
+            <div class="x"><table class="tbl">
+              <tr><th>待辦事項</th><th>負責人</th><th>期限</th></tr>
+              <tr><td>提供備援架構圖</td><td>業務小林</td><td>9/25 前</td></tr>
+              <tr><td>提供初步報價（含 SOC）</td><td>業務小林</td><td>下週五前</td></tr>
+              <tr><td>提供廠區 IP 清單</td><td>王經理（客戶）</td><td>來源未提供</td></tr>
+            </table></div>
+            <p><b>3-3</b>：方案 X 企業專線 2.5 萬起＋方案 Y 行動備援 6 千起＋方案 Z 資安託管 1.2 萬起＝<b>4.3 萬起</b>（未稅）。Z 要搭配 X 或 Y 才能買。</p>
+            <p><b>3-4</b>：型錄寫方案 X 頻寬 100M～10G，沒有 20G。更高頻寬要洽業務評估。</p>
+            <p class="note">如果它回答「可以」，就是錯的。點引用就能發現。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="nc orange">
+        <h3>AI 最常出錯的 3 個地方</h3>
+        <ul><li>數字、日期抄錯，例如把 9/25 寫成 9/15。</li><li>來源沒寫的事，講得很肯定。</li><li>回答後面沒有引用。</li></ul>
+        <p>對策只有一個：<span class="mk">點引用，對原文</span>。</p>
+      </div>
+
+      <h3 class="ph"><i>檢查</i>這段完成了嗎</h3>
+      <ul class="checks"><li>4 題都問完，每題至少點過一個引用。</li><li>說得出提問公式的 4 個零件。</li></ul>
     </section>
 
-    <section class="card" id="tips">
-      <h2>使用提醒</h2>
-      <ul>
-        <li>只放核准資料；勿上傳客戶資料、個資、密碼或未授權文件。</li>
-        <li>摘要只反映來源內容，不是完整觀點；重要結論須核對原文。</li>
-        <li>沒有引用或答非所問：確認來源已勾選，縮小問題再問。</li>
-        <li>內容貼到 Word 需重新排版，長篇逐字稿可能使檔案變慢。</li>
-      </ul>
-      <p><small>參考：<a href="https://www.cc.ntu.edu.tw/chinese/epaper/home/20250320_007206.html" target="_blank" rel="noopener">臺大計中電子報〈AI 筆記工具：NotebookLM 應用簡介〉</a>（2025-03）。介面與限制以官方說明為準。</small></p>
+    <section class="seg" id="s4">
+      <h2 class="kai"><span class="sn hand">4</span><span class="tt">Studio 一鍵產出</span><small class="tm">第 4 段 · 10 分</small></h2>
+      <p class="sum"><span class="tag">一句話</span>這段做完，你會做出一份給主管看的簡報文件。</p>
+
+      <h3 class="ph"><i>看</i>Studio 能做哪些東西</h3>
+      <p><b>簡報文件</b>：一份文字的重點整理，不是投影片。</p>
+      <div class="nc blue">
+        <h3>Studio 產出怎麼用</h3>
+        <div class="x"><table class="tbl">
+          <tr><th>功能</th><th>產出</th><th>工作用途</th></tr>
+          <tr><td>簡報文件</td><td>簡介、主要主題、引用、結論</td><td>會議或文件摘要</td></tr>
+          <tr><td>研讀指南</td><td>重點回顧、簡答題、名詞解釋</td><td>新人教育、規格自學</td></tr>
+          <tr><td>常見問題</td><td>FAQ 問答</td><td>客服與內部 Q&amp;A</td></tr>
+          <tr><td>時間軸</td><td>事件序與角色列表</td><td>案件、專案進度回顧</td></tr>
+          <tr><td>語音摘要</td><td>對話式音檔，可下載</td><td>通勤時快速吸收</td></tr>
+          <tr><td>轉換為來源</td><td>把記事變成新來源</td><td>多份摘要再彙整</td></tr>
+        </table></div>
+        <p class="note">Studio 常改版。有些項目會合併到「報告」裡，或改名。找不到時，看下面的橘色卡。</p>
+      </div>
+
+      <h3 class="ph"><i>做</i>產生簡報文件（約 6 分鐘）</h3>
+      <ol class="steps">
+        <li>看右邊的「Studio」視窗。<span class="see"><b>按完你會看到</b>一排產出按鈕，例如語音摘要、報告。</span></li>
+        <li>按「報告」，再選「簡報文件」。舊版可能直接有「簡報文件」。<span class="see"><b>按完你會看到</b>開始產生，要等幾十秒。</span></li>
+        <li>產生好後，點它打開。<span class="see"><b>按完你會看到</b>一份文字文件，有摘要、重點和引用。</span></li>
+        <li>（選做）按「語音摘要」。<span class="see"><b>按完你會看到</b>要等幾分鐘。好了可以播放、下載。</span></li>
+        <li>回到對話，貼上練習 4 的提示詞，指定要的格式。<span class="see"><b>按完你會看到</b>照 4 個部分整理好的內容。</span></li>
+      </ol>
+
+      <div class="ex">
+        <h3><span class="no hand">練習<b>4</b></span>做一份給主管看的簡報文件</h3>
+        <p>先用 Studio 按一次。再用下面的提示詞，在對話裡指定格式。</p>
+        <div class="prompt"><div class="prompt-h"><b>4 給主管的簡報文件</b><small>貼到對話輸入框</small></div><pre>請依來源寫一份給主管看的簡報文件，用台灣繁體中文。
+內容包含：
+1. 三行摘要
+2. 客戶需求 3 點
+3. 建議方案與月費起價
+4. 下一步待辦
+每一點都要標出引用。</pre></div>
+        <div class="nc green">
+          <h3>做對時你會看到</h3>
+          <ul class="checks ok">
+            <li>全文是繁體中文，有 4 個部分。</li>
+            <li>每一點後面都有引用。</li>
+            <li>月費起價和型錄一樣：4.3 萬起。</li>
+          </ul>
+        </div>
+        <details class="ref"><summary>參考答案：大概長這樣（做完再點開）</summary>
+          <div class="ref-b">
+            <p><b>一、三行摘要</b>：台鴻精工 3 條產線網路常斷線。想要專線、備援和資安監控。合約 12 月到期，對手報價低約 10%。</p>
+            <p><b>二、客戶需求</b>：① 產線網路穩定 ② 資安監控（SOC）③ 月預算 8 萬內。</p>
+            <p><b>三、建議方案</b>：X 企業專線＋Y 行動備援＋Z 資安託管，月費 4.3 萬起（未稅）。</p>
+            <p><b>四、下一步</b>：9/25 前給備援架構圖；下週五前給初步報價；跟客戶要廠區 IP 清單。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="nc orange">
+        <h3>找不到「簡報文件」按鈕</h3>
+        <ul><li>把瀏覽器視窗拉寬，或在 Studio 裡往下捲。</li><li>找「報告」這兩個字，簡報文件常放在裡面。</li><li>真的找不到，就用練習 4 的提示詞，在對話裡做。</li></ul>
+      </div>
+      <div class="nc purple">
+        <h3>拿去用之前，檢查 4 件事</h3>
+        <ul><li>數字對不對：價格、日期。</li><li>名字對不對：人名、公司名。</li><li>有沒有來源沒寫的內容。</li><li>語氣適不適合給主管或客戶看。</li></ul>
+      </div>
+
+      <h3 class="ph"><i>檢查</i>這段完成了嗎</h3>
+      <ul class="checks"><li>Studio 或對話裡，有一份簡報文件。</li><li>4 件事都檢查過。</li></ul>
     </section>
-    <section class="card recap" id="recap"><h2>重點回顧</h2><ul><li>NotebookLM 只依你加入的來源回答，回答附引用編號，可點開回查原文。</li><li>三個區塊：來源、對話、Studio。先看來源導覽，再開始提問。</li><li>提問要具體：角色＋任務＋輸出格式；查不到時要求標示「來源未提供」。</li><li>只放核准、已去識別化的資料；重要結論一定核對原文。</li></ul><p class="next">下一步：用 <a href="card.html">上手步驟卡</a> 複習 5 步驟，再進入第 2 級業務情境。</p></section>
+
+    <section class="seg" id="s5">
+      <h2 class="kai"><span class="sn hand">5</span><span class="tt">資料安全、總結</span><small class="tm">第 5 段 · 12 分</small></h2>
+      <p class="sum"><span class="tag">一句話</span>這段做完，你能判斷哪些資料可以放進 NotebookLM。</p>
+
+      <h3 class="ph"><i>看</i>資料紅綠燈</h3>
+      <p><b>去識別化</b>：把認得出是誰的資料換掉，例如公司名改成「A 公司」。</p>
+      <div class="nc purple">
+        <h3>資料紅綠燈（公司規定優先）</h3>
+        <div class="x"><table class="tbl">
+          <tr><th>燈號</th><th>怎麼做</th><th>例子</th></tr>
+          <tr><td><span class="dot g"></span>可以放</td><td>直接放</td><td>公開的官網、型錄；已去識別化的紀錄</td></tr>
+          <tr><td><span class="dot y"></span>先處理</td><td>去識別化後再放</td><td>寫了客戶公司名、窗口、電話的拜訪紀錄</td></tr>
+          <tr><td><span class="dot r"></span>不可以</td><td>不要放</td><td>身分證字號、合約掃描檔、內部底價、密碼、公司機密</td></tr>
+        </table></div>
+        <p>拿不準就當紅燈，先問主管。</p>
+      </div>
+
+      <h3 class="ph"><i>做</i>判斷 5 份資料（約 5 分鐘）</h3>
+      <div class="ex">
+        <h3><span class="no hand">練習<b>5</b></span>這份資料能不能放？</h3>
+        <p>每一份寫下你的判斷：○ 可以放、△ 先去識別化、× 不可以。</p>
+        <div class="x"><table class="tbl wide">
+          <tr><th>#</th><th>資料</th><th>你的判斷</th></tr>
+          <tr><td>1</td><td>公司官網上公開的方案介紹頁</td><td>○ △ ×</td></tr>
+          <tr><td>2</td><td>客戶合約掃描檔，有統一編號和簽名</td><td>○ △ ×</td></tr>
+          <tr><td>3</td><td>拜訪紀錄，寫了客戶公司名和窗口手機</td><td>○ △ ×</td></tr>
+          <tr><td>4</td><td>公司內部的底價表</td><td>○ △ ×</td></tr>
+          <tr><td>5</td><td>已把公司名改成「A 公司」、窗口改成「聯絡人甲」的紀錄</td><td>○ △ ×</td></tr>
+        </table></div>
+        <div class="nc green">
+          <h3>做對時你會看到</h3>
+          <ul class="checks ok"><li>5 題都答對，而且說得出理由。</li><li>知道第 3 題要先換掉哪些字。</li></ul>
+        </div>
+        <details class="ref"><summary>參考答案（5 題都寫完再點開）</summary>
+          <div class="ref-b">
+            <p><b>1 ○ 可以</b>：已經公開的資料。</p>
+            <p><b>2 × 不可以</b>：合約和統一編號屬於客戶機密。</p>
+            <p><b>3 △ 先去識別化</b>：公司名換成代號，手機刪掉，再放。</p>
+            <p><b>4 × 不可以</b>：底價是公司機密。</p>
+            <p><b>5 ○ 可以</b>：已經去識別化，認不出是誰。</p>
+          </div>
+        </details>
+      </div>
+      <div class="prompt"><div class="prompt-h"><b>去識別化小抄</b><small>放資料前，自己先照著改</small></div><pre>放進 NotebookLM 前，先換掉：
+1. 公司名稱 → A 公司、B 公司
+2. 人名 → 聯絡人甲、聯絡人乙
+3. 電話、手機、Email → 刪掉
+4. 統一編號、身分證字號 → 刪掉
+5. 地址 → 只留縣市
+6. 合約金額、底價 → 不要放</pre></div>
+      <div class="nc purple">
+        <h3>使用提醒</h3>
+        <ul>
+          <li>只放核准資料。客戶資料先去識別化；個資、密碼、未授權文件不要放。</li>
+          <li>摘要只反映來源內容，不是完整觀點。重要結論要核對原文。</li>
+          <li>沒有引用或答非所問：確認來源有打勾，把問題縮小再問。</li>
+          <li>內容貼到 Word 要重新排版。很長的逐字稿，可能讓筆記本變慢。</li>
+        </ul>
+        <p class="note">參考：<a href="https://www.cc.ntu.edu.tw/chinese/epaper/home/20250320_007206.html" target="_blank" rel="noopener">臺大計中電子報〈AI 筆記工具：NotebookLM 應用簡介〉</a>（2025-03）。介面與限制以官方說明為準。</p>
+      </div>
+
+      <h3 class="ph"><i>檢查</i>全課完成清單</h3>
+      <ul class="checks">
+        <li>練習 1：有一本「台鴻精工 拜訪準備」筆記本。</li>
+        <li>練習 2：2 個來源都打勾，沒有 i 圖示。</li>
+        <li>練習 3：4 題都問完，點過引用。</li>
+        <li>練習 4：有一份繁體中文的簡報文件。</li>
+        <li>練習 5：5 份資料都判斷對。</li>
+      </ul>
+      <div class="nc blue">
+        <h3>下一步去哪裡</h3>
+        <ul>
+          <li>用 <a href="card.html">上手步驟卡</a> 複習 5 個步驟，可以印出來放桌上。</li>
+          <li>到第 2 級 <a href="notebooklm-ai-training.html">NotebookLM 業務助理</a>，把台鴻精工的 5 個關卡做完。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="seg" id="help">
+      <h2 class="kai"><span class="sn hand">?</span><span class="tt">卡住怎麼辦</span><small class="tm">隨時查</small></h2>
+      <p class="sum"><span class="tag">一句話</span>照「先試這個」做；還是不行，再看右邊那欄。</p>
+      <div class="x"><table class="tbl help">
+        <tr><th>狀況</th><th>先試這個</th><th>還是不行</th></tr>
+        <tr><td>登不進去</td><td>確認用的是公司允許的 Google 帳號。換 Chrome 或 Edge 再試。</td><td>帳號可能沒開放這個服務。請問講師或公司 IT。</td></tr>
+        <tr><td>上傳失敗（來源旁有 i 圖示）</td><td>刪掉後重傳。檢查檔案有沒有太大。</td><td>打開原檔複製文字，改用「複製的文字」貼上。</td></tr>
+        <tr><td>回答沒有引用</td><td>確認來源有打勾。在提問最後加「請標出引用」。</td><td>把問題縮小，一次只問一件事。</td></tr>
+        <tr><td>回答是英文</td><td>在提問最後加「請用台灣繁體中文回答」。</td><td>到設定選單找「輸出語言」，改成中文（繁體）。位置會隨版本不同。</td></tr>
+        <tr><td>找不到按鈕</td><td>把視窗拉寬、往下捲。按鈕常改名。</td><td>用提示詞在對話裡做同樣的事。</td></tr>
+        <tr><td>答案和原文對不上</td><td>點引用看原文，以原文為準。</td><td>補一句「只依來源回答，沒寫就說未提供」再問。</td></tr>
+      </table></div>
+    </section>
+
+    <section class="seg recap" id="recap">
+      <h2 class="kai"><span class="sn hand">✓</span><span class="tt">重點回顧</span></h2>
+      <ul>
+        <li>NotebookLM 只依你加入、有打勾的來源回答。回答附引用，可點開回查原文。</li>
+        <li>3 個視窗：來源、對話、Studio。先看來源導覽，再開始提問。</li>
+        <li>提問要具體：角色＋任務＋格式＋限制。查不到時要它標示「來源未提供」。</li>
+        <li>Studio 可一鍵產出簡報文件。拿去用之前，數字、名字都要核對。</li>
+        <li>只放核准、已去識別化的資料。拿不準就先問主管。</li>
+      </ul>
+      <p class="next">下一步：用 <a href="card.html">上手步驟卡</a> 複習，再進入 <a href="notebooklm-ai-training.html">第 2 級業務情境</a>。</p>
+    </section>
   </main>
   <script src="assets/nav.js"></script><script src="assets/lesson.js"></script>
 </body>
