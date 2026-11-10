@@ -17,7 +17,7 @@ const LESSONS=[
 {f:'notebooklm-ai-training.html',t:'NotebookLM 業務助理',s:2,who:'業務同仁',time:'約 30 分',pre:'NotebookLM 入門',out:'5 大業務情境的做法與提示詞（附人偶語音導讀）'},
 {f:'practice.html',t:'實作練習包',s:2,who:'業務同仁',time:'每題 10 分',pre:'NotebookLM 業務助理',out:'待辦表、比較表等練習成果'},
 {f:'quiz.html',t:'情境題暖身測驗',s:2,who:'全員',time:'約 10 分',pre:'實作練習包',out:'10 題得分與易錯觀念'},
-{f:'ai-presentation-workflow.html',t:'AI 簡報工作流',s:3,who:'需要製作簡報者',time:'約 60 分',pre:'第 2 級：應用',out:'一份可核對來源的簡報大綱'},
+{f:'ai-presentation-workflow.html',t:'AI 簡報工作流',s:2,who:'需要製作簡報者',time:'約 60 分（自學）',pre:'NotebookLM 業務助理',out:'一份可核對來源的簡報大綱'},
 {f:'copilot-desktop-basics.html',t:'Copilot 桌面版入門',s:3,who:'需要做規劃與文件者',time:'約 60 分',pre:'NotebookLM 入門（提示詞公式）',out:'一份經角色審查的規劃 HTML'},
 {f:'duo-narrated-deck.html',t:'人偶導讀簡報',s:3,who:'需要製作教材者',time:'約 45 分',pre:'Copilot 桌面版入門',out:'一份會自己講的人偶導讀教材，附 Skill 完整內容'},
 {f:'agent-parallel-workflow.html',t:'AI 分身平行作業',s:3,who:'要處理一批相似工作者',time:'約 60 分',pre:'Copilot 桌面版入門',out:'用 /plan＋/fleet 讓主 AI 帶子 AI 完成 8 張客訴回覆，附 12 則提示詞'},
