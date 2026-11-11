@@ -331,8 +331,560 @@
     .pagenum{right:108px;bottom:15px}
   }
 </style>
+<style id="nlm78-base">
+/* ===== ⑦ 筆記本速查表：全頁底色與一般元件（只限 body.nlm78） ===== */
+body.nlm78{
+  --n-desk:#E7E1D5;--n-paper:#FFFDF7;--n-rule:#DDE7F1;--n-margin:#EFA3A3;--n-ink:#2B2B33;--n-muted:#62626F;
+  --n-teal:#17807C;--n-teal-ink:#11615E;--n-red:#D2423F;--n-hl:rgba(255,112,166,.32);
+  --n-sticky:#FFE679;--n-sticky-ink:#3A3320;--n-note:#FFF4B8;--n-tape:rgba(226,206,140,.72);--n-on:#fff;--n-shadow:rgba(60,48,30,.22);
+  --n-blue:#3F7FD0;--n-blue-ink:#2A62A8;--n-blue-bg:#EAF2FC;--n-green:#2F9459;--n-green-ink:#23744A;--n-green-bg:#E8F6EC;
+  --n-orange:#DB7A1F;--n-orange-ink:#A85A10;--n-orange-bg:#FFF1E2;--n-purple:#7454C2;--n-purple-ink:#5B3FA6;--n-purple-bg:#F2EDFC;
+  --n-tline:#C9D3DE;--n-clip:#FBF7EC;--n-clip-line:#D9D0BC;--n-sk-bg:#FFFFFF;
+  --n-kai:"DFKai-SB","BiauKai","標楷體","Kaiti TC",serif;
+  --n-hand:"Ink Free","Segoe Print","Microsoft JhengHei",cursive;
+  --n-wave:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='10'%3E%3Cpath d='M0 6 Q7.5 0 15 6 T30 6' fill='none' stroke='%2317807C' stroke-width='2.6'/%3E%3C/svg%3E");
+  --n-ring:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='58'%3E%3Crect x='6' y='20' width='62' height='18' rx='9' fill='none' stroke='%238D9099' stroke-width='4'/%3E%3Ccircle cx='57' cy='29' r='4' fill='%234C4741'/%3E%3C/svg%3E");
+  --n-mx:62px;
+  /* 原主題變數改成 ⑦ 色，沿用變數的地方會自動跟著變 */
+  --bg:#FFFFFF;--g1:transparent;--g2:transparent;
+  --surface:#FFFDF7;--surface2:#FBF8EF;--hi:#EAF2FC;
+  --line:#C9D3DE;--line2:#9AA6B4;
+  --text:#2B2B33;--muted:#62626F;--heading:#2B2B33;
+  --brand:#17807C;--brand-ink:#11615E;--brand2:#3F7FD0;
+  --accent:#2F9459;--accent-ink:#23744A;
+  --warn:#DB7A1F;--warn-ink:#A85A10;--danger:#D2423F;
+  --src-bg:#FBF7EC;--src-text:#2B2B33;--src-who:#2A62A8;
+  --shadow:0 10px 24px rgba(60,48,30,.14);
+  background:var(--n-desk);color:var(--n-ink);
+}
+html[data-theme="dark"] body.nlm78{
+  --n-desk:#0E1013;--n-paper:#1F232A;--n-rule:rgba(255,255,255,.07);--n-margin:rgba(239,140,140,.38);--n-ink:#E4E7EB;--n-muted:#A9B0BA;
+  --n-teal:#5CC4BE;--n-teal-ink:#7FD6D1;--n-red:#FF8682;--n-hl:rgba(255,112,166,.28);
+  --n-sticky:#5A5228;--n-sticky-ink:#F4EDC6;--n-note:#4A4426;--n-tape:rgba(150,138,92,.6);--n-on:#15171B;--n-shadow:rgba(0,0,0,.5);
+  --n-blue:#86B4EE;--n-blue-ink:#A5C8F3;--n-blue-bg:#1B2533;--n-green:#74CC95;--n-green-ink:#93DBAD;--n-green-bg:#16271E;
+  --n-orange:#F0A55E;--n-orange-ink:#F5BC85;--n-orange-bg:#2D2216;--n-purple:#B09AF2;--n-purple-ink:#C6B6F6;--n-purple-bg:#231F35;
+  --n-tline:#3A414B;--n-clip:#262A31;--n-clip-line:#454B55;--n-sk-bg:#1A1D22;
+  --n-wave:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='10'%3E%3Cpath d='M0 6 Q7.5 0 15 6 T30 6' fill='none' stroke='%235CC4BE' stroke-width='2.6'/%3E%3C/svg%3E");
+  --n-ring:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='58'%3E%3Crect x='6' y='20' width='62' height='18' rx='9' fill='none' stroke='%236B707A' stroke-width='4'/%3E%3Ccircle cx='57' cy='29' r='4' fill='%23000'/%3E%3C/svg%3E");
+  --bg:#1A1D22;--surface:#1F232A;--surface2:#262B33;--hi:#1B2533;
+  --line:#3A414B;--line2:#566170;
+  --text:#E4E7EB;--muted:#A9B0BA;--heading:#F1F3F5;
+  --brand:#5CC4BE;--brand-ink:#7FD6D1;--brand2:#86B4EE;
+  --accent:#74CC95;--accent-ink:#93DBAD;
+  --warn:#F0A55E;--warn-ink:#F5BC85;--danger:#FF8682;
+  --src-bg:#262A31;--src-text:#E4E7EB;--src-who:#A5C8F3;
+  --shadow:0 10px 24px rgba(0,0,0,.45);
+}
+
+/* ---- 桌面＋紙張（橫線、左紅邊線、線圈） ---- */
+body.nlm78 .deck{background:var(--n-desk)}
+body.nlm78 .deck::after{content:"";position:absolute;left:6px;top:34px;bottom:34px;width:56px;z-index:4;pointer-events:none;
+  background:var(--n-ring) 0 0/56px 40px;background-repeat:no-repeat round}
+body.nlm78 .slide{inset:12px 14px 12px 34px;border-radius:6px 16px 16px 6px;padding:42px 56px 84px 96px;
+  background:linear-gradient(90deg,transparent var(--n-mx),var(--n-margin) var(--n-mx) calc(var(--n-mx) + 2px),transparent calc(var(--n-mx) + 2px)),
+    repeating-linear-gradient(180deg,transparent 0 43px,var(--n-rule) 43px 44px),var(--n-paper);
+  background-attachment:local;color:var(--n-ink);
+  box-shadow:0 1px 2px rgba(0,0,0,.10),0 12px 30px rgba(0,0,0,.12)}
+html[data-theme="dark"] body.nlm78 .slide{box-shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.45)}
+
+/* ---- 標題：標楷體＋波浪底線 ---- */
+body.nlm78 h1,body.nlm78 h2{font-family:var(--n-kai);color:var(--n-teal);font-weight:700;letter-spacing:.04em;align-self:flex-start;
+  background:var(--n-wave) left bottom/30px 10px repeat-x}
+body.nlm78 h1{font-size:60px;line-height:1.22;padding-bottom:14px;margin:14px 0 14px}
+body.nlm78 h2{font-size:38px;line-height:1.25;padding-bottom:10px;margin-bottom:8px}
+body.nlm78 h3{color:var(--n-ink);font-size:21px}
+body.nlm78 p{color:var(--n-muted)}
+body.nlm78 .lead{color:var(--n-ink);font-size:22px}
+body.nlm78 .muted-s{color:var(--n-muted);font-size:15px}
+body.nlm78 .kick{font-family:var(--n-hand);color:var(--n-red);font-size:19px;font-weight:700;letter-spacing:.05em;text-transform:none}
+body.nlm78 .mini{color:var(--c,var(--n-teal));font-size:15px;font-weight:800;letter-spacing:.1em;text-transform:none}
+
+/* 情境標籤＝右上黃色便利貼 */
+body.nlm78 .scene-tag{top:26px;right:54px;z-index:3;background:var(--n-sticky);color:var(--n-sticky-ink);font-size:16px;font-weight:800;letter-spacing:.06em;
+  padding:10px 18px 8px;transform:rotate(2.5deg);box-shadow:0 2px 3px rgba(0,0,0,.10),0 8px 14px var(--n-shadow)}
+body.nlm78 .scene-tag::before{content:"";position:absolute;left:50%;top:-10px;width:62px;height:18px;margin-left:-31px;background:rgba(255,255,255,.55);transform:rotate(-4deg)}
+html[data-theme="dark"] body.nlm78 .scene-tag::before{background:rgba(255,255,255,.16)}
+
+/* 封面徽章＝紅色印章 */
+body.nlm78 .hero-badge{align-self:flex-start;background:transparent;border:2.5px solid var(--n-red);color:var(--n-red);border-radius:14px 18px 12px 20px;
+  font-size:17px;font-weight:800;letter-spacing:.06em;padding:6px 16px;transform:rotate(-2deg)}
+
+/* 標籤 */
+body.nlm78 .pill{--pc:var(--n-teal);--pi:var(--n-teal-ink);background:var(--n-paper);border:2px solid var(--pc);color:var(--pi);
+  border-radius:12px 16px 10px 14px;font-size:16px;font-weight:700;padding:5px 13px;margin:6px 8px 0 0}
+body.nlm78 .pill.tagA{--pc:var(--n-green);--pi:var(--n-green-ink)}
+body.nlm78 .pill.tagW,body.nlm78 .tagW{--pc:var(--n-orange);--pi:var(--n-orange-ink);background:var(--n-orange-bg)}
+
+/* 清單符號：空心圓點，顏色跟著所在卡片 */
+body.nlm78 ul.clean li{color:var(--n-ink);font-size:18px}
+body.nlm78 ul.clean li::before{top:9px;width:13px;height:13px;border-radius:50%;background:transparent;border:2.6px solid var(--c,var(--n-teal))}
+
+/* ---- 卡片：藍＝事實、橘＝卡住/注意、紫＝規則/提醒 ---- */
+body.nlm78 .card{--c:var(--n-blue);--bgc:var(--n-blue-bg);position:relative;background:var(--bgc);border:2.5px solid var(--c);
+  border-radius:16px 20px 14px 22px/20px 14px 22px 16px;padding:28px 22px 16px;box-shadow:none}
+body.nlm78 .card>h3:first-of-type{position:absolute;top:-17px;left:16px;margin:0;background:var(--c);color:var(--n-on);font-size:18px;
+  line-height:1.5;padding:3px 14px;border-radius:10px;white-space:nowrap}
+body.nlm78 .card h3{color:var(--c)}
+body.nlm78 .card p{color:var(--n-ink);font-size:17px;line-height:1.65}
+body.nlm78 .card.orange{--c:var(--n-orange);--bgc:var(--n-orange-bg)}
+body.nlm78 .grid{gap:24px;margin-top:30px}
+body.nlm78 .big-emoji{position:absolute;top:10px;right:14px;font-size:22px;line-height:1;opacity:.85}
+/* 第 2 頁：三個痛點＝橘色，各自微傾 */
+body.nlm78 .deck>section:nth-of-type(2) .card{--c:var(--n-orange);--bgc:var(--n-orange-bg)}
+body.nlm78 .deck>section:nth-of-type(2) .card:nth-child(1){transform:rotate(-.7deg)}
+body.nlm78 .deck>section:nth-of-type(2) .card:nth-child(2){transform:rotate(.5deg);margin-top:8px}
+body.nlm78 .deck>section:nth-of-type(2) .card:nth-child(3){transform:rotate(-.3deg)}
+/* 第 25 頁：上手＝紫（建議），注意＝橘 */
+body.nlm78 .deck>section:nth-of-type(25) .card:nth-child(1){--c:var(--n-purple);--bgc:var(--n-purple-bg)}
+body.nlm78 .deck>section:nth-of-type(25) .card:nth-child(2){--c:var(--n-orange);--bgc:var(--n-orange-bg)}
+/* 第 29 頁：工具＝藍；參考資料＝剪報 */
+body.nlm78 .deck>section:nth-of-type(29) .card:nth-child(2){--c:var(--n-ink);--bgc:var(--n-clip);border:1.5px dashed var(--n-clip-line);
+  border-radius:4px;transform:rotate(.3deg);box-shadow:1px 2px 0 rgba(0,0,0,.06)}
+body.nlm78 .deck>section:nth-of-type(29) .card:nth-child(2)>h3:first-of-type{background:var(--n-ink);color:var(--n-paper)}
+body.nlm78 .deck>section:nth-of-type(29) .card ul.clean li{font-size:16px}
+
+/* 注意框：橘；第 2、25 頁是「一句話」→ 紫色虛線框 */
+body.nlm78 .warnbox{background:var(--n-orange-bg);border:2.5px solid var(--n-orange);border-radius:14px 18px 12px 16px;
+  padding:14px 20px;margin-top:22px;color:var(--n-ink);font-size:18px;line-height:1.65}
+body.nlm78 .warnbox b{color:var(--n-orange-ink)}
+body.nlm78 .deck>section:nth-of-type(2) .warnbox,body.nlm78 .deck>section:nth-of-type(25) .warnbox{
+  background:color-mix(in srgb,var(--n-purple-bg) 75%,transparent);border:2.5px dashed var(--n-purple);border-radius:16px}
+body.nlm78 .deck>section:nth-of-type(2) .warnbox b,body.nlm78 .deck>section:nth-of-type(25) .warnbox b{
+  display:inline-block;background:var(--n-purple);color:var(--n-on);font-size:16px;border-radius:8px;padding:1px 10px;margin-right:6px;line-height:1.6}
+
+/* ---- 左右分欄 ---- */
+body.nlm78 .split{gap:30px;margin-top:20px}
+body.nlm78 .panel{background:var(--n-paper);border:2.2px solid var(--n-ink);border-radius:14px 20px 12px 22px/20px 12px 22px 14px;padding:22px 24px;box-shadow:3px 4px 0 var(--n-shadow)}
+body.nlm78 .panel.hi{--c:var(--n-blue);background:var(--n-blue-bg);border:2.5px solid var(--n-blue);box-shadow:none}
+body.nlm78 .panel.hi:has(>ul.clean){--c:var(--n-purple);background:var(--n-purple-bg);border-color:var(--n-purple)}
+body.nlm78 .kv{color:var(--n-ink)}
+body.nlm78 .kv b{color:var(--n-ink)}
+body.nlm78 p.kv{color:var(--n-ink)}
+body.nlm78 .panel .disc{font-size:15px;font-style:normal;color:var(--n-muted)}
+
+/* 步驟：手寫編號圓圈＋虛線連接 */
+body.nlm78 .step{position:relative}
+body.nlm78 .step:not(:last-child)::after{content:"";position:absolute;left:17px;top:38px;bottom:-12px;border-left:2px dashed var(--n-tline)}
+body.nlm78 .num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--n-teal);color:var(--n-on);box-shadow:none;
+  font:900 19px/1 var(--n-hand)}
+body.nlm78 .step .body b{color:var(--n-ink)}
+body.nlm78 .step .body span{color:var(--n-muted);font-size:16px}
+
+/* ---- 表格 ---- */
+body.nlm78 table.tbl{background:var(--n-paper);font-size:18px}
+body.nlm78 table.tbl th,body.nlm78 table.tbl td{border:1.5px solid var(--n-tline);padding:11px 14px}
+body.nlm78 table.tbl th{background:var(--n-blue-bg);color:var(--n-ink)}
+body.nlm78 table.tbl td b{color:var(--n-ink)}
+body.nlm78 .num-badge{width:32px;height:32px;border-radius:50%;background:var(--n-teal);color:var(--n-on);font:900 18px/1 var(--n-hand)}
+body.nlm78 table.tbl2{background:var(--n-paper);font-size:15px}
+body.nlm78 table.tbl2 th,body.nlm78 table.tbl2 td{border:1.5px solid var(--n-tline);padding:5px 8px;line-height:1.45}
+body.nlm78 table.tbl2 th{background:var(--n-green-bg);color:var(--n-ink)}
+body.nlm78 table.tbl2 td b{color:var(--n-ink)}
+body.nlm78 .best{background:color-mix(in srgb,var(--n-green) 14%,var(--n-paper))}
+body.nlm78 .disc{font-size:15px;color:var(--n-muted)}
+
+/* ---- 輸入 / 輸出 ---- */
+body.nlm78 .io{gap:24px;margin-top:16px}
+body.nlm78 .io .col{border-radius:14px 18px 12px 20px/18px 12px 20px 14px;padding:14px 18px}
+body.nlm78 .io .inp{--c:var(--n-blue);background:var(--n-blue-bg);border:2.5px solid var(--n-blue)}
+body.nlm78 .io .outp{--c:var(--n-green);background:var(--n-paper);border:2.5px solid var(--n-green)}
+body.nlm78 .iohd{font-size:15px;letter-spacing:.06em;padding:3px 14px;border-radius:10px;margin-bottom:8px}
+body.nlm78 .iohd.in{background:var(--n-blue);border:0;color:var(--n-on)}
+body.nlm78 .iohd.out{background:var(--n-green);border:0;color:var(--n-on)}
+body.nlm78 .srccap{font-size:14px;color:var(--n-muted);margin:0 0 6px}
+/* 來源＝剪報 */
+body.nlm78 .src{position:relative;background:var(--n-clip);color:var(--n-ink);border:1px solid var(--n-clip-line);border-radius:2px;
+  font-family:"Noto Serif TC","PMingLiU","MingLiU",serif;font-size:15px;line-height:1.55;padding:12px 14px 10px;
+  transform:rotate(-.35deg);box-shadow:1px 2px 0 rgba(0,0,0,.06)}
+body.nlm78 .src::before{content:"";position:absolute;left:46%;top:-9px;width:70px;height:17px;background:var(--n-tape);transform:rotate(-3deg)}
+body.nlm78 .src .who{color:var(--n-blue-ink);font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif}
+/* 提示詞＝手寫便條 */
+body.nlm78 .prompt{position:relative;background:var(--n-note);color:var(--n-sticky-ink);border:0;border-radius:2px 2px 10px 2px;
+  font-family:"Ink Free",var(--n-kai);font-size:17px;line-height:1.5;padding:10px 14px 9px;margin-top:12px;
+  transform:rotate(-.4deg);box-shadow:0 1px 2px rgba(0,0,0,.08),0 5px 10px -4px var(--n-shadow)}
+body.nlm78 .prompt b{color:var(--n-red);font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;font-size:15px}
+body.nlm78 .panel .prompt:nth-of-type(2n){transform:rotate(.45deg)}
+body.nlm78 .panel .prompt:nth-of-type(3n){transform:rotate(-.15deg)}
+body.nlm78 .out-h{font-size:16px;color:var(--n-green-ink);margin:12px 0 5px;padding-bottom:2px;border-bottom:1.5px dashed var(--n-tline)}
+body.nlm78 .io ul{gap:4px}
+body.nlm78 .io ul li{font-size:15px;line-height:1.5;color:var(--n-ink);padding-left:18px}
+body.nlm78 .io ul li::before{top:7px;width:9px;height:9px;border-radius:50%;background:transparent;border:2.2px solid var(--c,var(--n-green))}
+body.nlm78 .io .disc{font-size:15px}
+
+/* ---- 圖表外框＝貼在紙上的白紙（兩角膠帶） ---- */
+body.nlm78 .chartwrap,body.nlm78 .mindwrap{position:relative;background:var(--n-sk-bg);border:1.5px solid var(--n-tline);border-radius:4px;
+  padding:10px 14px;margin-top:16px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 18px -10px var(--n-shadow)}
+body.nlm78 .chartwrap::before,body.nlm78 .chartwrap::after,body.nlm78 .mindwrap::before,body.nlm78 .mindwrap::after{content:"";position:absolute;top:-10px;width:84px;height:20px;background:var(--n-tape);pointer-events:none}
+body.nlm78 .chartwrap::before,body.nlm78 .mindwrap::before{left:14px;transform:rotate(-8deg)}
+body.nlm78 .chartwrap::after,body.nlm78 .mindwrap::after{right:14px;transform:rotate(7deg)}
+body.nlm78 .chartwrap svg{max-height:58vh}
+body.nlm78 .mind{max-height:60vh}
+
+/* ---- 封面與結尾（第 1、28 頁） ---- */
+body.nlm78 .slide.center>.hero-badge{position:absolute;top:58px;right:110px;background:var(--n-sticky);color:var(--n-sticky-ink);border:0;border-radius:2px;
+  font-size:20px;padding:22px 26px 18px;transform:rotate(3deg);box-shadow:0 2px 3px rgba(0,0,0,.12),0 10px 18px var(--n-shadow)}
+body.nlm78 .slide.center>.hero-badge::before{content:"";position:absolute;left:50%;top:-12px;width:92px;height:24px;margin-left:-46px;background:rgba(255,255,255,.55);transform:rotate(-4deg)}
+html[data-theme="dark"] body.nlm78 .slide.center>.hero-badge::before{background:rgba(255,255,255,.16)}
+body.nlm78 .slide.center>h1{font-size:66px}
+body.nlm78 .slide.center>.lead{font-size:23px;line-height:1.75}
+body.nlm78 .slide.center .pill{font-size:17px;padding:6px 15px}
+
+/* ---- 底部控制列 ---- */
+body.nlm78 .progress{top:4px;left:34px;width:calc(100% - 48px);height:4px;border-radius:2px;background:var(--n-teal)}
+body.nlm78 .dots{left:96px;bottom:24px;gap:6px}
+body.nlm78 .dot{min-width:26px;height:26px;border-radius:7px 9px 6px 8px;background:var(--n-paper);border:1.5px solid var(--n-tline);color:var(--n-muted);
+  font:700 14px/1 var(--n-hand)}
+body.nlm78 .dot:hover{border-color:var(--n-teal);color:var(--n-teal)}
+body.nlm78 .dot.active{background:var(--n-teal);border-color:var(--n-teal);color:var(--n-on)}
+body.nlm78 .nav{right:56px;bottom:22px}
+body.nlm78 .nav button{background:var(--n-paper);border:2px solid var(--n-ink);color:var(--n-ink);border-radius:12px 16px 10px 14px;box-shadow:2px 3px 0 var(--n-shadow);font-weight:700}
+body.nlm78 .nav button:hover{background:var(--n-teal);border-color:var(--n-teal);color:var(--n-on)}
+body.nlm78 .pagenum{right:172px;bottom:30px;font:700 15px/1 var(--n-hand);color:var(--n-muted);background:var(--n-paper);border:1.5px dashed var(--n-tline);
+  border-radius:10px;padding:7px 12px;-webkit-backdrop-filter:none;backdrop-filter:none}
+body.nlm78 .pagenum b{color:var(--n-red);font-size:18px}
+
+/* ---- 窄螢幕 ---- */
+@media (max-width:1100px){
+  body.nlm78 .slide{padding:40px 40px 80px 92px}
+  body.nlm78 h1,body.nlm78 .slide.center>h1{font-size:44px}
+  body.nlm78 h2{font-size:30px}
+}
+@media (max-width:720px){
+  body.nlm78{--n-mx:9px}
+  body.nlm78 .deck::after{display:none}
+  body.nlm78 .slide{inset:0;border-radius:0;padding:64px 14px 76px 22px;box-shadow:none}
+  body.nlm78 .progress{left:0;width:100%;top:0}
+  body.nlm78 h1,body.nlm78 .slide.center>h1{font-size:31px;padding-bottom:12px;margin:10px 0 8px}
+  body.nlm78 h2{font-size:24px;padding-bottom:9px}
+  body.nlm78 h3{font-size:18px}
+  body.nlm78 .kick{font-size:16px}
+  body.nlm78 .lead,body.nlm78 .slide.center>.lead{font-size:17px}
+  body.nlm78 .scene-tag{position:static;order:-1;align-self:flex-start;margin:4px 0 8px;font-size:15px;transform:rotate(-1.5deg)}
+  body.nlm78 .slide.center>.hero-badge{position:static;align-self:flex-start;font-size:16px;padding:12px 16px 10px;margin-top:8px}
+  body.nlm78 .pill,body.nlm78 .slide.center .pill{font-size:15px;padding:4px 10px}
+  body.nlm78 ul.clean li{font-size:16px;padding-left:24px}
+  body.nlm78 ul.clean li::before{top:7px;width:11px;height:11px}
+  body.nlm78 .grid{gap:26px;margin-top:24px}
+  body.nlm78 .card{padding:24px 14px 12px}
+  body.nlm78 .card p{font-size:15.5px}
+  body.nlm78 .deck>section:nth-of-type(2) .card:nth-child(n){transform:none;margin-top:0}
+  body.nlm78 .warnbox{font-size:16px;padding:12px 14px}
+  body.nlm78 .panel,body.nlm78 .io .col{padding:14px;box-shadow:none}
+  body.nlm78 .split,body.nlm78 .io{gap:16px}
+  body.nlm78 .step .body b{font-size:16px}
+  body.nlm78 .step .body span{font-size:15px}
+  body.nlm78 .num{flex-basis:30px;height:30px;font-size:16px}
+  body.nlm78 .step:not(:last-child)::after{left:15px;top:34px}
+  body.nlm78 table.tbl{font-size:15px}
+  body.nlm78 table.tbl th,body.nlm78 table.tbl td{padding:7px 8px}
+  body.nlm78 .prompt{font-size:16px}
+  body.nlm78 .chartwrap,body.nlm78 .mindwrap{padding:8px 6px}
+  body.nlm78 .chartwrap svg{max-height:none}
+  body.nlm78 .mind{max-height:70vh}
+  body.nlm78 .nav{right:8px;bottom:8px}
+  body.nlm78 .pagenum{right:108px;bottom:15px}
+}
+</style>
+
+<style id="nlm78-flows">
+/* ⑧ 手繪流程圖（第 3、5、24、29 頁）：線依意義上色、框與線套 #nlm78-rough、文字不套濾鏡 */
+body.nlm78{--f78-ink:#1F2328;--f78-mut:#5B626C;--f78-box:#FFFFFF;--f78-bg:#FFFFFF;--f78-on:#FFFFFF;
+  --f78-blue:#2F6FDB;--f78-green:#2E9A55;--f78-orange:#DD7716;--f78-red:#D63B3B;--f78-purple:#7454C2;--f78-teal:#17807C;
+  --f78-zone:#7D848E;--f78-tline:#C9D3DE;
+  --f78-hand:"Ink Free","Segoe Print","Microsoft JhengHei",cursive;
+  --f78-kai:"DFKai-SB","BiauKai","標楷體","Kaiti TC",serif;
+  --f78-sans:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif}
+html[data-theme="dark"] body.nlm78{--f78-ink:#E4E7EB;--f78-mut:#A3ABB5;--f78-box:#22262D;--f78-bg:#1A1D22;--f78-on:#15171B;
+  --f78-blue:#7FAEF2;--f78-green:#6CCB8F;--f78-orange:#F2A65E;--f78-red:#FF7B78;--f78-purple:#B09AF2;--f78-teal:#5CC4BE;
+  --f78-zone:#8A929C;--f78-tline:#3A414B}
+body.nlm78 .nlm78-mk.b{fill:var(--f78-blue)} body.nlm78 .nlm78-mk.g{fill:var(--f78-green)} body.nlm78 .nlm78-mk.o{fill:var(--f78-orange)}
+
+/* 白板底（⑧ 白底） */
+body.nlm78 svg[data-chart=flow],body.nlm78 svg[data-chart=journey],body.nlm78 svg#fdg{
+  background:var(--f78-bg);border:1.5px solid var(--f78-tline);border-radius:14px}
+body.nlm78 svg[data-chart=flow] text,body.nlm78 svg[data-chart=journey] text,body.nlm78 svg#fdg text{font-family:var(--f78-sans)}
+
+/* 流程（第 3、29 頁） */
+body.nlm78 svg[data-chart=flow] .fl-node{fill:var(--f78-box);stroke:var(--f78-ink);stroke-width:2.2;filter:url(#nlm78-rough)}
+body.nlm78 svg[data-chart=flow] .fl-t{fill:var(--f78-ink);font-weight:800}
+body.nlm78 svg[data-chart=flow] .fl-s{fill:var(--f78-mut);font-weight:600}
+body.nlm78 svg[data-chart=flow]>line{stroke-width:2.6;stroke-linecap:round;filter:url(#nlm78-rough-l)}
+body.nlm78 svg[aria-label="核心運作三步流程"] .fl-s{font-family:"Segoe UI","Microsoft JhengHei",sans-serif;font-size:10.8px;letter-spacing:-.6px}
+body.nlm78 .panel:has(>.nlm78-scroll){min-width:0}
+body.nlm78 .panel>.nlm78-scroll{margin:0 -22px;width:calc(100% + 44px)}
+body.nlm78 svg[aria-label="核心運作三步流程"]>line:nth-of-type(1){stroke:var(--f78-blue);marker-end:url(#nlm78-m-blue)}
+body.nlm78 svg[aria-label="核心運作三步流程"]>line:nth-of-type(2){stroke:var(--f78-orange);marker-end:url(#nlm78-m-orange)}
+body.nlm78 svg[aria-label="簡報製作五步流程"] .fl-s{font-size:11px}
+body.nlm78 svg[aria-label="簡報製作五步流程"]>line:nth-of-type(1){stroke:var(--f78-blue);marker-end:url(#nlm78-m-blue)}
+body.nlm78 svg[aria-label="簡報製作五步流程"]>line:nth-of-type(2),
+body.nlm78 svg[aria-label="簡報製作五步流程"]>line:nth-of-type(3){stroke:var(--f78-green);marker-end:url(#nlm78-m-green)}
+body.nlm78 svg[aria-label="簡報製作五步流程"]>line:nth-of-type(4){stroke:var(--f78-orange);marker-end:url(#nlm78-m-orange)}
+
+/* 旅程（第 5 頁） */
+body.nlm78 svg[data-chart=journey] .jn-line{stroke:var(--f78-ink);stroke-width:3;stroke-linecap:round;filter:url(#nlm78-rough-l)}
+body.nlm78 svg[data-chart=journey] .jn-hub{fill:var(--f78-teal);stroke:var(--f78-ink);stroke-width:2.4;filter:url(#nlm78-rough)}
+body.nlm78 svg[data-chart=journey] .jn-num{fill:var(--f78-on);font-family:var(--f78-hand);font-size:23px;font-weight:700}
+body.nlm78 svg[data-chart=journey] .jn-t{fill:var(--f78-ink);font-size:14.5px;font-weight:800}
+body.nlm78 svg[data-chart=journey] .jn-s{fill:var(--f78-mut);font-size:12.5px;font-weight:600}
+body.nlm78 svg[data-chart=journey] .nlm78-zn{fill:none;stroke:var(--f78-zone);stroke-width:2;stroke-dasharray:9 7;filter:url(#nlm78-rough)}
+body.nlm78 svg[data-chart=journey] .nlm78-znt{fill:var(--f78-mut);font-family:var(--f78-hand);font-size:15px;font-weight:700}
+
+/* 心智圖（第 24 頁；節點由 JS 產生，只用 CSS 覆寫） */
+body.nlm78 #fdg .fdg-links{filter:url(#nlm78-rough)}
+body.nlm78 #fdg .mm-edge{stroke-width:3}
+body.nlm78 #fdg .mm-edge2{stroke-width:2;stroke-dasharray:none}
+body.nlm78 #fdg .fdg-links line:nth-child(-n+6){stroke:var(--f78-blue)}
+body.nlm78 #fdg .fdg-links line:nth-child(n+7):nth-child(-n+9){stroke:var(--f78-orange)}
+body.nlm78 #fdg .fdg-links line:nth-child(n+10):nth-child(-n+15){stroke:var(--f78-green)}
+body.nlm78 #fdg .fdg-links line:nth-child(n+16){stroke:var(--f78-purple)}
+body.nlm78 #fdg circle.mm-hub{r:41px;fill:var(--f78-box);stroke:var(--f78-ink);stroke-width:3;filter:url(#nlm78-rough)}
+body.nlm78 #fdg .mm-hubt{fill:var(--f78-ink);font-family:var(--f78-kai);font-size:17px;font-weight:700}
+body.nlm78 #fdg .fdg-node circle:not(.fdg-hit):not(.mm-hub){stroke:var(--f78-ink);stroke-width:2;filter:url(#nlm78-rough-c)}
+body.nlm78 #fdg .fdg-node circle[r="6"]:not(.fdg-hit){r:7px;fill:var(--f78-box);stroke-width:2.4}
+body.nlm78 #fdg circle[r="11"].mm-c1,body.nlm78 #fdg circle[r="11"].mm-c2{fill:var(--f78-blue)}
+body.nlm78 #fdg circle[r="11"].mm-c3{fill:var(--f78-orange)}
+body.nlm78 #fdg circle[r="11"].mm-c4,body.nlm78 #fdg circle[r="11"].mm-c5{fill:var(--f78-green)}
+body.nlm78 #fdg circle[r="11"].mm-c6{fill:var(--f78-purple)}
+body.nlm78 #fdg circle[r="6"].mm-c1,body.nlm78 #fdg circle[r="6"].mm-c2{stroke:var(--f78-blue)}
+body.nlm78 #fdg circle[r="6"].mm-c3{stroke:var(--f78-orange)}
+body.nlm78 #fdg circle[r="6"].mm-c4,body.nlm78 #fdg circle[r="6"].mm-c5{stroke:var(--f78-green)}
+body.nlm78 #fdg circle[r="6"].mm-c6{stroke:var(--f78-purple)}
+body.nlm78 #fdg .mm-mt,body.nlm78 #fdg .mm-st{paint-order:stroke;stroke:var(--f78-bg);stroke-width:4px;stroke-linejoin:round}
+body.nlm78 #fdg .mm-mt{fill:var(--f78-ink);font-size:14.5px;font-weight:800;transform:translateY(-18px)}
+body.nlm78 #fdg .mm-st{fill:var(--f78-ink);font-size:14px;font-weight:600}
+
+/* 圖例 */
+body.nlm78 .legend.f78{display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;margin:8px 0 0;padding:6px 14px;
+  border:2px solid var(--f78-tline);border-radius:12px;background:var(--f78-bg);font-family:var(--f78-sans);font-size:15px;line-height:1.5;color:var(--f78-ink)}
+body.nlm78 .legend.f78 b{font-family:var(--f78-hand);font-weight:700;margin-right:2px}
+body.nlm78 .legend.f78 span{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+body.nlm78 .legend.f78 svg{width:40px;height:16px;flex:none;overflow:visible}
+body.nlm78 .legend.f78 svg.sw{width:18px}
+body.nlm78 .legend.f78 .ln{fill:none;stroke-width:3;stroke-linecap:round}
+body.nlm78 .legend.f78 .ln.b{stroke:var(--f78-blue)} body.nlm78 .legend.f78 .ln.g{stroke:var(--f78-green)}
+body.nlm78 .legend.f78 .ln.o{stroke:var(--f78-orange)} body.nlm78 .legend.f78 .ln.k{stroke:var(--f78-ink)}
+body.nlm78 .legend.f78 .ln.p{stroke:var(--f78-purple)}
+body.nlm78 .legend.f78 .bx{fill:var(--f78-box);stroke:var(--f78-ink);stroke-width:2}
+body.nlm78 .legend.f78 .zn{fill:none;stroke:var(--f78-zone);stroke-width:2;stroke-dasharray:5 4}
+body.nlm78 .legend.f78 .no{fill:var(--f78-teal);stroke:var(--f78-ink);stroke-width:1.5}
+body.nlm78 .legend.f78 .not{fill:var(--f78-on);font-family:var(--f78-hand);font-size:11px;font-weight:700}
+body.nlm78 .legend.f78 .c-b{fill:var(--f78-blue)} body.nlm78 .legend.f78 .c-o{fill:var(--f78-orange)}
+body.nlm78 .legend.f78 .c-g{fill:var(--f78-green)} body.nlm78 .legend.f78 .c-p{fill:var(--f78-purple)}
+body.nlm78 .legend.f78 .c-hub{fill:var(--f78-box);stroke:var(--f78-ink);stroke-width:2}
+body.nlm78 .legend.f78 .c-leaf{fill:var(--f78-box);stroke:var(--f78-ink);stroke-width:2}
+body.nlm78 .legend.f78 .c-main{stroke:var(--f78-ink);stroke-width:1.5}
+body.nlm78 .chartwrap+.legend.f78,body.nlm78 .mindwrap+.legend.f78{margin:6px 0 2px}
+body.nlm78 .nlm78-hint{display:none;margin:4px 0 0;font-size:15px;color:var(--f78-mut)}
+body.nlm78 .nlm78-scroll{width:100%}
+
+/* 手機：圖保持可讀字級，改左右滑動 */
+@media (max-width:720px){
+  body.nlm78 .nlm78-hint{display:block}
+  body.nlm78 svg[data-chart=flow]>line,body.nlm78 svg[data-chart=journey] .jn-line{filter:none}
+  body.nlm78 .legend.f78{gap:2px 14px;padding:6px 10px}
+  body.nlm78 .nlm78-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  body.nlm78 svg[aria-label="核心運作三步流程"]{min-width:480px}
+  body.nlm78 svg[aria-label="簡報製作五步流程"]{min-width:900px}
+  body.nlm78 .panel>.nlm78-scroll{margin:0;width:100%}
+  body.nlm78 svg[aria-label="簡報製作五步流程"] .fl-t{font-size:17px}
+  body.nlm78 svg[aria-label="簡報製作五步流程"] .fl-s{font-size:14.5px;letter-spacing:0}
+  body.nlm78 .chartwrap:has(>svg[data-chart=journey]){display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  body.nlm78 .chartwrap>svg[data-chart=journey]{min-width:900px;height:auto;max-height:none}
+  body.nlm78 svg[data-chart=journey] .jn-t{font-size:17px}
+  body.nlm78 svg[data-chart=journey] .jn-s{font-size:16px}
+  body.nlm78 .mindwrap:has(>svg#fdg){display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  body.nlm78 svg#fdg{min-width:680px;height:auto;max-height:none;touch-action:pan-x pan-y}
+}
+</style>
+<style id="nlm78-charts">
+/* ⑦+⑧ 數據圖表：顏色意義 藍＝事實/現況、綠＝改善後/做對、橘＝注意/產出；粗糙濾鏡只套線與框，不套文字 */
+body.nlm78{--c78-ink:#2B2B33;--c78-mut:#5E5E6B;--c78-grid:#C9D3DE;--c78-paper:#FFFDF7;--c78-track:#F3EFE6;
+  --c78-blue:#3F7FD0;--c78-blue-d:#2F67B8;--c78-blue-bg:#EAF2FC;--c78-blue-hl:#BFD6F3;
+  --c78-green:#2F9459;--c78-green-d:#24804A;--c78-green-bg:#E8F6EC;--c78-green-mid:#BFE3CB;--c78-green-low:#F3FAF5;
+  --c78-orange:#DB7A1F;--c78-orange-d:#B8620F;--c78-orange-bg:#FFF1E2;--c78-on:#fff;
+  --c78-hand:"Ink Free","Segoe Print","Microsoft JhengHei",cursive}
+html[data-theme="dark"] body.nlm78{--c78-ink:#E4E7EB;--c78-mut:#B4BCC6;--c78-grid:#4A525E;--c78-paper:#1F232A;--c78-track:#262B33;
+  --c78-blue:#86B4EE;--c78-blue-d:#86B4EE;--c78-blue-bg:#1B2533;--c78-blue-hl:#2E4767;
+  --c78-green:#74CC95;--c78-green-d:#74CC95;--c78-green-bg:#16271E;--c78-green-mid:#2C5A3E;--c78-green-low:#1A231E;
+  --c78-orange:#F0A55E;--c78-orange-d:#F0A55E;--c78-orange-bg:#2D2216;--c78-on:#15171B}
+
+/* 斜線填色（pattern 內元素跟著變數換色） */
+body.nlm78 #nlm78-hb .bg{fill:var(--c78-blue-bg)} body.nlm78 #nlm78-hb .ln{stroke:var(--c78-blue)}
+body.nlm78 #nlm78-hg .bg{fill:var(--c78-green-bg)} body.nlm78 #nlm78-hg .ln{stroke:var(--c78-green)}
+body.nlm78 #nlm78-hm .bg{fill:var(--c78-green-mid)} body.nlm78 #nlm78-hm .ln{stroke:var(--c78-green-d)}
+
+/* 共用：手繪線條 */
+body.nlm78 svg[data-chart=bars] .cx-grid,
+body.nlm78 svg[data-chart=gantt] .gt-tick{stroke:var(--c78-grid);stroke-width:1.4;stroke-dasharray:6 6;filter:url(#nlm78-rough-cl)}
+body.nlm78 svg[data-chart=bars] .cx-axis{stroke:var(--c78-ink);stroke-width:2.4;stroke-linecap:round;filter:url(#nlm78-rough-cl)}
+
+/* p11 分組長條：藍斜線＝人工（現況）、綠斜線＝NotebookLM（改善後） */
+body.nlm78 svg[data-chart=bars] .bar-a{fill:url(#nlm78-hb);stroke:var(--c78-blue);stroke-width:2.6;stroke-linejoin:round;filter:url(#nlm78-rough-c)}
+body.nlm78 svg[data-chart=bars] .bar-b{fill:url(#nlm78-hg);stroke:var(--c78-green);stroke-width:2.6;stroke-linejoin:round;filter:url(#nlm78-rough-c)}
+body.nlm78 svg[data-chart=bars] .cx-lab{fill:var(--c78-ink);font-size:15px;font-weight:600}
+body.nlm78 svg[data-chart=bars] .cx-val{fill:var(--c78-ink);font-family:var(--c78-hand);font-size:21px;font-weight:700}
+body.nlm78 svg[data-chart=bars] .leg-t{fill:var(--c78-ink);font-size:15px;font-weight:600}
+
+/* p15 適配矩陣：深綠實心＝高、綠斜線＝中、淺色＝低（越深越適配） */
+body.nlm78 svg[data-chart=heatmap] .hm-cell{stroke:var(--c78-green);stroke-width:1.8;filter:url(#nlm78-rough-c)}
+body.nlm78 svg[data-chart=heatmap] .hm-cell[style*="80%"]{fill:var(--c78-green-d)!important;stroke:var(--c78-green-d)}
+body.nlm78 svg[data-chart=heatmap] .hm-cell[style*="45%"]{fill:url(#nlm78-hm)!important}
+body.nlm78 svg[data-chart=heatmap] .hm-cell[style*="15%"]{fill:var(--c78-green-low)!important;stroke-dasharray:5 4}
+body.nlm78 svg[data-chart=heatmap] .hm-t{fill:var(--c78-ink);font-size:17px;font-weight:800}
+body.nlm78 svg[data-chart=heatmap] .hm-cell[style*="80%"]+.hm-t{fill:var(--c78-on)}
+body.nlm78 svg[data-chart=heatmap] .hm-row{fill:var(--c78-ink);font-size:15.5px;font-weight:700}
+body.nlm78 svg[data-chart=heatmap] .hm-col{fill:var(--c78-mut);font-size:15px;font-weight:700}
+body.nlm78 svg[data-chart=heatmap] .fn-side{fill:var(--c78-ink);font-size:15px;font-weight:600}
+
+/* p20 雷達：綠實線＝中華電信、橘虛線＝競品 */
+body.nlm78 svg[data-chart=radar] .rd-ring{fill:none;stroke:var(--c78-grid);stroke-width:1.6;stroke-dasharray:6 5;filter:url(#nlm78-rough-c)}
+body.nlm78 svg[data-chart=radar] .rd-axis{stroke:var(--c78-grid);stroke-width:1.6;filter:url(#nlm78-rough-cl)}
+body.nlm78 svg[data-chart=radar] .rd-a{fill:color-mix(in srgb,var(--c78-green) 18%,transparent);stroke:var(--c78-green);stroke-width:3.2;stroke-linejoin:round;filter:url(#nlm78-rough-c)}
+body.nlm78 svg[data-chart=radar] .rd-b{fill:color-mix(in srgb,var(--c78-orange) 14%,transparent);stroke:var(--c78-orange);stroke-width:2.8;stroke-dasharray:9 6;stroke-linejoin:round;filter:url(#nlm78-rough-c)}
+body.nlm78 svg[data-chart=radar] .rd-da{fill:var(--c78-green-d)} body.nlm78 svg[data-chart=radar] .rd-db{fill:var(--c78-orange)}
+body.nlm78 svg[data-chart=radar] circle.rd-da,body.nlm78 svg[data-chart=radar] circle.rd-db{r:5px;stroke:var(--c78-paper);stroke-width:1.5}
+body.nlm78 svg[data-chart=radar] .rd-lab{fill:var(--c78-ink);font-size:15.5px;font-weight:700}
+body.nlm78 svg[data-chart=radar] .leg-t{fill:var(--c78-ink);font-size:15px;font-weight:600}
+
+/* p26 甘特：藍＝準備資料、綠＝培訓與試用、橘＝看成果與調整 */
+body.nlm78 svg[data-chart=gantt] .gt-track{fill:var(--c78-track);stroke:var(--c78-grid);stroke-width:1.2;stroke-dasharray:4 5}
+body.nlm78 svg[data-chart=gantt] rect[class^=mm-c]{stroke-width:2.4;stroke-linejoin:round;filter:url(#nlm78-rough-c)}
+body.nlm78 svg[data-chart=gantt] rect.mm-c1,body.nlm78 svg[data-chart=gantt] rect.mm-c4{fill:var(--c78-blue-hl);stroke:var(--c78-blue-d)}
+body.nlm78 svg[data-chart=gantt] rect.mm-c2,body.nlm78 svg[data-chart=gantt] rect.mm-c5,body.nlm78 svg[data-chart=gantt] rect.mm-c6{fill:var(--c78-green-mid);stroke:var(--c78-green-d)}
+body.nlm78 svg[data-chart=gantt] rect.mm-c3{fill:var(--c78-orange-bg);stroke:var(--c78-orange)}
+body.nlm78 svg[data-chart=gantt] .gt-btxt{fill:var(--c78-ink);font-family:var(--c78-hand);font-size:15px;font-weight:700}
+body.nlm78 svg[data-chart=gantt] .gt-lab{fill:var(--c78-ink);font-size:15px;font-weight:600}
+body.nlm78 svg[data-chart=gantt] .gt-tlab{fill:var(--c78-mut);font-family:var(--c78-hand);font-size:16px;font-weight:700}
+
+/* p27 漏斗：藍＝各關比例、最後一關綠＝成交；右側綠點＝AI 幫的事 */
+body.nlm78 svg[data-chart=funnel] polygon{fill:var(--c78-blue-bg)!important;stroke:var(--c78-blue);stroke-width:2.4;stroke-linejoin:round;filter:url(#nlm78-rough-c)}
+body.nlm78 svg[data-chart=funnel] polygon:nth-of-type(5){fill:var(--c78-green-bg)!important;stroke:var(--c78-green)}
+body.nlm78 svg[data-chart=funnel] .fn-t{fill:var(--c78-ink);font-size:16px;font-weight:800}
+body.nlm78 svg[data-chart=funnel] circle{r:6.5px;fill:var(--c78-green);stroke:var(--c78-green-d);stroke-width:1.5}
+body.nlm78 svg[data-chart=funnel] .fn-side{fill:var(--c78-ink);font-size:12.6px;font-weight:600}
+
+/* 圖例 */
+body.nlm78 .legend.nlm78-lg{display:flex;flex-wrap:wrap;align-items:center;gap:6px 22px;margin:8px 0 0;padding:7px 14px;border:2px dashed var(--c78-grid);border-radius:12px;font-size:16px;line-height:1.5;color:var(--c78-ink);background:color-mix(in srgb,var(--c78-paper) 85%,transparent);flex:none}
+body.nlm78 .legend.nlm78-lg b{font-family:var(--c78-hand);font-weight:700;margin-right:2px}
+body.nlm78 .legend.nlm78-lg span{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+body.nlm78 .legend.nlm78-lg svg{width:40px;height:18px;flex:none;overflow:visible}
+body.nlm78 .legend.nlm78-lg .lg-m{display:none;color:var(--c78-mut)}
+body.nlm78 .nlm78-lg .sw{stroke-width:2.2;filter:url(#nlm78-rough-c)}
+body.nlm78 .nlm78-lg .sw-hb{fill:url(#nlm78-hb);stroke:var(--c78-blue)}
+body.nlm78 .nlm78-lg .sw-hg{fill:url(#nlm78-hg);stroke:var(--c78-green)}
+body.nlm78 .nlm78-lg .sw-hi{fill:var(--c78-green-d);stroke:var(--c78-green-d)}
+body.nlm78 .nlm78-lg .sw-md{fill:url(#nlm78-hm);stroke:var(--c78-green)}
+body.nlm78 .nlm78-lg .sw-lo{fill:var(--c78-green-low);stroke:var(--c78-green);stroke-dasharray:5 4}
+body.nlm78 .nlm78-lg .sw-bl{fill:var(--c78-blue-hl);stroke:var(--c78-blue-d)}
+body.nlm78 .nlm78-lg .sw-gr{fill:var(--c78-green-mid);stroke:var(--c78-green-d)}
+body.nlm78 .nlm78-lg .sw-or{fill:var(--c78-orange-bg);stroke:var(--c78-orange)}
+body.nlm78 .nlm78-lg .sw-fb{fill:var(--c78-blue-bg);stroke:var(--c78-blue)}
+body.nlm78 .nlm78-lg .sw-fg{fill:var(--c78-green-bg);stroke:var(--c78-green)}
+body.nlm78 .nlm78-lg .sw-dot{fill:var(--c78-green);stroke:var(--c78-green-d);stroke-width:1.5}
+body.nlm78 .nlm78-lg .ln-g{fill:none;stroke:var(--c78-green);stroke-width:3.2;stroke-linecap:round;filter:url(#nlm78-rough-cl)}
+body.nlm78 .nlm78-lg .ln-o{fill:none;stroke:var(--c78-orange);stroke-width:2.8;stroke-dasharray:9 6;filter:url(#nlm78-rough-cl)}
+body.nlm78 .nlm78-lg .ln-r{fill:none;stroke:var(--c78-grid);stroke-width:1.8;stroke-dasharray:5 4}
+
+/* 手機：圖保持可讀字級，改成左右滑動 */
+@media (max-width:720px){
+  body.nlm78 .chartwrap:has(> svg[data-chart=bars]),body.nlm78 .chartwrap:has(> svg[data-chart=heatmap]),
+  body.nlm78 .chartwrap:has(> svg[data-chart=radar]),body.nlm78 .chartwrap:has(> svg[data-chart=gantt]),
+  body.nlm78 .chartwrap:has(> svg[data-chart=funnel]){overflow-x:auto;overflow-y:hidden;place-items:start;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+  body.nlm78 .chartwrap>svg[data-chart=bars],body.nlm78 .chartwrap>svg[data-chart=heatmap],body.nlm78 .chartwrap>svg[data-chart=gantt]{min-width:980px}
+  body.nlm78 .chartwrap>svg[data-chart=radar]{min-width:600px}
+  body.nlm78 .chartwrap>svg[data-chart=funnel]{min-width:860px}
+  body.nlm78 .legend.nlm78-lg{gap:4px 14px;padding:6px 10px;font-size:15px}
+  body.nlm78 .legend.nlm78-lg .lg-m{display:inline-flex}
+}
+</style>
+<style id="nlm78-layout">
+/* ===== 圖表放大＋左右對稱（左右兩欄到 721px；手機才直排） ===== */
+@media (min-width:1101px){
+  body.nlm78 .slide:has(svg[data-chart=journey],svg[data-chart=bars],svg[data-chart=heatmap],svg[data-chart=gantt],svg[data-chart=funnel]) .chartwrap{
+    flex:1 1 0;min-height:0;display:grid;place-items:center}
+  body.nlm78 .slide:has(svg[data-chart=journey],svg[data-chart=bars],svg[data-chart=heatmap],svg[data-chart=gantt],svg[data-chart=funnel]) .chartwrap>svg{
+    width:100%;height:100%;max-height:none;min-width:0}
+}
+@media (min-width:721px){
+  /* 第 20、24 頁：上方標題橫跨，下方左右各半 */
+  body.nlm78 .slide.active:has(svg[data-chart=radar]),
+  body.nlm78 .slide.active:has(svg#fdg){
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:32px;
+    grid-template-rows:auto auto auto auto auto 1fr;align-content:stretch}
+  body.nlm78 .slide:has(svg[data-chart=radar])>*,
+  body.nlm78 .slide:has(svg#fdg)>*{grid-column:1;min-width:0}
+  body.nlm78 .slide:has(svg[data-chart=radar])>.scene-tag,
+  body.nlm78 .slide:has(svg#fdg)>.scene-tag{grid-column:auto}
+  body.nlm78 .slide:has(svg[data-chart=radar])>.kick,
+  body.nlm78 .slide:has(svg[data-chart=radar])>h2,
+  body.nlm78 .slide:has(svg#fdg)>.kick,
+  body.nlm78 .slide:has(svg#fdg)>h2{grid-column:1 / -1}
+  body.nlm78 .slide:has(svg[data-chart=radar])>.chartwrap,
+  body.nlm78 .slide:has(svg#fdg)>.mindwrap{grid-column:2;grid-row:3 / -1;align-self:stretch;
+    display:grid;place-items:center;margin-top:10px;min-height:0;overflow:visible}
+  body.nlm78 .slide:has(svg[data-chart=radar])>.chartwrap>svg,
+  body.nlm78 .slide:has(svg#fdg)>.mindwrap>svg{width:100%;height:100%;max-height:none;min-width:0}
+  body.nlm78 .slide:has(svg[data-chart=radar])>.muted-s,
+  body.nlm78 .slide:has(svg#fdg)>.muted-s{font-size:19px;line-height:1.7;color:var(--n-ink,inherit);margin:14px 0 4px}
+  body.nlm78 .slide:has(svg[data-chart=radar])>.legend,
+  body.nlm78 .slide:has(svg#fdg)>.legend{flex-direction:column;align-items:flex-start;gap:8px;margin:14px 0 0;padding:12px 16px;font-size:16px}
+  body.nlm78 .slide:has(svg[data-chart=radar])>.disc,
+  body.nlm78 .slide:has(svg#fdg)>.disc{align-self:start}
+  body.nlm78 .slide:has(svg#fdg)>.nlm78-hint{display:none}
+}
+/* 第 3 頁：左右對稱，右欄直式流程圖撐滿 */
+body.nlm78 .split.nlm78-s3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+body.nlm78 .nlm78-s3 .panel.hi{display:flex;flex-direction:column;min-width:0}
+body.nlm78 .nlm78-s3 .panel.hi>.nlm78-scroll{flex:1 1 0;min-height:0;display:grid;place-items:center;overflow:hidden;margin-top:10px}
+body.nlm78 svg.nlm78-vflow{width:100%;height:100%;max-height:100%;min-width:0;margin:0}
+body.nlm78 .nlm78-s3 .kv{margin-top:26px}
+@media (max-width:720px){
+  body.nlm78 .split.nlm78-s3{grid-template-columns:1fr}
+  body.nlm78 .nlm78-s3 .panel.hi>.nlm78-scroll{flex:none;overflow:visible}
+  body.nlm78 svg.nlm78-vflow{height:auto}
+}
+/* 矮螢幕（如 1280×720）：左欄文字收緊，避免捲動 */
+@media (min-width:721px) and (max-height:820px){
+  body.nlm78 .slide:has(svg[data-chart=radar])>.muted-s,
+  body.nlm78 .slide:has(svg#fdg)>.muted-s{font-size:16px;line-height:1.55;margin:8px 0 0}
+  body.nlm78 .slide:has(svg[data-chart=radar]) .nlm78-read li,
+  body.nlm78 .slide:has(svg#fdg) .nlm78-read li{font-size:15px;margin:4px 0;line-height:1.5}
+}
+@media (min-width:1201px) and (max-height:820px){
+  body.nlm78 .slide:has(svg[data-chart=radar])>.legend,
+  body.nlm78 .slide:has(svg#fdg)>.legend{display:grid;grid-template-columns:auto 1fr 1fr;gap:4px 14px;padding:8px 12px;font-size:15px}
+  body.nlm78 .slide:has(svg[data-chart=radar])>.legend>b,
+  body.nlm78 .slide:has(svg#fdg)>.legend>b{grid-row:span 3}
+}
+@media (min-width:721px){
+  body.nlm78 .slide:has(svg[data-chart=radar])>.legend>b,
+  body.nlm78 .slide:has(svg#fdg)>.legend>b{white-space:nowrap}
+}
+/* 手機（≤720px）：直排時圖表不被壓扁 */
+@media (max-width:720px){
+  body.nlm78 .slide:has(svg[data-chart=radar])>.chartwrap,
+  body.nlm78 .slide:has(svg#fdg)>.mindwrap{flex:none;height:auto;min-height:0}
+  body.nlm78 .slide:has(svg[data-chart=radar])>.chartwrap>svg{width:100%;height:auto;max-height:none;min-width:0}
+  body.nlm78 .slide:has(svg#fdg)>.mindwrap>svg{width:100%;height:auto;aspect-ratio:580/470;max-height:none;min-width:0}
+}
+/* 看圖重點：⑦ 藍色事實卡（窄螢幕也顯示，在圖上方） */
+body.nlm78 .nlm78-read{position:relative;margin:14px 0 0;padding:14px 18px 12px;border:2px solid var(--n-blue,#2F6FB0);border-radius:6px;
+  background:var(--n-blue-bg,#EEF4FB)}
+body.nlm78 .nlm78-read .rd-h{position:absolute;top:-13px;left:14px;padding:1px 10px;background:var(--n-blue,#2F6FB0);color:#fff;font-size:15px;border-radius:4px}
+body.nlm78 .nlm78-read ol{margin:6px 0 0;padding-left:0;list-style:none;counter-reset:r}
+body.nlm78 .nlm78-read li{counter-increment:r;position:relative;padding-left:36px;margin:8px 0;font-size:17px;line-height:1.6}
+body.nlm78 .nlm78-read li::before{content:counter(r);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  border:2px solid currentColor;display:grid;place-items:center;font-family:"Ink Free","Segoe Print",cursive;font-weight:700;font-size:15px}
+body.nlm78 .nlm78-read li>span{font-weight:800;color:var(--n-teal,#17807C);margin-right:8px}
+html[data-theme="dark"] body.nlm78 .nlm78-read{background:rgba(80,140,210,.12);border-color:#6FA3DA}
+html[data-theme="dark"] body.nlm78 .nlm78-read .rd-h{background:#4F86C2}
+html[data-theme="dark"] body.nlm78 .nlm78-read li>span{color:#5CC8C2}
+@media (max-width:1100px){body.nlm78 .nlm78-read li{font-size:16px}}
+</style>
 </head>
-<body>
+<body class="nlm78">
+<svg id="nlm78-charts-defs" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false"><defs><filter id="nlm78-rough-c" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="nlm78-rough-cl" filterUnits="userSpaceOnUse" x="-50" y="-50" width="1100" height="600"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/></filter><pattern id="nlm78-hb" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)"><rect class="bg" width="8" height="8"/><line class="ln" x1="0" y1="0" x2="0" y2="8" stroke-width="3" stroke-opacity=".5"/></pattern><pattern id="nlm78-hg" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)"><rect class="bg" width="8" height="8"/><line class="ln" x1="0" y1="0" x2="0" y2="8" stroke-width="3" stroke-opacity=".5"/></pattern><pattern id="nlm78-hm" patternUnits="userSpaceOnUse" width="9" height="9" patternTransform="rotate(45)"><rect class="bg" width="9" height="9"/><line class="ln" x1="0" y1="0" x2="0" y2="9" stroke-width="2" stroke-opacity=".35"/></pattern></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="nlm78-rough" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="nlm78-rough-c" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="5" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.8" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="nlm78-rough-l" filterUnits="userSpaceOnUse" x="-50" y="-50" width="1100" height="660"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/></filter><marker id="nlm78-m-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path class="nlm78-mk b" d="M0 0L10 5L0 10z"/></marker><marker id="nlm78-m-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path class="nlm78-mk g" d="M0 0L10 5L0 10z"/></marker><marker id="nlm78-m-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path class="nlm78-mk o" d="M0 0L10 5L0 10z"/></marker></defs></svg>
 <div class="deck" id="deck">
   <div class="progress" id="progress"></div>
 
@@ -369,31 +921,7 @@
     <span class="kick">工具速覽</span>
     <h2>NotebookLM 是什麼？能幫我做什麼？</h2>
     <p>Google 推出、內建 Gemini 的 AI 研究筆記工具（2026 年更名為 Gemini Notebook）。把資料丟進去，它變成你的「專屬知識庫」。</p>
-    <div class="split">
-      <div class="panel hi">
-        <div class="mini">核心運作 3 步</div>
-        <svg viewBox="0 0 380 118" data-chart="flow" style="width:100%;height:auto;margin-top:12px" role="img" aria-label="核心運作三步流程">
-          <defs><marker id="flArr" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path class="fl-arrow" d="M0,0 L9,4.5 L0,9 Z"/></marker></defs>
-          <line x1="112" y1="52" x2="132" y2="52" stroke="var(--brand)" stroke-width="2.4" marker-end="url(#flArr)"/>
-          <line x1="246" y1="52" x2="266" y2="52" stroke="var(--brand)" stroke-width="2.4" marker-end="url(#flArr)"/>
-          <rect class="fl-node" x="6"   y="30" width="104" height="44" rx="12"/>
-          <rect class="fl-node" x="140" y="30" width="104" height="44" rx="12"/>
-          <rect class="fl-node" x="274" y="30" width="104" height="44" rx="12"/>
-          <text class="fl-t" x="58"  y="52" text-anchor="middle">① 匯入來源</text>
-          <text class="fl-s" x="58"  y="68" text-anchor="middle">PDF・網頁・YouTube</text>
-          <text class="fl-t" x="192" y="52" text-anchor="middle">② 向 AI 提問</text>
-          <text class="fl-s" x="192" y="68" text-anchor="middle">輸入提示詞</text>
-          <text class="fl-t" x="326" y="52" text-anchor="middle">③ 產出成果</text>
-          <text class="fl-s" x="326" y="68" text-anchor="middle">摘要・簡報・音訊</text>
-          <text class="fl-s" x="58"  y="22" text-anchor="middle">📥</text>
-          <text class="fl-s" x="192" y="22" text-anchor="middle">💬</text>
-          <text class="fl-s" x="326" y="22" text-anchor="middle">📤</text>
-        </svg>
-        <div class="kv" style="margin-top:20px">
-          <div class="mini">收費</div>
-          <p style="margin-top:6px"><b style="color:var(--heading)">免費版</b>即可使用大部分功能；Google AI Pro／Workspace 帳號有更高的來源與產出額度。<br><span class="tagW pill">建議：先用公司帳號的免費額度體驗</span></p>
-        </div>
-      </div>
+    <div class="split nlm78-s3">
       <div class="panel">
         <div class="mini">6 大常用能力</div>
         <ul class="clean" style="margin-top:14px">
@@ -404,6 +932,30 @@
           <li><b>影片摘要</b>：60 秒客製化教學短片，補足純文字講不清的語境</li>
           <li><b>心智圖 & AI 出題</b>：整理架構、自我檢核記憶</li>
         </ul>
+        <div class="kv" style="margin-top:20px">
+          <div class="mini">收費</div>
+          <p style="margin-top:6px"><b style="color:var(--heading)">免費版</b>即可使用大部分功能；Google AI Pro／Workspace 帳號有更高的來源與產出額度。<br><span class="tagW pill">建議：先用公司帳號的免費額度體驗</span></p>
+        </div>
+      </div>
+      <div class="panel hi">
+        <div class="mini">核心運作 3 步</div>
+        <div class="nlm78-scroll"><svg class="nlm78-vflow" viewBox="0 0 300 222" data-chart="flow" role="img" aria-label="核心運作三步流程">
+          <defs><marker id="flArr" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path class="fl-arrow" d="M0,0 L9,4.5 L0,9 Z"/></marker></defs>
+          <line x1="171" y1="58" x2="171" y2="76" stroke="var(--brand)" stroke-width="2.4" marker-end="url(#flArr)"/>
+          <line x1="171" y1="138" x2="171" y2="156" stroke="var(--brand)" stroke-width="2.4" marker-end="url(#flArr)"/>
+          <rect class="fl-node" x="46" y="4"   width="250" height="52" rx="12"/>
+          <rect class="fl-node" x="46" y="84"  width="250" height="52" rx="12"/>
+          <rect class="fl-node" x="46" y="164" width="250" height="52" rx="12"/>
+          <text class="fl-t" x="171" y="27"  text-anchor="middle">① 匯入來源</text>
+          <text class="fl-s" x="171" y="46"  text-anchor="middle">PDF・網頁・YouTube</text>
+          <text class="fl-t" x="171" y="107" text-anchor="middle">② 向 AI 提問</text>
+          <text class="fl-s" x="171" y="126" text-anchor="middle">輸入提示詞</text>
+          <text class="fl-t" x="171" y="187" text-anchor="middle">③ 產出成果</text>
+          <text class="fl-s" x="171" y="206" text-anchor="middle">摘要・簡報・音訊</text>
+          <text class="fl-s" x="22" y="31" text-anchor="middle" style="font-size:22px" dominant-baseline="middle">📥</text>
+          <text class="fl-s" x="22" y="111" text-anchor="middle" style="font-size:22px" dominant-baseline="middle">💬</text>
+          <text class="fl-s" x="22" y="191" text-anchor="middle" style="font-size:22px" dominant-baseline="middle">📤</text>
+        </svg></div><div class="legend f78" role="note" aria-label="核心流程圖例"><b>圖例</b><span><svg viewBox="0 0 40 16" aria-hidden="true"><path class="ln b" d="M2 8H34" marker-end="url(#nlm78-m-blue)"/></svg>藍線＝匯入、讀取來源</span><span><svg viewBox="0 0 40 16" aria-hidden="true"><path class="ln o" d="M2 8H34" marker-end="url(#nlm78-m-orange)"/></svg>橘線＝產出成果</span><span><svg viewBox="0 0 40 16" aria-hidden="true"><rect class="bx" x="3" y="2" width="34" height="12" rx="3"/></svg>實線框＝操作步驟</span></div><p class="nlm78-hint">手機上可以左右滑動看完整張圖。</p>
       </div>
     </div>
   </section>
@@ -429,7 +981,7 @@
     <h2>業務的一天：用 AI 串起 5 個情境</h2>
     <p class="muted-s" style="margin-bottom:2px">從晨會到拜訪前，NotebookLM 貫穿一整天的關鍵節點，把零碎時間變成業績時間。</p>
     <div class="chartwrap">
-      <svg viewBox="0 0 1000 300" data-chart="journey" role="img" aria-label="業務一天工作流旅程圖">
+      <svg viewBox="12 24 976 254" data-chart="journey" role="img" aria-label="業務一天工作流旅程圖"><rect class="nlm78-zn" x="28" y="40" width="352" height="222" rx="22" aria-hidden="true"/><rect class="nlm78-zn" x="420" y="40" width="552" height="222" rx="22" aria-hidden="true"/><text class="nlm78-znt" x="46" y="66" aria-hidden="true">上午</text><text class="nlm78-znt" x="438" y="66" aria-hidden="true">午後</text>
         <line class="jn-line" x1="100" y1="150" x2="900" y2="150"/>
         <!-- 站點 -->
         <g><circle class="jn-hub" cx="100" cy="150" r="26"/><text class="jn-num" x="100" y="157" text-anchor="middle">1</text>
@@ -444,7 +996,7 @@
           <text class="jn-t" x="900" y="88" text-anchor="middle">財報解讀</text><text class="jn-s" x="900" y="106" text-anchor="middle">18:00 拜訪前準備</text></g>
       </svg>
     </div>
-    <div class="disc">＊時間點為示意，實際依個人工作節奏調整。</div>
+    <div class="legend f78" role="note" aria-label="旅程圖圖例"><b>圖例</b><span><svg viewBox="0 0 40 16" aria-hidden="true"><path class="ln k" d="M2 8H38"/></svg>黑線＝一天的時間順序（左早右晚）</span><span><svg class="sw" viewBox="0 0 18 18" aria-hidden="true"><circle class="no" cx="9" cy="9" r="8"/><text class="not" x="9" y="13" text-anchor="middle">1</text></svg>青色圓圈＝情境編號（同上一頁 1–5）</span><span><svg viewBox="0 0 40 16" aria-hidden="true"><rect class="zn" x="3" y="2" width="34" height="12" rx="4"/></svg>虛線框＝上午／午後</span></div><p class="nlm78-hint">手機上可以左右滑動看完整張圖。</p><div class="disc">＊時間點為示意，實際依個人工作節奏調整。</div>
   </section>
 
   <!-- 5 情境1 -->
@@ -615,7 +1167,7 @@
     <h2>競品研究效益：人工 vs NotebookLM（示意）</h2>
     <p class="muted-s" style="margin-bottom:2px">同一份競品比較，NotebookLM 把耗時大幅壓縮，讓業務把時間留給客戶。</p>
     <div class="chartwrap">
-      <svg viewBox="0 0 1000 380" data-chart="bars" role="img" aria-label="人工與 NotebookLM 工時分組長條圖">
+      <svg viewBox="-5 -3 981 365" data-chart="bars" role="img" aria-label="人工與 NotebookLM 工時分組長條圖">
         <!-- 圖例 -->
         <rect class="bar-a" x="640" y="18" width="16" height="16" rx="3"/><text class="leg-t" x="662" y="31">人工</text>
         <rect class="bar-b" x="740" y="18" width="16" height="16" rx="3"/><text class="leg-t" x="762" y="31">NotebookLM</text>
@@ -646,6 +1198,7 @@
         <text class="cx-lab" x="849" y="342" text-anchor="middle">合計工時</text>
       </svg>
     </div>
+    <div class="legend nlm78-lg" role="note" aria-label="工時長條圖圖例"><b>圖例</b><span><svg viewBox="0 0 40 18" aria-hidden="true"><rect class="sw sw-hb" x="2" y="2" width="36" height="14" rx="3"/></svg>藍＝現況（人工作業）</span><span><svg viewBox="0 0 40 18" aria-hidden="true"><rect class="sw sw-hg" x="2" y="2" width="36" height="14" rx="3"/></svg>綠＝改善後（用 NotebookLM）</span><span>柱上數字＝小時</span><span class="lg-m">手機可左右滑動看整張圖</span></div>
     <div class="disc">＊工時為示意，用以說明效率差異；實際依案件複雜度而定。</div>
   </section>
 
@@ -745,7 +1298,7 @@
     <h2>方案適配矩陣：需求 × 產品（示意）</h2>
     <p class="muted-s" style="margin-bottom:2px">把知識庫的判斷邏輯視覺化：顏色越深＝適配度越高，拜訪時一眼對到客戶需求。</p>
     <div class="chartwrap">
-      <svg viewBox="0 0 1000 430" data-chart="heatmap" role="img" aria-label="需求與產品適配度熱區矩陣">
+      <svg viewBox="45 24 911 404" data-chart="heatmap" role="img" aria-label="需求與產品適配度熱區矩陣">
         <!-- 欄標題 -->
         <text class="hm-col" x="270" y="58" text-anchor="middle">SD-WAN</text>
         <text class="hm-col" x="420" y="58" text-anchor="middle">IP-VPN</text>
@@ -794,6 +1347,7 @@
         <rect class="hm-cell" x="440" y="392" width="30" height="20" rx="4" style="fill:color-mix(in srgb,var(--brand) 15%,transparent)"/><text class="fn-side" x="478" y="407">低適配</text>
       </svg>
     </div>
+    <div class="legend nlm78-lg" role="note" aria-label="適配矩陣圖例"><b>圖例</b><span><svg viewBox="0 0 40 18" aria-hidden="true"><rect class="sw sw-hi" x="2" y="2" width="36" height="14" rx="3"/></svg>深綠實心＝高</span><span><svg viewBox="0 0 40 18" aria-hidden="true"><rect class="sw sw-md" x="2" y="2" width="36" height="14" rx="3"/></svg>綠斜線＝中</span><span><svg viewBox="0 0 40 18" aria-hidden="true"><rect class="sw sw-lo" x="2" y="2" width="36" height="14" rx="3"/></svg>淺色虛框＝低</span><span>列＝客戶需求，欄＝產品</span><span class="lg-m">手機可左右滑動看整張圖</span></div>
     <div class="disc">＊適配度為業務判斷示意，實際方案與費率以中華電信正式評估報價為準。</div>
   </section>
 
@@ -922,8 +1476,13 @@
     <span class="kick">Radar Chart</span>
     <h2>能力雷達：中華電信 vs 競品（示意）</h2>
     <p class="muted-s" style="margin-bottom:2px">提案時用一張雷達圖說清楚「我方強在哪」，把價格劣勢轉成價值對話。</p>
+    <div class="nlm78-read"><b class="rd-h">看圖重點</b><ol>
+<li><span>怎麼看</span>每個角是一個面向，越往外越強。</li>
+<li><span>比一比</span>綠色是我方、橘色是對手；哪個角拉得最遠，就是長處。</li>
+<li><span>提案時</span>價格不是最低時，把話題拉到涵蓋、資安和服務保證，把價格的對話變成價值的對話。</li>
+</ol></div>
     <div class="chartwrap">
-      <svg viewBox="0 0 640 470" data-chart="radar" role="img" aria-label="中華電信與競品能力雷達圖">
+      <svg viewBox="75 -6 489 411" data-chart="radar" role="img" aria-label="中華電信與競品能力雷達圖">
         <!-- 圖例 -->
         <rect class="rd-da" x="176" y="14" width="16" height="16" rx="3"/><text class="leg-t" x="198" y="27">中華電信</text>
         <rect class="rd-db" x="360" y="14" width="16" height="16" rx="3"/><text class="leg-t" x="382" y="27">競品（示意）</text>
@@ -951,6 +1510,7 @@
         <text class="rd-lab" x="154" y="176" text-anchor="end">價格彈性</text>
       </svg>
     </div>
+    <div class="legend nlm78-lg" role="note" aria-label="雷達圖圖例"><b>圖例</b><span><svg viewBox="0 0 40 18" aria-hidden="true"><path class="ln-g" d="M2 9H38"/></svg>綠實線＝我方</span><span><svg viewBox="0 0 40 18" aria-hidden="true"><path class="ln-o" d="M2 9H38"/></svg>橘虛線＝競品</span><span><svg viewBox="0 0 40 18" aria-hidden="true"><path class="ln-r" d="M2 9H38"/></svg>由內到外三圈＝1、3、5 分</span><span class="lg-m">手機可左右滑動看整張圖</span></div>
     <div class="disc">＊各面向為業務觀點示意評分（滿分 5），非官方數據；費率以專案報價為準。</div>
   </section>
 
@@ -1057,13 +1617,19 @@
     <span class="kick">Mind Map</span>
     <h2>客戶心智圖：台鴻精工 一頁看懂</h2>
     <p class="muted-s" style="margin-bottom:2px">參照 D3 Force-Directed Graph：節點載入時自動收斂成形、可用滑鼠拖曳；以客戶為核心連結「6 大面向 · 12 個重點」。</p>
+    <div class="nlm78-read"><b class="rd-h">看圖重點</b><ol>
+<li><span>怎麼看</span>中間是客戶，往外長出六個面向，每個面向再接到重點。</li>
+<li><span>為什麼畫成圖</span>一眼看出誰跟誰有關，例如海外擴點連到網路需求。</li>
+<li><span>動手玩</span>用滑鼠拖一個點，看它怎麼牽動其他點。</li>
+<li><span>拜訪前</span>看一眼就掌握客戶全貌；也能請 NotebookLM 直接產出心智圖。</li>
+</ol></div>
     <div class="mindwrap">
-      <svg id="fdg" class="mind" viewBox="0 0 900 560" data-chart="fdg" role="img" aria-label="台鴻精工 客戶全貌力導向關係圖">
+      <svg id="fdg" class="mind" viewBox="200 50 580 470" data-chart="fdg" role="img" aria-label="台鴻精工 客戶全貌力導向關係圖">
         <g class="fdg-links"></g>
         <g class="fdg-nodes"></g>
       </svg>
     </div>
-    <div class="disc">＊心智圖內容依 Case 05 整理；財務數字為示意，電信服務費率以專案報價為準。</div>
+    <div class="legend f78" role="note" aria-label="心智圖圖例"><b>圖例</b><span><svg class="sw" viewBox="0 0 18 16" aria-hidden="true"><circle class="c-hub" cx="9" cy="8" r="7"/></svg>中心＝客戶</span><span><svg class="sw" viewBox="0 0 18 16" aria-hidden="true"><circle class="c-main c-b" cx="9" cy="8" r="6"/></svg>藍＝客戶現況（財務、營運）</span><span><svg class="sw" viewBox="0 0 18 16" aria-hidden="true"><circle class="c-main c-o" cx="9" cy="8" r="6"/></svg>橘＝要注意的風險</span><span><svg class="sw" viewBox="0 0 18 16" aria-hidden="true"><circle class="c-main c-g" cx="9" cy="8" r="6"/></svg>綠＝我方切入（商機、話題）</span><span><svg class="sw" viewBox="0 0 18 16" aria-hidden="true"><circle class="c-main c-p" cx="9" cy="8" r="6"/></svg>紫＝誰拍板</span><span><svg class="sw" viewBox="0 0 18 16" aria-hidden="true"><circle class="c-leaf" cx="9" cy="8" r="4.5"/></svg>空心小點＝細項</span></div><p class="nlm78-hint">手機上可以左右滑動看完整張圖。</p><div class="disc">＊心智圖內容依 Case 05 整理；財務數字為示意，電信服務費率以專案報價為準。</div>
   </section>
 
   <!-- 10 導入建議 -->
@@ -1097,7 +1663,7 @@
     <h2>8 週導入時程建議（示意）</h2>
     <p class="muted-s" style="margin-bottom:2px">從資料整備到成效檢視，分階段推進；每階段都要有「可展示的成果」。</p>
     <div class="chartwrap">
-      <svg viewBox="0 0 1000 380" data-chart="gantt" role="img" aria-label="8 週導入時程甘特圖">
+      <svg viewBox="44 13 932 345" data-chart="gantt" role="img" aria-label="8 週導入時程甘特圖">
         <!-- 週格線 + 標題 -->
         <g>
           <text class="gt-tlab" x="285" y="44" text-anchor="middle">W1</text><text class="gt-tlab" x="375" y="44" text-anchor="middle">W2</text>
@@ -1125,6 +1691,7 @@
         <rect class="gt-track" x="240" y="304" width="720" height="26" rx="6"/><rect class="mm-c3" x="780" y="304" width="180" height="26" rx="6"/><text class="gt-btxt" x="870" y="322" text-anchor="middle">W7–W8</text>
       </svg>
     </div>
+    <div class="legend nlm78-lg" role="note" aria-label="甘特圖圖例"><b>圖例</b><span><svg viewBox="0 0 40 18" aria-hidden="true"><rect class="sw sw-bl" x="2" y="2" width="36" height="14" rx="3"/></svg>藍＝準備資料</span><span><svg viewBox="0 0 40 18" aria-hidden="true"><rect class="sw sw-gr" x="2" y="2" width="36" height="14" rx="3"/></svg>綠＝培訓與試用</span><span><svg viewBox="0 0 40 18" aria-hidden="true"><rect class="sw sw-or" x="2" y="2" width="36" height="14" rx="3"/></svg>橘＝看成果、再調整</span><span>一格＝1 週</span><span class="lg-m">手機可左右滑動看整張圖</span></div>
     <div class="disc">＊時程為導入示意，實際依團隊人力與案量調整。</div>
   </section>
 
@@ -1134,7 +1701,7 @@
     <h2>業務推進漏斗：AI 在每一關幫什麼（示意）</h2>
     <p class="muted-s" style="margin-bottom:2px">從名單到成交，NotebookLM 在每個階段都能省時、補彈藥、提高轉換。</p>
     <div class="chartwrap">
-      <svg viewBox="0 0 820 400" data-chart="funnel" role="img" aria-label="業務推進漏斗圖">
+      <svg viewBox="34 14 798 374" data-chart="funnel" role="img" aria-label="業務推進漏斗圖">
         <polygon points="50,30 610,30 565,92 95,92"   style="fill:color-mix(in srgb,var(--brand) 85%,transparent)"/><text class="fn-t" x="330" y="66" text-anchor="middle">名單開發　100%</text>
         <polygon points="95,100 565,100 520,162 140,162" style="fill:color-mix(in srgb,var(--brand) 72%,transparent)"/><text class="fn-t" x="330" y="136" text-anchor="middle">需求確認　65%</text>
         <polygon points="140,170 520,170 475,232 185,232" style="fill:color-mix(in srgb,var(--brand) 59%,transparent)"/><text class="fn-t" x="330" y="206" text-anchor="middle">方案提案　42%</text>
@@ -1148,6 +1715,7 @@
         <circle class="mm-c6" cx="630" cy="337" r="5"/><text class="fn-side" x="646" y="341">整包簽約／門號續約</text>
       </svg>
     </div>
+    <div class="legend nlm78-lg" role="note" aria-label="漏斗圖圖例"><b>圖例</b><span><svg viewBox="0 0 40 18" aria-hidden="true"><rect class="sw sw-fb" x="2" y="2" width="36" height="14" rx="3"/></svg>藍＝各關留下的比例</span><span><svg viewBox="0 0 40 18" aria-hidden="true"><rect class="sw sw-fg" x="2" y="2" width="36" height="14" rx="3"/></svg>綠＝最後一關成交</span><span><svg viewBox="0 0 40 18" aria-hidden="true"><circle class="sw-dot" cx="20" cy="9" r="6.5"/></svg>綠點＝AI 在這關做的事</span><span class="lg-m">手機可左右滑動看整張圖</span></div>
     <div class="disc">＊轉換率為示意，用以說明各階段 AI 應用；實際依產品與客戶而定。</div>
   </section>
 
@@ -1197,8 +1765,8 @@
     <div class="disc" style="margin-top:8px">＊案例中的公司、財務數字與轉換率均為<b>示意</b>；電信費率一律以<b>專案報價</b>為準，非官方數據。</div>
 
     <div class="mini" style="margin-top:12px">製作流程</div>
-    <div style="margin-top:6px;width:100%">
-      <svg viewBox="0 0 1000 96" data-chart="flow" role="img" aria-label="簡報製作五步流程" style="display:block;width:100%;height:auto">
+    <div class="nlm78-scroll" style="margin-top:6px;width:100%">
+      <svg viewBox="0 12 1000 72" data-chart="flow" role="img" aria-label="簡報製作五步流程" style="display:block;width:100%;height:auto">
         <defs>
           <marker id="cfArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 z" class="fl-arrow"/>
@@ -1215,7 +1783,7 @@
         <g><rect class="fl-node" x="816" y="20" width="160" height="56" rx="12"/><text class="fl-t" x="896" y="46" text-anchor="middle">⑤ 檢視修訂</text><text class="fl-s" x="896" y="66" text-anchor="middle">預覽回饋再迭代</text></g>
       </svg>
     </div>
-    <div class="disc" style="margin-top:6px">＊本頁流程亦即「用 AI 做一份教學簡報」的縮影：先餵資料、再共創、後打磨，人審定稿。</div>
+    <div class="legend f78" role="note" aria-label="製作流程圖例"><b>圖例</b><span><svg viewBox="0 0 40 16" aria-hidden="true"><path class="ln b" d="M2 8H34" marker-end="url(#nlm78-m-blue)"/></svg>藍線＝讀進參考文章、官網</span><span><svg viewBox="0 0 40 16" aria-hidden="true"><path class="ln g" d="M2 8H34" marker-end="url(#nlm78-m-green)"/></svg>綠線＝和 AI 共創、加工</span><span><svg viewBox="0 0 40 16" aria-hidden="true"><path class="ln o" d="M2 8H34" marker-end="url(#nlm78-m-orange)"/></svg>橘線＝產出交給人審</span><span><svg viewBox="0 0 40 16" aria-hidden="true"><rect class="bx" x="3" y="2" width="34" height="12" rx="3"/></svg>實線框＝製作步驟</span></div><p class="nlm78-hint">手機上可以左右滑動看完整張圖。</p><div class="disc" style="margin-top:6px">＊本頁流程亦即「用 AI 做一份教學簡報」的縮影：先餵資料、再共創、後打磨，人審定稿。</div>
   </section>
 
   <div class="dots" id="dots"></div>
