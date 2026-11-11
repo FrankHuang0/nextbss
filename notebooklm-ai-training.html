@@ -798,13 +798,14 @@ body.nlm78 .nlm78-lg .ln-r{fill:none;stroke:var(--c78-grid);stroke-width:1.8;str
 }
 </style>
 <style id="nlm78-layout">
-/* ===== 圖表放大＋左右對稱（只在寬螢幕；≤1100px 維持原本直排） ===== */
+/* ===== 圖表放大＋左右對稱（左右兩欄到 721px；手機才直排） ===== */
 @media (min-width:1101px){
   body.nlm78 .slide:has(svg[data-chart=journey],svg[data-chart=bars],svg[data-chart=heatmap],svg[data-chart=gantt],svg[data-chart=funnel]) .chartwrap{
     flex:1 1 0;min-height:0;display:grid;place-items:center}
   body.nlm78 .slide:has(svg[data-chart=journey],svg[data-chart=bars],svg[data-chart=heatmap],svg[data-chart=gantt],svg[data-chart=funnel]) .chartwrap>svg{
     width:100%;height:100%;max-height:none;min-width:0}
-
+}
+@media (min-width:721px){
   /* 第 20、24 頁：上方標題橫跨，下方左右各半 */
   body.nlm78 .slide.active:has(svg[data-chart=radar]),
   body.nlm78 .slide.active:has(svg#fdg){
@@ -837,21 +838,34 @@ body.nlm78 .nlm78-s3 .panel.hi{display:flex;flex-direction:column;min-width:0}
 body.nlm78 .nlm78-s3 .panel.hi>.nlm78-scroll{flex:1 1 0;min-height:0;display:grid;place-items:center;overflow:hidden;margin-top:10px}
 body.nlm78 svg.nlm78-vflow{width:100%;height:100%;max-height:100%;min-width:0;margin:0}
 body.nlm78 .nlm78-s3 .kv{margin-top:26px}
-@media (max-width:1100px){
+@media (max-width:720px){
   body.nlm78 .split.nlm78-s3{grid-template-columns:1fr}
   body.nlm78 .nlm78-s3 .panel.hi>.nlm78-scroll{flex:none;overflow:visible}
   body.nlm78 svg.nlm78-vflow{height:auto}
 }
 /* 矮螢幕（如 1280×720）：左欄文字收緊，避免捲動 */
-@media (min-width:1101px) and (max-height:820px){
+@media (min-width:721px) and (max-height:820px){
   body.nlm78 .slide:has(svg[data-chart=radar])>.muted-s,
   body.nlm78 .slide:has(svg#fdg)>.muted-s{font-size:16px;line-height:1.55;margin:8px 0 0}
   body.nlm78 .slide:has(svg[data-chart=radar]) .nlm78-read li,
   body.nlm78 .slide:has(svg#fdg) .nlm78-read li{font-size:15px;margin:4px 0;line-height:1.5}
+}
+@media (min-width:1201px) and (max-height:820px){
   body.nlm78 .slide:has(svg[data-chart=radar])>.legend,
   body.nlm78 .slide:has(svg#fdg)>.legend{display:grid;grid-template-columns:auto 1fr 1fr;gap:4px 14px;padding:8px 12px;font-size:15px}
   body.nlm78 .slide:has(svg[data-chart=radar])>.legend>b,
   body.nlm78 .slide:has(svg#fdg)>.legend>b{grid-row:span 3}
+}
+@media (min-width:721px){
+  body.nlm78 .slide:has(svg[data-chart=radar])>.legend>b,
+  body.nlm78 .slide:has(svg#fdg)>.legend>b{white-space:nowrap}
+}
+/* 手機（≤720px）：直排時圖表不被壓扁 */
+@media (max-width:720px){
+  body.nlm78 .slide:has(svg[data-chart=radar])>.chartwrap,
+  body.nlm78 .slide:has(svg#fdg)>.mindwrap{flex:none;height:auto;min-height:0}
+  body.nlm78 .slide:has(svg[data-chart=radar])>.chartwrap>svg{width:100%;height:auto;max-height:none;min-width:0}
+  body.nlm78 .slide:has(svg#fdg)>.mindwrap>svg{width:100%;height:auto;aspect-ratio:580/470;max-height:none;min-width:0}
 }
 /* 看圖重點：⑦ 藍色事實卡（窄螢幕也顯示，在圖上方） */
 body.nlm78 .nlm78-read{position:relative;margin:14px 0 0;padding:14px 18px 12px;border:2px solid var(--n-blue,#2F6FB0);border-radius:6px;
